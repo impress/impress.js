@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>impress.js | presentation framework based on the power of CSS3 transforms and transitions in modern browsers | by Bartek Szopka @bartaz</title>
+    
+    <meta name="description" content="It's a presentation framework based on the power of CSS3 transforms and transitions in modern browsers and inspired by the idea behind prezi.com.">
+    <meta name="author" content="Bartek Szopka" />
+
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:regular,semibold,italic,italicsemibold|Crimson+Text:400,700,400italic" rel="stylesheet" />
+
+    <link href="impress.css" rel="stylesheet" />
+    <link href="style.css" rel="stylesheet" />
+</head>
+<body>
+
+<div id="impress">
+<div id="canvas" class="scale"><div class="rotate">
+
+    <div id="bored" class="step slide" data-x="-1000" data-y="-1000">
+        <q>Aren't you just <b>bored</b> with all those slides-based presentations?</q>
+    </div>
+
+    <div id="limits" class="step slide" data-x="0" data-y="-1000">
+        <q>Don't you think that presentations given <strong>in modern browsers</strong> shouldn't <strong>copy the limits</strong> of 'classic' slide decks?</q>
+    </div>
+
+    <div id="visualisation" class="step slide" data-x="1000" data-y="-1000">
+        <q>Would you like to <strong>impress your audience</strong> with <strong>stunning visualization</strong> of your talk?</q>
+    </div>
+
+    <div id="title" class="step" data-x="0" data-y="0" data-scale="3">
+        <span class="try">than you should try</span>
+        <h1>impress.js<sup>*</sup></h1>
+        <span class="footnote"><sup>*</sup> no rhyme intended</span>
+    </div>
+
+    <div id="its" class="step" data-x="0" data-y="3000" data-rotate="90" data-scale="6">
+        <p>It's a <strong>presentation framework</strong> <br/>
+        inspired by the idea behind <a href="http://prezi.com">Prezi.com</a> <br/>
+        and based on the <strong>power of CSS3 transforms and transitions</strong> in modern browsers.</p>
+    </div>
+
+
+</div></div><!-- #canvas.scale > .rotate -->
+</div><!-- #impress -->
+
+<script src="impress.js"></script>
+
+</body>
+</html>
