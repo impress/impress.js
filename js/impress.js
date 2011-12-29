@@ -1,6 +1,8 @@
-(function() {
+(function ( document ) {
 
-    var _pfx = (function () {
+    // HELPER FUNCTIONS
+    
+    var pfx = (function () {
 
         var style = document.createElement('dummy').style,
             prefixes = 'Webkit Moz O ms Khtml'.split(' '),
@@ -27,38 +29,52 @@
 
     })();
 
-    var extend = function (dst, src) {
-        for (var key in src) {
-            if (src.hasOwnProperty(key)) {
+    var extend = function ( dst, src ) {
+        var key;
+        for ( key in src ) {
+            if ( src.hasOwnProperty(key) ) {
                 dst[key] = src[key];
             }
         }
         return dst;
     }
     
-    var css = function (el, props) {
+    var css = function ( el, props ) {
         var key, pkey;
-        for (key in props) {
-            pkey = _pfx(key);
-            if (pkey != null) {
+        for ( key in props ) {
+            pkey = pfx(key);
+            if ( pkey != null ) {
                 el.style[pkey] = props[key];
             }
         }
         return el;
     }
     
-    var $ = function(s) {
-        return document.querySelector(s);
+    var $ = function ( selector, context ) {
+        context = context || document;
+        return context.querySelector(selector);
     };
     
-    var $$ = function(selector){
-        return [].slice.call(document.querySelectorAll(selector));
+    var $$ = function ( selector, context ) {
+        context = context || document;
+        return [].slice.call( context.querySelectorAll(selector) );
     };
+    
+    var translate = function (x,y) { return " translate3d(" + x + "px," + y + "px, 0) "; }
+    var rotate = function (a) { return " rotate(" + a + "deg) "; }
+    var scale = function (s) { return " scale(" + s + ") "; }
+    
+    // DOM ELEMENTS
     
     var impress = document.getElementById("impress");
-    
     var canvas = document.getElementById("canvas");
+    
     canvas.rotate = canvas.querySelector(".rotate");
+    
+    var steps = $$(".step", impress);
+    
+    // SETUP
+    // set initial values and defaults
     
     document.documentElement.style.height = "100%";
     
@@ -91,19 +107,17 @@
 
     var current = canvas.dataset;
 
-    var translate = function (x,y) { return " translate3d(" + x + "px," + y + "px, 0) "; }
-    var rotate = function (a) { return " rotate(" + a + "deg) "; }
-    var scale = function (s) { return " scale(" + s + ") "; }
-    
-    var steps = $$(".step");
-        
-    steps.forEach(function(el){
+    steps.forEach(function ( el, idx ) {
         var step = el.dataset;
         
         step.x = step.x || 0;
         step.y = step.y || 0;
         step.rotate = step.rotate || 0;
         step.scale = step.scale || 1;
+        
+        if ( !el.id ) {
+            el.id = "step-" + idx;
+        }
         
         css(el, {
             position: "absolute",
@@ -114,12 +128,14 @@
         });
         
     });
-    
-    function select(el) {
+
+    // making given step active
+
+    var select = function ( el ) {
         var step = el.dataset;
 
-        if ($(".step.active")) {
-            $(".step.active").classList.remove("active");
+        if ( $(".step.active", canvas) ) {
+            $(".step.active", canvas).classList.remove("active");
         }
         el.classList.add("active");
 
@@ -127,11 +143,10 @@
         
         var target = {
             rotate: -parseInt(step.rotate, 10),
-            scale: 1 / parseFloat(step.scale)
+            scale: 1 / parseFloat(step.scale),
+            x: -step.x,
+            y: -step.y
         };
-        
-        target.x = -step.x;
-        target.y = -step.y;
 
         css(canvas, {
             transform: scale(target.scale),
@@ -146,10 +161,12 @@
         extend(current, target);
     }
     
-    document.addEventListener("keydown", function(event){
+    // EVENTS
+    
+    document.addEventListener("keydown", function ( event ) {
         if( event.keyCode == 32 || (event.keyCode >= 37 && event.keyCode <= 40) ) {
             var next = null;
-            var active = document.querySelector(".step.active");
+            var active = $(".step.active", canvas);
             switch( event.keyCode ) {
                 case 37: ; // left
                 case 38:   // up
@@ -170,6 +187,9 @@
         }
     }, false);
     
+    // START 
+    // by selecting first step of presentation
     select(steps[0]);
-})();
+
+})(document);
 
