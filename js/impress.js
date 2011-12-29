@@ -27,14 +27,31 @@
 
     })();
 
-    var $ = function(s) { return document.querySelector(s) };
+    var $ = function(s) {
+        return document.querySelector(s);
+    };
     
     var $$ = function(selector){
         return [].slice.call(document.querySelectorAll(selector));
-    }
+    };
+    
+    var impress = document.getElementById("impress");
     
     var canvas = document.getElementById("canvas");
     canvas.rotate = canvas.querySelector(".rotate");
+    
+    document.documentElement.style.height = "100%";
+    
+    document.body.style.height = "100%";
+    document.body.style.overflow = "hidden";
+
+    impress.style.position = "absolute";
+    impress.style.top = "50%";
+    impress.style.left = "50%";
+
+    canvas.style["position"] = canvas.rotate.style["position"] = "absolute";
+    canvas.style[_pfx("transformOrigin")] = canvas.rotate.style[_pfx("transformOrigin")] = "top left";
+    canvas.style[_pfx("transition")] = canvas.rotate.style[_pfx("transition")] = "all 1s ease-in-out";
     
     canvas.dataset["x"] = "0";
     canvas.dataset["y"] = "0";
@@ -57,10 +74,11 @@
         step.rotate = step.rotate || 0;
         step.scale = step.scale || 1;
         
+        el.style["position"] = "absolute";
         el.style[_pfx("transform")] =  "translate(-50%,-50%)" +
                                  translate(step.x, step.y) +
                                  rotate(step.rotate) +
-                                 scale(step.scale)
+                                 scale(step.scale);
         
     });
     
@@ -72,7 +90,7 @@
         }
         el.classList.add("active");
 
-        document.getElementById("impress").className = "step-" + el.id;
+        impress.className = "step-" + el.id;
         
         var target = {
             rotate: -parseInt(step.rotate, 10),
