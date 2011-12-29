@@ -27,6 +27,26 @@
 
     })();
 
+    var extend = function (dst, src) {
+        for (var key in src) {
+            if (src.hasOwnProperty(key)) {
+                dst[key] = src[key];
+            }
+        }
+        return dst;
+    }
+    
+    var css = function (el, props) {
+        var key, pkey;
+        for (key in props) {
+            pkey = _pfx(key);
+            if (pkey != null) {
+                el.style[pkey] = props[key];
+            }
+        }
+        return el;
+    }
+    
     var $ = function(s) {
         return document.querySelector(s);
     };
@@ -42,21 +62,32 @@
     
     document.documentElement.style.height = "100%";
     
-    document.body.style.height = "100%";
-    document.body.style.overflow = "hidden";
+    css(document.body, {
+        height: "100%",
+        overflow: "hidden"
+    });
 
-    impress.style.position = "absolute";
-    impress.style.top = "50%";
-    impress.style.left = "50%";
+    css(impress, {
+        position: "absolute",
+        top: "50%",
+        left: "50%"
+    });
 
-    canvas.style["position"] = canvas.rotate.style["position"] = "absolute";
-    canvas.style[_pfx("transformOrigin")] = canvas.rotate.style[_pfx("transformOrigin")] = "top left";
-    canvas.style[_pfx("transition")] = canvas.rotate.style[_pfx("transition")] = "all 1s ease-in-out";
+    var props = {
+        position: "absolute",
+        transformOrigin: "top left",
+        transition: "all 1s ease-in-out"
+    }
     
-    canvas.dataset["x"] = "0";
-    canvas.dataset["y"] = "0";
-    canvas.dataset["rotate"] = "0";
-    canvas.dataset["scale"] = "1";
+    css(canvas, props);
+    css(canvas.rotate, props);
+    
+    extend(canvas.dataset, {
+        x: 0,
+        y: 0,
+        rotate: 0,
+        scale: 1
+    });
 
     var current = canvas.dataset;
 
@@ -74,11 +105,13 @@
         step.rotate = step.rotate || 0;
         step.scale = step.scale || 1;
         
-        el.style["position"] = "absolute";
-        el.style[_pfx("transform")] =  "translate(-50%,-50%)" +
-                                 translate(step.x, step.y) +
-                                 rotate(step.rotate) +
-                                 scale(step.scale);
+        css(el, {
+            position: "absolute",
+            transform: "translate(-50%,-50%)" +
+                       translate(step.x, step.y) +
+                       rotate(step.rotate) +
+                       scale(step.scale)
+        });
         
     });
     
@@ -100,16 +133,17 @@
         target.x = -step.x;
         target.y = -step.y;
 
-        canvas.style[ _pfx("transform") ] = scale(target.scale);
-        canvas.style[ _pfx("transitionDelay") ] = (target.scale > current.scale ? "300ms" : "0");
+        css(canvas, {
+            transform: scale(target.scale),
+            transitionDelay: (target.scale > current.scale ? "300ms" : "0")
+        });
         
-        canvas.rotate.style[ _pfx("transform") ] = rotate(target.rotate) + translate(target.x, target.y);
-        canvas.rotate.style[ _pfx("transformDelay") ] = (target.scale > current.scale ? "0" : "300ms");
+        css(canvas.rotate, {
+            transform: rotate(target.rotate) + translate(target.x, target.y),
+            transformDelay: (target.scale > current.scale ? "0" : "300ms")
+        });
         
-        current["x"] = target["x"];
-        current["y"] = target["y"];
-        current["rotate"] = target["rotate"];
-        current["scale"] = target["scale"];
+        extend(current, target);
     }
     
     document.addEventListener("keydown", function(event){
