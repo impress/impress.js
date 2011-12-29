@@ -52,9 +52,21 @@
         return [].slice.call( context.querySelectorAll(selector) );
     };
     
-    var translate = function (x,y) { return " translate3d(" + x + "px," + y + "px, 0) "; }
-    var rotate = function (a) { return " rotate(" + a + "deg) "; }
-    var scale = function (s) { return " scale(" + s + ") "; }
+    var translate = function ( t ) {
+        return " translate3d(" + t.x + "px," + t.y + "px," + t.z + "px) ";
+    };
+    
+    var rotate = function ( r, revert ) {
+        var rX = " rotateX(" + r.x + "deg) ",
+            rY = " rotateY(" + r.y + "deg) ",
+            rZ = " rotatez(" + r.z + "deg) ";
+        
+        return revert ? rZ+rY+rX : rX+rY+rZ;
+    };
+    
+    var scale = function ( s ) {
+        return " scaleX(" + s.x + ") scaleY(" + s.y + ") scaleZ(" + s.z + ") ";
+    }
     
     // DOM ELEMENTS
     
@@ -75,29 +87,46 @@
 
     var props = {
         position: "absolute",
-        top: "50%",
-        left: "50%",
         transformOrigin: "top left",
-        transition: "all 1s ease-in-out"
+        transition: "all 1s ease-in-out",
+        transformStyle: "preserve-3d"
     }
     
     css(impress, props);
+    css(impress, {
+        top: "50%",
+        left: "50%",
+        perspective: "1000px"
+    });
     css(canvas, props);
     
     var current = {
-        x: 0,
-        y: 0,
-        rotate: 0,
-        scale: 1
+        translate: { x: 0, y: 0, z: 0 },
+        rotate:    { x: 0, y: 0, z: 0 },
+        scale:     { x: 1, y: 1, z: 1 }
     };
 
     steps.forEach(function ( el, idx ) {
-        var step = el.dataset;
+        var data = el.dataset,
+            step = {
+                translate: {
+                    x: data.x || 0,
+                    y: data.y || 0,
+                    z: data.z || 0
+                },
+                rotate: {
+                    x: data.rotateX || 0,
+                    y: data.rotateY || 0,
+                    z: data.rotateZ || data.rotate || 0
+                },
+                scale: {
+                    x: data.scaleX || data.scale || 1,
+                    y: data.scaleY || data.scale || 1,
+                    z: data.scaleZ || 1
+                }
+            };
         
-        step.x = step.x || 0;
-        step.y = step.y || 0;
-        step.rotate = step.rotate || 0;
-        step.scale = step.scale || 1;
+        el.stepData = step;
         
         if ( !el.id ) {
             el.id = "step-" + idx;
@@ -106,7 +135,7 @@
         css(el, {
             position: "absolute",
             transform: "translate(-50%,-50%)" +
-                       translate(step.x, step.y) +
+                       translate(step.translate) +
                        rotate(step.rotate) +
                        scale(step.scale)
         });
@@ -116,7 +145,7 @@
     // making given step active
 
     var select = function ( el ) {
-        var step = el.dataset;
+        var step = el.stepData;
 
         if ( $(".step.active", impress) ) {
             $(".step.active", impress).classList.remove("active");
@@ -126,20 +155,35 @@
         impress.className = "step-" + el.id;
         
         var target = {
-            rotate: -parseInt(step.rotate, 10),
-            scale: 1 / parseFloat(step.scale),
-            x: -step.x,
-            y: -step.y
+            rotate: {
+                x: -parseInt(step.rotate.x, 10),
+                y: -parseInt(step.rotate.y, 10),
+                z: -parseInt(step.rotate.z, 10),
+            },
+            scale: {
+                x: 1 / parseFloat(step.scale.x),
+                y: 1 / parseFloat(step.scale.y),
+                z: 1 / parseFloat(step.scale.z),
+            },
+            translate: {
+                x: -step.translate.x,
+                y: -step.translate.y,
+                z: -step.translate.z
+            }
         };
+
+        var zoomin = target.scale.x > current.scale.x ||
+                     target.scale.y > current.scale.y ||
+                     target.scale.z > current.scale.z;
 
         css(impress, {
             transform: scale(target.scale),
-            transitionDelay: (target.scale > current.scale ? "300ms" : "0")
+            transitionDelay: (zoomin ? "300ms" : "0")
         });
         
         css(canvas, {
-            transform: rotate(target.rotate) + translate(target.x, target.y),
-            transformDelay: (target.scale > current.scale ? "0" : "300ms")
+            transform: rotate(target.rotate, true) + translate(target.translate),
+            transformDelay: (zoomin ? "0" : "300ms")
         });
         
         current = target;
