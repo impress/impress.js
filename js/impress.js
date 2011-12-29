@@ -192,15 +192,16 @@
     // EVENTS
     
     document.addEventListener("keydown", function ( event ) {
-        if( event.keyCode == 32 || (event.keyCode >= 37 && event.keyCode <= 40) ) {
-            var next = null;
+        if ( event.keyCode == 9 || event.keyCode == 32 || (event.keyCode >= 37 && event.keyCode <= 40) ) {
             var active = $(".step.active", impress);
+            var next = active;
             switch( event.keyCode ) {
                 case 37: ; // left
                 case 38:   // up
                          next = steps.indexOf( active ) - 1;
                          next = next >= 0 ? steps[ next ] : steps[ steps.length-1 ];
-                         break; 
+                         break;
+                case 9:  ; // tab
                 case 32: ; // space
                 case 39: ; // right
                 case 40:   // down
