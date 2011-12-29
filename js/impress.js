@@ -27,19 +27,67 @@
 
     })();
 
-    var $ = function(s) { return document.querySelector(s) };
+    var extend = function (dst, src) {
+        for (var key in src) {
+            if (src.hasOwnProperty(key)) {
+                dst[key] = src[key];
+            }
+        }
+        return dst;
+    }
+    
+    var css = function (el, props) {
+        var key, pkey;
+        for (key in props) {
+            pkey = _pfx(key);
+            if (pkey != null) {
+                el.style[pkey] = props[key];
+            }
+        }
+        return el;
+    }
+    
+    var $ = function(s) {
+        return document.querySelector(s);
+    };
     
     var $$ = function(selector){
         return [].slice.call(document.querySelectorAll(selector));
-    }
+    };
+    
+    var impress = document.getElementById("impress");
     
     var canvas = document.getElementById("canvas");
     canvas.rotate = canvas.querySelector(".rotate");
     
-    canvas.dataset["x"] = "0";
-    canvas.dataset["y"] = "0";
-    canvas.dataset["rotate"] = "0";
-    canvas.dataset["scale"] = "1";
+    document.documentElement.style.height = "100%";
+    
+    css(document.body, {
+        height: "100%",
+        overflow: "hidden"
+    });
+
+    css(impress, {
+        position: "absolute",
+        top: "50%",
+        left: "50%"
+    });
+
+    var props = {
+        position: "absolute",
+        transformOrigin: "top left",
+        transition: "all 1s ease-in-out"
+    }
+    
+    css(canvas, props);
+    css(canvas.rotate, props);
+    
+    extend(canvas.dataset, {
+        x: 0,
+        y: 0,
+        rotate: 0,
+        scale: 1
+    });
 
     var current = canvas.dataset;
 
@@ -57,10 +105,13 @@
         step.rotate = step.rotate || 0;
         step.scale = step.scale || 1;
         
-        el.style[_pfx("transform")] =  "translate(-50%,-50%)" +
-                                 translate(step.x, step.y) +
-                                 rotate(step.rotate) +
-                                 scale(step.scale)
+        css(el, {
+            position: "absolute",
+            transform: "translate(-50%,-50%)" +
+                       translate(step.x, step.y) +
+                       rotate(step.rotate) +
+                       scale(step.scale)
+        });
         
     });
     
@@ -72,7 +123,7 @@
         }
         el.classList.add("active");
 
-        document.getElementById("impress").className = "step-" + el.id;
+        impress.className = "step-" + el.id;
         
         var target = {
             rotate: -parseInt(step.rotate, 10),
@@ -82,16 +133,17 @@
         target.x = -step.x;
         target.y = -step.y;
 
-        canvas.style[ _pfx("transform") ] = scale(target.scale);
-        canvas.style[ _pfx("transitionDelay") ] = (target.scale > current.scale ? "300ms" : "0");
+        css(canvas, {
+            transform: scale(target.scale),
+            transitionDelay: (target.scale > current.scale ? "300ms" : "0")
+        });
         
-        canvas.rotate.style[ _pfx("transform") ] = rotate(target.rotate) + translate(target.x, target.y);
-        canvas.rotate.style[ _pfx("transformDelay") ] = (target.scale > current.scale ? "0" : "300ms");
+        css(canvas.rotate, {
+            transform: rotate(target.rotate) + translate(target.x, target.y),
+            transformDelay: (target.scale > current.scale ? "0" : "300ms")
+        });
         
-        current["x"] = target["x"];
-        current["y"] = target["y"];
-        current["rotate"] = target["rotate"];
-        current["scale"] = target["scale"];
+        extend(current, target);
     }
     
     document.addEventListener("keydown", function(event){
