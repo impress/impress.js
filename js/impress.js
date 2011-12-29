@@ -29,22 +29,14 @@
 
     })();
 
-    var extend = function ( dst, src ) {
-        var key;
-        for ( key in src ) {
-            if ( src.hasOwnProperty(key) ) {
-                dst[key] = src[key];
-            }
-        }
-        return dst;
-    }
-    
     var css = function ( el, props ) {
         var key, pkey;
         for ( key in props ) {
-            pkey = pfx(key);
-            if ( pkey != null ) {
-                el.style[pkey] = props[key];
+            if ( props.hasOwnProperty(key) ) {
+                pkey = pfx(key);
+                if ( pkey != null ) {
+                    el.style[pkey] = props[key];
+                }
             }
         }
         return el;
@@ -67,9 +59,7 @@
     // DOM ELEMENTS
     
     var impress = document.getElementById("impress");
-    var canvas = document.getElementById("canvas");
-    
-    canvas.rotate = canvas.querySelector(".rotate");
+    var canvas = $(".canvas", impress);
     
     var steps = $$(".step", impress);
     
@@ -83,29 +73,23 @@
         overflow: "hidden"
     });
 
-    css(impress, {
-        position: "absolute",
-        top: "50%",
-        left: "50%"
-    });
-
     var props = {
         position: "absolute",
+        top: "50%",
+        left: "50%",
         transformOrigin: "top left",
         transition: "all 1s ease-in-out"
     }
     
+    css(impress, props);
     css(canvas, props);
-    css(canvas.rotate, props);
     
-    extend(canvas.dataset, {
+    var current = {
         x: 0,
         y: 0,
         rotate: 0,
         scale: 1
-    });
-
-    var current = canvas.dataset;
+    };
 
     steps.forEach(function ( el, idx ) {
         var step = el.dataset;
@@ -134,8 +118,8 @@
     var select = function ( el ) {
         var step = el.dataset;
 
-        if ( $(".step.active", canvas) ) {
-            $(".step.active", canvas).classList.remove("active");
+        if ( $(".step.active", impress) ) {
+            $(".step.active", impress).classList.remove("active");
         }
         el.classList.add("active");
 
@@ -148,17 +132,17 @@
             y: -step.y
         };
 
-        css(canvas, {
+        css(impress, {
             transform: scale(target.scale),
             transitionDelay: (target.scale > current.scale ? "300ms" : "0")
         });
         
-        css(canvas.rotate, {
+        css(canvas, {
             transform: rotate(target.rotate) + translate(target.x, target.y),
             transformDelay: (target.scale > current.scale ? "0" : "300ms")
         });
         
-        extend(current, target);
+        current = target;
     }
     
     // EVENTS
@@ -166,7 +150,7 @@
     document.addEventListener("keydown", function ( event ) {
         if( event.keyCode == 32 || (event.keyCode >= 37 && event.keyCode <= 40) ) {
             var next = null;
-            var active = $(".step.active", canvas);
+            var active = $(".step.active", impress);
             switch( event.keyCode ) {
                 case 37: ; // left
                 case 38:   // up
