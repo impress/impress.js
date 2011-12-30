@@ -29,6 +29,10 @@
 
     })();
 
+    var arrayify = function ( a ) {
+        return [].slice.call( a );
+    };
+    
     var css = function ( el, props ) {
         var key, pkey;
         for ( key in props ) {
@@ -49,7 +53,7 @@
     
     var $$ = function ( selector, context ) {
         context = context || document;
-        return [].slice.call( context.querySelectorAll(selector) );
+        return arrayify( context.querySelectorAll(selector) );
     };
     
     var translate = function ( t ) {
@@ -71,7 +75,14 @@
     // DOM ELEMENTS
     
     var impress = document.getElementById("impress");
-    var canvas = $(".canvas", impress);
+    
+    var canvas = document.createElement("div");
+    canvas.className = "canvas";
+    
+    arrayify( impress.childNodes ).forEach(function ( el ) {
+        canvas.appendChild( el );
+    });
+    impress.appendChild(canvas);
     
     var steps = $$(".step", impress);
     
