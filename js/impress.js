@@ -148,7 +148,8 @@
             transform: "translate(-50%,-50%)" +
                        translate(step.translate) +
                        rotate(step.rotate) +
-                       scale(step.scale)
+                       scale(step.scale),
+            transformStyle: "preserve-3d"
         });
         
     });
@@ -186,7 +187,7 @@
         var zoomin = target.scale.x > current.scale.x ||
                      target.scale.y > current.scale.y ||
                      target.scale.z > current.scale.z;
-
+        
         css(impress, {
             transform: scale(target.scale),
             transitionDelay: (zoomin ? "300ms" : "0")
