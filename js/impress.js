@@ -72,9 +72,20 @@
         return " scaleX(" + s.x + ") scaleY(" + s.y + ") scaleZ(" + s.z + ") ";
     }
     
+    // CHECK SUPPORT
+    
+    var impressSupported = (pfx("perspective") != null);
+    
     // DOM ELEMENTS
     
     var impress = document.getElementById("impress");
+    
+    if (!impressSupported) {
+        impress.className = "impress-not-supported";
+        return;
+    } else {
+        impress.className = "";
+    }
     
     var canvas = document.createElement("div");
     canvas.className = "canvas";
