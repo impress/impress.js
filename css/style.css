@@ -63,50 +63,304 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
+b, strong { font-weight: bold }
+
+a {
+    color: inherit;
+    text-decoration: none;
+    padding: 0 0.1em;
+    background: rgba(255,255,255,0.5);
+    text-shadow: -1px -1px 2px rgba(100,100,100,0.9);
+    border-radius: 0.2em;
+    
+    -webkit-transition: 0.5s;
+    -moz-transition:    0.5s;
+    -ms-transition:     0.5s;
+    -o-transition:      0.5s;
+    transition:         0.5s;
+}
+
+a:hover {
+    background: rgba(255,255,255,1);
+    text-shadow: -1px -1px 2px rgba(100,100,100,0.5);
+}
+
+/* COMMON STEP STYLES */
 
 .step {
     width: 900px;
-    padding: 40px 60px;
+    padding: 40px;
 
     -webkit-box-sizing: border-box;
     -moz-box-sizing:    border-box;
+    -ms-box-sizing:     border-box;
     -o-box-sizing:      border-box;
     box-sizing:         border-box;
 
-    font-family: 'Crimson Text', georgia, times, serif;
-    font-size: 32px;
-    line-height: 42px;
+    font-family: 'PT Serif', georgia, serif;
+
+    font-size: 48px;
+    line-height: 1.5;
 }
 
-b, strong { font-weight: bold }
+/* fade out inactive slides */
 
-a { color: inherit; }
+.step {
+    -webkit-transition: opacity 1s;
+    -moz-transition:    opacity 1s;
+    -ms-transition:     opacity 1s;
+    -o-transition:      opacity 1s;
+    transition:         opacity 1s;
+}
 
+.step:not(.active) {
+    opacity: 0.3;
+}
 
-/* step specific styles */
+/* STEP SPECIFIC STYLES */
 
-#title { padding: 0; }
+/* impress.js title */
+
+#title {
+    padding: 0;
+}
 
 #title .try {
-
     font-size: 64px;
-    line-height: 1.3;
     position: absolute;
     top: -0.5em;
     left: 1.5em;
+    
+    -webkit-transform: translateZ(20px);
+    -moz-transform:    translateZ(20px);
+    -ms-transform:     translateZ(20px);
+    -o-transform:      translateZ(20px);
+    transform:         translateZ(20px);
 }
 
 #title h1 {
     font-size: 190px;
+    
+    -webkit-transform: translateZ(50px);
+    -moz-transform:    translateZ(50px);
+    -ms-transform:     translateZ(50px);
+    -o-transform:      translateZ(50px);
+    transform:         translateZ(50px);
+}
+
+#title .footnote {
+    font-size: 32px;
+}
+
+/* big thoughts */
+
+#big {
+    width: 600px;
+    text-align: center;
+    font-size: 60px;
+    line-height: 1;
+}
+
+#big b {
+    display: block;
+    font-size: 250px;
     line-height: 250px;
 }
 
-#its { font-size: 48px; line-height: 62px; }
+#big .thoughts {
+    font-size: 90px;
+    line-height: 150px;
+}
+
+/* tiny ideas */
+
+#tiny {
+    width: 500px;
+    text-align: center;
+}
+
+#ing {
+    width: 500px;
+}
+
+#ing b {
+    display: inline-block;
+    -webkit-transition: 0.5s;
+    -moz-transition:    0.5s;
+    -ms-transition:     0.5s;
+    -o-transition:      0.5s;
+    transition:         0.5s;
+}
+
+#ing.active .positioning {
+    -webkit-transform: translateY(-10px);
+    -moz-transform:    translateY(-10px);
+    -ms-transform:     translateY(-10px);
+    -o-transform:      translateY(-10px);
+    transform:         translateY(-10px);
+
+    -webkit-transition-delay: 1s;
+    -moz-transition-delay:    1s;
+    -ms-transition-delay:     1s;
+    -o-transition-delay:      1s;
+    transition-delay:         1s;
+}
+
+#ing.active .rotating {
+    -webkit-transform: rotate(-10deg);
+    -moz-transform:    rotate(-10deg);
+    -ms-transform:     rotate(-10deg);
+    -o-transform:      rotate(-10deg);
+    transform:         rotate(-10deg);
+
+    -webkit-transition-delay: 1.5s;
+    -moz-transition-delay:    1.5s;
+    -ms-transition-delay:     1.5s;
+    -o-transition-delay:      1.5s;
+    transition-delay:         1.5s;
+}
+
+#ing.active .scaling {
+    -webkit-transform: scale(0.7);
+    -moz-transform:    scale(0.7);
+    -ms-transform:     scale(0.7);
+    -o-transform:      scale(0.7);
+    transform:         scale(0.7);
+
+    -webkit-transition-delay: 2s;
+    -moz-transition-delay:    2s;
+    -ms-transition-delay:     2s;
+    -o-transition-delay:      2s;
+    transition-delay:         2s;
+
+}
+
+/* imagination */
+
+#imagination {
+    width: 600px;
+}
+
+#imagination .imagination {
+    font-size: 78px;
+}
+
+/* use the source, Luke */
+
+#source {
+    width: 700px;
+    padding-bottom: 300px;
+    
+    /* Yoda Icon :: Pixel Art from Star Wars http://www.pixeljoint.com/pixelart/1423.htm */
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARgAAAEYCAMAAACwUBm+AAAAAXNSR0IArs4c6QAAAKtQTFRFsAAAvbWSLUUrLEQqY1s8UYJMqJ1vNTEgOiIdIzYhjIFVLhsXZ6lgSEIsP2U8JhcCVzMsSXZEgXdOO145XJdWOl03LzAYMk4vSXNExr+hwcuxRTs1Qmk+RW9Am49eFRANQz4pUoNMQWc+OSMDTz0wLBsCNVMxa2NBOyUDUoNNSnlEWo9VRGxAVzYFl6tXCggHbLNmMUIcHhwTXkk5f3VNRT8wUT8xAAAACQocRBWFFwAAAAF0Uk5TAEDm2GYAAAPCSURBVHja7d3JctNAFIZRMwRCCGEmzPM8z/D+T8bu/ptbXXJFdij5fMt2Wuo+2UgqxVmtttq5WVotLzBgwIABAwYMGDCn0qVqbo69psPqVpWx+1XG5iaavF8wYMCAAQMGDBgwi4DJ6Y6qkxB1HNlcN3a92gbR5P2CAQMGDBgwYMCAWSxMlrU+UY5yu2l9okfV4bAxUVbf7TJnAwMGDBgwYMCAAbMLMHeqbGR82Zy+VR1Ht81nVca6R+UdTLaU24Ruzd3qM/e4yjnAgAEDBgwYMGDA7AJMd1l/3NRdVGcj3eX/2WEhCmDGxnM7yqygu8XIPjJj8iN/MGDAgAEDBgwYMAuDGb8q0RGlLCHLv1t9qDKWn3vdNHVuEI6HPaxO9Jo3GDBgwIABAwYMmIXBdC9ShGgMk+XnkXUeuGcsP/e1+lhNnZsL/G5Vs3OAAQMGDBgwYMCAWSxMR3SzOmraG5atdy9wZKzb+vg16qyqe2FltbnAgAEDBgwYMGDALAxmTJSuN3WA76rnVca6GTnemGN1WoEBAwYMGDBgwIBZGMxUomy4+xO899V4LAg5Xnc2MGDAgAEDBgwYMGA218Wq+2K1LDqvY9xZu8zN8fICdM6btYABAwYMGDBgwIABMzfH0+pGU5afze2tXebmeAfVz+p8BQYMGDBgwIABAwbMPBzZ+oWmfJrln1273FhkbHzee9WWbw7AgAEDBgwYMGDALAKm43hcdctKgblcPamOhuXnXlY5Xs6bsW4FGyQCAwYMGDBgwIABswiYMceZKgvMo+h8mrHLTdn676rj+FEFoTtHd8MwOxEYMGDAgAEDBgyYRcBM5UhXqiymW3R3c9ARhWO/OmjqfjVZy+xEYMCAAQMGDBgwYBYG073OnCV0RFNhMhaOa9WfKmOB6XjHMN1tQmaAAQMGDBgwYMCA2VWY7vXjz1U4croAzgPztwIDBgwYMGDAgAEDZhswh035NBw59Dww3RgYMGDAgAEDBgwYMJuD6f4tXT7NUqfCdBvZLkxXdgQGDBgwYMCAAQNmt2DGj8WzwAfV/w7T/aq7mxwwYMCAAQMGDBgwuwqTOo7uTwTngflSzQ3TdaJvAwEDBgwYMGDAgAED5gSvgbyo5oHZ4Pc+gwEDBgwYMGDAgAEzhOm+5G0qTGaAAQMGDBgwYMCAAXNaMOcnls3tNwWm+zRzp54NDBgwYMCAAQMGDJh5YNL36k1TLuGvVq+qnKMbS5n7tulT9asCAwYMGDBgwIABA2ZumKuztLnjgQEDBgwYMGDAgNl5mH/4/ltKA6vBNAAAAABJRU5ErkJggg==);
+    background-position: bottom right;
+    background-repeat: no-repeat;
+}
+
+#source q {
+    font-size: 60px;
+}
+
+/* it's in 3D */
+
+#its-in-3d span,
+#its-in-3d b {
+    display: inline-block;
+    -webkit-transform: translateZ(40px);
+    -moz-transform:    translateZ(40px);
+    -ms-transform:     translateZ(40px);
+    -o-transform:      translateZ(40px);
+     transform:        translateZ(40px);
+            
+    -webkit-transition: 0.5s;
+    -moz-transition:    0.5s;
+    -ms-transition:     0.5s;
+    -o-transition:      0.5s;
+    transition:         0.5s;
+}
+
+#its-in-3d .have {
+    -webkit-transform: translateZ(-40px);
+    -moz-transform:    translateZ(-40px);
+    -ms-transform:     translateZ(-40px);
+    -o-transform:      translateZ(-40px);
+    transform:         translateZ(-40px);
+}
+
+#its-in-3d .you {
+    -webkit-transform: translateZ(20px);
+    -moz-transform:    translateZ(20px);
+    -ms-transform:     translateZ(20px);
+    -o-transform:      translateZ(20px);
+    transform:         translateZ(20px);
+}
+
+#its-in-3d .noticed {
+    -webkit-transform: translateZ(-40px);
+    -moz-transform:    translateZ(-40px);
+    -ms-transform:     translateZ(-40px);
+    -o-transform:      translateZ(-40px);
+    transform:         translateZ(-40px);
+}
+
+#its-in-3d .its {
+    -webkit-transform: translateZ(60px);
+    -moz-transform:    translateZ(60px);
+    -ms-transform:     translateZ(60px);
+    -o-transform:      translateZ(60px);
+    transform:         translateZ(60px);
+}
+
+#its-in-3d .in {
+    -webkit-transform: translateZ(-10px);
+    -moz-transform:    translateZ(-10px);
+    -ms-transform:     translateZ(-10px);
+    -o-transform:      translateZ(-10px);
+    transform:         translateZ(-10px);
+}
+
+#its-in-3d .footnote {
+    font-size: 32px;
+
+    -webkit-transform: translateZ(-10px);
+    -moz-transform:    translateZ(-10px);
+    -ms-transform:     translateZ(-10px);
+    -o-transform:      translateZ(-10px);
+    transform:         translateZ(-10px);
+}
+
+#its-in-3d.active span,
+#its-in-3d.active b {
+    -webkit-transform: translateZ(0px);
+    -moz-transform:    translateZ(0px);
+    -ms-transform:     translateZ(0px);
+    -o-transform:      translateZ(0px);
+    transform:         translateZ(0px);
+    
+    -webkit-transition-delay: 1s;
+    -moz-transition-delay:    1s;
+    -ms-transition-delay:     1s;
+    -o-transition-delay:      1s;
+    transition-delay:         1s;
+}
+
+/* overview step */
+
+#overview {
+    z-index: -1;
+}
+
+/* on overview step everything is visible */
+
+#impress.step-overview .step {
+    opacity: 1;
+}
 
 
 /*
- * Inspired by:
- * http://html5slides.googlecode.com/svn/trunk/styles.css
+ * SLIDE STEP STYLES
+ *
+ * inspired by: http://html5slides.googlecode.com/svn/trunk/styles.css
  *
  * ;)
  */
@@ -119,25 +373,12 @@ a { color: inherit; }
 
     padding: 40px 60px;
 
-    box-sizing: border-box;
-    -o-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-
     border-radius: 10px;
-    -o-border-radius: 10px;
-    -moz-border-radius: 10px;
-    -webkit-border-radius: 10px;
 
     background-color: white;
 
     box-shadow: 0 2px 6px rgba(0, 0, 0, .1);
     border: 1px solid rgba(0, 0, 0, .3);
-
-    transition: transform .3s ease-out;
-    -o-transition: -o-transform .3s ease-out;
-    -moz-transition: -moz-transform .3s ease-out;
-    -webkit-transition: -webkit-transform .3s ease-out;
 
     font-family: 'Open Sans', Arial, sans-serif;
 
@@ -159,6 +400,6 @@ a { color: inherit; }
 }
 
 .slide q strong {
-    font-size: 65px;
     white-space: nowrap;
 }
+
