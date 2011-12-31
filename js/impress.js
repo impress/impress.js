@@ -1,4 +1,4 @@
-(function ( document ) {
+(function ( document, window ) {
 
     // HELPER FUNCTIONS
     
@@ -226,9 +226,20 @@
         }
     }, false);
     
+    // Sometimes it's possible to trigger focus on first link with some keyboard action.
+    // Browser in such a case tries to scroll the page to make this element visible
+    // (even that body overflow is set to hidden) and it breaks our careful positioning.
+    //
+    // So, as a lousy (and lazy) workaround any scroll event will make the page scroll back to the top.
+    //
+    // If you are reading this and know any better way to handle it, I'll be glad to hear about it!
+    window.addEventListener("scroll", function ( event ) {
+        window.scrollTo(0, 0);
+    }, false);
+    
     // START 
     // by selecting first step of presentation
     select(steps[0]);
 
-})(document);
+})(document, window);
 
