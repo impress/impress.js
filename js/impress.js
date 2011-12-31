@@ -184,18 +184,16 @@
             }
         };
 
-        var zoomin = target.scale.x > current.scale.x ||
-                     target.scale.y > current.scale.y ||
-                     target.scale.z > current.scale.z;
+        var zoomin = target.scale.x >= current.scale.x;
         
         css(impress, {
             transform: scale(target.scale),
-            transitionDelay: (zoomin ? "300ms" : "0")
+            transitionDelay: (zoomin ? "500ms" : "0ms")
         });
         
         css(canvas, {
             transform: rotate(target.rotate, true) + translate(target.translate),
-            transformDelay: (zoomin ? "0" : "300ms")
+            transitionDelay: (zoomin ? "0ms" : "500ms")
         });
         
         current = target;

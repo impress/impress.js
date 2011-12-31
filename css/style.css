@@ -199,11 +199,11 @@ a:hover {
     -o-transform:      translateY(-10px);
     transform:         translateY(-10px);
 
-    -webkit-transition-delay: 1s;
-    -moz-transition-delay:    1s;
-    -ms-transition-delay:     1s;
-    -o-transition-delay:      1s;
-    transition-delay:         1s;
+    -webkit-transition-delay: 1.5s;
+    -moz-transition-delay:    1.5s;
+    -ms-transition-delay:     1.5s;
+    -o-transition-delay:      1.5s;
+    transition-delay:         1.5s;
 }
 
 #ing.active .rotating {
@@ -213,11 +213,11 @@ a:hover {
     -o-transform:      rotate(-10deg);
     transform:         rotate(-10deg);
 
-    -webkit-transition-delay: 1.5s;
-    -moz-transition-delay:    1.5s;
-    -ms-transition-delay:     1.5s;
-    -o-transition-delay:      1.5s;
-    transition-delay:         1.5s;
+    -webkit-transition-delay: 1.75s;
+    -moz-transition-delay:    1.75s;
+    -ms-transition-delay:     1.75s;
+    -o-transition-delay:      1.75s;
+    transition-delay:         1.75s;
 }
 
 #ing.active .scaling {
