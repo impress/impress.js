@@ -85,7 +85,9 @@
     
     // CHECK SUPPORT
     
-    var impressSupported = (pfx("perspective") != null);
+    var ua = navigator.userAgent.toLowerCase();
+    var impressSupported = ( pfx("perspective") != null ) &&
+                           ( ua.search(/(iphone)|(ipod)|(ipad)|(android)/) == -1 );
     
     // DOM ELEMENTS
     
