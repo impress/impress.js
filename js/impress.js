@@ -180,7 +180,7 @@
 
     var select = function ( el ) {
         var step = el.stepData;
-
+    	
         if ( $(".step.active", impress) ) {
             $(".step.active", impress).classList.remove("active");
         }
@@ -219,9 +219,21 @@
         });
         
         current = target;
+		
     }
     
-    // EVENTS
+    // EVENTS & NAVIGATION
+	
+    var links = $$(".impress-link");
+    
+    links.forEach(function ( el, idx ) {
+        var data = el.dataset;
+        el.onclick = function(evt) {
+			evt.preventDefault();
+			select(eval(data.select));
+		};
+    });
+	
     
     document.addEventListener("keydown", function ( event ) {
         if ( event.keyCode == 9 || event.keyCode == 32 || (event.keyCode >= 37 && event.keyCode <= 40) ) {
@@ -247,6 +259,8 @@
             event.preventDefault();
         }
     }, false);
+    
+    
     
     // Sometimes it's possible to trigger focus on first link with some keyboard action.
     // Browser in such a case tries to scroll the page to make this element visible
