@@ -494,3 +494,18 @@ a:hover {
     display: block;
 }
 
+#instructions {
+	position:fixed;
+	top:0;
+	right:0;
+	padding:6px;
+	padding-top:10px;
+	padding-right:10px;
+	margin-top:-4px;
+	margin-right:-4px;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 80%;
+	background-color: #eeeeee;
+	border-radius: 4px;
+}
+
