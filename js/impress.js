@@ -230,7 +230,7 @@
     // EVENTS
     
     document.addEventListener("keydown", function ( event ) {
-        if ( event.keyCode == 9 || event.keyCode == 32 || (event.keyCode >= 37 && event.keyCode <= 40) ) {
+
             var active = $(".step.active", impress);
             var next = active;
             switch( event.keyCode ) {
@@ -245,13 +245,15 @@
                 case 40:   // down
                          next = steps.indexOf( active ) + 1;
                          next = next < steps.length ? steps[ next ] : steps[ 0 ];
-                         break; 
+                         break;
+                default:
+                    return;
             }
             
             select(next);
             
             event.preventDefault();
-        }
+
     }, false);
     
     // Sometimes it's possible to trigger focus on first link with some keyboard action.
