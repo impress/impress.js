@@ -194,12 +194,12 @@
             rotate: {
                 x: -parseInt(step.rotate.x, 10),
                 y: -parseInt(step.rotate.y, 10),
-                z: -parseInt(step.rotate.z, 10),
+                z: -parseInt(step.rotate.z, 10)
             },
             scale: {
                 x: 1 / parseFloat(step.scale.x),
                 y: 1 / parseFloat(step.scale.y),
-                z: 1 / parseFloat(step.scale.z),
+                z: 1 / parseFloat(step.scale.z)
             },
             translate: {
                 x: -step.translate.x,
