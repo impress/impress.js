@@ -28,6 +28,10 @@ Impress.js is developed with current webkit-based browsers in mind (Chrome,
 Safari), but *should* work also in other browsers supporting CSS3 3D transforms
 and transitions (Firefox, IE10).
 
+Additionally for the animations to run smoothly it's required to have hardware
+acceleration support in your browser. This depends on the browser, your operating
+system and even kind of graphic hardware you have in your machine.
+
 It's actively developed with newest Chromium and tested in Firefox Aurora.
 
 I don't really expect it to run smoothly in non-webkit-based browser.
