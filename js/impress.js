@@ -74,7 +74,7 @@
     var rotate = function ( r, revert ) {
         var rX = " rotateX(" + r.x + "deg) ",
             rY = " rotateY(" + r.y + "deg) ",
-            rZ = " rotatez(" + r.z + "deg) ";
+            rZ = " rotateZ(" + r.z + "deg) ";
         
         return revert ? rZ+rY+rX : rX+rY+rZ;
     };
