@@ -68,18 +68,22 @@
     };
     
     var translate = function ( t ) {
+        t = t.translate;
         return " translate3d(" + t.x + "px," + t.y + "px," + t.z + "px) ";
     };
     
     var rotate = function ( r, revert ) {
-        var rX = " rotateX(" + r.x + "deg) ",
-            rY = " rotateY(" + r.y + "deg) ",
-            rZ = " rotateZ(" + r.z + "deg) ";
-        
-        return revert ? rZ+rY+rX : rX+rY+rZ;
+        r = r.rotate;
+            
+        if ( revert ) {
+            return " rotateZ(" + r.z + "deg) rotateY(" + r.y + "deg) rotateX(" + r.x + "deg) ";
+        } else {
+            return " rotateX(" + r.x + "deg) rotateY(" + r.y + "deg) rotateZ(" + r.z + "deg) ";
+        }
     };
     
     var scale = function ( s ) {
+        s = s.scale;
         return " scaleX(" + s.x + ") scaleY(" + s.y + ") scaleZ(" + s.z + ") ";
     }
     
@@ -170,9 +174,9 @@
         css(el, {
             position: "absolute",
             transform: "translate(-50%,-50%)" +
-                       translate(step.translate) +
-                       rotate(step.rotate) +
-                       scale(step.scale),
+                       translate(step) +
+                       rotate(step) +
+                       scale(step),
             transformStyle: "preserve-3d"
         });
         
@@ -211,12 +215,12 @@
         var zoomin = target.scale.x >= current.scale.x;
         
         css(impress, {
-            transform: scale(target.scale),
+            transform: scale(target),
             transitionDelay: (zoomin ? "500ms" : "0ms")
         });
         
         css(canvas, {
-            transform: rotate(target.rotate, true) + translate(target.translate),
+            transform: rotate(target, true) + translate(target),
             transitionDelay: (zoomin ? "0ms" : "500ms")
         });
         
