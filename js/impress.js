@@ -12,21 +12,22 @@
 (function ( document, window ) {
 
     // HELPER FUNCTIONS
-    
+
     var pfx = (function () {
 
         var style = document.createElement('dummy').style,
             prefixes = 'Webkit Moz O ms Khtml'.split(' '),
             memory = {};
-            
+
         return function ( prop ) {
             if ( typeof memory[ prop ] === "undefined" ) {
 
                 var ucProp  = prop.charAt(0).toUpperCase() + prop.substr(1),
-                    props   = (prop + ' ' + prefixes.join(ucProp + ' ') + ucProp).split(' ');
+                    props   = (prop + ' ' + prefixes.join(ucProp + ' ') + ucProp).split(' '),
+                    i ;
 
                 memory[ prop ] = null;
-                for ( var i in props ) {
+                for ( i in props ) {
                     if ( style[ props[i] ] !== undefined ) {
                         memory[ prop ] = props[i];
                         break;
@@ -41,92 +42,98 @@
     })();
 
     var arrayify = function ( a ) {
-        return [].slice.call( a );
-    };
-    
-    var css = function ( el, props ) {
-        var key, pkey;
-        for ( key in props ) {
-            if ( props.hasOwnProperty(key) ) {
-                pkey = pfx(key);
-                if ( pkey != null ) {
-                    el.style[pkey] = props[key];
+            return [].slice.call( a );
+        },
+
+        css = function ( el, props ) {
+            var key, pkey;
+            for ( key in props ) {
+                if ( props.hasOwnProperty(key) ) {
+                    pkey = pfx(key);
+                    if ( pkey != null ) {
+                        el.style[pkey] = props[key];
+                    }
                 }
             }
-        }
-        return el;
-    }
-    
-    var $ = function ( selector, context ) {
-        context = context || document;
-        return context.querySelector(selector);
-    };
-    
-    var $$ = function ( selector, context ) {
-        context = context || document;
-        return arrayify( context.querySelectorAll(selector) );
-    };
-    
-    var translate = function ( t ) {
-        return " translate3d(" + t.x + "px," + t.y + "px," + t.z + "px) ";
-    };
-    
-    var rotate = function ( r, revert ) {
-        var rX = " rotateX(" + r.x + "deg) ",
-            rY = " rotateY(" + r.y + "deg) ",
-            rZ = " rotateZ(" + r.z + "deg) ";
-        
-        return revert ? rZ+rY+rX : rX+rY+rZ;
-    };
-    
-    var scale = function ( s ) {
-        return " scaleX(" + s.x + ") scaleY(" + s.y + ") scaleZ(" + s.z + ") ";
-    }
-    
+            return el;
+        },
+
+        $ = function ( selector, context ) {
+            context = context || document;
+            return context.querySelector(selector);
+        },
+
+        $$ = function ( selector, context ) {
+            context = context || document;
+            return arrayify( context.querySelectorAll(selector) );
+        },
+
+        translate = function ( t ) {
+            return " translate3d(" + t.x + "px," + t.y + "px," + t.z + "px) ";
+        },
+
+        rotate = function ( r, revert ) {
+            var rX = " rotateX(" + r.x + "deg) ",
+                rY = " rotateY(" + r.y + "deg) ",
+                rZ = " rotateZ(" + r.z + "deg) ";
+
+            return revert ? rZ+rY+rX : rX+rY+rZ;
+        },
+
+        scale = function ( s ) {
+            return " scaleX(" + s.x + ") scaleY(" + s.y + ") scaleZ(" + s.z + ") ";
+        },
+
     // CHECK SUPPORT
-    
-    var ua = navigator.userAgent.toLowerCase();
-    var impressSupported = ( pfx("perspective") != null ) &&
-                           ( ua.search(/(iphone)|(ipod)|(ipad)|(android)/) == -1 );
-    
+
+        ua = navigator.userAgent.toLowerCase(),
+        impressSupported = ( pfx("perspective") != null ) &&
+                           ( ua.search(/(iphone)|(ipod)|(ipad)|(android)/) == -1 ),
+
     // DOM ELEMENTS
-    
-    var impress = document.getElementById("impress");
-    
+
+        impress = document.getElementById("impress");
+
     if (!impressSupported) {
         impress.className = "impress-not-supported";
         return;
     } else {
         impress.className = "";
     }
-    
+
     var canvas = document.createElement("div");
     canvas.className = "canvas";
-    
+
     arrayify( impress.childNodes ).forEach(function ( el ) {
         canvas.appendChild( el );
     });
     impress.appendChild(canvas);
-    
+
     var steps = $$(".step", impress);
-    
+
     // SETUP
     // set initial values and defaults
-    
+
     document.documentElement.style.height = "100%";
-    
+
     css(document.body, {
         height: "100%",
         overflow: "hidden"
     });
 
     var props = {
-        position: "absolute",
-        transformOrigin: "top left",
-        transition: "all 1s ease-in-out",
-        transformStyle: "preserve-3d"
-    }
-    
+            position: "absolute",
+            transformOrigin: "top left",
+            transition: "all 1s ease-in-out",
+            transformStyle: "preserve-3d"
+        },
+
+        current = {
+            translate: { x: 0, y: 0, z: 0 },
+            rotate:    { x: 0, y: 0, z: 0 },
+            scale:     { x: 1, y: 1, z: 1 }
+        };
+
     css(impress, props);
     css(impress, {
         top: "50%",
@@ -134,12 +141,6 @@
         perspective: "1000px"
     });
     css(canvas, props);
-    
-    var current = {
-        translate: { x: 0, y: 0, z: 0 },
-        rotate:    { x: 0, y: 0, z: 0 },
-        scale:     { x: 1, y: 1, z: 1 }
-    };
 
     steps.forEach(function ( el, idx ) {
         var data = el.dataset,
@@ -160,13 +161,13 @@
                     z: data.scaleZ || 1
                 }
             };
-        
+
         el.stepData = step;
-        
+
         if ( !el.id ) {
             el.id = "step-" + idx;
         }
-        
+
         css(el, {
             position: "absolute",
             transform: "translate(-50%,-50%)" +
@@ -175,7 +176,7 @@
                        scale(step.scale),
             transformStyle: "preserve-3d"
         });
-        
+
     });
 
     // making given step active
@@ -189,46 +190,46 @@
         el.classList.add("active");
 
         impress.className = "step-" + el.id;
-        
-        var target = {
-            rotate: {
-                x: -parseInt(step.rotate.x, 10),
-                y: -parseInt(step.rotate.y, 10),
-                z: -parseInt(step.rotate.z, 10),
-            },
-            scale: {
-                x: 1 / parseFloat(step.scale.x),
-                y: 1 / parseFloat(step.scale.y),
-                z: 1 / parseFloat(step.scale.z),
-            },
-            translate: {
-                x: -step.translate.x,
-                y: -step.translate.y,
-                z: -step.translate.z
-            }
-        };
 
-        var zoomin = target.scale.x >= current.scale.x;
-        
+        var target = {
+                rotate: {
+                    x: -parseInt(step.rotate.x, 10),
+                    y: -parseInt(step.rotate.y, 10),
+                    z: -parseInt(step.rotate.z, 10),
+                },
+                scale: {
+                    x: 1 / parseFloat(step.scale.x),
+                    y: 1 / parseFloat(step.scale.y),
+                    z: 1 / parseFloat(step.scale.z),
+                },
+                translate: {
+                    x: -step.translate.x,
+                    y: -step.translate.y,
+                    z: -step.translate.z
+                }
+            },
+
+            zoomin = target.scale.x >= current.scale.x;
+
         css(impress, {
             transform: scale(target.scale),
             transitionDelay: (zoomin ? "500ms" : "0ms")
         });
-        
+
         css(canvas, {
             transform: rotate(target.rotate, true) + translate(target.translate),
             transitionDelay: (zoomin ? "0ms" : "500ms")
         });
-        
+
         current = target;
     }
-    
+
     // EVENTS
-    
+
     document.addEventListener("keydown", function ( event ) {
         if ( event.keyCode == 9 || ( event.keyCode >= 32 && event.keyCode <= 34 ) || (event.keyCode >= 37 && event.keyCode <= 40) ) {
-            var active = $(".step.active", impress);
-            var next = active;
+            var active = $(".step.active", impress),
+                next = active;
             switch( event.keyCode ) {
                 case 33: ; // pg up
                 case 37: ; // left
@@ -243,16 +244,16 @@
                 case 40:   // down
                          next = steps.indexOf( active ) + 1;
                          next = next < steps.length ? steps[ next ] : steps[ 0 ];
-                         break; 
+                         break;
             }
-            
+
             select(next);
-            
+
             event.preventDefault();
         }
     }, false);
 
-    
+
     // Sometimes it's possible to trigger focus on first link with some keyboard action.
     // Browser in such a case tries to scroll the page to make this element visible
     // (even that body overflow is set to hidden) and it breaks our careful positioning.
@@ -263,8 +264,8 @@
     window.addEventListener("scroll", function ( event ) {
         window.scrollTo(0, 0);
     }, false);
-    
-    // START 
+
+    // START
     // by selecting first step of presentation
     select(steps[0]);
 
