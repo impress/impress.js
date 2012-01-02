@@ -15,10 +15,10 @@
     
     var pfx = (function () {
 
-        var style = document.createElement('dummy').style,
+        var style = document.createElement('div').style,
             prefixes = 'Webkit Moz O ms Khtml'.split(' '),
             memory = {};
-            
+
         return function ( prop ) {
             if ( typeof memory[ prop ] === "undefined" ) {
 
