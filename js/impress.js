@@ -252,6 +252,36 @@
         }
     }, false);
 
+    var all_elements = document.getElementsByTagName("a");
+    for(i = 0; i < all_elements.length; i++){
+        if(all_elements[i].getAttribute("class") == "internal"){
+            all_elements[i].addEventListener("click", function (event) {
+                event.preventDefault();
+                parts = this.href.split("/");
+                skipTo(parseInt(parts[parts.length - 1]));
+            }, false);
+        }
+    }
+    
+    function skipTo(slide){
+        var active = $(".step.active", impress);
+        var next = active;
+        
+        if(slide > steps.indexOf(active)){
+            for(var zz = steps.indexOf(active); zz != slide; zz++){
+                next = zz + 1;
+                next = next < steps.length ? steps[next] : steps[0];
+                select(next);
+            }
+        }
+        else if(slide < steps.indexOf(active)){
+            for(var zz = steps.indexOf(active); zz != slide; zz--){   
+                next = zz - 1;
+                next = next >= 0 ? steps[next] : steps[steps.length];
+                select(next);
+            }
+        }
+    }
     
     // Sometimes it's possible to trigger focus on first link with some keyboard action.
     // Browser in such a case tries to scroll the page to make this element visible
