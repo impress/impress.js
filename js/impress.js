@@ -57,6 +57,10 @@
         return el;
     }
     
+    var byId = function ( id ) {
+        return document.getElementById(id);
+    }
+    
     var $ = function ( selector, context ) {
         context = context || document;
         return context.querySelector(selector);
@@ -91,7 +95,7 @@
     
     // DOM ELEMENTS
     
-    var impress = document.getElementById("impress");
+    var impress = byId("impress");
     
     if (!impressSupported) {
         impress.className = "impress-not-supported";
@@ -164,7 +168,7 @@
         el.stepData = step;
         
         if ( !el.id ) {
-            el.id = "step-" + idx;
+            el.id = "step-" + (idx + 1);
         }
         
         css(el, {
@@ -181,14 +185,23 @@
     // making given step active
 
     var select = function ( el ) {
+        if ( !el || !el.stepData ) {
+            // selected element is not defined as step
+            return false;
+        }
+        
         var step = el.stepData;
-
+        
         if ( $(".step.active", impress) ) {
             $(".step.active", impress).classList.remove("active");
         }
         el.classList.add("active");
-
+        
         impress.className = "step-" + el.id;
+        
+        // `#/step-id` is used instead of `#step-id` to prevent default browser
+        // scrolling to element in hash
+        window.location.hash = "#/" + el.id;
         
         var target = {
             rotate: {
@@ -207,7 +220,7 @@
                 z: -step.translate.z
             }
         };
-
+        
         var zoomin = target.scale.x >= current.scale.x;
         
         css(impress, {
@@ -221,6 +234,8 @@
         });
         
         current = target;
+        
+        return el;
     }
     
     // EVENTS
@@ -252,6 +267,34 @@
         }
     }, false);
 
+    document.addEventListener("click", function ( event ) {
+        // event delegation with "bubbling"
+        // check if event target (or any of its parents it a link)
+        var target = event.target;
+        while ( (target.tagName != "A") && (target != document.body) ) {
+            target = target.parentNode;
+        }
+        
+        if ( target.tagName == "A" ) {
+            var href = target.getAttribute("href");
+            
+            // if it's a link to presentation step, select this step
+            if ( href && href[0] == '#' && ( target = byId(href.slice(1)) ) ) {
+                select(target);
+                event.preventDefault();
+            }
+        }
+    });
+    
+    var getElementFromUrl = function () {
+        // get id from url # by removing `#` or `#/` from the beginning,
+        // so both "fallback" `#slide-id` and "enhanced" `#/slide-id` will work
+        return byId( window.location.hash.replace(/^#\/?/,"") );
+    }
+    
+    window.addEventListener("hashchange", function () {
+        select( getElementFromUrl() );
+    }, false);
     
     // Sometimes it's possible to trigger focus on first link with some keyboard action.
     // Browser in such a case tries to scroll the page to make this element visible
@@ -265,8 +308,8 @@
     }, false);
     
     // START 
-    // by selecting first step of presentation
-    select(steps[0]);
+    // by selecting step defined in url or first step of the presentation
+    select(getElementFromUrl() || steps[0]);
 
 })(document, window);
 
