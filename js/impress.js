@@ -253,7 +253,7 @@
     }, false);
 
     document.addEventListener("click", function ( event ) {
-        if(event.target.tagName == "A" && event.target.className.indexOf('impress-link') >= 0){
+        if(event.target.tagName.toUpperCase() == "A" && event.target.className.indexOf('impress-link') >= 0){
             var link = event.target.getAttribute('href');
             select($(link));
             event.preventDefault();
