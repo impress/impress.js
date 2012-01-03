@@ -254,8 +254,7 @@
 
     document.addEventListener("click", function ( event ) {
         if(event.target.tagName.toUpperCase() == "A" && event.target.className.indexOf('impress-link') >= 0){
-            var link = event.target.getAttribute('href');
-            select($(link));
+            select($(event.target.getAttribute('href')));
             event.preventDefault();
         }
     }, false);
