@@ -252,6 +252,14 @@
         }
     }, false);
 
+    document.addEventListener("click", function ( event ) {
+        if(event.target.tagName == "A" && event.target.className.indexOf('impress-link') >= 0){
+            var link = event.target.getAttribute('href');
+            select($(link));
+            event.preventDefault();
+        }
+    }, false);
+
     
     // Sometimes it's possible to trigger focus on first link with some keyboard action.
     // Browser in such a case tries to scroll the page to make this element visible
