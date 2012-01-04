@@ -234,6 +234,9 @@
         var zoomin = target.scale.x >= current.scale.x;
         
         css(impress, {
+            // to keep the perspective look similar for different scales
+            // we need to 'scale' the perspective, too
+            perspective: step.scale.x * 1000 + "px",
             transform: scale(target.scale),
             transitionDelay: (zoomin ? "500ms" : "0ms")
         });
