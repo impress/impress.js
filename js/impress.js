@@ -184,6 +184,8 @@
 
     // making given step active
 
+    var active = null;
+    
     var select = function ( el ) {
         if ( !el || !el.stepData ) {
             // selected element is not defined as step
@@ -202,8 +204,8 @@
         
         var step = el.stepData;
         
-        if ( $(".step.active", impress) ) {
-            $(".step.active", impress).classList.remove("active");
+        if ( active ) {
+            active.classList.remove("active");
         }
         el.classList.add("active");
         
@@ -247,6 +249,7 @@
         });
         
         current = target;
+        active = el;
         
         return el;
     }
@@ -255,7 +258,6 @@
     
     document.addEventListener("keydown", function ( event ) {
         if ( event.keyCode == 9 || ( event.keyCode >= 32 && event.keyCode <= 34 ) || (event.keyCode >= 37 && event.keyCode <= 40) ) {
-            var active = $(".step.active", impress);
             var next = active;
             switch( event.keyCode ) {
                 case 33: ; // pg up
