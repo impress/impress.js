@@ -99,6 +99,16 @@ a:hover {
 
 /* COMMON STEP STYLES */
 
+#timebar {
+    width: 0px;
+    background-color: #535353;
+    height: 5px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+}
+
 .step {
     width: 900px;
     padding: 40px;

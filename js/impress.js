@@ -12,18 +12,18 @@
 (function ( document, window ) {
 
     // HELPER FUNCTIONS
-    
+
     var pfx = (function () {
 
         var style = document.createElement('dummy').style,
-            prefixes = 'Webkit Moz O ms Khtml'.split(' '),
-            memory = {};
-            
+        prefixes = 'Webkit Moz O ms Khtml'.split(' '),
+        memory = {};
+
         return function ( prop ) {
             if ( typeof memory[ prop ] === "undefined" ) {
 
                 var ucProp  = prop.charAt(0).toUpperCase() + prop.substr(1),
-                    props   = (prop + ' ' + prefixes.join(ucProp + ' ') + ucProp).split(' ');
+                props   = (prop + ' ' + prefixes.join(ucProp + ' ') + ucProp).split(' ');
 
                 memory[ prop ] = null;
                 for ( var i in props ) {
@@ -43,7 +43,7 @@
     var arrayify = function ( a ) {
         return [].slice.call( a );
     };
-    
+
     var css = function ( el, props ) {
         var key, pkey;
         for ( key in props ) {
@@ -56,69 +56,69 @@
         }
         return el;
     }
-    
+
     var byId = function ( id ) {
         return document.getElementById(id);
     }
-    
+
     var $ = function ( selector, context ) {
         context = context || document;
         return context.querySelector(selector);
     };
-    
+
     var $$ = function ( selector, context ) {
         context = context || document;
         return arrayify( context.querySelectorAll(selector) );
     };
-    
+
     var translate = function ( t ) {
         return " translate3d(" + t.x + "px," + t.y + "px," + t.z + "px) ";
     };
-    
+
     var rotate = function ( r, revert ) {
         var rX = " rotateX(" + r.x + "deg) ",
-            rY = " rotateY(" + r.y + "deg) ",
-            rZ = " rotateZ(" + r.z + "deg) ";
-        
+        rY = " rotateY(" + r.y + "deg) ",
+        rZ = " rotateZ(" + r.z + "deg) ";
+
         return revert ? rZ+rY+rX : rX+rY+rZ;
     };
-    
+
     var scale = function ( s ) {
         return " scaleX(" + s.x + ") scaleY(" + s.y + ") scaleZ(" + s.z + ") ";
     }
-    
+
     // CHECK SUPPORT
-    
+
     var ua = navigator.userAgent.toLowerCase();
     var impressSupported = ( pfx("perspective") != null ) &&
-                           ( ua.search(/(iphone)|(ipod)|(ipad)|(android)/) == -1 );
-    
+    ( ua.search(/(iphone)|(ipod)|(ipad)|(android)/) == -1 );
+
     // DOM ELEMENTS
-    
+
     var impress = byId("impress");
-    
+
     if (!impressSupported) {
         impress.className = "impress-not-supported";
         return;
     } else {
         impress.className = "";
     }
-    
+
     var canvas = document.createElement("div");
     canvas.className = "canvas";
-    
+
     arrayify( impress.childNodes ).forEach(function ( el ) {
         canvas.appendChild( el );
     });
     impress.appendChild(canvas);
-    
+
     var steps = $$(".step", impress);
-    
+
     // SETUP
     // set initial values and defaults
-    
+
     document.documentElement.style.height = "100%";
-    
+
     css(document.body, {
         height: "100%",
         overflow: "hidden"
@@ -130,7 +130,7 @@
         transition: "all 1s ease-in-out",
         transformStyle: "preserve-3d"
     }
-    
+
     css(impress, props);
     css(impress, {
         top: "50%",
@@ -138,60 +138,77 @@
         perspective: "1000px"
     });
     css(canvas, props);
-    
+
     var current = {
-        translate: { x: 0, y: 0, z: 0 },
-        rotate:    { x: 0, y: 0, z: 0 },
-        scale:     { x: 1, y: 1, z: 1 }
+        translate: {
+            x: 0, 
+            y: 0, 
+            z: 0
+        },
+        rotate:    {
+            x: 0, 
+            y: 0, 
+            z: 0
+        },
+        scale:     {
+            x: 1, 
+            y: 1, 
+            z: 1
+        }
     };
 
     steps.forEach(function ( el, idx ) {
         var data = el.dataset,
-            step = {
-                translate: {
-                    x: data.x || 0,
-                    y: data.y || 0,
-                    z: data.z || 0
-                },
-                rotate: {
-                    x: data.rotateX || 0,
-                    y: data.rotateY || 0,
-                    z: data.rotateZ || data.rotate || 0
-                },
-                scale: {
-                    x: data.scaleX || data.scale || 1,
-                    y: data.scaleY || data.scale || 1,
-                    z: data.scaleZ || 1
-                }
-            };
-        
+        step = {
+            translate: {
+                x: data.x || 0,
+                y: data.y || 0,
+                z: data.z || 0
+            },
+            rotate: {
+                x: data.rotateX || 0,
+                y: data.rotateY || 0,
+                z: data.rotateZ || data.rotate || 0
+            },
+            scale: {
+                x: data.scaleX || data.scale || 1,
+                y: data.scaleY || data.scale || 1,
+                z: data.scaleZ || 1
+            },
+            time: {
+                i: data.time || data.time || 0
+            }
+        };
+
         el.stepData = step;
-        
+
         if ( !el.id ) {
             el.id = "step-" + (idx + 1);
         }
-        
+
         css(el, {
             position: "absolute",
             transform: "translate(-50%,-50%)" +
-                       translate(step.translate) +
-                       rotate(step.rotate) +
-                       scale(step.scale),
+            translate(step.translate) +
+            rotate(step.rotate) +
+            scale(step.scale),
             transformStyle: "preserve-3d"
         });
-        
+
     });
 
     // making given step active
 
     var active = null;
-    
+
+    var timeout = null;
+
     var select = function ( el ) {
         if ( !el || !el.stepData ) {
             // selected element is not defined as step
             return false;
         }
-        
+
         // Sometimes it's possible to trigger focus on first link with some keyboard action.
         // Browser in such a case tries to scroll the page to make this element visible
         // (even that body overflow is set to hidden) and it breaks our careful positioning.
@@ -201,20 +218,21 @@
         //
         // If you are reading this and know any better way to handle it, I'll be glad to hear about it!
         window.scrollTo(0, 0);
-        
+        resetTimebar();
+
         var step = el.stepData;
-        
+
         if ( active ) {
             active.classList.remove("active");
         }
         el.classList.add("active");
-        
+
         impress.className = "step-" + el.id;
-        
+
         // `#/step-id` is used instead of `#step-id` to prevent default browser
         // scrolling to element in hash
         window.location.hash = "#/" + el.id;
-        
+
         var target = {
             rotate: {
                 x: -parseInt(step.rotate.x, 10),
@@ -232,9 +250,9 @@
                 z: -step.translate.z
             }
         };
-        
+
         var zoomin = target.scale.x >= current.scale.x;
-        
+
         css(impress, {
             // to keep the perspective look similar for different scales
             // we need to 'scale' the perspective, too
@@ -242,42 +260,95 @@
             transform: scale(target.scale),
             transitionDelay: (zoomin ? "500ms" : "0ms")
         });
-        
+
         css(canvas, {
             transform: rotate(target.rotate, true) + translate(target.translate),
             transitionDelay: (zoomin ? "0ms" : "500ms")
         });
-        
+
         current = target;
         active = el;
+
+        if(step.time.i > 0) {
+            next = steps.indexOf( active ) + 1;
+            next = next < steps.length ? steps[ next ] : steps[ 0 ];
+
+            if(timeout) {
+                window.clearTimeout(timeout);
+            }
+            
+            animateTimebar(step.time.i);
+            
+            timeout = window.setTimeout(function() {
+                select(next);
+            }, step.time.i);
+        } else {
+            return el;
+        }
+    }
+
+    var timebar = byId('timebar');
+    var timebarAnimate;
+
+    var animateTimebar = function(time) {
+        var windowWidth = window.innerWidth;
+        var step = windowWidth / ((time - 300) / 40);
+        timebarAnimate = window.setInterval(function() {
+            updateTimebar(step, windowWidth);
+        }, 40);  
+    }
+    
+    var updateTimebar = function(step, windowWidth) {
+        currentWidth = timebar.style.width;
         
-        return el;
+        if(currentWidth) {
+            currentWidth = parseFloat(currentWidth.slice(0, -2));
+        } else {
+            currentWidth = 0;
+        }
+        
+        if(currentWidth >= windowWidth) {
+            window.clearInterval(timebarAnimate);
+        }
+        
+        newWidth = "" + (currentWidth + step) + "px";
+        timebar.style.width = newWidth;
+    }
+    
+    var resetTimebar = function() {
+        timebar.style.width = "0px";
     }
     
     // EVENTS
-    
+
     document.addEventListener("keydown", function ( event ) {
         if ( event.keyCode == 9 || ( event.keyCode >= 32 && event.keyCode <= 34 ) || (event.keyCode >= 37 && event.keyCode <= 40) ) {
             var next = active;
             switch( event.keyCode ) {
-                case 33: ; // pg up
-                case 37: ; // left
+                case 33:
+                    ; // pg up
+                case 37:
+                    ; // left
                 case 38:   // up
-                         next = steps.indexOf( active ) - 1;
-                         next = next >= 0 ? steps[ next ] : steps[ steps.length-1 ];
-                         break;
-                case 9:  ; // tab
-                case 32: ; // space
-                case 34: ; // pg down
-                case 39: ; // right
+                    next = steps.indexOf( active ) - 1;
+                    next = next >= 0 ? steps[ next ] : steps[ steps.length-1 ];
+                    break;
+                case 9:
+                    ; // tab
+                case 32:
+                    ; // space
+                case 34:
+                    ; // pg down
+                case 39:
+                    ; // right
                 case 40:   // down
-                         next = steps.indexOf( active ) + 1;
-                         next = next < steps.length ? steps[ next ] : steps[ 0 ];
-                         break; 
+                    next = steps.indexOf( active ) + 1;
+                    next = next < steps.length ? steps[ next ] : steps[ 0 ];
+                    break;
             }
-            
+
             select(next);
-            
+
             event.preventDefault();
         }
     }, false);
@@ -287,36 +358,38 @@
         // check if event target (or any of its parents is a link or a step)
         var target = event.target;
         while ( (target.tagName != "A") &&
-                (!target.stepData) &&
-                (target != document.body) ) {
+            (!target.stepData) &&
+            (target != document.body) ) {
             target = target.parentNode;
         }
-        
+
         if ( target.tagName == "A" ) {
             var href = target.getAttribute("href");
-            
+
             // if it's a link to presentation step, target this step
             if ( href && href[0] == '#' ) {
                 target = byId( href.slice(1) );
             }
         }
-        
+
         if ( select(target) ) {
             event.preventDefault();
         }
     });
-    
+
     var getElementFromUrl = function () {
         // get id from url # by removing `#` or `#/` from the beginning,
         // so both "fallback" `#slide-id` and "enhanced" `#/slide-id` will work
         return byId( window.location.hash.replace(/^#\/?/,"") );
     }
-    
+
+    /* - Removed for the moment as it causes issues with timeout.
     window.addEventListener("hashchange", function () {
         select( getElementFromUrl() );
     }, false);
-    
-    // START 
+    */
+
+    // START
     // by selecting step defined in url or first step of the presentation
     select(getElementFromUrl() || steps[0]);
 
