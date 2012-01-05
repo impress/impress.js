@@ -44,6 +44,11 @@
         return [].slice.call( a );
     };
 
+    /**
+     * Fetches the CSS value of the provided element.
+     * @param el Element ID
+     * @param props Style attribute
+     */
     var css = function ( el, props ) {
         var key, pkey;
         for ( key in props ) {
@@ -57,6 +62,11 @@
         return el;
     }
 
+    /**
+     * Returns a reference to the element by its ID.
+     * @param id Element unique ID
+     * @return reference DOMElement
+     */
     var byId = function ( id ) {
         return document.getElementById(id);
     }
@@ -71,10 +81,21 @@
         return arrayify( context.querySelectorAll(selector) );
     };
 
+    /**
+     * Converts translate object values to CSS valid string.
+     * @param t Translate object containing x,y & z values.
+     * @return string
+     */
     var translate = function ( t ) {
         return " translate3d(" + t.x + "px," + t.y + "px," + t.z + "px) ";
     };
 
+    /**
+     * Converts rotate object values to CSS valid string.
+     * @param r Rotate object containing x,y & z values.
+     * @param revert Something something dark side.
+     * @param string
+     */
     var rotate = function ( r, revert ) {
         var rX = " rotateX(" + r.x + "deg) ",
         rY = " rotateY(" + r.y + "deg) ",
@@ -83,6 +104,11 @@
         return revert ? rZ+rY+rX : rX+rY+rZ;
     };
 
+    /**
+     * Converts scale object values to CSS valid string.
+     * @param s Scale object containing x,y & z values.
+     * @return string
+     */
     var scale = function ( s ) {
         return " scaleX(" + s.x + ") scaleY(" + s.y + ") scaleZ(" + s.z + ") ";
     }
@@ -90,6 +116,7 @@
     // CHECK SUPPORT
 
     var ua = navigator.userAgent.toLowerCase();
+    
     var impressSupported = ( pfx("perspective") != null ) &&
     ( ua.search(/(iphone)|(ipod)|(ipad)|(android)/) == -1 );
 
@@ -157,6 +184,9 @@
         }
     };
 
+    /**
+     *
+     */
     steps.forEach(function ( el, idx ) {
         var data = el.dataset,
         step = {
@@ -203,6 +233,10 @@
 
     var timeout = null;
 
+    /**
+     * Selects a slide and transitions to that slide for the user to view.
+     * @param el
+     */
     var select = function ( el ) {
         if ( !el || !el.stepData ) {
             // selected element is not defined as step
@@ -290,6 +324,9 @@
     var timebar = byId('timebar');
     var timebarAnimate;
 
+    /**
+     *
+     */
     var animateTimebar = function(time) {
         var windowWidth = window.innerWidth;
         var step = windowWidth / ((time - 300) / 40);
@@ -298,6 +335,9 @@
         }, 40);  
     }
     
+    /**
+     *
+     */
     var updateTimebar = function(step, windowWidth) {
         currentWidth = timebar.style.width;
         
@@ -315,12 +355,18 @@
         timebar.style.width = newWidth;
     }
     
+    /**
+     *
+     */
     var resetTimebar = function() {
         timebar.style.width = "0px";
     }
     
     // EVENTS
 
+    /**
+     *
+     */
     document.addEventListener("keydown", function ( event ) {
         if ( event.keyCode == 9 || ( event.keyCode >= 32 && event.keyCode <= 34 ) || (event.keyCode >= 37 && event.keyCode <= 40) ) {
             var next = active;
@@ -353,6 +399,9 @@
         }
     }, false);
 
+    /**
+     *
+     */
     document.addEventListener("click", function ( event ) {
         // event delegation with "bubbling"
         // check if event target (or any of its parents is a link or a step)
@@ -377,6 +426,9 @@
         }
     });
 
+    /**
+     *
+     */
     var getElementFromUrl = function () {
         // get id from url # by removing `#` or `#/` from the beginning,
         // so both "fallback" `#slide-id` and "enhanced" `#/slide-id` will work
