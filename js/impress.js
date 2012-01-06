@@ -187,9 +187,6 @@
         }
     };
 
-    /**
-     *
-     */
     steps.forEach(function ( el, idx ) {
         var data = el.dataset,
         step = {
@@ -231,13 +228,17 @@
     });
 
     // making given step active
-
     var active = null;
 
+    /**
+     * setTimeout referenc
+     * @param timeout
+     */
     var timeout = null;
 
     /**
-     * Selects a slide and transitions to that slide for the user to view.
+     * Method selects the referenced slide and transitions to that slide
+     * using the parameters set via the dataset.
      * @param el
      */
     var select = function ( el ) {
@@ -306,6 +307,8 @@
         current = target;
         active = el;
 
+        // If a slide has a time value instead of returning the element
+        // we wait and then move onto the next slide before returning anything.
         if(step.time.i > 0) {
             next = steps.indexOf( active ) + 1;
             next = next < steps.length ? steps[ next ] : steps[ 0 ];
@@ -328,10 +331,10 @@
     var timebarAnimate;
 
     /**
-     *
+     * Prepares the interval loop to animate the time bar that 
+     * runs across the page.
      */
     var animateTimebar = function(time) {
-        console.log(time);
         var windowWidth = window.innerWidth;
         var step = windowWidth / ((time - 300) / 40);
         timebarAnimate = window.setInterval(function() {
@@ -340,10 +343,12 @@
     }
     
     /**
-     *
+     * Updates the width of the timebar.
+     * @param step Pixels of which to increment the timebar.
+     * @param windowWidth The width of the current viewport.
      */
     var updateTimebar = function(step, windowWidth) {
-        currentWidth = timebar.style.width;
+        var currentWidth = timebar.style.width;
         
         if(currentWidth) {
             currentWidth = parseFloat(currentWidth.slice(0, -2));
