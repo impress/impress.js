@@ -117,6 +117,9 @@
 
     var ua = navigator.userAgent.toLowerCase();
     
+    /**
+     * Impress supports browsers with perspective compability and doesn't 
+     */
     var impressSupported = ( pfx("perspective") != null ) &&
     ( ua.search(/(iphone)|(ipod)|(ipad)|(android)/) == -1 );
 
@@ -328,6 +331,7 @@
      *
      */
     var animateTimebar = function(time) {
+        console.log(time);
         var windowWidth = window.innerWidth;
         var step = windowWidth / ((time - 300) / 40);
         timebarAnimate = window.setInterval(function() {
@@ -359,6 +363,7 @@
      *
      */
     var resetTimebar = function() {
+        window.clearInterval(timebarAnimate);
         timebar.style.width = "0px";
     }
     
