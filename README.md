@@ -12,7 +12,7 @@ impress.js may not help you if you have nothing interesting to say ;)
 ABOUT THE NAME
 ----------------
 
-impress.js name in courtesy of @skuzniak (http://twitter.com/skuzniak/status/143627215165333504).
+impress.js name in [courtesy of @skuzniak](http://twitter.com/skuzniak/status/143627215165333504).
 
 It's an (un)fortunate coincidence that a Open/LibreOffice presentation tool is called Impress ;)
 
@@ -20,7 +20,7 @@ It's an (un)fortunate coincidence that a Open/LibreOffice presentation tool is c
 VERSION HISTORY
 -----------------
 
-### 0.1
+### 0.1 ([zip](https://github.com/bartaz/impress.js/zipball/0.1), [tar](https://github.com/bartaz/impress.js/tarball/0.1))
 
 First release.
 
@@ -31,7 +31,7 @@ with simple fallback for non-supporting browsers.
 DEMO
 ------
 
-impress.js demo: [http://bartaz.github.com/impress.js]
+[impress.js demo](http://bartaz.github.com/impress.js) by @bartaz
 
 
 If you have used impress.js in your presentation and would like to have it listed here,
@@ -105,5 +105,5 @@ likely to be supported (without polyfill code).
 LICENSE
 ---------
 
-Copyright 2011 Bartek Szopka. Released under MIT License.
+Copyright 2011-2012 Bartek Szopka. Released under MIT License.
 
