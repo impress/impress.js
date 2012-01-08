@@ -185,6 +185,7 @@
     // making given step active
 
     var active = null;
+    var pechakuchaTimer = false;
     
     var select = function ( el ) {
         if ( !el || !el.stepData ) {
@@ -257,7 +258,7 @@
     // EVENTS
     
     document.addEventListener("keydown", function ( event ) {
-        if ( event.keyCode == 9 || ( event.keyCode >= 32 && event.keyCode <= 34 ) || (event.keyCode >= 37 && event.keyCode <= 40) ) {
+        if ( event.keyCode == 9 || ( event.keyCode >= 32 && event.keyCode <= 34 ) || (event.keyCode >= 37 && event.keyCode <= 40) ||  event.keyCode == 80 ) {
             var next = active;
             switch( event.keyCode ) {
                 case 33: ; // pg up
@@ -273,7 +274,23 @@
                 case 40:   // down
                          next = steps.indexOf( active ) + 1;
                          next = next < steps.length ? steps[ next ] : steps[ 0 ];
-                         break; 
+                         break;
+                case 80:	// "p" - Pecha-kucha presentation style (20 sec per slide) 
+                			// 	more on : http://en.wikipedia.org/wiki/Pecha_Kucha
+		                if ( !pechakuchaTimer ) {
+		                	pechakuchaTimer = 1;
+		             		timer = window.setInterval(function() {
+		             			next = steps.indexOf( active ) + 1;
+		             	        next = next < steps.length ? steps[ next ] : steps[ 0 ];
+		             	        select(next);
+		             	        event.preventDefault();
+		             		}, 20000);
+		             	}else {
+		             		pechakuchaTimer = 0;
+		             		window.clearInterval(timer);
+		             	}
+                		break;
+                         
             }
             
             select(next);
