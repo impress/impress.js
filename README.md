@@ -4,7 +4,7 @@ impress.js
 It's a presentation framework based on the power of CSS3 transforms and 
 transitions in modern browsers and inspired by the idea behind prezi.com.
 
-*WARNING*
+**WARNING**
 
 impress.js may not help you if you have nothing interesting to say ;)
 
@@ -16,6 +16,16 @@ impress.js name in courtesy of @skuzniak (http://twitter.com/skuzniak/status/143
 
 It's an (un)fortunate coincidence that a Open/LibreOffice presentation tool is called Impress ;)
 
+
+VERSION HISTORY
+-----------------
+
+### 0.1
+
+First release.
+
+Contains basic functionality for step placement and transitions between them
+with simple fallback for non-supporting browsers.
 
 
 DEMO
