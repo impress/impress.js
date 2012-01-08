@@ -142,7 +142,8 @@
     var current = {
         translate: { x: 0, y: 0, z: 0 },
         rotate:    { x: 0, y: 0, z: 0 },
-        scale:     { x: 1, y: 1, z: 1 }
+        scale:     { x: 1, y: 1, z: 1 },
+        duration:  { i: 0 }
     };
 
     steps.forEach(function ( el, idx ) {
@@ -162,6 +163,9 @@
                     x: data.scaleX || data.scale || 1,
                     y: data.scaleY || data.scale || 1,
                     z: data.scaleZ || 1
+                },
+                duration: {
+                	i: parseFloat(data.duration) * 1000 || 0
                 }
             };
         
@@ -186,6 +190,8 @@
 
     var active = null;
     
+    var duration = null;
+    
     var select = function ( el ) {
         if ( !el || !el.stepData ) {
             // selected element is not defined as step
@@ -201,6 +207,7 @@
         //
         // If you are reading this and know any better way to handle it, I'll be glad to hear about it!
         window.scrollTo(0, 0);
+        resetDurationBar();
         
         var step = el.stepData;
         
@@ -251,9 +258,56 @@
         current = target;
         active = el;
         
-        return el;
+        if(step.duration.i > 0) {
+        	next = steps.indexOf( active ) + 1;
+        	next = next < steps.length ? steps[ next ] : steps[ 0 ];
+        	
+        	if(duration) {
+        		window.clearTimeout(duration);
+        	}
+        	
+        	animateDurationBar(step.duration.i);
+        	
+        	duration = window.setTimeout(function() {
+        		select(next);
+        	}, step.duration.i);
+        } else {
+        	return el;
+        }
     }
     
+    // TIMEBAR
+    
+    var durationBar = byId('duration-bar');
+	var barAnimateInterval;
+	
+	var animateDurationBar = function(duration) {
+		var windowWidth = window.innerWidth;
+		var step = windowWidth / ((duration - 300) / 40);
+		
+		barAnimateInterval = window.setInterval(function() {
+			updateDurationBar(step, windowWidth);
+		}, 40);
+	}
+	
+	var updateDurationBar = function(step, windowWidth) {
+		currentWidth = durationBar.style.width;
+		
+		if(currentWidth) { 
+			currentWidth = parseFloat(currentWidth.slice(0, -2));
+		} else {
+			currentWidth = 0;
+		}
+		
+		newWidth = "" + (currentWidth + step) + "px";
+		durationBar.style.width = newWidth;
+	}
+	
+	var resetDurationBar = function() {
+		window.clearInterval(barAnimateInterval);
+		durationBar.style.width = "0px";
+	}
+	
     // EVENTS
     
     document.addEventListener("keydown", function ( event ) {
@@ -312,9 +366,11 @@
         return byId( window.location.hash.replace(/^#\/?/,"") );
     }
     
+    /*
     window.addEventListener("hashchange", function () {
         select( getElementFromUrl() );
     }, false);
+    */
     
     // START 
     // by selecting step defined in url or first step of the presentation
