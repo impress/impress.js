@@ -281,6 +281,34 @@
             event.preventDefault();
         }
     }, false);
+    
+    var canScroll = true;
+    var magicNumber = 1000;
+    resetScroll = function() {
+	canScroll = true;
+    }
+    scroller = function( event ) {
+	if (!canScroll)
+		return;
+	canScroll = false;
+	var next = active;
+        var raw = event.detail ? event.detail : event.wheelDelta;
+        if (raw > 0) {
+                next = steps.indexOf( active ) + 1;
+                next = next < steps.length ? steps[next] : steps[0];
+        } else {
+                next = steps.indexOf( active ) - 1;
+                next = next >= 0 ? steps[next] : steps[steps.length-1];
+        }   
+
+        select(next);
+    
+        event.preventDefault();
+	setTimeout("resetScroll()", magicNumber);
+    };
+
+    document.addEventListener('DOMMouseScroll', scroller, false);
+    document.addEventListener('mousewheel', scroller, false);
 
     document.addEventListener("click", function ( event ) {
         // event delegation with "bubbling"
