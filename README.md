@@ -35,6 +35,7 @@ DEMO
 
 [What the Heck is Responsive Web Design](http://johnpolacek.github.com/WhatTheHeckIsResponsiveWebDesign-impressjs/) by John Polacek [@johnpolacek](http://twitter.com/johnpolacek)
 
+[lioshi.com](http://lioshi.com) by @lioshi
 
 If you have used impress.js in your presentation and would like to have it listed here,
 please contact me via GitHub or send me a pull request to updated `README.md` file.
