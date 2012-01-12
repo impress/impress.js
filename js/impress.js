@@ -187,8 +187,8 @@
     var active = null;
     
     var select = function ( el ) {
-        if ( !el || !el.stepData ) {
-            // selected element is not defined as step
+        if ( !el || !el.stepData || el == active) {
+            // selected element is not defined as step or is already active
             return false;
         }
         
