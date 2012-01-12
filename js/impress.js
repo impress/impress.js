@@ -186,6 +186,17 @@
 
     var active = null;
     
+    var navigate = function ( el ) {
+		if ( !el || !el.stepData ) {
+            // selected element is not defined as step
+            return false;
+        }
+        
+		// `#/step-id` is used instead of `#step-id` to prevent default browser
+        // scrolling to element in hash
+        window.location.hash = "#/" + el.id;
+    }
+    
     var select = function ( el ) {
         if ( !el || !el.stepData ) {
             // selected element is not defined as step
@@ -210,10 +221,6 @@
         el.classList.add("active");
         
         impress.className = "step-" + el.id;
-        
-        // `#/step-id` is used instead of `#step-id` to prevent default browser
-        // scrolling to element in hash
-        window.location.hash = "#/" + el.id;
         
         var target = {
             rotate: {
@@ -276,7 +283,7 @@
                          break; 
             }
             
-            select(next);
+            navigate(next);
             
             event.preventDefault();
         }
