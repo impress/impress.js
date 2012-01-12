@@ -84,7 +84,7 @@
     };
     
     var scale = function ( s ) {
-        return " scaleX(" + s.x + ") scaleY(" + s.y + ") scaleZ(" + s.z + ") ";
+        return " scale(" + s + ") ";
     }
     
     // CHECK SUPPORT
@@ -142,7 +142,7 @@
     var current = {
         translate: { x: 0, y: 0, z: 0 },
         rotate:    { x: 0, y: 0, z: 0 },
-        scale:     { x: 1, y: 1, z: 1 }
+        scale:     1
     };
 
     steps.forEach(function ( el, idx ) {
@@ -158,11 +158,7 @@
                     y: data.rotateY || 0,
                     z: data.rotateZ || data.rotate || 0
                 },
-                scale: {
-                    x: data.scaleX || data.scale || 1,
-                    y: data.scaleY || data.scale || 1,
-                    z: data.scaleZ || 1
-                }
+                scale: data.scale || 1
             };
         
         el.stepData = step;
@@ -228,24 +224,20 @@
                 y: -parseInt(step.rotate.y, 10),
                 z: -parseInt(step.rotate.z, 10)
             },
-            scale: {
-                x: 1 / parseFloat(step.scale.x),
-                y: 1 / parseFloat(step.scale.y),
-                z: 1 / parseFloat(step.scale.z)
-            },
             translate: {
                 x: -step.translate.x,
                 y: -step.translate.y,
                 z: -step.translate.z
-            }
+            },
+            scale: 1 / parseFloat(step.scale)
         };
         
-        var zoomin = target.scale.x >= current.scale.x;
+        var zoomin = target.scale >= current.scale;
         
         css(impress, {
             // to keep the perspective look similar for different scales
             // we need to 'scale' the perspective, too
-            perspective: step.scale.x * 1000 + "px",
+            perspective: step.scale * 1000 + "px",
             transform: scale(target.scale),
             transitionDelay: (zoomin ? "500ms" : "0ms")
         });
