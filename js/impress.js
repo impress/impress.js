@@ -312,10 +312,6 @@
         return byId( window.location.hash.replace(/^#\/?/,"") );
     }
     
-    window.addEventListener("hashchange", function () {
-        select( getElementFromUrl() );
-    }, false);
-    
     // START 
     // by selecting step defined in url or first step of the presentation
     select(getElementFromUrl() || steps[0]);
