@@ -306,6 +306,12 @@
         }
     });
     
+    document.addEventListener("mousewheel", function( event ) {        
+        next = steps.indexOf( active ) - event.wheelDelta / Math.abs(event.wheelDelta);
+        next = next >= 0 ? steps[ next ] : steps[ steps.length-1 ];
+        select(next);
+    }, false); 
+    
     var getElementFromUrl = function () {
         // get id from url # by removing `#` or `#/` from the beginning,
         // so both "fallback" `#slide-id` and "enhanced" `#/slide-id` will work
