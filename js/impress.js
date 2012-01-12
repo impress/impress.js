@@ -213,7 +213,12 @@
         
         // `#/step-id` is used instead of `#step-id` to prevent default browser
         // scrolling to element in hash
-        window.location.hash = "#/" + el.id;
+        //
+        // and it has to be set after animation finishes, because in chrome it
+        // causes transtion being laggy
+        window.setTimeout(function () {
+            window.location.hash = "#/" + el.id;
+        }, 1000);
         
         var target = {
             rotate: {
