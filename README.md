@@ -37,6 +37,8 @@ DEMO
 
 [lioshi.com](http://lioshi.com) by @lioshi
 
+[12412.org presentation to Digibury](http://extra.12412.org/digibury/) by Stephen Fulljames [@fulljames](http://twitter.com/fulljames)
+
 If you have used impress.js in your presentation and would like to have it listed here,
 please contact me via GitHub or send me a pull request to updated `README.md` file.
 
