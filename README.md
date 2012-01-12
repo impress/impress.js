@@ -20,6 +20,14 @@ It's an (un)fortunate coincidence that a Open/LibreOffice presentation tool is c
 VERSION HISTORY
 -----------------
 
+### master (in development)
+
+**CONTAINS UNRELEASED CHANGES, MAY BE UNSTABLE**
+
+* added mousewheel support (thx @OpenGrid)
+* couple of small bug-fixes
+
+
 ### 0.1 ([browse](https://github.com/bartaz/impress.js/tree/0.1), [zip](https://github.com/bartaz/impress.js/zipball/0.1), [tar](https://github.com/bartaz/impress.js/tarball/0.1))
 
 First release.
