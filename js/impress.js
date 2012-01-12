@@ -187,8 +187,8 @@
     var active = null;
     
     var select = function ( el ) {
-        if ( !el || !el.stepData ) {
-            // selected element is not defined as step
+        if ( !el || !el.stepData || el == active) {
+            // selected element is not defined as step or is already active
             return false;
         }
         
@@ -213,7 +213,12 @@
         
         // `#/step-id` is used instead of `#step-id` to prevent default browser
         // scrolling to element in hash
-        window.location.hash = "#/" + el.id;
+        //
+        // and it has to be set after animation finishes, because in chrome it
+        // causes transtion being laggy
+        window.setTimeout(function () {
+            window.location.hash = "#/" + el.id;
+        }, 1000);
         
         var target = {
             rotate: {
@@ -304,7 +309,13 @@
         if ( select(target) ) {
             event.preventDefault();
         }
-    });
+    }, false);
+    
+    document.addEventListener("mousewheel", function ( event ) {
+        next = steps.indexOf( active ) - event.wheelDelta / Math.abs(event.wheelDelta);
+        next = next >= 0 ? steps[ next ] : steps[ steps.length-1 ];
+        select(next);
+    }, false);
     
     var getElementFromUrl = function () {
         // get id from url # by removing `#` or `#/` from the beginning,
