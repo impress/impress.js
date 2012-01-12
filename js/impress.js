@@ -11,6 +11,12 @@
 
 (function ( document, window ) {
 
+    // API
+    var Impress = window.Impress || {
+		beforeNavigation: function() {}, 
+		afterNavigation: function() {}
+    };
+
     // HELPER FUNCTIONS
     
     var pfx = (function () {
@@ -192,6 +198,9 @@
             return false;
         }
         
+        var before = active;
+        Impress.beforeNavigation(before, el);
+
         // Sometimes it's possible to trigger focus on first link with some keyboard action.
         // Browser in such a case tries to scroll the page to make this element visible
         // (even that body overflow is set to hidden) and it breaks our careful positioning.
@@ -251,6 +260,8 @@
         current = target;
         active = el;
         
+        Impress.afterNavigation(before, active);
+
         return el;
     }
     
