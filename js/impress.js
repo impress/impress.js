@@ -185,6 +185,7 @@
     // making given step active
 
     var active = null;
+    var hashTimeout = null;
     
     var select = function ( el ) {
         if ( !el || !el.stepData || el == active) {
@@ -216,7 +217,8 @@
         //
         // and it has to be set after animation finishes, because in chrome it
         // causes transtion being laggy
-        window.setTimeout(function () {
+        window.clearTimeout( hashTimeout );
+        hashTimeout = window.setTimeout(function () {
             window.location.hash = "#/" + el.id;
         }, 1000);
         
