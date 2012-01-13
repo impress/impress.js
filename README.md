@@ -53,7 +53,7 @@ EXAMPLES AND DEMOS
 
 [lioshi.com](http://lioshi.com) by @lioshi
 
-[alingham.com](http://www.alingham.com) by Al Ingham (@alingham)(http://twitter.com/alingham)
+[alingham.com](http://www.alingham.com) by Al Ingham [@alingham](http://twitter.com/alingham)
 
 
 If you have used impress.js in your presentation (or website) and would like to have it listed here,
