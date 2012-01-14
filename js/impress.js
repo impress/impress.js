@@ -262,16 +262,24 @@
                 case 33: ; // pg up
                 case 37: ; // left
                 case 38:   // up
-                         next = steps.indexOf( active ) - 1;
-                         next = next >= 0 ? steps[ next ] : steps[ steps.length-1 ];
+                         if ( active.dataset.previous ) {
+                             next = byId( active.dataset.previous );
+                         } else {
+                             next = steps.indexOf( active ) - 1;
+                             next = next >= 0 ? steps[ next ] : steps[ steps.length-1 ];
+                         }
                          break;
                 case 9:  ; // tab
                 case 32: ; // space
                 case 34: ; // pg down
                 case 39: ; // right
                 case 40:   // down
-                         next = steps.indexOf( active ) + 1;
-                         next = next < steps.length ? steps[ next ] : steps[ 0 ];
+                         if ( active.dataset.next ) {
+                             next = byId( active.dataset.next );
+                         } else {
+                             next = steps.indexOf( active ) + 1;
+                             next = next < steps.length ? steps[ next ] : steps[ 0 ];
+                         }
                          break; 
             }
             
