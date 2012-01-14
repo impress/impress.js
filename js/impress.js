@@ -183,9 +183,13 @@
     var active = null;
     var hashTimeout = null;
     
-    var select = function ( el ) {
-        if ( !el || !el.stepData || el == active) {
-            // selected element is not defined as step or is already active
+    var select = function ( el, force ) {
+        if ( !el || !el.stepData ) {
+            // selected element is not defined as step
+            return false;
+        }
+        if ( el == active && !force ) {
+	    // selected element is active
             return false;
         }
         
@@ -218,6 +222,8 @@
             window.location.hash = "#/" + el.id;
         }, 1000);
         
+        // Correct the scale if it is not used in fullscreen at 1024x768
+        var windowScale = Math.sqrt(window.innerHeight * window.innerWidth / 1024 / 768);
         var target = {
             rotate: {
                 x: -parseInt(step.rotate.x, 10),
@@ -229,7 +235,7 @@
                 y: -step.translate.y,
                 z: -step.translate.z
             },
-            scale: 1 / parseFloat(step.scale)
+            scale: 1 / parseFloat(step.scale) * windowScale
         };
         
         var zoomin = target.scale >= current.scale;
@@ -321,6 +327,11 @@
         select( getElementFromUrl() );
     }, false);
     
+    window.addEventListener("resize", function () {
+        // Force select on resize
+        select( active, true );
+    }, false);
+
     // START 
     // by selecting step defined in url or first step of the presentation
     select(getElementFromUrl() || steps[0]);
