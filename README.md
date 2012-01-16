@@ -41,9 +41,11 @@ EXAMPLES AND DEMOS
 
 ### Official demo
 
-[impress.js demo](http://bartaz.github.com/impress.js) by @bartaz
+[impress.js demo](http://bartaz.github.com/impress.js) by [@bartaz](http://twitter.com/bartaz)
 
 ### Presentations
+
+[CSS 3D transfroms](http://bartaz.github.com/meetjs/css3d-summit) from [meet.js summit](http://summit.meetjs.pl) by [@bartaz](http://twitter.com/bartaz)
 
 [What the Heck is Responsive Web Design](http://johnpolacek.github.com/WhatTheHeckIsResponsiveWebDesign-impressjs/) by John Polacek [@johnpolacek](http://twitter.com/johnpolacek)
 
