@@ -306,9 +306,13 @@
     }, false);
     
     document.addEventListener("mousewheel", function ( event ) {
-        next = steps.indexOf( active ) - event.wheelDelta / Math.abs(event.wheelDelta);
-        next = next >= 0 ? steps[ next ] : steps[ steps.length-1 ];
-        select(next);
+        var next = steps.indexOf( active ) - event.wheelDelta / Math.abs(event.wheelDelta);
+        if (next < 0) {
+            next = steps.length-1;
+        } else if (next >= steps.length) {
+            next = 0;
+        }
+        select(steps[next]);
     }, false);
     
     var getElementFromUrl = function () {
