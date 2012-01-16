@@ -57,7 +57,7 @@ EXAMPLES AND DEMOS
 
 [alingham.com](http://www.alingham.com) by Al Ingham [@alingham](http://twitter.com/alingham)
 
-[museum140](http://www.youtube.com/watch?v=ObLiikJEt94) Shorty Award promo video entirely made with ImpressJS by [@thingsinjars](http://twitter.com/thingsinjars)
+[museum140](http://www.youtube.com/watch?v=ObLiikJEt94) Shorty Award promo video [entirely made with ImpressJS](http://thingsinjars.com/post/446/museum140-shorty/) by [@thingsinjars](http://twitter.com/thingsinjars)
 
 
 If you have used impress.js in your presentation (or website) and would like to have it listed here,
