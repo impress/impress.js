@@ -49,6 +49,8 @@ EXAMPLES AND DEMOS
 
 [12412.org presentation to Digibury](http://extra.12412.org/digibury/) by Stephen Fulljames [@fulljames](http://twitter.com/fulljames)
 
+[Data center virtualization with Wakame-VDC](http://wakame.jp/wiki/materials/20120114_TLUG/) by Andreas Kieckens [@Metallion98](https://twitter.com/#!/Metallion98)
+
 ### Websites and portfolios
 
 [lioshi.com](http://lioshi.com) by @lioshi
