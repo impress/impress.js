@@ -24,7 +24,7 @@ VERSION HISTORY
 
 **CONTAINS UNRELEASED CHANGES, MAY BE UNSTABLE**
 
-* added mousewheel support (thx @OpenGrid)
+* code clean-up
 * couple of small bug-fixes
 
 
