@@ -251,31 +251,42 @@
         active = el;
         
         return el;
-    }
+    };
+    
+    var selectNext = function () {
+        var next = active;
+        next = steps.indexOf( active ) - 1;
+        next = next >= 0 ? steps[ next ] : steps[ steps.length-1 ];
+        
+        return select(next);
+    };
+    
+    var selectPrev = function () {
+        var prev = active;
+        prev = steps.indexOf( active ) + 1;
+        prev = prev < steps.length ? steps[ prev ] : steps[ 0 ];
+        
+        return select(prev);
+    };
     
     // EVENTS
     
     document.addEventListener("keydown", function ( event ) {
         if ( event.keyCode == 9 || ( event.keyCode >= 32 && event.keyCode <= 34 ) || (event.keyCode >= 37 && event.keyCode <= 40) ) {
-            var next = active;
             switch( event.keyCode ) {
                 case 33: ; // pg up
                 case 37: ; // left
                 case 38:   // up
-                         next = steps.indexOf( active ) - 1;
-                         next = next >= 0 ? steps[ next ] : steps[ steps.length-1 ];
+                         selectNext();
                          break;
                 case 9:  ; // tab
                 case 32: ; // space
                 case 34: ; // pg down
                 case 39: ; // right
                 case 40:   // down
-                         next = steps.indexOf( active ) + 1;
-                         next = next < steps.length ? steps[ next ] : steps[ 0 ];
-                         break; 
+                         selectPrev();
+                         break;
             }
-            
-            select(next);
             
             event.preventDefault();
         }
