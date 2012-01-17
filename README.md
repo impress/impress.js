@@ -53,6 +53,8 @@ EXAMPLES AND DEMOS
 
 [Data center virtualization with Wakame-VDC](http://wakame.jp/wiki/materials/20120114_TLUG/) by Andreas Kieckens [@Metallion98](https://twitter.com/#!/Metallion98)
 
+[Asynchronous JavaScript](http://www.medikoo.com/asynchronous-javascript/#/asynchronous-javascript) by Mariusz Nowak [@medikoo](http://twitter.com/medikoo)
+
 ### Websites and portfolios
 
 [lioshi.com](http://lioshi.com) by @lioshi
