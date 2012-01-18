@@ -253,20 +253,18 @@
         return el;
     };
     
-    var selectNext = function () {
-        var next = active;
-        next = steps.indexOf( active ) - 1;
-        next = next >= 0 ? steps[ next ] : steps[ steps.length-1 ];
-        
-        return select(next);
-    };
-    
     var selectPrev = function () {
-        var prev = active;
-        prev = steps.indexOf( active ) + 1;
-        prev = prev < steps.length ? steps[ prev ] : steps[ 0 ];
+        var prev = steps.indexOf( active ) - 1;
+        prev = prev >= 0 ? steps[ prev ] : steps[ steps.length-1 ];
         
         return select(prev);
+    };
+    
+    var selectNext = function () {
+        var next = steps.indexOf( active ) + 1;
+        next = next < steps.length ? steps[ next ] : steps[ 0 ];
+        
+        return select(next);
     };
     
     // EVENTS
@@ -277,14 +275,14 @@
                 case 33: ; // pg up
                 case 37: ; // left
                 case 38:   // up
-                         selectNext();
+                         selectPrev();
                          break;
                 case 9:  ; // tab
                 case 32: ; // space
                 case 34: ; // pg down
                 case 39: ; // right
                 case 40:   // down
-                         selectPrev();
+                         selectNext();
                          break;
             }
             
