@@ -187,6 +187,14 @@
         if ( !el || !el.stepData || el == active) {
             // selected element is not defined as step or is already active
             return false;
+        } else if ( el.classList.contains("skip") ) {
+          
+          var skipedIndex = steps.indexOf( active ) > steps.indexOf( el ) ? -1 : 1;
+          var skipped = steps.indexOf( el ) + skipedIndex;
+          skipped = skipped < steps.length ? steps[ skipped ] : steps[ 0 ];
+          
+          select(skipped);
+          return false;
         }
         
         // Sometimes it's possible to trigger focus on first link with some keyboard action.
@@ -256,14 +264,14 @@
     var selectPrev = function () {
         var prev = steps.indexOf( active ) - 1;
         prev = prev >= 0 ? steps[ prev ] : steps[ steps.length-1 ];
-        
+
         return select(prev);
     };
     
     var selectNext = function () {
         var next = steps.indexOf( active ) + 1;
         next = next < steps.length ? steps[ next ] : steps[ 0 ];
-        
+
         return select(next);
     };
     
