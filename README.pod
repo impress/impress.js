@@ -1,0 +1,11 @@
+=encoding utf8
+
+=head1 NAME
+
+impress.js
+
+=head1 DESCRIPTION
+
+スライドで木構造を表現することを目指す。
+
+test.html を見ればなんとなく分かるはず。
