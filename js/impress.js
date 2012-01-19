@@ -145,21 +145,41 @@
         scale:     1
     };
 
-    steps.forEach(function ( el, idx ) {
-        var data = el.dataset,
-            step = {
-                translate: {
-                    x: data.x || 0,
-                    y: data.y || 0,
-                    z: data.z || 0
-                },
-                rotate: {
+	
+	var head  = [];
+	var count = 0;
+
+    steps.forEach(function ( el, idx, self ) {
+        var data  = el.dataset,
+			h     = data.head,
+			step  = {
+				rotate: {
                     x: data.rotateX || 0,
                     y: data.rotateY || 0,
-                    z: data.rotateZ || data.rotate || 0
-                },
-                scale: data.scale || 1
-            };
+                    z: data.rotatez || data.rotate || 0
+                }
+			};
+
+		if (head[h] == undefined) {
+			head[h] = 0;
+		} else {
+			head[h]++;
+		}
+
+		if (idx > 0 && h == self[idx-1].dataset.head) {
+			count++;
+		} else {
+			count = 0;
+		}
+
+		console.log(count + "," + idx + "," + data.id);
+
+		step.translate = {
+				x: head[h] * 1000,
+				y: count * 1000,
+				z: 0
+		};
+		step.scale = -1 * h;
         
         el.stepData = step;
         
