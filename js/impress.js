@@ -179,7 +179,7 @@
 				y: count * 1000,
 				z: 0
 		};
-		step.scale = -1 * h;
+		step.scale = h;
         
         el.stepData = step;
         
