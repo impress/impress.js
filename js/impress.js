@@ -10,6 +10,13 @@
  */
 
 (function ( document, window ) {
+    // The original window size, where the presentation was be created and tested.
+    // On a larger or smaller window it will be resized.
+    // TODO: it should be changed with the JS API
+    var originalSize = {
+        width: 1024,
+        height: 768
+    };
 
     // HELPER FUNCTIONS
     
@@ -183,9 +190,13 @@
     var active = null;
     var hashTimeout = null;
     
-    var select = function ( el ) {
-        if ( !el || !el.stepData || el == active) {
-            // selected element is not defined as step or is already active
+    var select = function ( el, force ) {
+        if ( !el || !el.stepData ) {
+            // selected element is not defined as step
+            return false;
+        }
+        if ( el == active && !force ) {
+            // selected element is active
             return false;
         }
         
@@ -234,11 +245,15 @@
         
         var zoomin = target.scale >= current.scale;
         
+        // Correct the scale based on the window's size
+        var windowScale = Math.min(window.innerHeight/originalSize.height,
+                window.innerWidth/originalSize.width);
+
         css(impress, {
             // to keep the perspective look similar for different scales
             // we need to 'scale' the perspective, too
             perspective: step.scale * 1000 + "px",
-            transform: scale(target.scale),
+            transform: scale(target.scale * windowScale),
             transitionDelay: (zoomin ? "500ms" : "0ms")
         });
         
@@ -324,6 +339,11 @@
         select( getElementFromUrl() );
     }, false);
     
+    window.addEventListener("resize", function () {
+        // Force select on resize
+        select( active, true );
+    }, false);
+
     // START 
     // by selecting step defined in url or first step of the presentation
     select(getElementFromUrl() || steps[0]);
