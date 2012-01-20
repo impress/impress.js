@@ -124,6 +124,8 @@
         overflow: "hidden"
     });
 
+	
+
     var props = {
         position: "absolute",
         transformOrigin: "top left",
@@ -145,41 +147,55 @@
         scale:     1
     };
 
+	var head = $(".head");
+	console.log(head);
 	
-	var head  = [];
-	var count = 0;
+	(function (head, depth) {
+		var h, data;
+		var head = [];
 
-    steps.forEach(function ( el, idx, self ) {
-        var data  = el.dataset,
-			h     = data.head,
-			step  = {
-				rotate: {
+		for (var h = head.firstChild; h && h.nodeType !== -1; h = h.nextSibling) {
+			if (h.className == "head") {
+				arguments.callee(h, ++depth);
+			}
+			console.log(h.className + "," + depth);
+		}
+
+		data = {
+			translate: {
+				x: ,
+				y: ,
+				z:
+			},
+			scale: hoge
+		};
+
+		h.headData = data;
+
+		css(h, {
+			position: "absolute",
+            transform: "translate(-50%,-50%)" +
+                       translate(data.translate) +
+                       scale(data.scale),
+            transformStyle: "preserve-3d"
+		});
+	} )(head, 0);
+
+    steps.forEach(function ( el, idx ) {
+        var data = el.dataset,
+            step = {
+                translate: {
+                    x: data.x || 0,
+                    y: data.y || 0,
+                    z: data.z || 0
+                },
+                rotate: {
                     x: data.rotateX || 0,
                     y: data.rotateY || 0,
-                    z: data.rotatez || data.rotate || 0
-                }
-			};
-
-		if (head[h] == undefined) {
-			head[h] = 0;
-		} else {
-			head[h]++;
-		}
-
-		if (idx > 0 && h == self[idx-1].dataset.head) {
-			count++;
-		} else {
-			count = 0;
-		}
-
-		console.log(count + "," + idx + "," + data.id);
-
-		step.translate = {
-				x: head[h] * 1000,
-				y: count * 1000,
-				z: 0
-		};
-		step.scale = h;
+                    z: data.rotateZ || data.rotate || 0
+                },
+                //scale: data.scale || 1
+            };
         
         el.stepData = step;
         
@@ -188,7 +204,7 @@
         }
         
         css(el, {
-            position: "absolute",
+            //position: "absolute",
             transform: "translate(-50%,-50%)" +
                        translate(step.translate) +
                        rotate(step.rotate) +
@@ -271,31 +287,40 @@
         active = el;
         
         return el;
-    }
+    };
+    
+    var selectPrev = function () {
+        var prev = steps.indexOf( active ) - 1;
+        prev = prev >= 0 ? steps[ prev ] : steps[ steps.length-1 ];
+        
+        return select(prev);
+    };
+    
+    var selectNext = function () {
+        var next = steps.indexOf( active ) + 1;
+        next = next < steps.length ? steps[ next ] : steps[ 0 ];
+        
+        return select(next);
+    };
     
     // EVENTS
     
     document.addEventListener("keydown", function ( event ) {
         if ( event.keyCode == 9 || ( event.keyCode >= 32 && event.keyCode <= 34 ) || (event.keyCode >= 37 && event.keyCode <= 40) ) {
-            var next = active;
             switch( event.keyCode ) {
                 case 33: ; // pg up
                 case 37: ; // left
                 case 38:   // up
-                         next = steps.indexOf( active ) - 1;
-                         next = next >= 0 ? steps[ next ] : steps[ steps.length-1 ];
+                         selectPrev();
                          break;
                 case 9:  ; // tab
                 case 32: ; // space
                 case 34: ; // pg down
                 case 39: ; // right
                 case 40:   // down
-                         next = steps.indexOf( active ) + 1;
-                         next = next < steps.length ? steps[ next ] : steps[ 0 ];
-                         break; 
+                         selectNext();
+                         break;
             }
-            
-            select(next);
             
             event.preventDefault();
         }
@@ -323,12 +348,6 @@
         if ( select(target) ) {
             event.preventDefault();
         }
-    }, false);
-    
-    document.addEventListener("mousewheel", function ( event ) {
-        next = steps.indexOf( active ) - event.wheelDelta / Math.abs(event.wheelDelta);
-        next = next >= 0 ? steps[ next ] : steps[ steps.length-1 ];
-        select(next);
     }, false);
     
     var getElementFromUrl = function () {
