@@ -127,7 +127,7 @@
     var props = {
         position: "absolute",
         transformOrigin: "top left",
-        transition: "all 1s ease-in-out",
+        transition: "all 0s ease-in-out",
         transformStyle: "preserve-3d"
     }
     
@@ -232,18 +232,25 @@
             scale: 1 / parseFloat(step.scale)
         };
         
+        // check if the transition is zooming in or not
         var zoomin = target.scale >= current.scale;
+        
+        // if presentation starts (nothing is active yet)
+        // don't animate (set duration to 0)
+        var duration = (active) ? "1s" : "0";
         
         css(impress, {
             // to keep the perspective look similar for different scales
             // we need to 'scale' the perspective, too
             perspective: step.scale * 1000 + "px",
             transform: scale(target.scale),
+            transitionDuration: duration,
             transitionDelay: (zoomin ? "500ms" : "0ms")
         });
         
         css(canvas, {
             transform: rotate(target.rotate, true) + translate(target.translate),
+            transitionDuration: duration,
             transitionDelay: (zoomin ? "0ms" : "500ms")
         });
         
