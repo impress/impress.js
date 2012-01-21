@@ -32,7 +32,6 @@
                         break;
                     }
                 }
-
             }
 
             return memory[ prop ];
@@ -124,14 +123,12 @@
         overflow: "hidden"
     });
 
-	
-
     var props = {
         position: "absolute",
         transformOrigin: "top left",
         transition: "all 1s ease-in-out",
         transformStyle: "preserve-3d"
-    }
+    };
     
     css(impress, props);
     css(impress, {
@@ -147,27 +144,14 @@
         scale:     1
     };
 
-	var head = $(".head");
-	console.log(head);
-	
-	(function (head, depth) {
-		var h, data;
-		var head = [];
-
-		for (var h = head.firstChild; h && h.nodeType !== -1; h = h.nextSibling) {
-			if (h.className == "head") {
-				arguments.callee(h, ++depth);
-			}
-			console.log(h.className + "," + depth);
-		}
-
+	var setCSS = function (h, current) {
 		data = {
 			translate: {
-				x: ,
-				y: ,
-				z:
+				x: current.x,
+				y: 0,
+				z: 0
 			},
-			scale: hoge
+			scale: current.depth
 		};
 
 		h.headData = data;
@@ -179,7 +163,40 @@
                        scale(data.scale),
             transformStyle: "preserve-3d"
 		});
-	} )(head, 0);
+	};
+	
+
+	(function headSearch(head, current) {
+		var h, data,
+			x = 0,
+			child = {
+				x: 0,
+				depth: 0
+			};
+		var children = $$("div.head", head).sort(function (a, b) {
+			if (!$("div.head", a)) {
+				return 1;
+			} else if (!$("div.head", b)) {
+				return -1;
+			} else {
+				return 0;
+			}
+		});
+
+		var i = 0;
+		children.forEach( function (c) {
+			headSearch(c, child);
+			console.log(i + "," + c.id)
+			setCSS(c, current);
+			i++;
+		});
+
+		current.depth = child.depth + 1;
+		current.x += 800;
+
+		console.log(head.id + "," + current.depth + "," + current.x);
+
+	} )(impress, {x: 0, depth: 0});
 
     steps.forEach(function ( el, idx ) {
         var data = el.dataset,
@@ -224,7 +241,9 @@
             // selected element is not defined as step or is already active
             return false;
         }
-        
+
+		var parent = el.parentNode;
+       
         // Sometimes it's possible to trigger focus on first link with some keyboard action.
         // Browser in such a case tries to scroll the page to make this element visible
         // (even that body overflow is set to hidden) and it breaks our careful positioning.

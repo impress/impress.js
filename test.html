@@ -3,34 +3,48 @@
 <head>
     <meta charset="utf-8" />
     <title>impress.js | presentation tool based on the power of CSS3 transforms and transitions in modern browsers | by Bartek Szopka @bartaz</title>
-    
-    <meta name="description" content="impress.js is a presentation tool based on the power of CSS3 transforms and transitions in modern browsers and inspired by the idea behind prezi.com.">
-    <meta name="author" content="Bartek Szopka" />
 
-    <link href="http://fonts.googleapis.com/css?family=Open+Sans:regular,semibold,italic,italicsemibold|PT+Sans:400,700,400italic,700italic|PT+Serif:400,700,400italic,700italic" rel="stylesheet" />
+	<!--
+    <meta name="description" content="impress.js is a presentation tool based on the power of css3 transforms and transitions in modern browsers and inspired by the idea behind prezi.com.">
+    <meta name="author" content="bartek szopka" />
 
-    <link href="css/impress-demo.css" rel="stylesheet" />
+    <link href="http://fonts.googleapis.com/css?family=open+sans:regular,semibold,italic,italicsemibold|pt+sans:400,700,400italic,700italic|pt+serif:400,700,400italic,700italic" rel="stylesheet" />
+
+	<link href="css/impress-demo.css" rel="stylesheet" />
+	-->
 </head>
 <body>
 
 <div id="impress" class="impress-not-supported">
 
-	<div class="head">
-		<div class="step slide" data-head="1">
+	<div class="head" id="1-1">
+		<div class="step slide">
+			<p>hoge</p>
+		</div>
+	</div>
+
+	<div class="head" id="1-2">
+		<div class="step slide">
 			<p style="font-size:100px;">head1</p>
 		</div>
-		
-		<div class="head">
-			<div class="step slide" data-head="2">
+
+		<div class="head" id="3-1">
+			<div class="step slide">
 				<p style="font-size:100px;">head2 1</p>
 			</div>
+
+			<div class="head" id="4-1">
+				<div class="step slide" data-head="3">
+					<p style="font-size:100px;">head3</p>
+				</div>
+			</div>
 		
-			<div class="head">
+			<div class="head" id="4-2">
 				<div class="step slide" data-head="3">
 					<p style="font-size:100px;">head3</p>
 				</div>
 			
-				<div class="head">
+				<div class="head" id="5-1">
 					<div class="step slide" data-head="4">
 						<p style="font-size:100px;">head4 1</p>
 					</div>
@@ -42,18 +56,9 @@
 					<div class="step slide" data-head="4">
 						<p style="font-size:100px;">head4 3</p>
 					</div>
-				</div>
-			</div>
+				</div>	
 
-			<div class="step slide" data-head="2">
-				<p style="font-size:100px;">head2 2</p>
-			</div>
-	
-			<div class="head">
-				<div class="step slide" data-head="3">
-					<p style="font-size:100px;">head3 2</p>
-				</div>
-			</div>
+			</div>	
 		</div>
 	</div>
 </div>
