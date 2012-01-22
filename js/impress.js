@@ -210,6 +210,13 @@
         
         impress.className = "step-" + el.id;
         
+        // if presentation starts (nothing is active yet)
+        // don't animate (set duration to 0)
+        // transition duration depends on the current direction
+        // If moving forward, transitionDuration is in the next slide
+        // If moving backwards, transitionDuration is in the current slide
+        var duration = (active) ? ((forward) ? target.transitionDuration : current.transitionDuration) + "ms" : "0";
+        
         // `#/step-id` is used instead of `#step-id` to prevent default browser
         // scrolling to element in hash
         //
@@ -218,7 +225,7 @@
         window.clearTimeout( hashTimeout );
         hashTimeout = window.setTimeout(function () {
             window.location.hash = "#/" + el.id;
-        }, 1000);
+        }, duration);
         
         var target = {
             rotate: {
@@ -237,13 +244,6 @@
         
         // check if the transition is zooming in or not
         var zoomin = target.scale >= current.scale;
-        
-        // if presentation starts (nothing is active yet)
-        // don't animate (set duration to 0)
-        // transition duration depends on the current direction
-        // If moving forward, transitionDuration is in the next slide
-        // If moving backwards, transitionDuration is in the current slide
-        var duration = (active) ? ((forward) ? target.transitionDuration : current.transitionDuration) + "ms" : "0";
         
         css(impress, {
             // to keep the perspective look similar for different scales
