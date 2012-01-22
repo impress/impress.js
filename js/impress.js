@@ -158,7 +158,8 @@
                     y: data.rotateY || 0,
                     z: data.rotateZ || data.rotate || 0
                 },
-                scale: data.scale || 1
+                scale: data.scale || 1,
+                transitionDuration : data.transitionDuration || 1000
             };
         
         el.stepData = step;
@@ -183,7 +184,8 @@
     var active = null;
     var hashTimeout = null;
     
-    var select = function ( el ) {
+    var select = function ( el, forward ) {
+        if (typeof forward === 'undefined') forward = true;
         if ( !el || !el.stepData || el == active) {
             // selected element is not defined as step or is already active
             return false;
@@ -229,7 +231,8 @@
                 y: -step.translate.y,
                 z: -step.translate.z
             },
-            scale: 1 / parseFloat(step.scale)
+            scale: 1 / parseFloat(step.scale),
+            transitionDuration: step.transitionDuration
         };
         
         // check if the transition is zooming in or not
@@ -237,7 +240,10 @@
         
         // if presentation starts (nothing is active yet)
         // don't animate (set duration to 0)
-        var duration = (active) ? "1s" : "0";
+        // transition duration depends on the current direction
+        // If moving forward, transitionDuration is in the next slide
+        // If moving backwards, transitionDuration is in the current slide
+        var duration = (active) ? ((forward) ? target.transitionDuration : current.transitionDuration) + "ms" : "0";
         
         css(impress, {
             // to keep the perspective look similar for different scales
@@ -264,7 +270,7 @@
         var prev = steps.indexOf( active ) - 1;
         prev = prev >= 0 ? steps[ prev ] : steps[ steps.length-1 ];
         
-        return select(prev);
+        return select(prev, false);
     };
     
     var selectNext = function () {
