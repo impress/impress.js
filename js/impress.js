@@ -210,6 +210,21 @@
         
         impress.className = "step-" + el.id;
         
+        var target = {
+            rotate: {
+                x: -parseInt(step.rotate.x, 10),
+                y: -parseInt(step.rotate.y, 10),
+                z: -parseInt(step.rotate.z, 10)
+            },
+            translate: {
+                x: -step.translate.x,
+                y: -step.translate.y,
+                z: -step.translate.z
+            },
+            scale: 1 / parseFloat(step.scale),
+            transitionDuration: step.transitionDuration
+        };
+        
         // if presentation starts (nothing is active yet)
         // don't animate (set duration to 0)
         // transition duration depends on the current direction
@@ -226,21 +241,6 @@
         hashTimeout = window.setTimeout(function () {
             window.location.hash = "#/" + el.id;
         }, duration);
-        
-        var target = {
-            rotate: {
-                x: -parseInt(step.rotate.x, 10),
-                y: -parseInt(step.rotate.y, 10),
-                z: -parseInt(step.rotate.z, 10)
-            },
-            translate: {
-                x: -step.translate.x,
-                y: -step.translate.y,
-                z: -step.translate.z
-            },
-            scale: 1 / parseFloat(step.scale),
-            transitionDuration: step.transitionDuration
-        };
         
         // check if the transition is zooming in or not
         var zoomin = target.scale >= current.scale;
