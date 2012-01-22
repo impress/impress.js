@@ -9,6 +9,40 @@
  * Copyright 2011 Bartek Szopka (@bartaz)
  */
 
+/**
+ * extensions:
+ *
+ * onReadStep( element, stepData )
+ *  read the infos from the element.
+ *
+ * onPostprocessStep( element, stepData )
+ *  apply styles and more to the element. info should be read from stepData.
+ *
+ * onSelectTarget( element, stepData, target )
+ *  modify the infos for defining the target.
+ *
+ * onPostprocessTarget( element, stepData, target, impressElement, canvasElement )
+ *  apply styles from target info the the element, impressElement and/or canvasElement.
+ *
+ * prevStep = onPrev( activeStep, stepsList )
+ * nextStep = onNext( activeStep, stepsList )
+ *  hook prev and next. return an alternative step element to switch the those
+ *  or return undefined to use default choice.
+ *
+ * nextStep = onClick( activeStep, stepsList, event, choosenStep )
+ *  hook clicks on links or steps.
+ *
+ * how to use:
+ *   var impressjs = impressjs || {};
+ *   impressjs.onReadStep = impressjs.onReadStep || [];
+ *   impressjs.onReadStep.push(function( element, stepData ) {
+ *      // add your code here...
+ *   });
+ *
+ *  your extension script must be included in html file before including the
+ *  impress.js script file.
+ */
+
 (function ( document, window ) {
 
     // HELPER FUNCTIONS
@@ -86,6 +120,20 @@
     var scale = function ( s ) {
         return " scale(" + s + ") ";
     }
+
+    var useExtension = function ( iface, args ) {
+        if(typeof window.impressjs != "object") return;
+        if(!window.impressjs[iface]) return;
+        var extensions = window.impressjs[iface];
+        var result;
+        for(var i = 0; i < extensions.length; i++) {
+            var extension = extensions[i];
+            if(typeof extension == "function") {
+                result = extension.apply(null, args) || result;
+            }
+        }
+        return result;
+    }
     
     // CHECK SUPPORT
     
@@ -160,6 +208,8 @@
                 },
                 scale: data.scale || 1
             };
+
+        useExtension("onReadStep", [el, step]);
         
         el.stepData = step;
         
@@ -175,6 +225,8 @@
                        scale(step.scale),
             transformStyle: "preserve-3d"
         });
+
+        useExtension("onPostprocessStep", [el, step]);
         
     });
 
@@ -232,6 +284,8 @@
             scale: 1 / parseFloat(step.scale)
         };
         
+        useExtension("onSelectTarget", [el, step, target]);
+
         // check if the transition is zooming in or not
         var zoomin = target.scale >= current.scale;
         
@@ -253,6 +307,8 @@
             transitionDuration: duration,
             transitionDelay: (zoomin ? "0ms" : "500ms")
         });
+
+        useExtension("onPostprocessTarget", [el, step, target, impress, canvas]);
         
         current = target;
         active = el;
@@ -263,6 +319,8 @@
     var selectPrev = function () {
         var prev = steps.indexOf( active ) - 1;
         prev = prev >= 0 ? steps[ prev ] : steps[ steps.length-1 ];
+
+        prev = useExtension("onPrev", [active, steps]) || prev;
         
         return select(prev);
     };
@@ -270,7 +328,9 @@
     var selectNext = function () {
         var next = steps.indexOf( active ) + 1;
         next = next < steps.length ? steps[ next ] : steps[ 0 ];
-        
+
+        next = useExtension("onNext", [active, steps]) || next;
+
         return select(next);
     };
     
@@ -315,6 +375,8 @@
                 target = byId( href.slice(1) );
             }
         }
+
+        target = useExtension("onClick", [active, steps, event, target]) || target;
         
         if ( select(target) ) {
             event.preventDefault();
