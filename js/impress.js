@@ -274,11 +274,25 @@
         return select(next);
     };
     
+    var selectHome = function () {
+        return select(steps[0]);
+    };
+    
+    var selectEnd = function () {
+        return select(steps[steps.length-1]);
+    };
+    
     // EVENTS
     
     document.addEventListener("keydown", function ( event ) {
-        if ( event.keyCode == 9 || ( event.keyCode >= 32 && event.keyCode <= 34 ) || (event.keyCode >= 37 && event.keyCode <= 40) ) {
+        if ( event.keyCode == 9 || ( event.keyCode >= 32 && event.keyCode <= 40) ) {
             switch( event.keyCode ) {
+                case 35: ; // end
+                         selectEnd();
+                         break;
+                case 36: ; // home
+                         selectHome();
+                         break;
                 case 33: ; // pg up
                 case 37: ; // left
                 case 38:   // up
