@@ -42,7 +42,7 @@
 	})();
 
 	var arrayify = function ( a ) {
-		return [].slice.call( a );
+		return Array.prototype.slice.call( a );
 	};
 	
 	var css = function ( el, props ) {
@@ -126,7 +126,7 @@
 	});
 
 	var props = {
-		position: "absolute",
+		position: "static",
 		transformOrigin: "top left",
 		transition: "all 1s ease-in-out",
 		transformStyle: "preserve-3d"
@@ -138,50 +138,84 @@
 		left: "50%",
 		perspective: "1000px"
 	});
+
 	css(canvas, props);
-	
+
 	var current = {
 		translate: { x: 0, y: 0, z: 0 },
 		rotate:	{ x: 0, y: 0, z: 0 },
-		scale:	 1
+		scale: 1
 	};
 
-	var setCSS = function (h, current) {
+	var setCSS = function (layer, current) {
 		var data = {
 			translate: {
 				x: current.x,
 				y: 0,
 				z: 0
 			},
-			scale: current.depth
+			scale: current.depth,
+			parent: current.parent
 		};
 
-		h.headData = data;
+		layer.layerData = data;
 
-		css(h, {
+		css(layer, {
 			position: "absolute",
-			transform: "translate(-50%,-50%)" +
+			transform: "translate(50%, 10%)" +
 					   translate(data.translate) +
-					   scale(data.scale),
+					   scale(current.depth),
 			transformStyle: "preserve-3d"
 		});
 	};
 	
-	(function headSearch(layer, current) {
-		var h, 
+	var setStep = function (l, count) {
+		var data = l.dataset,
+			step = { 
+				translate: {
+					x: 0,
+					y: count * 1000,
+					z: 0
+				},
+				rotate: {
+					x: data.rotateX || 0,
+					y: data.rotateY || 0,
+					z: data.rotateZ || data.rotate || 0
+				}
+			};
+
+		l.stepData = step;
+
+		css(l, {
+			position: "absolute",
+			transform: "translate(50%, 10%)" +
+			translate(step.translate) +
+			rotate(step.rotate),
+			//scale(1),
+			transformStyle: "preserve-3d"
+		});
+	};
+
+	(function searchHead(layer, current) {
+		var l, 
+			slide = 0,
 			childNodes = [],
 			child = {
 				x: 0,
 				depth: 0,
+				parent: current.parent + 1,
 				sibling: 0
 			};
-		
-		for (h = layer.firstChild; h && h.nodeType != -1; h = h.nextSibling) {
-			if (h.className == "head") {
-				childNodes.push(h);
+
+		for (l = layer.firstChild; l && l.nodeType != -1; l = l.nextSibling) {
+			if (l.className == "head") {
+				childNodes.push(l);
+			} else if (l.className && l.className.indexOf("step") != -1) {
+				setStep(l, slide);
+				slide++;
 			}
 		};
-
+		
 		childNodes.sort( function (a, b) {
 			if (!$(".head", a)) {
 				return 1;
@@ -191,49 +225,22 @@
 				return 0;
 			}
 		}).forEach( function (c) {
-			headSearch(c, child);
+			searchHead(c, child);
 			child.sibling++;
 		});
 
 		current.depth = current.depth || child.depth + 1;
-		current.x = current.sibling * 800;
+		current.x = current.sibling * 1000 * current.depth;
 		
 		if (layer.className == "head") {
 			setCSS(layer, current)
-		}			
-	} )(canvas, {x: 0, depth: 0, sibling: 0});
+		}
+	} )(canvas, {x: 0, depth: 0, parent: 0, sibling: 0});
 
 	steps.forEach(function ( el, idx ) {
-		var data = el.dataset,
-			step = {
-				translate: {
-					x: data.x || 0,
-					y: data.y || 0,
-					z: data.z || 0
-				},
-				rotate: {
-					x: data.rotateX || 0,
-					y: data.rotateY || 0,
-					z: data.rotateZ || data.rotate || 0
-				},
-				//scale: data.scale || 1
-			};
-		
-		el.stepData = step;
-		
 		if ( !el.id ) {
 			el.id = "step-" + (idx + 1);
 		}
-		
-		css(el, {
-			//position: "absolute",
-			transform: "translate(-50%,-50%)" +
-					   translate(step.translate) +
-					   rotate(step.rotate) +
-					   scale(step.scale),
-			transformStyle: "preserve-3d"
-		});
-		
 	});
 
 	// making given step active
@@ -247,7 +254,7 @@
 			return false;
 		}
 
-		var parent = el.parentNode;
+		var parent = el.parentNode.layerData;
 	   
 		// Sometimes it's possible to trigger focus on first link with some keyboard action.
 		// Browser in such a case tries to scroll the page to make this element visible
@@ -262,8 +269,10 @@
 		var step = el.stepData;
 		
 		if ( active ) {
+			active.parentNode.classList.remove("active");
 			active.classList.remove("active");
 		}
+		el.parentNode.classList.add("active");
 		el.classList.add("active");
 		
 		impress.className = "step-" + el.id;
@@ -285,23 +294,38 @@
 				z: -parseInt(step.rotate.z, 10)
 			},
 			translate: {
-				x: -step.translate.x,
+				x: -parent.translate.x,
 				y: -step.translate.y,
 				z: -step.translate.z
 			},
-			scale: 1 / parseFloat(step.scale)
+			scale: 1 / parseFloat((function aPb(a, b) {
+				if (b > 0) {
+					return a * aPb(a-1, b-1);
+				} else {
+					return 1;
+				}
+			})(parent.parent + parent.scale - 1, parent.parent))
 		};
+
+		console.log((function aPb(a, b) {
+			if (b > 0) {
+				return a * aPb(a-1, b-1);
+			} else {
+				return 1;
+			}
+		})(parent.parent, parent.parent));
 		
 		var zoomin = target.scale >= current.scale;
 		
 		css(impress, {
 			// to keep the perspective look similar for different scales
 			// we need to 'scale' the perspective, too
-			perspective: step.scale * 1000 + "px",
+			perspective: parent.p * 1000 + "px",
 			transform: scale(target.scale),
 			transitionDelay: (zoomin ? "500ms" : "0ms")
 		});
 		
+		console.log(translate(target.translate));
 		css(canvas, {
 			transform: rotate(target.rotate, true) + translate(target.translate),
 			transitionDelay: (zoomin ? "0ms" : "500ms")
