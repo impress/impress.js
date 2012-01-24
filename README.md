@@ -61,6 +61,8 @@ EXAMPLES AND DEMOS
 
 [alingham.com](http://www.alingham.com) by Al Ingham [@alingham](http://twitter.com/alingham)
 
+[nice-shots.de](http://nice-shots.de) by [@NiceShots](http://twitter.com/NiceShots)
+
 [museum140](http://www.youtube.com/watch?v=ObLiikJEt94) Shorty Award promo video [entirely made with ImpressJS](http://thingsinjars.com/post/446/museum140-shorty/) by [@thingsinjars](http://twitter.com/thingsinjars)
 
 
@@ -75,8 +77,8 @@ BROWSER SUPPORT
 ### TL;DR;
 
 Currently impress.js works fine in latest Chrome/Chromium browser, Safari 5.1 and Firefox 10
-(to be released in January 2012). IE10 support is currently unknown, so let's assume it doesn't
-work there. It also doesn't work in Opera.
+(to be released in January 2012). IE is currently not supported (IE10 is close, but not there
+yet - see below for details). It also doesn't work in Opera.
 
 As it was not developed with mobile browsers in mind, it currently doesn't work on 
 any mobile devices, including tablets.

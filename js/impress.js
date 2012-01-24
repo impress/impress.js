@@ -10,6 +10,7 @@
  */
 
 (function ( document, window ) {
+    'use strict';
 
     // HELPER FUNCTIONS
     
