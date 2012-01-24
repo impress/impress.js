@@ -36,6 +36,22 @@ Contains basic functionality for step placement and transitions between them
 with simple fallback for non-supporting browsers.
 
 
+
+HOW TO USE IT
+---------------
+
+[Use the source](http://github.com/bartaz/impress.js/blob/master/index.html), Luke ;)
+
+If you have no idea what I mean by that, or you just clicked that link above and got 
+very confused by all these strange characters that got displayed on your screen,
+it's a sign, that impress.js is not for you.
+
+Sorry.
+
+Fortunately there are some guys on GitHub that got quite excited with the idea of building
+editing tool for impress.js. Let's hope they will manage to do it.
+
+
 EXAMPLES AND DEMOS
 --------------------
 
