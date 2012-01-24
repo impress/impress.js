@@ -157,6 +157,10 @@
 
 		l.stepData = step;
 
+		for (var i in current) {
+			l.innerHTML += i + ":" + current[i] + " ";
+		}
+
 		css(l, {
 			position: "absolute",
 			transform: "translate(-50%, -50%)" +
@@ -171,8 +175,8 @@
 		var l, s, i,
 			childLayers = [],
 			child = {
-				position: current.position,
 				depth: 0,
+				position: current.position
 			};
 
 		i = 0;
@@ -197,7 +201,7 @@
 			child.position -= c.order;
 		});
 		
-		current.depth = child.depth ? child.depth + 1 : 1;
+		current.depth = current.depth ? current.depth : child.depth + 1;
 		
 		i = 0;
 		for (s = layer.firstChild; s && s.nodeType != -1; s = s.nextSibling) {
