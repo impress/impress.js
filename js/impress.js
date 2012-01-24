@@ -9,10 +9,8 @@
  * Copyright 2011 Bartek Szopka (@bartaz)
  */
 
-
 (function ( document, window ) {
 	"use strict";
-
 	// HELPER FUNCTIONS
 	
 	var pfx = (function () {
@@ -34,6 +32,7 @@
 						break;
 					}
 				}
+
 			}
 
 			return memory[ prop ];
@@ -42,7 +41,7 @@
 	})();
 
 	var arrayify = function ( a ) {
-		return Array.prototype.slice.call( a );
+		return [].slice.call( a );
 	};
 	
 	var css = function ( el, props ) {
@@ -126,11 +125,11 @@
 	});
 
 	var props = {
-		position: "static",
+		position: "absolute",
 		transformOrigin: "top left",
 		transition: "all 1s ease-in-out",
 		transformStyle: "preserve-3d"
-	};
+	}
 	
 	css(impress, props);
 	css(impress, {
@@ -138,42 +137,13 @@
 		left: "50%",
 		perspective: "1000px"
 	});
-
 	css(canvas, props);
-
-	var current = {
-		translate: { x: 0, y: 0, z: 0 },
-		rotate:	{ x: 0, y: 0, z: 0 },
-		scale: 1
-	};
-
-	var setCSS = function (layer, current) {
-		var data = {
-			translate: {
-				x: current.x,
-				y: 0,
-				z: 0
-			},
-			scale: current.depth,
-			parent: current.parent
-		};
-
-		layer.layerData = data;
-
-		css(layer, {
-			position: "absolute",
-			transform: "translate(50%, 10%)" +
-					   translate(data.translate) +
-					   scale(current.depth),
-			transformStyle: "preserve-3d"
-		});
-	};
 	
-	var setStep = function (l, count) {
+	var setCSS = function (l, current, count) {
 		var data = l.dataset,
 			step = { 
 				translate: {
-					x: 0,
+					x: current.position * 4200,
 					y: count * 1000,
 					z: 0
 				},
@@ -181,61 +151,62 @@
 					x: data.rotateX || 0,
 					y: data.rotateY || 0,
 					z: data.rotateZ || data.rotate || 0
-				}
+				},
+				scale: current.depth
 			};
 
 		l.stepData = step;
 
 		css(l, {
 			position: "absolute",
-			transform: "translate(50%, 10%)" +
+			transform: "translate(-50%, -50%)" +
 			translate(step.translate) +
-			rotate(step.rotate),
-			//scale(1),
+			rotate(step.rotate) + 
+			scale(step.scale),
 			transformStyle: "preserve-3d"
 		});
 	};
 
 	(function searchHead(layer, current) {
-		var l, 
-			slide = 0,
-			childNodes = [],
+		var l, s, i,
+			childLayers = [],
 			child = {
-				x: 0,
+				position: current.position,
 				depth: 0,
-				parent: current.parent + 1,
-				sibling: 0
 			};
 
+		i = 0;
 		for (l = layer.firstChild; l && l.nodeType != -1; l = l.nextSibling) {
-			if (l.className == "head") {
-				childNodes.push(l);
-			} else if (l.className && l.className.indexOf("step") != -1) {
-				setStep(l, slide);
-				slide++;
+			if (l.className && l.className == "head") {
+				childLayers.push({layer: l, order: i});
+				i++;
 			}
 		};
 		
-		childNodes.sort( function (a, b) {
-			if (!$(".head", a)) {
+		childLayers.sort( function (a, b) {
+			if (!$(".head", a.layer)) {
 				return 1;
-			} else if (!$(".head", b)) {
+			} else if (!$(".head", b.layer)) {
 				return -1;
 			} else {
 				return 0;
 			}
 		}).forEach( function (c) {
-			searchHead(c, child);
-			child.sibling++;
+			child.position += c.order;
+			searchHead(c.layer, child);
+			child.position -= c.order;
 		});
-
-		current.depth = current.depth || child.depth + 1;
-		current.x = current.sibling * 1000 * current.depth;
 		
-		if (layer.className == "head") {
-			setCSS(layer, current)
+		current.depth = current.depth || child.depth + 1;
+		
+		i = 0;
+		for (s = layer.firstChild; s && s.nodeType != -1; s = s.nextSibling) {
+			if (s.className && s.className.indexOf("step") != -1) {
+				setCSS(s, current, i);
+				i++;
+			}
 		}
-	} )(canvas, {x: 0, depth: 0, parent: 0, sibling: 0});
+	 } )(canvas, {depth: 0, position: 0});
 
 	steps.forEach(function ( el, idx ) {
 		if ( !el.id ) {
@@ -245,17 +216,20 @@
 
 	// making given step active
 
+	var current = {
+		translate: { x: 0, y: 0, z: 0 },
+		rotate:	{ x: 0, y: 0, z: 0 },
+		scale:	 1
+	};
 	var active = null;
 	var hashTimeout = null;
-	
+
 	var select = function ( el ) {
 		if ( !el || !el.stepData || el == active) {
 			// selected element is not defined as step or is already active
 			return false;
 		}
-
-		var parent = el.parentNode.layerData;
-	   
+		
 		// Sometimes it's possible to trigger focus on first link with some keyboard action.
 		// Browser in such a case tries to scroll the page to make this element visible
 		// (even that body overflow is set to hidden) and it breaks our careful positioning.
@@ -269,10 +243,8 @@
 		var step = el.stepData;
 		
 		if ( active ) {
-			active.parentNode.classList.remove("active");
 			active.classList.remove("active");
 		}
-		el.parentNode.classList.add("active");
 		el.classList.add("active");
 		
 		impress.className = "step-" + el.id;
@@ -294,38 +266,23 @@
 				z: -parseInt(step.rotate.z, 10)
 			},
 			translate: {
-				x: -parent.translate.x,
+				x: -step.translate.x,
 				y: -step.translate.y,
 				z: -step.translate.z
 			},
-			scale: 1 / parseFloat((function aPb(a, b) {
-				if (b > 0) {
-					return a * aPb(a-1, b-1);
-				} else {
-					return 1;
-				}
-			})(parent.parent + parent.scale - 1, parent.parent))
+			scale: 1 / parseFloat(step.scale)
 		};
-
-		console.log((function aPb(a, b) {
-			if (b > 0) {
-				return a * aPb(a-1, b-1);
-			} else {
-				return 1;
-			}
-		})(parent.parent, parent.parent));
 		
 		var zoomin = target.scale >= current.scale;
 		
 		css(impress, {
 			// to keep the perspective look similar for different scales
 			// we need to 'scale' the perspective, too
-			perspective: parent.p * 1000 + "px",
+			perspective: step.scale * 1000 + "px",
 			transform: scale(target.scale),
 			transitionDelay: (zoomin ? "500ms" : "0ms")
 		});
 		
-		console.log(translate(target.translate));
 		css(canvas, {
 			transform: rotate(target.rotate, true) + translate(target.translate),
 			transitionDelay: (zoomin ? "0ms" : "500ms")

@@ -101,7 +101,7 @@ a:hover {
 
 .step {
     width: 900px;
-    padding: 40px;
+    padding: 400px;
 
     -webkit-box-sizing: border-box;
     -moz-box-sizing:    border-box;
@@ -127,10 +127,6 @@ a:hover {
 
 .step:not(.active) {
     opacity: 0.1;
-}
-
-.head:not(.active) {
-	opatity: 0.1;
 }
 
 /* STEP SPECIFIC STYLES */
