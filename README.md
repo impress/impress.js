@@ -77,8 +77,8 @@ BROWSER SUPPORT
 ### TL;DR;
 
 Currently impress.js works fine in latest Chrome/Chromium browser, Safari 5.1 and Firefox 10
-(to be released in January 2012). IE10 support is currently unknown, so let's assume it doesn't
-work there. It also doesn't work in Opera.
+(to be released in January 2012). IE is currently not supported (IE10 is close, but not there
+yet - see below for details). It also doesn't work in Opera.
 
 As it was not developed with mobile browsers in mind, it currently doesn't work on 
 any mobile devices, including tablets.
