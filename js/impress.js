@@ -112,7 +112,6 @@
 	});
 	impress.appendChild(canvas);
 	
-	var steps = $$(".step", impress);
 	
 	// SETUP
 	// set initial values and defaults
@@ -156,10 +155,6 @@
 			};
 
 		l.stepData = step;
-
-		for (var i in current) {
-			l.innerHTML += i + ":" + current[i] + " ";
-		}
 
 		css(l, {
 			position: "absolute",
@@ -210,7 +205,9 @@
 				i++;
 			}
 		}
-	 } )(canvas, {depth: 0, position: 0});
+	} )(canvas, {depth: 0, position: 0});
+
+	var steps = $$(".step", impress);
 
 	steps.forEach(function ( el, idx ) {
 		if ( !el.id ) {
