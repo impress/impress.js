@@ -61,6 +61,8 @@ EXAMPLES AND DEMOS
 
 [alingham.com](http://www.alingham.com) by Al Ingham [@alingham](http://twitter.com/alingham)
 
+[nice-shots.de](http://nice-shots.de) by [@NiceShots](http://twitter.com/NiceShots)
+
 [museum140](http://www.youtube.com/watch?v=ObLiikJEt94) Shorty Award promo video [entirely made with ImpressJS](http://thingsinjars.com/post/446/museum140-shorty/) by [@thingsinjars](http://twitter.com/thingsinjars)
 
 

@@ -143,16 +143,16 @@
 		var data = l.dataset,
 			step = { 
 				translate: {
-					x: current.position * 4200,
-					y: count * 1000,
-					z: 0
+					x: data.x || current.position * 2000,
+					y: data.y || count * 1000,
+					z: data.z || 0
 				},
 				rotate: {
 					x: data.rotateX || 0,
 					y: data.rotateY || 0,
 					z: data.rotateZ || data.rotate || 0
 				},
-				scale: current.depth
+				scale: data.scale || current.depth
 			};
 
 		l.stepData = step;
@@ -197,7 +197,7 @@
 			child.position -= c.order;
 		});
 		
-		current.depth = current.depth || child.depth + 1;
+		current.depth = child.depth ? child.depth + 1 : 1;
 		
 		i = 0;
 		for (s = layer.firstChild; s && s.nodeType != -1; s = s.nextSibling) {
@@ -215,7 +215,6 @@
 	});
 
 	// making given step active
-
 	var current = {
 		translate: { x: 0, y: 0, z: 0 },
 		rotate:	{ x: 0, y: 0, z: 0 },
