@@ -1,0 +1,24 @@
+=encoding utf8
+
+=head1 NAME
+
+impress.js 改
+
+=head1 DESCRIPTION
+
+スライドで木構造を表現することを目指す。
+test.html を見ればなんとなく分かるはず。
+
+=head1 動作環境
+
+これはChromeでのみ動作確認をしました。
+
+B<レイアウトが崩れる場合>は、
+「表示」→「実際のサイズ」を押してみてください。
+
+=head1 DEMO
+
+http://dl.dropbox.com/u/16667824/js/impress.js/index.html
+
+http://dl.dropbox.com/u/16667824/js/impress.js/test.html
+

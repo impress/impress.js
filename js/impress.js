@@ -10,8 +10,7 @@
  */
 
 (function ( document, window ) {
-    'use strict';
-
+    "use strict";
     // HELPER FUNCTIONS
     
     var pfx = (function () {
@@ -113,7 +112,6 @@
     });
     impress.appendChild(canvas);
     
-    var steps = $$(".step", impress);
     
     // SETUP
     // set initial values and defaults
@@ -128,7 +126,7 @@
     var props = {
         position: "absolute",
         transformOrigin: "top left",
-        transition: "all 0s ease-in-out",
+        transition: "all 1s ease-in-out",
         transformStyle: "preserve-3d"
     }
     
@@ -140,18 +138,12 @@
     });
     css(canvas, props);
     
-    var current = {
-        translate: { x: 0, y: 0, z: 0 },
-        rotate:    { x: 0, y: 0, z: 0 },
-        scale:     1
-    };
-
-    steps.forEach(function ( el, idx ) {
-        var data = el.dataset,
-            step = {
+    var setCSS = function (l, current, count) {
+        var data = l.dataset,
+            step = { 
                 translate: {
-                    x: data.x || 0,
-                    y: data.y || 0,
+                    x: data.x || current.position * 2000,
+                    y: data.y || count * 1000,
                     z: data.z || 0
                 },
                 rotate: {
@@ -159,31 +151,79 @@
                     y: data.rotateY || 0,
                     z: data.rotateZ || data.rotate || 0
                 },
-                scale: data.scale || 1
+                scale: data.scale || current.depth
             };
+
+        l.stepData = step;
+
+        css(l, {
+            position: "absolute",
+            transform: "translate(-50%, -50%)" +
+            translate(step.translate) +
+            rotate(step.rotate) + 
+            scale(step.scale),
+            transformStyle: "preserve-3d"
+        });
+    };
+
+    (function searchHead(layer, current) {
+        var l, s, i,
+            childLayers = [],
+            child = {
+                depth: 0,
+                position: current.position
+            };
+
+        i = 0;
+        for (l = layer.firstChild; l && l.nodeType != -1; l = l.nextSibling) {
+            if (l.className && l.className == "head") {
+                childLayers.push({layer: l, order: i});
+                i++;
+            }
+        };
         
-        el.stepData = step;
+        childLayers.sort( function (a, b) {
+            if (!$(".head", a.layer)) {
+                return 1;
+            } else if (!$(".head", b.layer)) {
+                return -1;
+            } else {
+                return 0;
+            }
+        }).forEach( function (c) {
+            child.position += c.order;
+            searchHead(c.layer, child);
+            child.position -= c.order;
+        });
         
+        current.depth = current.depth ? current.depth : child.depth + 1;
+        
+        i = 0;
+        for (s = layer.firstChild; s && s.nodeType != -1; s = s.nextSibling) {
+            if (s.className && s.className.indexOf("step") != -1) {
+                setCSS(s, current, i);
+                i++;
+            }
+        }
+    } )(canvas, {depth: 0, position: 0});
+
+    var steps = $$(".step", impress);
+
+    steps.forEach(function ( el, idx ) {
         if ( !el.id ) {
             el.id = "step-" + (idx + 1);
         }
-        
-        css(el, {
-            position: "absolute",
-            transform: "translate(-50%,-50%)" +
-                       translate(step.translate) +
-                       rotate(step.rotate) +
-                       scale(step.scale),
-            transformStyle: "preserve-3d"
-        });
-        
     });
 
     // making given step active
-
+    var current = {
+        translate: { x: 0, y: 0, z: 0 },
+        rotate:    { x: 0, y: 0, z: 0 },
+        scale:     1
+    };
     var active = null;
     var hashTimeout = null;
-    
+
     var select = function ( el ) {
         if ( !el || !el.stepData || el == active) {
             // selected element is not defined as step or is already active
@@ -233,25 +273,18 @@
             scale: 1 / parseFloat(step.scale)
         };
         
-        // check if the transition is zooming in or not
         var zoomin = target.scale >= current.scale;
-        
-        // if presentation starts (nothing is active yet)
-        // don't animate (set duration to 0)
-        var duration = (active) ? "1s" : "0";
         
         css(impress, {
             // to keep the perspective look similar for different scales
             // we need to 'scale' the perspective, too
             perspective: step.scale * 1000 + "px",
             transform: scale(target.scale),
-            transitionDuration: duration,
             transitionDelay: (zoomin ? "500ms" : "0ms")
         });
         
         css(canvas, {
             transform: rotate(target.rotate, true) + translate(target.translate),
-            transitionDuration: duration,
             transitionDelay: (zoomin ? "0ms" : "500ms")
         });
         
