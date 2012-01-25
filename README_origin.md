@@ -36,6 +36,22 @@ Contains basic functionality for step placement and transitions between them
 with simple fallback for non-supporting browsers.
 
 
+
+HOW TO USE IT
+---------------
+
+[Use the source](http://github.com/bartaz/impress.js/blob/master/index.html), Luke ;)
+
+If you have no idea what I mean by that, or you just clicked that link above and got 
+very confused by all these strange characters that got displayed on your screen,
+it's a sign, that impress.js is not for you.
+
+Sorry.
+
+Fortunately there are some guys on GitHub that got quite excited with the idea of building
+editing tool for impress.js. Let's hope they will manage to do it.
+
+
 EXAMPLES AND DEMOS
 --------------------
 
@@ -77,8 +93,8 @@ BROWSER SUPPORT
 ### TL;DR;
 
 Currently impress.js works fine in latest Chrome/Chromium browser, Safari 5.1 and Firefox 10
-(to be released in January 2012). IE10 support is currently unknown, so let's assume it doesn't
-work there. It also doesn't work in Opera.
+(to be released in January 2012). IE is currently not supported (IE10 is close, but not there
+yet - see below for details). It also doesn't work in Opera.
 
 As it was not developed with mobile browsers in mind, it currently doesn't work on 
 any mobile devices, including tablets.

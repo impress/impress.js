@@ -44,6 +44,25 @@
 
 -->
 
+<!--
+    
+    So you'd like to know how to use impress.js?
+    
+    You've made the first, very important step -- you're reading the source code.
+    And that's how impress.js presentations are built -- with HTML and CSS code.
+    
+    Believe me, you need quite decent HTML and CSS skills to be able to use impress.js effectively.
+    And what is even more important, you need to be a designer, too, because there are no default
+    styles for impress.js presentations, there is no default or automatic layout for them.
+    
+    You need to design and build it by hand.
+    
+    So...
+    
+    Would you still like to know how to use impress.js?
+    
+-->
+
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -55,6 +74,7 @@
     <link href="http://fonts.googleapis.com/css?family=Open+Sans:regular,semibold,italic,italicsemibold|PT+Sans:400,700,400italic,700italic|PT+Serif:400,700,400italic,700italic" rel="stylesheet" />
 
     <!--
+        
         Impress.js doesn't depend on any external stylesheet. Script adds all styles it needs for
         presentation to work.
         
@@ -66,6 +86,7 @@
         don't we?
         
         When creating your own presentation get rid of this file. Start from scratch, it's fun!
+        
     -->
     <link href="css/impress-demo.css" rel="stylesheet" />
 </head>
@@ -82,6 +103,9 @@
     good enough it will add this class, but keeping it in HTML means that users without JavaScript
     will also get fallback styles.
     
+    The class name on this element also depends on currently active presentation step. More details about
+    it can be found below, when `hint` element is being described.
+    
 -->
 <div id="impress" class="impress-not-supported">
 
@@ -91,6 +115,7 @@
     </div>
 
     <!--
+        
         Here is where interesting thing start to happen.
         
         Each step of the presentation should be an element inside the `#impress` with a class name
@@ -104,16 +129,26 @@
         will be positioned in point x = -1000px and y = -1500px of the presentation 'canvas'.
         
         It will not be rotated or scaled.
+        
     -->
     <div id="bored" class="step slide" data-x="-1000" data-y="-1500">
         <q>Aren't you just <b>bored</b> with all those slides-based presentations?</q>
     </div>
 
     <!--
+        
         The `id` attribute of the step element is used to identify it in the URL, but it's optional.
         If it is not defined, it will get a default value of `step-N` where N is a number of slide.
         
         So in the example below it'll be `step-2`.
+        
+        The hash part of the url when this step is active will be `#/step-2`.
+        
+        You can also use `#step-2` in a link, to point directly to this particular step.
+        
+        Please note, that while `#/step-2` (with slash) would also work in a link it's not recommended.
+        Using classic `id`-based links like `#step-2` makes these links usable also in fallback mode.
+        
     -->
     <div class="step slide" data-x="0" data-y="-1500">
         <q>Don't you think that presentations given <strong>in modern browsers</strong> shouldn't <strong>copy the limits</strong> of 'classic' slide decks?</q>
@@ -124,12 +159,14 @@
     </div>
 
     <!--
+        
         This is an example of step element being scaled.
         
         Again, we use a `data-` attribute, this time it's `data-scale="4"`, so it means that this
         element will be 4 times larger than the others.
         From presentation and transitions point of view it means, that it will have to be scaled
         down (4 times) to make it back to it's correct size.
+        
     -->
     <div id="title" class="step" data-x="0" data-y="0" data-scale="4">
         <span class="try">then you should try</span>
@@ -138,10 +175,12 @@
     </div>
 
     <!--
+        
         This element introduces rotation.
         
         Notation shouldn't be a surprise. We use `data-rotate="90"` attribute, meaning that this
         element should be rotated by 90 degrees clockwise.
+        
     -->
     <div id="its" class="step" data-x="850" data-y="3000" data-rotate="90" data-scale="5">
         <p>It's a <strong>presentation tool</strong> <br/>
@@ -154,11 +193,13 @@
     </div>
 
     <!--
+        
         And now it gets really exiting! We move into third dimension!
         
         Along with `data-x` and `data-y`, you can define the position on third (Z) axis, with
         `data-z`. In the example below we use `data-z="-3000"` meaning that element should be
         positioned far away from us (by 3000px).
+        
     -->
     <div id="tiny" class="step" data-x="2825" data-y="2325" data-z="-3000" data-rotate="300" data-scale="1">
         <p>and <b>tiny</b> ideas</p>
@@ -182,6 +223,7 @@
     </div>
 
     <!--
+        
         And the last one shows full power and flexibility of impress.js.
         
         You can not only position element in 3D, but also rotate it around any axis.
@@ -190,6 +232,7 @@
         
         You can of course rotate it around Z axis with `data-rotate-z` - it has exactly the same effect
         as `data-rotate` (these two are basically aliases).
+        
     -->
     <div id="its-in-3d" class="step" data-x="6200" data-y="4300" data-z="-100" data-rotate-x="-40" data-rotate-y="10" data-scale="2">
         <p><span class="have">have</span> <span class="you">you</span> <span class="noticed">noticed</span> <span class="its">it's</span> <span class="in">in</span> <b>3D<sup>*</sup></b>?</p>
@@ -197,6 +240,7 @@
     </div>
 
     <!--
+        
         So to make a summary of all the possible attributes used to position presentation steps, we have:
         
         * `data-x`, `data-y`, `data-z` -- they define the position of **the center** of step element on
@@ -205,6 +249,7 @@
             the element around given axis in degrees; their default value is 0; `data-rotate` and `data-rotate-z`
             are exactly the same;
         * `data-scale` -- defines the scale of step element; default value is 1
+        
     -->
     <div id="overview" class="step" data-x="3000" data-y="1500" data-scale="10">
     </div>
@@ -212,6 +257,7 @@
 </div>
 
 <!--
+    
     Hint is not related to impress.js in any way.
     
     But it can show you how to use impress.js features in creative way.
@@ -222,6 +268,7 @@
     is active, `#impress` element get a class of `step-bored`.
     
     This class is used by this hint below. Check CSS file to see how it's shown with delayed CSS animation.
+    
 -->
 <div class="hint">
     <p>Use a spacebar or arrow keys to navigate</p>
@@ -229,14 +276,57 @@
 
 
 <!--
+    
     Last, but not least.
     
     To make all described above really work, you need to include impress.js in the page.
     And you should do it in the end of your document. Not only because it's a good practice, but also
     because I was lazy, haven't wrapped the code in any kind of "DOM ready" event, so it will not work
     if included too early in the source ;)
+    
 -->
 <script src="js/impress.js"></script>
 
 </body>
 </html>
+
+<!--
+    
+    Now you know more or less everything you need to build your first impress.js presentation, but before
+    you start...
+    
+    Oh, you've already cloned the code from GitHub?
+    
+    You have it open in text editor?
+    
+    Stop right there!
+    
+    That's not how you create awesome presentations. This is only a code. Implementation of the idea that
+    first needs to grow in your mind.
+    
+    So if you want to build great presentation take a pencil and piece of paper. And turn off the computer.
+    
+    Sketch, draw and write. Brainstorm your ideas on a paper. Try to build a mind-map of what you'd like
+    to present. It will get you closer and closer to the layout you'll build later with impress.js.
+    
+    Get back to the code only when you have your presentation ready on a paper. It doesn't make sense to do
+    it earlier, because you'll only waste your time fighting with positioning of useless points.
+    
+    If you think I'm crazy, please put your hands on a book called "Presentation Zen". It's all about 
+    creating awesome and engaging presentations.
+    
+    Think about it. 'Cause impress.js may not help you, if you have nothing interesting to say.
+    
+-->
+
+<!--
+    
+    Are you still reading this?
+    
+    For real?
+    
+    I'm impressed! Feel free to let me know that you got that far (I'm @bartaz on Twitter), 'cause I'd like
+    to congratulate you personally :)
+    
+-->
+
