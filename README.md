@@ -61,8 +61,6 @@ EXAMPLES AND DEMOS
 
 ### Presentations
 
-[Introduction to Responsive Design](http://www.alecrust.com/factory/rd-presentation/) by Alec Rust [@alecrust] (http://twitter.com/alecrust)
-
 [CSS 3D transforms](http://bartaz.github.com/meetjs/css3d-summit) from [meet.js summit](http://summit.meetjs.pl) by [@bartaz](http://twitter.com/bartaz)
 
 [What the Heck is Responsive Web Design](http://johnpolacek.github.com/WhatTheHeckIsResponsiveWebDesign-impressjs/) by John Polacek [@johnpolacek](http://twitter.com/johnpolacek)
@@ -72,6 +70,8 @@ EXAMPLES AND DEMOS
 [Data center virtualization with Wakame-VDC](http://wakame.jp/wiki/materials/20120114_TLUG/) by Andreas Kieckens [@Metallion98](https://twitter.com/#!/Metallion98)
 
 [Asynchronous JavaScript](http://www.medikoo.com/asynchronous-javascript/#/asynchronous-javascript) by Mariusz Nowak [@medikoo](http://twitter.com/medikoo)
+
+[Introduction to Responsive Design](http://www.alecrust.com/factory/rd-presentation/) by Alec Rust [@alecrust] (http://twitter.com/alecrust)
 
 ### Websites and portfolios
 
