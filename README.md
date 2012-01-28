@@ -69,7 +69,7 @@ EXAMPLES AND DEMOS
 
 [Data center virtualization with Wakame-VDC](http://wakame.jp/wiki/materials/20120114_TLUG/) by Andreas Kieckens [@Metallion98](https://twitter.com/#!/Metallion98)
 
-[Asynchronous JavaScript](http://www.medikoo.com/asynchronous-javascript/#/asynchronous-javascript) by Mariusz Nowak [@medikoo](http://twitter.com/medikoo)
+[Asynchronous JavaScript](http://www.medikoo.com/asynchronous-javascript/3d/) by Mariusz Nowak [@medikoo](http://twitter.com/medikoo)
 
 [Introduction to Responsive Design](http://www.alecrust.com/factory/rd-presentation/) by Alec Rust [@alecrust] (http://twitter.com/alecrust)
 
