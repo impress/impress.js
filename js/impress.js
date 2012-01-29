@@ -149,26 +149,37 @@ impress.init = function ( document, window, impress, options ) {
     };
 
     steps.forEach(function ( el, idx ) {
-        var data = el.dataset,
-            step = {
-                translate: {
-                    x: data.x || 0,
-                    y: data.y || 0,
-                    z: data.z || 0
-                },
-                rotate: {
-                    x: data.rotateX || 0,
-                    y: data.rotateY || 0,
-                    z: data.rotateZ || data.rotate || 0
-                },
-                scale: data.scale || 1
-            };
-        
-        el.stepData = step;
-        
         if ( !el.id ) {
             el.id = "step-" + (idx + 1);
         }
+        
+        var conf = options && options.steps && options.steps[el.id],
+            data = el.dataset,
+            step = {
+                translate: {
+                    x: (!conf || isNaN(conf.x)) ?
+                        (Number(data.x) || 0) : Number(conf.x),
+                    y: (!conf || isNaN(conf.y)) ?
+                        (Number(data.y) || 0) : Number(conf.y),
+                    z: (!conf || isNaN(conf.z)) ?
+                        (Number(data.z) || 0) : Number(conf.z)
+                },
+                rotate: {
+                    x: (!conf || !conf.rotate || isNaN(conf.rotate.x)) ?
+                        (Number(data.rotateX) || 0) : Number(conf.rotate.x),
+                    y: (!conf || !conf.rotate || isNaN(conf.rotate.y)) ?
+                        (Number(data.rotateY) || 0) : Number(conf.rotate.y),
+                    z: (conf && conf.rotate && !isNaN(conf.rotate.z)) ?
+                        Number(conf.rotate.z) :
+                        ((conf && !isNaN(conf.rotate)) ? Number(conf.rotate) :
+                            (!isNaN(data.rotateZ) ? Number(data.rotateZ) :
+                                (Number(data.rotate) || 0)))
+                },
+                scale: (!conf || isNaN(conf.scale)) ?
+                    (Number(data.scale) || 1) : Number(conf.scale)
+            };
+        
+        el.stepData = step;
         
         css(el, {
             position: "absolute",
