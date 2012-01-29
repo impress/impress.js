@@ -12,6 +12,8 @@
 (function ( document, window ) {
     'use strict';
 
+    var impress = window.impress = {};
+
     // HELPER FUNCTIONS
     
     var pfx = (function () {
@@ -96,24 +98,24 @@
     
     // DOM ELEMENTS
     
-    var impress = byId("impress");
+    var impressEl = byId("impress");
     
     if (!impressSupported) {
-        impress.className = "impress-not-supported";
+        impressEl.className = "impress-not-supported";
         return;
     } else {
-        impress.className = "";
+        impressEl.className = "";
     }
     
     var canvas = document.createElement("div");
     canvas.className = "canvas";
     
-    arrayify( impress.childNodes ).forEach(function ( el ) {
+    arrayify( impressEl.childNodes ).forEach(function ( el ) {
         canvas.appendChild( el );
     });
-    impress.appendChild(canvas);
+    impressEl.appendChild(canvas);
     
-    var steps = $$(".step", impress);
+    var steps = $$(".step", impressEl);
     
     // SETUP
     // set initial values and defaults
@@ -132,8 +134,8 @@
         transformStyle: "preserve-3d"
     }
     
-    css(impress, props);
-    css(impress, {
+    css(impressEl, props);
+    css(impressEl, {
         top: "50%",
         left: "50%",
         perspective: "1000px"
@@ -207,7 +209,7 @@
         }
         el.classList.add("active");
         
-        impress.className = "step-" + el.id;
+        impressEl.className = "step-" + el.id;
         
         // `#/step-id` is used instead of `#step-id` to prevent default browser
         // scrolling to element in hash
@@ -240,7 +242,7 @@
         // don't animate (set duration to 0)
         var duration = (active) ? "1s" : "0";
         
-        css(impress, {
+        css(impressEl, {
             // to keep the perspective look similar for different scales
             // we need to 'scale' the perspective, too
             perspective: step.scale * 1000 + "px",
