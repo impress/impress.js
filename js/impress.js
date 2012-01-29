@@ -9,10 +9,12 @@
  * Copyright 2011 Bartek Szopka (@bartaz)
  */
 
-window.impress = {};
-
-impress.init = function ( document, window, impress, options ) {
+(function ( document, window ) {
     'use strict';
+
+var impress = window.impress = {};
+
+impress.init = function ( options ) {
 
     // HELPER FUNCTIONS
     
@@ -349,5 +351,7 @@ impress.init = function ( document, window, impress, options ) {
     // by selecting step defined in url or first step of the presentation
     select(getElementFromUrl() || steps[0]);
 
-}.bind(null, document, window, window.impress);
+};
+
+})(document, window);
 
