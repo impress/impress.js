@@ -12,6 +12,10 @@
 (function ( document, window ) {
     'use strict';
 
+var impress = window.impress = {};
+
+impress.init = function ( options ) {
+
     // HELPER FUNCTIONS
     
     var pfx = (function () {
@@ -96,24 +100,24 @@
     
     // DOM ELEMENTS
     
-    var impress = byId("impress");
+    var impressEl = byId("impress");
     
     if (!impressSupported) {
-        impress.className = "impress-not-supported";
+        impressEl.className = "impress-not-supported";
         return;
     } else {
-        impress.className = "";
+        impressEl.className = "";
     }
     
     var canvas = document.createElement("div");
     canvas.className = "canvas";
     
-    arrayify( impress.childNodes ).forEach(function ( el ) {
+    arrayify( impressEl.childNodes ).forEach(function ( el ) {
         canvas.appendChild( el );
     });
-    impress.appendChild(canvas);
+    impressEl.appendChild(canvas);
     
-    var steps = $$(".step", impress);
+    var steps = $$(".step", impressEl);
     
     // SETUP
     // set initial values and defaults
@@ -132,8 +136,8 @@
         transformStyle: "preserve-3d"
     }
     
-    css(impress, props);
-    css(impress, {
+    css(impressEl, props);
+    css(impressEl, {
         top: "50%",
         left: "50%",
         perspective: "1000px"
@@ -147,26 +151,37 @@
     };
 
     steps.forEach(function ( el, idx ) {
-        var data = el.dataset,
-            step = {
-                translate: {
-                    x: data.x || 0,
-                    y: data.y || 0,
-                    z: data.z || 0
-                },
-                rotate: {
-                    x: data.rotateX || 0,
-                    y: data.rotateY || 0,
-                    z: data.rotateZ || data.rotate || 0
-                },
-                scale: data.scale || 1
-            };
-        
-        el.stepData = step;
-        
         if ( !el.id ) {
             el.id = "step-" + (idx + 1);
         }
+        
+        var conf = options && options.steps && options.steps[el.id],
+            data = el.dataset,
+            step = {
+                translate: {
+                    x: (!conf || isNaN(conf.x)) ?
+                        (Number(data.x) || 0) : Number(conf.x),
+                    y: (!conf || isNaN(conf.y)) ?
+                        (Number(data.y) || 0) : Number(conf.y),
+                    z: (!conf || isNaN(conf.z)) ?
+                        (Number(data.z) || 0) : Number(conf.z)
+                },
+                rotate: {
+                    x: (!conf || !conf.rotate || isNaN(conf.rotate.x)) ?
+                        (Number(data.rotateX) || 0) : Number(conf.rotate.x),
+                    y: (!conf || !conf.rotate || isNaN(conf.rotate.y)) ?
+                        (Number(data.rotateY) || 0) : Number(conf.rotate.y),
+                    z: (conf && conf.rotate && !isNaN(conf.rotate.z)) ?
+                        Number(conf.rotate.z) :
+                        ((conf && !isNaN(conf.rotate)) ? Number(conf.rotate) :
+                            (!isNaN(data.rotateZ) ? Number(data.rotateZ) :
+                                (Number(data.rotate) || 0)))
+                },
+                scale: (!conf || isNaN(conf.scale)) ?
+                    (Number(data.scale) || 1) : Number(conf.scale)
+            };
+        
+        el.stepData = step;
         
         css(el, {
             position: "absolute",
@@ -207,7 +222,7 @@
         }
         el.classList.add("active");
         
-        impress.className = "step-" + el.id;
+        impressEl.className = "step-" + el.id;
         
         // `#/step-id` is used instead of `#step-id` to prevent default browser
         // scrolling to element in hash
@@ -240,7 +255,7 @@
         // don't animate (set duration to 0)
         var duration = (active) ? "1s" : "0";
         
-        css(impress, {
+        css(impressEl, {
             // to keep the perspective look similar for different scales
             // we need to 'scale' the perspective, too
             perspective: step.scale * 1000 + "px",
@@ -335,6 +350,8 @@
     // START 
     // by selecting step defined in url or first step of the presentation
     select(getElementFromUrl() || steps[0]);
+
+};
 
 })(document, window);
 
