@@ -146,6 +146,8 @@
         scale:     1
     };
 
+    var stepData = {};
+    
     steps.forEach(function ( el, idx ) {
         var data = el.dataset,
             step = {
@@ -159,14 +161,15 @@
                     y: data.rotateY || 0,
                     z: data.rotateZ || data.rotate || 0
                 },
-                scale: data.scale || 1
+                scale: data.scale || 1,
+                el: el
             };
-        
-        el.stepData = step;
         
         if ( !el.id ) {
             el.id = "step-" + (idx + 1);
         }
+        
+        stepData["impress-" + el.id] = step;
         
         css(el, {
             position: "absolute",
@@ -184,8 +187,12 @@
     var active = null;
     var hashTimeout = null;
     
+    var isStep = function ( el ) {
+        return !!(el && el.id && stepData["impress-" + el.id]);
+    }
+    
     var select = function ( el ) {
-        if ( !el || !el.stepData || el == active) {
+        if ( !el || !isStep(el) || el == active) {
             // selected element is not defined as step or is already active
             return false;
         }
@@ -200,7 +207,7 @@
         // If you are reading this and know any better way to handle it, I'll be glad to hear about it!
         window.scrollTo(0, 0);
         
-        var step = el.stepData;
+        var step = stepData["impress-" + el.id];
         
         if ( active ) {
             active.classList.remove("active");
@@ -303,7 +310,7 @@
         // check if event target (or any of its parents is a link or a step)
         var target = event.target;
         while ( (target.tagName != "A") &&
-                (!target.stepData) &&
+                (!isStep(target)) &&
                 (target != document.body) ) {
             target = target.parentNode;
         }
@@ -335,6 +342,6 @@
     // START 
     // by selecting step defined in url or first step of the presentation
     select(getElementFromUrl() || steps[0]);
-
+    
 })(document, window);
 
