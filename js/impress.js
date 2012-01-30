@@ -9,7 +9,51 @@
  * Copyright 2011 Bartek Szopka (@bartaz)
  */
 
-(function ( document, window ) {
+if (!Function.prototype.bind) {
+    (function () {
+        var slice = Array.prototype.slice, cache = [];
+
+        var getBody = (function (genArgs, body) {
+            return function (length) {
+                return cache[length] || (cache[length] = Function('target', 'that',
+                    'args', 'slice', 'return function bound (' + genArgs(length) + ') {' +
+                    body + '};'));
+            };
+        }(function (length) {
+            var args = [];
+            while (length--) {
+                args.push('a' + length.toString(32));
+            }
+            return args.join(', ');
+        }, function () {
+            if (this instanceof bound) {
+                var F = function () {};
+                F.prototype = target.prototype;
+                var self = new F;
+                var result = target.apply(self, args.concat(slice.call(arguments)));
+
+                if (result && (Object(result) === result)) {
+                    return result;
+                }
+                return self;
+
+            } else {
+                return target.apply(that, args.concat(slice.call(arguments)));
+            }
+        }.toString().slice('function () {'.length, -1)));
+
+        Function.prototype.bind = function bind (that) {
+            if (typeof this != "function") {
+                return new TypeError();
+            }
+            return getBody(this.length)(this, that, slice.call(arguments, 1), slice);
+        };
+    }());
+}
+
+window.impress = {};
+
+impress.init = function ( document, window, impress, options ) {
     'use strict';
 
     // HELPER FUNCTIONS
@@ -41,6 +85,8 @@
 
     })();
 
+    var slice = Array.prototype.slice;
+    var some = Array.prototype.some;
     var arrayify = function ( a ) {
         return [].slice.call( a );
     };
@@ -96,24 +142,24 @@
     
     // DOM ELEMENTS
     
-    var impress = byId("impress");
+    var impressEl = byId("impress");
     
     if (!impressSupported) {
-        impress.className = "impress-not-supported";
+        impressEl.className = "impress-not-supported";
         return;
     } else {
-        impress.className = "";
+        impressEl.className = "";
     }
     
     var canvas = document.createElement("div");
     canvas.className = "canvas";
     
-    arrayify( impress.childNodes ).forEach(function ( el ) {
+    arrayify( impressEl.childNodes ).forEach(function ( el ) {
         canvas.appendChild( el );
     });
-    impress.appendChild(canvas);
+    impressEl.appendChild(canvas);
     
-    var steps = $$(".step", impress);
+    var steps = $$(".step", impressEl);
     
     // SETUP
     // set initial values and defaults
@@ -132,8 +178,8 @@
         transformStyle: "preserve-3d"
     }
     
-    css(impress, props);
-    css(impress, {
+    css(impressEl, props);
+    css(impressEl, {
         top: "50%",
         left: "50%",
         perspective: "1000px"
@@ -146,27 +192,49 @@
         scale:     1
     };
 
+    var firstNumber = function () {
+        // Returns first valid number value or 0
+        var i;
+        return some.call(arguments, function (num, index) {
+            i = index;
+            return !isNaN(num);
+        }) ? Number(arguments[i]) : 0;
+    };
+
+    var get = function (obj) {
+        return slice.call(arguments, 1).every(function (name) {
+            if (obj && obj.hasOwnProperty(name)) {
+                obj = obj[name];
+                return true;
+            } else {
+                return false;
+            }
+        }) ? obj : undefined;
+    };
+
     steps.forEach(function ( el, idx ) {
-        var data = el.dataset,
-            step = {
-                translate: {
-                    x: data.x || 0,
-                    y: data.y || 0,
-                    z: data.z || 0
-                },
-                rotate: {
-                    x: data.rotateX || 0,
-                    y: data.rotateY || 0,
-                    z: data.rotateZ || data.rotate || 0
-                },
-                scale: data.scale || 1
-            };
-        
-        el.stepData = step;
-        
         if ( !el.id ) {
             el.id = "step-" + (idx + 1);
         }
+        
+        var conf = options && options.steps && options.steps[el.id],
+            data = el.dataset,
+            step = {
+                translate: {
+                    x: firstNumber(get(conf, 'x'), data.x),
+                    y: firstNumber(get(conf, 'y'), data.y),
+                    z: firstNumber(get(conf, 'z'), data.z)
+                },
+                rotate: {
+                    x: firstNumber(get(conf, 'rotate', 'x'), data.rotateX),
+                    y: firstNumber(get(conf, 'rotate', 'y'), data.rotateY),
+                    z: firstNumber(get(conf, 'rotate', 'z'), data.rotateZ,
+                        get(conf, 'rotate'), data.rotate)
+                },
+                scale: firstNumber(get(conf, 'scale'), data.scale, 1)
+            };
+        
+        el.stepData = step;
         
         css(el, {
             position: "absolute",
@@ -207,7 +275,7 @@
         }
         el.classList.add("active");
         
-        impress.className = "step-" + el.id;
+        impressEl.className = "step-" + el.id;
         
         // `#/step-id` is used instead of `#step-id` to prevent default browser
         // scrolling to element in hash
@@ -240,7 +308,7 @@
         // don't animate (set duration to 0)
         var duration = (active) ? "1s" : "0";
         
-        css(impress, {
+        css(impressEl, {
             // to keep the perspective look similar for different scales
             // we need to 'scale' the perspective, too
             perspective: step.scale * 1000 + "px",
@@ -336,5 +404,5 @@
     // by selecting step defined in url or first step of the presentation
     select(getElementFromUrl() || steps[0]);
 
-})(document, window);
+}.bind(null, document, window, window.impress);
 
