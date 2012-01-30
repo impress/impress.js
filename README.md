@@ -24,11 +24,16 @@ VERSION HISTORY
 
 **CONTAINS UNRELEASED CHANGES, MAY BE UNSTABLE**
 
+
+### 0.2 ([browse](http://github.com/bartaz/impress.js/tree/0.2), [zip](http://github.com/bartaz/impress.js/zipball/0.2), [tar](http://github.com/bartaz/impress.js/tarball/0.2))
+
+* tutorial/documentation added to `index.html` source file
+* being even more strict with strict mode
 * code clean-up
 * couple of small bug-fixes
 
 
-### 0.1 ([browse](https://github.com/bartaz/impress.js/tree/0.1), [zip](https://github.com/bartaz/impress.js/zipball/0.1), [tar](https://github.com/bartaz/impress.js/tarball/0.1))
+### 0.1 ([browse](http://github.com/bartaz/impress.js/tree/0.1), [zip](http://github.com/bartaz/impress.js/zipball/0.1), [tar](http://github.com/bartaz/impress.js/tarball/0.1))
 
 First release.
 
@@ -69,7 +74,9 @@ EXAMPLES AND DEMOS
 
 [Data center virtualization with Wakame-VDC](http://wakame.jp/wiki/materials/20120114_TLUG/) by Andreas Kieckens [@Metallion98](https://twitter.com/#!/Metallion98)
 
-[Asynchronous JavaScript](http://www.medikoo.com/asynchronous-javascript/#/asynchronous-javascript) by Mariusz Nowak [@medikoo](http://twitter.com/medikoo)
+[Asynchronous JavaScript](http://www.medikoo.com/asynchronous-javascript/3d/) by Mariusz Nowak [@medikoo](http://twitter.com/medikoo)
+
+[Introduction to Responsive Design](http://www.alecrust.com/factory/rd-presentation/) by Alec Rust [@alecrust] (http://twitter.com/alecrust)
 
 ### Websites and portfolios
 
