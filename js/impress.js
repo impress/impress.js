@@ -46,7 +46,7 @@
 
 	})();
 	
-	// Check support for...
+	// Check support for...?
 	// (is there a more elegant way to do this?)
 	chk('translate3d', 'transform', 'translate3d(0px, 0px, 0px)');
 	chk('rotate3d', 'transform', 'rotateX(0deg) rotateY(0deg) rotateZ(0deg)');
