@@ -85,6 +85,8 @@ impress.init = function ( document, window, impress, options ) {
 
     })();
 
+    var slice = Array.prototype.slice;
+    var some = Array.prototype.some;
     var arrayify = function ( a ) {
         return [].slice.call( a );
     };
@@ -190,6 +192,26 @@ impress.init = function ( document, window, impress, options ) {
         scale:     1
     };
 
+    var firstNumber = function () {
+        // Returns first valid number value or 0
+        var i;
+        return some.call(arguments, function (num, index) {
+            i = index;
+            return !isNaN(num);
+        }) ? Number(arguments[i]) : 0;
+    };
+
+    var get = function (obj) {
+        return slice.call(arguments, 1).every(function (name) {
+            if (obj && obj.hasOwnProperty(name)) {
+                obj = obj[name];
+                return true;
+            } else {
+                return false;
+            }
+        }) ? obj : undefined;
+    };
+
     steps.forEach(function ( el, idx ) {
         if ( !el.id ) {
             el.id = "step-" + (idx + 1);
@@ -199,26 +221,17 @@ impress.init = function ( document, window, impress, options ) {
             data = el.dataset,
             step = {
                 translate: {
-                    x: (!conf || isNaN(conf.x)) ?
-                        (Number(data.x) || 0) : Number(conf.x),
-                    y: (!conf || isNaN(conf.y)) ?
-                        (Number(data.y) || 0) : Number(conf.y),
-                    z: (!conf || isNaN(conf.z)) ?
-                        (Number(data.z) || 0) : Number(conf.z)
+                    x: firstNumber(get(conf, 'x'), data.x),
+                    y: firstNumber(get(conf, 'y'), data.y),
+                    z: firstNumber(get(conf, 'z'), data.z)
                 },
                 rotate: {
-                    x: (!conf || !conf.rotate || isNaN(conf.rotate.x)) ?
-                        (Number(data.rotateX) || 0) : Number(conf.rotate.x),
-                    y: (!conf || !conf.rotate || isNaN(conf.rotate.y)) ?
-                        (Number(data.rotateY) || 0) : Number(conf.rotate.y),
-                    z: (conf && conf.rotate && !isNaN(conf.rotate.z)) ?
-                        Number(conf.rotate.z) :
-                        ((conf && !isNaN(conf.rotate)) ? Number(conf.rotate) :
-                            (!isNaN(data.rotateZ) ? Number(data.rotateZ) :
-                                (Number(data.rotate) || 0)))
+                    x: firstNumber(get(conf, 'rotate', 'x'), data.rotateX),
+                    y: firstNumber(get(conf, 'rotate', 'y'), data.rotateY),
+                    z: firstNumber(get(conf, 'rotate', 'z'), data.rotateZ,
+                        get(conf, 'rotate'), data.rotate)
                 },
-                scale: (!conf || isNaN(conf.scale)) ?
-                    (Number(data.scale) || 1) : Number(conf.scale)
+                scale: firstNumber(get(conf, 'scale'), data.scale, 1)
             };
         
         el.stepData = step;
