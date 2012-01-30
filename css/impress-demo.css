@@ -126,7 +126,9 @@ a:hover {
 }
 
 .step:not(.active) {
-    opacity: 0.3;
+   /* Firefox animations are painful to experience when non-active steps are semi-transparent */
+    opacity: 0;
+    -webkit-opacity: 0.3;
 }
 
 /* STEP SPECIFIC STYLES */
