@@ -20,6 +20,11 @@ It's an (un)fortunate coincidence that a Open/LibreOffice presentation tool is c
 VERSION HISTORY
 -----------------
 
+### master (in development)
+
+**CONTAINS UNRELEASED CHANGES, MAY BE UNSTABLE**
+
+
 ### 0.2 ([browse](http://github.com/bartaz/impress.js/tree/0.2), [zip](http://github.com/bartaz/impress.js/zipball/0.2), [tar](http://github.com/bartaz/impress.js/tarball/0.2))
 
 * tutorial/documentation added to `index.html` source file
