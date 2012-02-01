@@ -73,6 +73,8 @@ EXAMPLES AND DEMOS
 
 [Introduction to Responsive Design](http://www.alecrust.com/factory/rd-presentation/) by Alec Rust [@alecrust] (http://twitter.com/alecrust)
 
+[Bonne année 2012](http://duael.fr/voeux/2012/) by Edouard Cunibil [@DuaelFr](http://twitter.com/DuaelFr)
+
 ### Websites and portfolios
 
 [lioshi.com](http://lioshi.com) by @lioshi
