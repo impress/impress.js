@@ -24,6 +24,7 @@ VERSION HISTORY
 
 **CONTAINS UNRELEASED CHANGES, MAY BE UNSTABLE**
 
+* minor CSS 3D fixes
 
 ### 0.2 ([browse](http://github.com/bartaz/impress.js/tree/0.2), [zip](http://github.com/bartaz/impress.js/zipball/0.2), [tar](http://github.com/bartaz/impress.js/tarball/0.2))
 
