@@ -323,6 +323,14 @@ a:hover {
 
 /* it's in 3D */
 
+#its-in-3d p {
+    -webkit-transform-style: preserve-3d;
+    -moz-transform-style:    preserve-3d; /* Y U need this Firefox?! */
+    -ms-transform-style:     preserve-3d;
+    -o-transform-style:      preserve-3d;
+    transform-style:         preserve-3d;
+}
+
 #its-in-3d span,
 #its-in-3d b {
     display: inline-block;
