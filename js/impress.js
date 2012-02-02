@@ -6,7 +6,7 @@
  *
  * MIT Licensed.
  *
- * Copyright 2011 Bartek Szopka (@bartaz)
+ * Copyright 2012 Bartek Szopka (@bartaz)
  */
 
 (function ( document, window ) {
