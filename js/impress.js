@@ -321,6 +321,36 @@
             event.preventDefault();
         }
     }, false);
+
+    // CLICKABLE NAVIGATION
+    var prev_link = document.createElement('a');
+    prev_link.id = 'prev-impress';
+    prev_link.href = '#';
+    prev_link.style.cssText = 'position:fixed; bottom:50%; left:10px; z-index: 100;';
+    prev_link.innerHTML = 'Prev';
+    document.body.insertBefore(prev_link, document.body.childNodes[0]);
+    
+    var next_link = document.createElement('a');
+    next_link.id = 'next-impress';
+    next_link.href = '#';
+    next_link.style.cssText = 'position:fixed; bottom:50%; right:10px; z-index: 100;';
+    next_link.innerHTML = 'Next';
+    document.body.insertBefore(next_link, document.body.childNodes[0]);
+    
+    document.addEventListener("click", function( event ){
+        var prev_link_clicked = event.target;
+        if (prev_link_clicked.id == 'prev-impress'){
+            selectPrev();
+        }    
+    });
+
+    document.addEventListener("click", function( event ){
+        var next_link_clicked = event.target;
+        if (next_link_clicked.id == 'next-impress'){
+            selectNext();
+        }
+    
+    });
     
     var getElementFromUrl = function () {
         // get id from url # by removing `#` or `#/` from the beginning,
