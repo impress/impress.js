@@ -93,6 +93,7 @@ EXAMPLES AND DEMOS
 
 [museum140](http://www.youtube.com/watch?v=ObLiikJEt94) Shorty Award promo video [entirely made with ImpressJS](http://thingsinjars.com/post/446/museum140-shorty/) by [@thingsinjars](http://twitter.com/thingsinjars)
 
+[electricanimal.co.uk](http://www.electricanimal.co.uk) by [@elecmal](http://twitter.com/elecmal)
 
 If you have used impress.js in your presentation (or website) and would like to have it listed here,
 please contact me via GitHub or send me a pull request to updated `README.md` file.
