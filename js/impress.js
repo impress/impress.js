@@ -382,5 +382,23 @@
         }
     }, false);
     
+    // touch handler to detect taps on the left and right side of the screen
+    document.addEventListener("touchstart", function ( event ) {
+        if (event.touches.length === 1) {
+            var x = event.touches[0].clientX,
+                width = window.innerWidth * 0.3,
+                result = null;
+                
+            if ( x < width ) {
+                result = impress().prev();
+            } else if ( x > window.innerWidth - width ) {
+                result = impress().next();
+            }
+            
+            if (result) {
+                event.preventDefault();
+            }
+        }
+    }, false);
 })(document, window);
 
