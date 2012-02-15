@@ -98,7 +98,9 @@
     
     var ua = navigator.userAgent.toLowerCase();
     var impressSupported = ( pfx("perspective") != null ) &&
-                           ( ua.search(/(iphone)|(ipod)|(ipad)|(android)/) == -1 );
+                           ( document.body.classList ) &&
+                           ( document.body.dataset ) &&
+                           ( ua.search(/(iphone)|(ipod)|(android)/) == -1 );
     
     var roots = {};
     
