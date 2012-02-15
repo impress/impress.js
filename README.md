@@ -109,7 +109,8 @@ Currently impress.js works fine in latest Chrome/Chromium browser, Safari 5.1 an
 yet - see below for details). It also doesn't work in Opera.
 
 As it was not developed with mobile browsers in mind, it currently doesn't work on 
-any mobile devices, including tablets.
+some mobile devices. impress.js is supported by the BlackBerry PlayBook Tablet OS.
+
 
 ### Still interested? Read more...
 
