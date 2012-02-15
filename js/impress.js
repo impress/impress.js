@@ -298,6 +298,12 @@
         }
     }, false);
 
+	document.addEventListener("touchstart", function ( event ) {
+		selectNext();
+		
+		event.preventDefault();
+	}, false);
+	
     document.addEventListener("click", function ( event ) {
         // event delegation with "bubbling"
         // check if event target (or any of its parents is a link or a step)
