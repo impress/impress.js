@@ -124,6 +124,16 @@
             root.className = "";
         }
         
+        // viewport updates for iPad
+        var meta = $("meta[name='viewport']") || document.createElement("meta");
+        // hardcoding these values looks pretty bad, as they kind of depend on the content
+        // so they should be at least configurable
+        meta.content = "width=1024, initial-scale=0.75, user-scalable=no";
+        if (meta.parentNode != document.head) {
+            meta.name = 'viewport';
+            document.head.appendChild(meta);
+        }
+        
         var canvas = document.createElement("div");
         canvas.className = "canvas";
         
