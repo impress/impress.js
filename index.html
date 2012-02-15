@@ -280,9 +280,14 @@
     Last, but not least.
     
     To make all described above really work, you need to include impress.js in the page.
+    I strongly encourage to minify it first.
+    
+    In here I just include full source of the script to make it more readable.
+    
+    You also need to call a `impress()` function to initialize impress.js presentation.
     And you should do it in the end of your document. Not only because it's a good practice, but also
-    because I was lazy, haven't wrapped the code in any kind of "DOM ready" event, so it will not work
-    if included too early in the source ;)
+    because I should be done when the whole document is ready.
+    Of course you can wrap it in any kind of "DOM ready" event, but I was to lazy to do so ;)
     
 -->
 <script src="js/impress.js"></script>
