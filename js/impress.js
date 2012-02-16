@@ -128,7 +128,7 @@
         var meta = $("meta[name='viewport']") || document.createElement("meta");
         // hardcoding these values looks pretty bad, as they kind of depend on the content
         // so they should be at least configurable
-        meta.content = "width=1024, initial-scale=0.75, user-scalable=no";
+        meta.content = "width=1024, initial-scale=0.75, minimum-scale=0.75, maximum-scale=0.75, user-scalable=no";
         if (meta.parentNode != document.head) {
             meta.name = 'viewport';
             document.head.appendChild(meta);
@@ -313,6 +313,10 @@
         
         window.addEventListener("hashchange", function () {
             goto( getElementFromUrl() );
+        }, false);
+        
+        window.addEventListener("orientationchange", function () {
+            window.scrollTo(0, 0);
         }, false);
         
         // START 
