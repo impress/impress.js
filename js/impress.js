@@ -245,15 +245,7 @@
             
             root.className = "step-" + el.id;
             
-            // `#/step-id` is used instead of `#step-id` to prevent default browser
-            // scrolling to element in hash
-            //
-            // and it has to be set after animation finishes, because in chrome it
-            // causes transtion being laggy
-            window.clearTimeout( hashTimeout );
-            hashTimeout = window.setTimeout(function () {
-                window.location.hash = "#/" + el.id;
-            }, 1000);
+            history.pushState({}, '', '#' + el.id);
             
             var target = {
                 rotate: {
