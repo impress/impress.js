@@ -107,12 +107,14 @@ BROWSER SUPPORT
 
 ### TL;DR;
 
-Currently impress.js works fine in latest Chrome/Chromium browser, Safari 5.1 and Firefox 10
-(to be released in January 2012). IE is currently not supported (IE10 is close, but not there
-yet - see below for details). It also doesn't work in Opera.
+Currently impress.js works fine in latest Chrome/Chromium browser, Safari 5.1 and Firefox 10.
+With addition of some HTML5 polyfills (see below for details) it should work in Internet Explorer 10
+(currently available as Developers Preview).
+It doesn't work in Opera, as it doesn't support CSS 3D transforms.
 
-As it was not developed with mobile browsers in mind, it currently doesn't work on 
-any mobile devices, including tablets.
+As a presentation tool it was not developed with mobile browsers in mind, but some tablets are good
+enough to run it, so it should work quite well on iPad (iOS 5, or iOS 4 with HTML5 polyfills) and 
+Blackberry Playbook.
 
 ### Still interested? Read more...
 
@@ -155,14 +157,17 @@ with running impress.js.
 
 ### And few more details about mobile support
 
-Mobile browsers are currently not supported. Even iOS and Android browsers that support
-CSS 3D transforms are forced into fallback view at this point.
+Mobile browsers are currently not supported. Even Android browsers that support CSS 3D transforms are
+forced into fallback view at this point.
 
-Anyway, I'm really curious to see how modern mobile devices such as iPhone or iPad can
-handle such animations, so future mobile support is considered.
+Fortunately some tablets seem to have good enough hardware support and browsers to handle it.
+Currently impress.js presentations should work on iPad and Blackberry Playbook.
 
-iOS supports `classList` and `dataset` APIs starting with version 5, so iOS 4.X and older is not
-likely to be supported (without polyfill code).
+In theory iPhone should also be able to run it (as it runs the same software as iPad), but I haven't
+found a good way to handle it's small screen.
+
+Also note that iOS supports `classList` and `dataset` APIs starting with version 5, so iOS 4.X and older
+requires polyfills to work.
 
 
 LICENSE
