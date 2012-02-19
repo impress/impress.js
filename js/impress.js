@@ -245,7 +245,12 @@
             
             root.className = "step-" + el.id;
             
-            history.pushState({}, '', '#' + el.id);
+            // it has to be set after animation finishes, because in chrome it
+            // causes transition being laggy
+            window.clearTimeout( hashTimeout );
+            hashTimeout = setTimeout(function () {
+                history.pushState({}, '', '#' + el.id);
+            }, 1000);
             
             var target = {
                 rotate: {
