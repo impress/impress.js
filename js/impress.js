@@ -248,7 +248,7 @@
             // it has to be set after animation finishes, because in chrome it
             // causes transition being laggy
             window.clearTimeout( hashTimeout );
-            hashTimeout = setTimeout(function () {
+            hashTimeout = window.setTimeout(function () {
                 history.pushState({}, '', '#' + el.id);
             }, 1000);
             
