@@ -6,7 +6,13 @@
  *
  * MIT Licensed.
  *
- * Copyright 2011 Bartek Szopka (@bartaz)
+ * Copyright 2011-2012 Bartek Szopka (@bartaz)
+ *
+ * ------------------------------------------------
+ *  author:  Bartek Szopka
+ *  version: 0.3
+ *  url:     http://bartaz.github.com/impress.js/
+ *  source:  http://github.com/bartaz/impress.js/
  */
 
 (function ( document, window ) {

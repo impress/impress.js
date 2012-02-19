@@ -20,13 +20,19 @@ It's an (un)fortunate coincidence that a Open/LibreOffice presentation tool is c
 VERSION HISTORY
 -----------------
 
-### master (in development)
-
-**CONTAINS UNRELEASED CHANGES, MAY BE UNSTABLE**
+### 0.3 ([browse](http://github.com/bartaz/impress.js/tree/0.3), [zip](http://github.com/bartaz/impress.js/zipball/0.3), [tar](http://github.com/bartaz/impress.js/tarball/0.3))
 
 * minor CSS 3D fixes
 * basic API to control the presentation flow from JavaScript
 * touch event support
+* basic support for iPad (iOS 5 and iOS 4 with polyfills) and Blackberry Playbook
+
+**UPGRADING FROM PREVIOUS VERSIONS**
+
+Because API was introduced the way impress.js script is initialized was changed a bit. You not only has to include
+`impress.js` script file, but also call `impress()` function.
+
+See the source of `index.html` for example and more details.
 
 
 ### 0.2 ([browse](http://github.com/bartaz/impress.js/tree/0.2), [zip](http://github.com/bartaz/impress.js/zipball/0.2), [tar](http://github.com/bartaz/impress.js/tarball/0.2))
