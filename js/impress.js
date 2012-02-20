@@ -201,7 +201,7 @@
                     rotate: {
                         x: data.rotateX || rules.rotate.x || 0,
                         y: data.rotateY || rules.rotate.y || 0,
-                        z: data.rotateZ || rules.rotate.z || data.rotate || rules.rotate || 0
+                        z: data.rotateZ || rules.rotate.z || data.rotate || isFinite(rules.rotate) ? rules.rotate : 0
                     },
                     scale: data.scale || rules.scale || 1,
                     el: el
