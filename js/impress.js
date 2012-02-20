@@ -317,6 +317,16 @@
             return goto(next);
         };
         
+        var ignoredKeyCodes = [];
+        var ignoreKeyCodes = function () {
+            var argsArray = Array.prototype.slice.call( arguments );
+            ignoredKeyCodes = ignoredKeyCodes.concat( argsArray );
+        };
+        
+        var isKeyCodeIgnored = function ( keyCode ) {
+            return ignoredKeyCodes.indexOf(keyCode) != -1;
+        };
+        
         window.addEventListener("hashchange", function () {
             goto( getElementFromUrl() );
         }, false);
@@ -332,10 +342,12 @@
         return (roots[ "impress-root-" + rootId ] = {
             goto: goto,
             next: next,
-            prev: prev
+            prev: prev,
+            ignoreKeyCodes: ignoreKeyCodes,
+            isKeyCodeIgnored: isKeyCodeIgnored
         });
 
-    }
+    };
 })(document, window);
 
 // EVENTS
@@ -345,7 +357,9 @@
     
     // keyboard navigation handler
     document.addEventListener("keydown", function ( event ) {
-        if ( event.keyCode == 9 || ( event.keyCode >= 32 && event.keyCode <= 34 ) || (event.keyCode >= 37 && event.keyCode <= 40) ) {
+        if ( impress().isKeyCodeIgnored( event.keyCode ) ) {
+            event.preventDefault();
+        } else if ( event.keyCode == 9 || ( event.keyCode >= 32 && event.keyCode <= 34 ) || (event.keyCode >= 37 && event.keyCode <= 40) ) {
             switch( event.keyCode ) {
                 case 33: ; // pg up
                 case 37: ; // left
@@ -361,10 +375,6 @@
                          break;
             }
             
-            event.preventDefault();
-        }  else if ( event.keyCode == 116 && !( event.ctrlKey || event.altKey ) ) {
-            // event raised by some presentation tools
-            // use CTRL+R or CTRL+F5 to refresh the page
             event.preventDefault();
         }
     }, false);
