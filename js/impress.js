@@ -221,6 +221,13 @@
             
         });
 
+        //Maintain callbacks list
+        var callbacks = [];
+        var callback = function ( cb ) {
+            if(typeof(cb) === "function")
+                callbacks.push(cb);
+        };
+
         // making given step active
 
         var active = null;
@@ -300,6 +307,13 @@
             current = target;
             active = el;
             
+            //Go through callback list
+            callbacks.forEach(function(cb){
+                try { //Protect us from bad callbacks
+                    cb(el);
+                } catch(e){};
+            });
+            
             return el;
         };
         
@@ -332,7 +346,8 @@
         return (roots[ "impress-root-" + rootId ] = {
             goto: goto,
             next: next,
-            prev: prev
+            prev: prev,
+            callback: callback
         });
 
     }
