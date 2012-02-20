@@ -365,6 +365,7 @@
     document.addEventListener("keydown", function ( event ) {
         if ( event.keyCode == 9 || ( event.keyCode >= 32 && event.keyCode <= 34 ) || (event.keyCode >= 37 && event.keyCode <= 40) ) {
             switch( event.keyCode ) {
+                case 8: ; // backspace
                 case 33: ; // pg up
                 case 37: ; // left
                 case 38:   // up
