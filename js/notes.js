@@ -38,6 +38,26 @@
             notesWindow.document.title = "Impress.js Speaker Notes (" + document.title + ")";
             notesWindow.impress = window.impress;
             notesWindow.document.body.innerHTML = notesTemplate;
+            notesWindow.document.addEventListener("keydown", function ( event ) {
+			    switch( event.keyCode ) {
+				    case 8: ; // backspace
+			        case 33: ; // pg up
+			        case 37: ; // left
+			        case 38:   // up
+			                 impress().prev();
+			                 break;
+			        case 9:  ; // tab
+			        case 32: ; // space
+			        case 34: ; // pg down
+			        case 39: ; // right
+			        case 40:   // down
+			                 impress().next();
+			                 break;
+			        default: break;
+			    }
+				    
+			    event.preventDefault();
+			}, false);
             
             slideChange();
         }
