@@ -67,6 +67,18 @@ Fortunately there are some guys on GitHub that got quite excited with the idea o
 editing tool for impress.js. Let's hope they will manage to do it.
 
 
+Using remote controls
+---------------
+Some remote controls are sending unexpected key events when certain buttons are
+pressed. For instance, the Kensington Si600 Wireless Presenter sends a key code
+116 event when you press the laser pointer button. Impress.js can ignore and
+prevent the browser's default behavior when you instruct it to do so. In case
+of the aforementioned device, this can be achieved in the following way.
+
+    <script>
+        impress().ignoreKeyCodes( 116 );
+    </script>
+
 EXAMPLES AND DEMOS
 --------------------
 
