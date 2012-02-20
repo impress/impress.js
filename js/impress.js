@@ -362,6 +362,10 @@
             }
             
             event.preventDefault();
+        }  else if ( event.keyCode == 116 && !( event.ctrlKey || event.altKey ) ) {
+            // event raised by some presentation tools
+            // use CTRL+R or CTRL+F5 to refresh the page
+            event.preventDefault();
         }
     }, false);
     
