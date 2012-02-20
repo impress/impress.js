@@ -110,9 +110,10 @@
     
     var roots = {};
     
-    var impress = window.impress = function ( rootId ) {
+    var impress = window.impress = function ( rootId, stepRules ) {
 
         rootId = rootId || "impress";
+        stepRules = stepRules || {};
         
         // if already initialized just return the API
         if (roots["impress-root-" + rootId]) {
@@ -188,19 +189,21 @@
         }
         
         steps.forEach(function ( el, idx ) {
+            var rules = stepRules[el.id] || {};
+            rules.rotate = rules.rotate || 0;
             var data = el.dataset,
                 step = {
                     translate: {
-                        x: data.x || 0,
-                        y: data.y || 0,
-                        z: data.z || 0
+                        x: data.x || rules.x || 0,
+                        y: data.y || rules.y || 0,
+                        z: data.z || rules.z || 0
                     },
                     rotate: {
-                        x: data.rotateX || 0,
-                        y: data.rotateY || 0,
-                        z: data.rotateZ || data.rotate || 0
+                        x: data.rotateX || rules.rotate.x || 0,
+                        y: data.rotateY || rules.rotate.y || 0,
+                        z: data.rotateZ || rules.rotate.z || data.rotate || rules.rotate || 0
                     },
-                    scale: data.scale || 1,
+                    scale: data.scale || rules.scale || 1,
                     el: el
                 };
             
@@ -416,6 +419,8 @@
         
         if ( impress().goto(target) ) {
             event.preventDefault();
+        } else {
+            impress().next();
         }
     }, false);
     
