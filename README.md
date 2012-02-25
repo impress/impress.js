@@ -92,6 +92,8 @@ EXAMPLES AND DEMOS
 
 [Careers in Free and Open Source Software](http://exequiel09.github.com/symposium-presentation/) by Exequiel Ceasar Navarrete [@ichigo1411](http://twitter.com/ichigo1411)
 
+[WordPress 201: Performance & Security](http://jasoncosper.com/talks/wcphx/wp201/) by Jason Cosper [@boogah](http://twitter.com/boogah)
+
 ### Websites and portfolios
 
 [lioshi.com](http://lioshi.com) by @lioshi
