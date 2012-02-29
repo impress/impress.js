@@ -212,7 +212,7 @@ var impress = new (function() {
   	var active = null;
   	var hashTimeout = null;
   
-  	var goto = function(el) {
+  	self.goto = function(el) {
   		if (!isStep(el) || el == active) {
   			// selected element is not defined as step or is already active
   			return false;
@@ -290,22 +290,22 @@ var impress = new (function() {
   		return el;
   	};
   
-  	var prev = function() {
+  	self.prev = function() {
   		var prev = steps.indexOf(active) - 1;
   		prev = prev >= 0 ? steps[prev] : steps[steps.length - 1];
   
-  		return goto(prev);
+  		return self.goto(prev);
   	};
   
-  	var next = function() {
+  	self.next = function() {
   		var next = steps.indexOf(active) + 1;
   		next = next < steps.length ? steps[next] : steps[0];
   
-  		return goto(next);
+  		return self.goto(next);
   	};
   
   	window.addEventListener("hashchange", function() {
-  		goto(getElementFromUrl());
+  		self.goto(getElementFromUrl());
   	},
   	false);
   
@@ -316,7 +316,7 @@ var impress = new (function() {
   
   	// START 
   	// by selecting step defined in url or first step of the presentation
-  	goto(getElementFromUrl() || steps[0]);
+  	self.goto(getElementFromUrl() || steps[0]);
   
   	document.addEventListener("keydown", function(event) {
   		if (event.keyCode == 9 || (event.keyCode >= 32 && event.keyCode <= 34) || (event.keyCode >= 37 && event.keyCode <= 40)) {
@@ -327,7 +327,7 @@ var impress = new (function() {
   				; // left
   			case 38:
   				// up
-  				prev();
+  				self.prev();
   				break;
   			case 9:
   				; // tab
@@ -339,7 +339,7 @@ var impress = new (function() {
   				; // right
   			case 40:
   				// down
-  				next();
+  				self.next();
   				break;
   			}
   
@@ -366,7 +366,7 @@ var impress = new (function() {
   			}
   		}
   
-  		if (goto(target)) {
+  		if (self.goto(target)) {
   			event.stopImmediatePropagation();
   			event.preventDefault();
   		}
@@ -381,7 +381,7 @@ var impress = new (function() {
   			target = target.parentNode;
   		}
   
-  		if (goto(target)) {
+  		if (self.goto(target)) {
   			event.preventDefault();
   		}
   	},
@@ -395,9 +395,9 @@ var impress = new (function() {
   			result = null;
   
   			if (x < width) {
-  				result = prev();
+  				result = self.prev();
   			} else if (x > window.innerWidth - width) {
-  				result = next();
+  				result = self.next();
   			}
   
   			if (result) {
