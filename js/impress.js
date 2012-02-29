@@ -18,6 +18,8 @@
 var impress = new (function() {
   var self = this;
 
+  self.presenting = false; // Presentation has not yet started. Only a single presentation is allowed at a time.
+
   // Takes a property that is still only implemented using vendor-specific styles and applies the correct
   // vendor-specific style for the current browser, e.g.
   //
@@ -93,15 +95,14 @@ var impress = new (function() {
 	var ua = navigator.userAgent.toLowerCase();
 	var impressSupported = (setBrowserSpecificProperty("perspective") != null) && (document.body.classList) && (document.body.dataset) && (ua.search(/(iphone)|(ipod)|(android)/) == - 1);
 
-	var roots = {};
-
   this.start = function(rootId) {
+
+    // Only allow a single presentation at a time
+    if (self.presenting)
+      return;
+    self.presenting = true;
+
   	rootId = rootId || "impress";
-  
-  	// if already initialized just return the API
-  	if (roots["impress-root-" + rootId]) {
-  		return roots["impress-root-" + rootId];
-  	}
   
   	// DOM ELEMENTS
   	var root = byId(rootId);
