@@ -19,6 +19,7 @@ var impress = new (function() {
   var self = this;
 
   self.presenting = false; // Presentation has not yet started. Only a single presentation is allowed at a time.
+  self.root = null; // Set this to some HTMLElement if you want the presentation root to be somehing besides #impress
 
   // Takes a property that is still only implemented using vendor-specific styles and applies the correct
   // vendor-specific style for the current browser, e.g.
@@ -95,24 +96,21 @@ var impress = new (function() {
 	var ua = navigator.userAgent.toLowerCase();
 	var impressSupported = (setBrowserSpecificProperty("perspective") != null) && (document.body.classList) && (document.body.dataset) && (ua.search(/(iphone)|(ipod)|(android)/) == - 1);
 
-  this.start = function(rootId) {
+  this.start = function() {
 
     // Only allow a single presentation at a time
     if (self.presenting)
       return;
     self.presenting = true;
 
-  	rootId = rootId || "impress";
-  
-  	// DOM ELEMENTS
-  	var root = byId(rootId);
-  	self.root = root;
-  
+    if (null == self.root)
+      self.root = document.getElementById('impress');
+
   	if (!impressSupported) {
-  		root.className = "impress-not-supported";
+  		self.root.className = "impress-not-supported";
   		return;
   	} else {
-  		root.className = "";
+  		self.root.className = "";
   	}
   
   	// viewport updates for iPad
@@ -128,12 +126,12 @@ var impress = new (function() {
   	var canvas = document.createElement("div");
   	canvas.className = "canvas";
   
-  	arrayify(root.childNodes).forEach(function(el) {
+  	arrayify(self.root.childNodes).forEach(function(el) {
   		canvas.appendChild(el);
   	});
-  	root.appendChild(canvas);
+  	self.root.appendChild(canvas);
   
-  	var steps = $$(".step", root);
+  	var steps = $$(".step", self.root);
   
   	// SETUP
   	// set initial values and defaults
@@ -151,8 +149,8 @@ var impress = new (function() {
   		transformStyle: "preserve-3d"
   	}
   
-  	css(root, props);
-  	css(root, {
+  	css(self.root, props);
+  	css(self.root, {
   		top: "50%",
   		left: "50%",
   		perspective: "1000px"
@@ -237,7 +235,7 @@ var impress = new (function() {
   		}
   		el.classList.add("active");
   
-  		root.className = "step-" + el.id;
+  		self.root.className = "step-" + el.id;
   
   		// `#/step-id` is used instead of `#step-id` to prevent default browser
   		// scrolling to element in hash
@@ -271,7 +269,7 @@ var impress = new (function() {
   		// don't animate (set duration to 0)
   		var duration = (active) ? "1s": "0";
   
-  		css(root, {
+  		css(self.root, {
   			// to keep the perspective look similar for different scales
   			// we need to 'scale' the perspective, too
   			perspective: step.scale * 1000 + "px",
