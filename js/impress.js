@@ -96,7 +96,7 @@ var impress = new (function() {
 	var ua = navigator.userAgent.toLowerCase();
 	var impressSupported = (setBrowserSpecificProperty("perspective") != null) && (document.body.classList) && (document.body.dataset) && (ua.search(/(iphone)|(ipod)|(android)/) == - 1);
 
-  this.start = function() {
+  self.start = function() {
 
     // Only allow a single presentation at a time
     if (self.presenting)
