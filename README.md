@@ -92,6 +92,8 @@ EXAMPLES AND DEMOS
 
 [Careers in Free and Open Source Software](http://exequiel09.github.com/symposium-presentation/) by Exequiel Ceasar Navarrete [@ichigo1411](http://twitter.com/ichigo1411)
 
+[HTML5 Future : to infinity and beyond!](http://sylvainw.github.com/HTML5-Future/index_en.html) by Sylvain Weber [@sylvainw](http://twitter.com/sylvainw)
+
 ### Websites and portfolios
 
 [lioshi.com](http://lioshi.com) by @lioshi
