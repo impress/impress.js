@@ -17,44 +17,26 @@
 
 var impress = new (function() {
   var self = this;
-	/*function setBrowserSpecificProperty(property)
-     *
-     * Takes a property that is still only implemented
-     * using vendor-specific styles and applies the correct
-     * vendor-specific style for the current browser. For
-     * example, if you are using a webkit browser,
-     *
-     * setBrowserSpecificProperty("perspective")
-     *   -> "WebkitPerspective"
-     */
-	var setBrowserSpecificProperty = (function() {
 
-		var style = document.createElement('dummy').style,
-		prefixes = 'Webkit Moz O ms Khtml'.split(' '),
-		memory = {};
+  // Takes a property that is still only implemented using vendor-specific styles and applies the correct
+  // vendor-specific style for the current browser, e.g.
+  //
+  // setBrowserSpecificProperty("perspective")
+  //   -> "WebkitPerspective"
+  function setBrowserSpecificProperty(prop) {
+    var style = document.body.style; // No reason for this particular tag, just want the style
+    var prefixes = ['Webkit', 'Moz', 'O', 'ms', 'Khtml'];
+    var ucProp = prop.charAt(0).toUpperCase() + prop.substr(1);
+    var props = prefixes.map(function(prefix){return prefix + ucProp;}).concat(prop);
 
-		return function(prop) {
-			if (typeof memory[prop] === "undefined") {
+    for (var i in props) {
+      if (style[props[i]] !== undefined) {
+        return props[i];
+      }
+    }
+  }	
 
-				var ucProp = prop.charAt(0).toUpperCase() + prop.substr(1),
-				props = (prop + ' ' + prefixes.join(ucProp + ' ') + ucProp).split(' ');
-
-				memory[prop] = null;
-				for (var i in props) {
-					if (style[props[i]] !== undefined) {
-						memory[prop] = props[i];
-						break;
-					}
-				}
-
-			}
-
-			return memory[prop];
-		}
-
-	})();
-
-	var arrayify = function(a) {
+  var arrayify = function(a) {
 		return [].slice.call(a);
 	};
 
