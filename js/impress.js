@@ -49,6 +49,7 @@ var impress = new (function() {
   self.current = null;
   self.active_index = null;
 
+  // Pans to the slide specified by index_or_id, which is either a css ID or an index into self.steps
   self.goto = function(index_or_id) {
     var index = index_or_id;
     if (typeof index_or_id === "string") { // TODO(jeady): CHECK THIS
@@ -129,10 +130,18 @@ var impress = new (function() {
     self.active_index = index;
 
     return step.node;
-  }
-  function isStep(el) {
-    return !! (el && el.id && self.steps["impress-" + el.id]);
-  }
+  };
+
+  // Immediately pan to the previous slide
+  self.prev = function() {
+    return self.goto((self.active_index + self.steps.length - 1) % self.steps.length);
+  };
+
+  // Immediately pan to the next slide
+  self.next = function() {
+    return self.goto((self.active_index + 1) % self.steps.length);
+  };
+
   // Takes a property that is still only implemented using vendor-specific styles and applies the correct
   // vendor-specific style for the current browser, e.g.
   //
@@ -306,17 +315,7 @@ var impress = new (function() {
     // making given step active
     self.hashTimeout = null;
 
-    self.prev = function() {
-      var prev = (self.active_index + self.steps.length - 1) % self.steps.length
 
-      return self.goto(prev);
-    };
-
-    self.next = function() {
-      var next = (self.active_index + 1) % self.steps.length;
-
-      return self.goto(next);
-    };
 
     window.addEventListener("hashchange", function() {
       self.goto(getElementFromUrl());
