@@ -328,7 +328,7 @@ var impress = new (function() {
       // event delegation with "bubbling"
       // check if event target (or any of its parents is a link)
       var target = event.target;
-      while ((target.tagName != "A") && (target != document.body)) {
+      while ((target.tagName != "A") && !target.classList.contains("step") && (target != document.body)) {
         target = target.parentNode;
       }
 
@@ -345,20 +345,6 @@ var impress = new (function() {
 
       if (self.goto(target)) {
         event.stopImmediatePropagation();
-        event.preventDefault();
-      }
-    },
-    false);
-
-    // delegated handler for clicking on step elements
-    document.addEventListener("click", function(event) {
-      var target = event.target;
-      // find closest step element
-      while (!target.classList.contains("step") && (target != document.body)) {
-        target = target.parentNode;
-      }
-
-      if (self.goto(target.id)) {
         event.preventDefault();
       }
     },
