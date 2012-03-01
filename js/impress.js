@@ -46,15 +46,15 @@ var impress = new (function() {
     transformStyle: "preserve-3d"
   };
   self.steps = null;          // Once the presentation has started, this will contain the processed slide data
-  self.current = null;
   self.active_index = null;
 
   // Pans to the slide specified by index_or_id, which is either a css ID or an index into self.steps
   self.goto = function(index_or_id) {
     var index = index_or_id;
     if (typeof index_or_id === "string") { // TODO(jeady): CHECK THIS
-      var el = self.steps.filter(function(e){return e.node.id == index_or_id;})[0];
-      index = self.steps.indexOf(el);
+      var el = self.steps.filter(function(e){return e.node.id == index_or_id;});
+      if (el && el.length > 0)
+        index = self.steps.indexOf(el[0]);
     }
 
     if (typeof index !== "number" || index < 0 || index >= self.steps.length || self.active_index == index)
@@ -71,10 +71,10 @@ var impress = new (function() {
     window.scrollTo(0, 0);
 
     var step = self.steps[index];
+    var active = (null != self.active_index ? self.steps[self.active_index] : null);
 
-    if (null != self.active_index) {
-      self.steps[self.active_index].node.classList.remove("active");
-    }
+    if (null != active)
+      active.node.classList.remove("active");
     step.node.classList.add("active");
 
     self.root.className = "step-" + step.node.id;
@@ -90,22 +90,8 @@ var impress = new (function() {
     },
     1000);
 
-    var target = {
-      rotate: {
-        x: - parseInt(step.rotate.x, 10),
-        y: - parseInt(step.rotate.y, 10),
-        z: - parseInt(step.rotate.z, 10)
-      },
-      translate: {
-        x: - step.translate.x,
-        y: - step.translate.y,
-        z: - step.translate.z
-      },
-      scale: 1 / parseFloat(step.scale)
-    };
-
     // check if the transition is zooming in or not
-    var zoomin = target.scale >= self.current.scale;
+    var zoomin = (1 / step.scale) >= (null != active ? 1 / parseFloat(active.scale) : 1);
 
     // if presentation starts (nothing is active yet)
     // don't animate (set duration to 0)
@@ -115,18 +101,17 @@ var impress = new (function() {
       // to keep the perspective look similar for different scales
       // we need to 'scale' the perspective, too
       perspective: step.scale * 1000 + "px",
-      transform: scale(target.scale),
+      transform: scale(1 / step.scale),
       transitionDuration: duration,
       transitionDelay: (zoomin ? "500ms": "0ms")
     });
 
     css(self.canvas, {
-      transform: rotate(target.rotate, true) + translate(target.translate),
+      transform: rotate(step.rotate, true) + translate(step.translate, true),
       transitionDuration: duration,
       transitionDelay: (zoomin ? "0ms": "500ms")
     });
 
-    self.current = target;
     self.active_index = index;
 
     return step.node;
@@ -193,14 +178,16 @@ var impress = new (function() {
     return context.querySelector(selector);
   };
 
-  var translate = function(t) {
-    return " translate3d(" + t.x + "px," + t.y + "px," + t.z + "px) ";
+  var translate = function(t, revert) {
+    var negate = revert ? -1 : 1;
+    return " translate3d(" + negate * t.x + "px," + negate * t.y + "px," + negate * t.z + "px) ";
   };
 
   var rotate = function(r, revert) {
-    var rX = " rotateX(" + r.x + "deg) ",
-    rY = " rotateY(" + r.y + "deg) ",
-    rZ = " rotateZ(" + r.z + "deg) ";
+    var negate = revert ? -1 : 1;
+    var rX = " rotateX(" + negate * r.x + "deg) ",
+    rY = " rotateY(" + negate * r.y + "deg) ",
+    rZ = " rotateZ(" + negate * r.z + "deg) ";
 
     return revert ? rZ + rY + rX: rX + rY + rZ;
   };
@@ -265,20 +252,6 @@ var impress = new (function() {
     css(self.root, self.rootProperties);
     css(self.canvas, self.canvasProperties);
 
-    self.current = {
-      translate: {
-        x: 0,
-        y: 0,
-        z: 0
-      },
-      rotate: {
-        x: 0,
-        y: 0,
-        z: 0
-      },
-      scale: 1
-    };
-
     self.steps = [];
 
     self.root.querySelectorAll(".step").arrayify().forEach(function(el, idx) {
@@ -286,16 +259,16 @@ var impress = new (function() {
       step = {
         node: el,
         translate: {
-          x: data.x || 0,
-          y: data.y || 0,
-          z: data.z || 0
+          x: parseInt(data.x, 10) || 0,
+          y: parseInt(data.y, 10) || 0,
+          z: parseInt(data.z, 10) || 0
         },
         rotate: {
           x: data.rotateX || 0,
           y: data.rotateY || 0,
           z: data.rotateZ || data.rotate || 0
         },
-        scale: data.scale || 1,
+        scale: parseFloat(data.scale) || 1,
         el: el
       };
 
