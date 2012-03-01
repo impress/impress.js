@@ -47,6 +47,7 @@ var impress = new (function() {
   };
   self.steps = null;          // Once the presentation has started, this will contain the processed slide data
   self.active_index = null;
+  self.hashTimeout = null;
 
   // Pans to the slide specified by index_or_id, which is either a css ID or an index into self.steps
   self.goto = function(index_or_id) {
@@ -160,7 +161,7 @@ var impress = new (function() {
     return fields.join(',');
   };
 
-  var css = function(el, props) {
+  function css(el, props) {
     var key, pkey;
     for (key in props) {
       if (props.hasOwnProperty(key)) {
@@ -178,12 +179,12 @@ var impress = new (function() {
     return context.querySelector(selector);
   };
 
-  var translate = function(t, revert) {
+  function translate(t, revert) {
     var negate = revert ? -1 : 1;
     return " translate3d(" + negate * t.x + "px," + negate * t.y + "px," + negate * t.z + "px) ";
   };
 
-  var rotate = function(r, revert) {
+  function rotate(r, revert) {
     var negate = revert ? -1 : 1;
     var rX = " rotateX(" + negate * r.x + "deg) ",
     rY = " rotateY(" + negate * r.y + "deg) ",
@@ -192,22 +193,15 @@ var impress = new (function() {
     return revert ? rZ + rY + rX: rX + rY + rZ;
   };
 
-  var scale = function(s) {
+  function scale(s) {
     return " scale(" + s + ") ";
   };
 
-  var getElementFromUrl = function() {
-    // get id from url # by removing `#` or `#/` from the beginning,
-    // so both "fallback" `#slide-id` and "enhanced" `#/slide-id` will work
-    return window.location.hash.replace(/^#\/?/, "");
-  };
-
   // Check for browser support
-  var ua = navigator.userAgent.toLowerCase();
-  var impressSupported = (setBrowserSpecificProperty("perspective") != null) &&
-                         (document.body.classList) &&
-                         (document.body.dataset) &&
-                         (ua.search(/(iphone)|(ipod)|(android)/) == - 1);
+  self.supported = (setBrowserSpecificProperty("perspective") != null) &&
+                   (document.body.classList) &&
+                   (document.body.dataset) &&
+                   (navigator.userAgent.toLowerCase().search(/(iphone)|(ipod)|(android)/) == - 1);
 
   // Call this to begin the impress presentation
   self.start = function() {
@@ -222,7 +216,7 @@ var impress = new (function() {
       self.root = document.getElementById('impress');
 
     // If impress is not supported, set the error style and exit
-    if (!impressSupported) {
+    if (!self.supported) {
       self.root.className = "impress-not-supported";
       return;
     } else {
@@ -252,8 +246,8 @@ var impress = new (function() {
     css(self.root, self.rootProperties);
     css(self.canvas, self.canvasProperties);
 
+    // Calculate the transformations required for each step
     self.steps = [];
-
     self.root.querySelectorAll(".step").arrayify().forEach(function(el, idx) {
       var data = el.dataset,
       step = {
@@ -285,24 +279,18 @@ var impress = new (function() {
       });
     });
 
-    // making given step active
-    self.hashTimeout = null;
-
-
-
     window.addEventListener("hashchange", function() {
       self.goto(getElementFromUrl());
-    },
-    false);
+    }, false);
 
     window.addEventListener("orientationchange", function() {
       window.scrollTo(0, 0);
-    },
-    false);
+    }, false);
 
-    // START 
-    // by selecting step defined in url or first step of the presentation
-    self.goto(getElementFromUrl() || 0);
+    // Attempt to get the id from url # by removing `#` or `#/` from the beginning,
+    // so both "fallback" `#slide-id` and "enhanced" `#/slide-id` will work. If we fail
+    // to get the id from the url, just go to the first slide.
+    self.goto(window.location.hash.replace(/^#\/?/, "") || 0);
 
     document.addEventListener("keydown", function(event) {
       switch (event.keyCode) {
@@ -328,9 +316,8 @@ var impress = new (function() {
       // event delegation with "bubbling"
       // check if event target (or any of its parents is a link)
       var target = event.target;
-      while ((target.tagName != "A") && !target.classList.contains("step") && (target != document.body)) {
+      while ((target.tagName != "A") && !target.classList.contains("step") && (target != document.body))
         target = target.parentNode;
-      }
 
       if (target.tagName == "A") {
         var href = target.getAttribute("href");
@@ -347,8 +334,7 @@ var impress = new (function() {
         event.stopImmediatePropagation();
         event.preventDefault();
       }
-    },
-    false);
+    }, false);
 
     // touch handler to detect taps on the left and right side of the screen
     document.addEventListener("touchstart", function(event) {
@@ -357,17 +343,14 @@ var impress = new (function() {
         width = window.innerWidth * 0.3,
         result = null;
 
-        if (x < width) {
+        if (x < width)
           result = self.prev();
-        } else if (x > window.innerWidth - width) {
+        else if (x > window.innerWidth - width)
           result = self.next();
-        }
 
-        if (result) {
+        if (result)
           event.preventDefault();
-        }
       }
-    },
-    false);
+    }, false);
   }
 })();
