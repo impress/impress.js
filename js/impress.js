@@ -52,12 +52,15 @@ var impress = new (function() {
   // Pans to the slide specified by index_or_id, which is either a css ID or an index into self.steps
   self.goto = function(index_or_id) {
     var index = index_or_id;
-    if (typeof index_or_id === "string") { // TODO(jeady): CHECK THIS
+
+    // If we were passed a string (an id), convert it the index of the slide to go to
+    if (typeof index_or_id === "string") {
       var el = self.steps.filter(function(e){return e.node.id == index_or_id;});
       if (el && el.length > 0)
         index = self.steps.indexOf(el[0]);
     }
 
+    // Make sure we successfully converted whatever the user passed in into a valid index
     if (typeof index !== "number" || index < 0 || index >= self.steps.length || self.active_index == index)
       return false;
 
@@ -71,13 +74,14 @@ var impress = new (function() {
     // If you are reading this and know any better way to handle it, I'll be glad to hear about it!
     window.scrollTo(0, 0);
 
+    // step is the slide we are transitioning to, active is the one we are transitioning from
     var step = self.steps[index];
     var active = (null != self.active_index ? self.steps[self.active_index] : null);
 
+    // Change the .active class from active to step, update the root to reflect the classname of the current step
     if (null != active)
       active.node.classList.remove("active");
     step.node.classList.add("active");
-
     self.root.className = "step-" + step.node.id;
 
     // `#/step-id` is used instead of `#step-id` to prevent default browser
@@ -88,14 +92,12 @@ var impress = new (function() {
     window.clearTimeout(self.hashTimeout);
     self.hashTimeout = window.setTimeout(function() {
       window.location.hash = "#/" + step.node.id;
-    },
-    1000);
+    }, 1000);
 
     // check if the transition is zooming in or not
-    var zoomin = (1 / step.scale) >= (null != active ? 1 / parseFloat(active.scale) : 1);
+    var zoomin = (1 / step.scale) >= (null != active ? 1 / active.scale : 1);
 
-    // if presentation starts (nothing is active yet)
-    // don't animate (set duration to 0)
+    // if presentation starts (nothing is active yet), don't animate (set duration to 0)
     var duration = (null != self.active_index) ? "1s": "0";
 
     css(self.root, {
@@ -106,13 +108,11 @@ var impress = new (function() {
       transitionDuration: duration,
       transitionDelay: (zoomin ? "500ms": "0ms")
     });
-
     css(self.canvas, {
       transform: rotate(step.rotate, true) + translate(step.translate, true),
       transitionDuration: duration,
       transitionDelay: (zoomin ? "0ms": "500ms")
     });
-
     self.active_index = index;
 
     return step.node;
@@ -144,7 +144,7 @@ var impress = new (function() {
         return props[i];
       }
     }
-  } 
+  }
 
   // Used to ease iterating over NodeLists
   Object.prototype.arrayify = function() {
@@ -161,6 +161,8 @@ var impress = new (function() {
     return fields.join(',');
   };
 
+  // Set the specified properties on the specified HTML element, converting properties
+  // to their browser-specific counterparts when necessary
   function css(el, props) {
     var key, pkey;
     for (key in props) {
@@ -174,16 +176,17 @@ var impress = new (function() {
     return el;
   }
 
-  var $ = function(selector, context) {
-    context = context || document;
-    return context.querySelector(selector);
-  };
-
+  // Shorthand to create translate3d CSS property from an object of the form {x:..., y:..., z:...}.
+  // Revert specifies whether this property should be negated. Negation is used to that we can move
+  // the canvas so that the current slide is centered (has a translation of {0,0,0}).
   function translate(t, revert) {
     var negate = revert ? -1 : 1;
     return " translate3d(" + negate * t.x + "px," + negate * t.y + "px," + negate * t.z + "px) ";
   };
 
+  // Shorthand to create the rotate3d CSS property from an object of the form {x:..., y:..., z:...}.
+  // Revert specifies whether this property should be negated, so that when the same property is applied
+  // to the canvas and a slide, once negated and once not, the result will be oriented normally.
   function rotate(r, revert) {
     var negate = revert ? -1 : 1;
     var rX = " rotateX(" + negate * r.x + "deg) ",
@@ -193,6 +196,7 @@ var impress = new (function() {
     return revert ? rZ + rY + rX: rX + rY + rZ;
   };
 
+  // Shorthand for CSS scale property
   function scale(s) {
     return " scale(" + s + ") ";
   };
@@ -224,7 +228,7 @@ var impress = new (function() {
     }
 
     // Set the viewport for iPad
-    var meta = $("meta[name='viewport']") || document.createElement("meta");
+    var meta = document.querySelector("meta[name='viewport']") || document.createElement("meta");
     meta.content = self.metaContent.stringify();
     if (meta.parentNode != document.head) {
       meta.name = 'viewport';
