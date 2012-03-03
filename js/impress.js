@@ -19,7 +19,6 @@ var impress = new (function() {
   var self = this;
 
   // Change these before calling start() to alter the presentation configuration
-  self.presenting = false;    // Presentation has not yet started. Only a single presentation is allowed at a time.
   self.root = null;           // Set this to some HTMLElement to set the root element to somehing besides #impress
   self.documentProperties = { // These properties are applied to the document element
     height: "100%"
@@ -216,9 +215,8 @@ var impress = new (function() {
   self.start = function() {
 
     // Only allow a single presentation at a time
-    if (self.presenting)
+    if (null != self.steps)
       return;
-    self.presenting = true;
 
     // If the user has overridden the root, use their root instead of #impress
     if (null == self.root)
