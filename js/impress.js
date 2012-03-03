@@ -23,7 +23,7 @@ var impress = new (function() {
   self.root = null;           // Set this to some HTMLElement to set the root element to somehing besides #impress
   self.documentProperties = { // These properties are applied to the document element
     height: "100%"
-  };
+  }
   self.bodyProperties = {     // These properties are applied to the body element when the presentation starts
     height: "100%",
     overflow: "hidden"
@@ -38,13 +38,18 @@ var impress = new (function() {
     top: "50%",
     left: "50%",
     perspective: "1000px"
-  };
+  }
   self.canvasProperties = {   // These are applied to both the root and the canvas injected into it
     position: "absolute",
     transformOrigin: "top left",
     transition: "all 0s ease-in-out",
     transformStyle: "preserve-3d"
-  };
+  }
+  self.perStepProperties = {  // These are applied to each step individually upon the start of the presentation
+    position: "absolute",
+    transform: "translate(-50%, -50%)",
+    transformStyle: "preserve-3d"
+  }
   self.steps = null;          // Once the presentation has started, this will contain the processed slide data
   self.active_index = null;
   self.hashTimeout = null;
@@ -276,11 +281,14 @@ var impress = new (function() {
 
       self.steps.push(step);
 
-      css(el, {
-        position: "absolute",
-        transform: "translate(-50%,-50%)" + translate(step.translate) + rotate(step.rotate) + scale(step.scale),
-        transformStyle: "preserve-3d"
-      });
+      // Apply the transformation. We use self.perStepProperties for extensibility, but are going to
+      // have to change the transform property. So remember what it was before and reset it afterwards.
+      var oldTransform = self.perStepProperties.transform;
+      if ("string" !== typeof oldTransform)
+        self.perStepProperties.transform = ""
+      self.perStepProperties.transform += translate(step.translate) + rotate(step.rotate) + scale(step.scale);
+      css(el, self.perStepProperties);
+      self.perStepProperties.transform = oldTransform
     });
 
     window.addEventListener("hashchange", function() {
