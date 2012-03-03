@@ -110,9 +110,10 @@
     
     var roots = {};
     
-    var impress = window.impress = function ( rootId ) {
+    var impress = window.impress = function ( rootId, stepRules ) {
 
         rootId = rootId || "impress";
+        stepRules = stepRules || {};
         
         // if already initialized just return the API
         if (roots["impress-root-" + rootId]) {
@@ -188,19 +189,21 @@
         }
         
         steps.forEach(function ( el, idx ) {
+            var rules = stepRules[el.id] || {};
+            rules.rotate = rules.rotate || 0;
             var data = el.dataset,
                 step = {
                     translate: {
-                        x: data.x || 0,
-                        y: data.y || 0,
-                        z: data.z || 0
+                        x: data.x || rules.x || 0,
+                        y: data.y || rules.y || 0,
+                        z: data.z || rules.z || 0
                     },
                     rotate: {
-                        x: data.rotateX || 0,
-                        y: data.rotateY || 0,
-                        z: data.rotateZ || data.rotate || 0
+                        x: data.rotateX || rules.rotate.x || 0,
+                        y: data.rotateY || rules.rotate.y || 0,
+                        z: data.rotateZ || rules.rotate.z || data.rotate || isFinite(rules.rotate) ? rules.rotate : 0
                     },
-                    scale: data.scale || 1,
+                    scale: data.scale || rules.scale || 1,
                     el: el
                 };
             
@@ -220,6 +223,13 @@
             });
             
         });
+
+        //Maintain callbacks list
+        var callbacks = [];
+        var callback = function ( cb ) {
+            if(typeof(cb) === "function")
+                callbacks.push(cb);
+        };
 
         // making given step active
 
@@ -300,6 +310,13 @@
             current = target;
             active = el;
             
+            //Go through callback list
+            callbacks.forEach(function(cb){
+                try { //Protect us from bad callbacks
+                    cb(el);
+                } catch(e){};
+            });
+            
             return el;
         };
         
@@ -332,7 +349,8 @@
         return (roots[ "impress-root-" + rootId ] = {
             goto: goto,
             next: next,
-            prev: prev
+            prev: prev,
+            callback: callback
         });
 
     }
@@ -347,6 +365,7 @@
     document.addEventListener("keydown", function ( event ) {
         if ( event.keyCode == 9 || ( event.keyCode >= 32 && event.keyCode <= 34 ) || (event.keyCode >= 37 && event.keyCode <= 40) ) {
             switch( event.keyCode ) {
+                case 8: ; // backspace
                 case 33: ; // pg up
                 case 37: ; // left
                 case 38:   // up
@@ -401,6 +420,8 @@
         
         if ( impress().goto(target) ) {
             event.preventDefault();
+        } else {
+            impress().next();
         }
     }, false);
     
