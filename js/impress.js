@@ -15,7 +15,18 @@
  *  source:  http://github.com/bartaz/impress.js/
  */
 
-var impress = new (function() {
+function impress() {
+  // Added for backwards compatibility. If we're not being constructed as an object, behave like the old impress()
+  // function.
+  if (this.constructor != impress) {
+        var i = new impress();
+        i.start();
+        return {
+          goto: i.goto,
+          next: i.next,
+          prev: i.prev
+        };
+    }
   var self = this;
 
   // Change these before calling start() to alter the presentation configuration
@@ -363,4 +374,4 @@ var impress = new (function() {
       }
     }, false);
   }
-})();
+};
