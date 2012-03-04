@@ -15,18 +15,23 @@
  *  source:  http://github.com/bartaz/impress.js/
  */
 
+// Usage:
+//
+// | var i = new impress();
+// | i.start();
+//
 function impress() {
   // Added for backwards compatibility. If we're not being constructed as an object, behave like the old impress()
   // function.
   if (this.constructor != impress) {
-        var i = new impress();
-        i.start();
-        return {
-          goto: i.goto,
-          next: i.next,
-          prev: i.prev
-        };
-    }
+    var i = new impress();
+    i.start();
+    return {
+      goto: i.goto,
+      next: i.next,
+      prev: i.prev
+    };
+  }
   var self = this;
 
   // Change these before calling start() to alter the presentation configuration
@@ -63,14 +68,23 @@ function impress() {
   self.steps = null;          // Once the presentation has started, this will contain the processed slide data
   self.active_index = null;
   self.hashTimeout = null;
+  // Check for browser support
+  self.supported = (setBrowserSpecificProperty("perspective") != null) &&
+                   (document.body.classList) &&
+                   (document.body.dataset) &&
+                   (navigator.userAgent.toLowerCase().search(/(iphone)|(ipod)|(android)/) == - 1);
 
-  // Pans to the slide specified by index_or_id, which is either a css ID or an index into self.steps
-  self.goto = function(index_or_id) {
-    var index = index_or_id;
+  // Pans to the slide specified by index_or_id, which is either a css ID, step element, or an index into self.steps
+  self.goto = function(index_el_or_id) {
+    var index = index_el_or_id;
 
     // If we were passed a string (an id), convert it the index of the slide to go to
-    if (typeof index_or_id === "string") {
-      var el = self.steps.filter(function(e){return e.node.id == index_or_id;});
+    if (typeof index_el_or_id === "string") {
+      var el = self.steps.filter(function(e){return e.node.id == index_el_or_id;});
+      if (el && el.length > 0)
+        index = self.steps.indexOf(el[0]);
+    } else if (index_el_or_id instanceof HTMLElement) {
+      var el = self.steps.filter(function(e){return e.node == index_el_or_id;});
       if (el && el.length > 0)
         index = self.steps.indexOf(el[0]);
     }
@@ -216,13 +230,7 @@ function impress() {
     return " scale(" + s + ") ";
   };
 
-  // Check for browser support
-  self.supported = (setBrowserSpecificProperty("perspective") != null) &&
-                   (document.body.classList) &&
-                   (document.body.dataset) &&
-                   (navigator.userAgent.toLowerCase().search(/(iphone)|(ipod)|(android)/) == - 1);
-
-  // Call this to begin the impress presentation
+    // Call this to begin the impress presentation
   self.start = function() {
 
     // Only allow a single presentation at a time
@@ -374,4 +382,4 @@ function impress() {
       }
     }, false);
   }
-};
+}
