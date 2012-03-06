@@ -148,12 +148,6 @@
             height: 768
         }
         
-        // computing scale of the window
-        var hScale = window.innerHeight / config.height;
-        var wScale = window.innerWidth / config.width;
-        var windowScale = hScale > wScale ? wScale : hScale;
-        
-        
         var canvas = document.createElement("div");
         canvas.className = "canvas";
         
@@ -201,6 +195,12 @@
             return !!(el && el.id && stepData["impress-" + el.id]);
         }
         
+        var computeWindowScale = function () {
+            var hScale = window.innerHeight / config.height;
+            var wScale = window.innerWidth / config.width;
+            return hScale > wScale ? wScale : hScale;
+        }
+        
         steps.forEach(function ( el, idx ) {
             var data = el.dataset,
                 step = {
@@ -240,8 +240,10 @@
         var active = null;
         var hashTimeout = null;
         
-        var goto = function ( el ) {
-            if ( !isStep(el) || el == active) {
+        var windowScale = computeWindowScale();
+        
+        var goto = function ( el, force ) {
+            if ( !isStep(el) || (el == active && !force) ) {
                 // selected element is not defined as step or is already active
                 return false;
             }
@@ -294,6 +296,10 @@
             // if presentation starts (nothing is active yet)
             // don't animate (set duration to 0)
             var duration = (active) ? "1s" : "0";
+            
+            if (force) {
+                windowScale = computeWindowScale();
+            }
             
             css(root, {
                 // to keep the perspective look similar for different scales
@@ -356,8 +362,21 @@
 (function ( document, window ) {
     'use strict';
     
+    // throttling function calls, by Remy Sharp
+    // http://remysharp.com/2010/07/21/throttling-function-calls/
+    var throttle = function (fn, delay) {
+        var timer = null;
+        return function () {
+            var context = this, args = arguments;
+            clearTimeout(timer);
+            timer = setTimeout(function () {
+                fn.apply(context, args);
+            }, delay);
+        };
+    };
+    
     // keyboard navigation handler
-    document.addEventListener("keydown", function ( event ) {
+    document.addEventListener("keydown", throttle(function ( event ) {
         if ( event.keyCode == 9 || ( event.keyCode >= 32 && event.keyCode <= 34 ) || (event.keyCode >= 37 && event.keyCode <= 40) ) {
             switch( event.keyCode ) {
                 case 33: ; // pg up
@@ -376,7 +395,7 @@
             
             event.preventDefault();
         }
-    }, false);
+    }, 50), false);
     
     // delegated handler for clicking on the links to presentation steps
     document.addEventListener("click", function ( event ) {
@@ -435,5 +454,11 @@
             }
         }
     }, false);
+    
+    // rescale presentation when window is resized
+    window.addEventListener("resize", throttle(function (event) {
+        // force going to active step again, to trigger rescaling
+        impress().goto( document.querySelector(".active"), true );
+    }, 250), false);
 })(document, window);
 
