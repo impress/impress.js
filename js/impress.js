@@ -141,6 +141,19 @@
             document.head.appendChild(meta);
         }
         
+        // configuration object
+        // probably will get extended (and configurable) later
+        var config = {
+            width: 1024,
+            height: 768
+        }
+        
+        // computing scale of the window
+        var hScale = window.innerHeight / config.height;
+        var wScale = window.innerWidth / config.width;
+        var windowScale = hScale > wScale ? wScale : hScale;
+        
+        
         var canvas = document.createElement("div");
         canvas.className = "canvas";
         
@@ -285,8 +298,8 @@
             css(root, {
                 // to keep the perspective look similar for different scales
                 // we need to 'scale' the perspective, too
-                perspective: step.scale * 1000 + "px",
-                transform: scale(target.scale),
+                perspective: step.scale * (1/windowScale) * 1000 + "px",
+                transform: scale(target.scale * windowScale),
                 transitionDuration: duration,
                 transitionDelay: (zoomin ? "500ms" : "0ms")
             });
