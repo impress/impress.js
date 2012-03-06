@@ -10,7 +10,7 @@
  *
  * ------------------------------------------------
  *  author:  Bartek Szopka
- *  version: 0.3
+ *  version: 0.4pre (in development)
  *  url:     http://bartaz.github.com/impress.js/
  *  source:  http://github.com/bartaz/impress.js/
  */
