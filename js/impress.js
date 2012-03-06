@@ -97,7 +97,7 @@
     
     var getElementFromUrl = function () {
         // get id from url # by removing `#` or `#/` from the beginning,
-        // so both "fallback" `#slide-id` and "enhanced" `#/slide-id` will work
+        // so both `#slide-id` and "legacy" `#/slide-id` will work
         return byId( window.location.hash.replace(/^#\/?/,"") );
     };
     
@@ -252,15 +252,13 @@
             
             root.className = "step-" + el.id;
             
-            // `#/step-id` is used instead of `#step-id` to prevent default browser
-            // scrolling to element in hash
-            //
-            // and it has to be set after animation finishes, because in chrome it
+            // Setting fragment URL with `history.pushState`
+            // and it has to be set after animation finishes, because in Chrome it
             // causes transtion being laggy
             // BUG: http://code.google.com/p/chromium/issues/detail?id=62820
             window.clearTimeout( hashTimeout );
             hashTimeout = window.setTimeout(function () {
-                window.location.hash = "#/" + el.id;
+                history.pushState({}, '', '#' + el.id);
             }, 1000);
             
             var target = {
