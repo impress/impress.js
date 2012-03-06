@@ -256,6 +256,7 @@
             //
             // and it has to be set after animation finishes, because in chrome it
             // causes transtion being laggy
+            // BUG: http://code.google.com/p/chromium/issues/detail?id=62820
             window.clearTimeout( hashTimeout );
             hashTimeout = window.setTimeout(function () {
                 window.location.hash = "#/" + el.id;
