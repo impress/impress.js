@@ -95,6 +95,10 @@
         return " scale(" + s + ") ";
     };
     
+    var perspective = function ( p ) {
+        return " perspective(" + p + "px) ";
+    };
+    
     var getElementFromUrl = function () {
         // get id from url # by removing `#` or `#/` from the beginning,
         // so both `#slide-id` and "legacy" `#/slide-id` will work
@@ -179,7 +183,7 @@
         css(root, {
             top: "50%",
             left: "50%",
-            perspective: "1000px"
+            transform: perspective(1000)
         });
         css(canvas, props);
         
@@ -304,8 +308,7 @@
             css(root, {
                 // to keep the perspective look similar for different scales
                 // we need to 'scale' the perspective, too
-                perspective: step.scale * (1/windowScale) * 1000 + "px",
-                transform: scale(target.scale * windowScale),
+                transform: perspective( 1000 / (target.scale * windowScale) ) + scale(target.scale * windowScale),
                 transitionDuration: duration,
                 transitionDelay: (zoomin ? "500ms" : "0ms")
             });
