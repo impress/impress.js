@@ -258,7 +258,7 @@
             // BUG: http://code.google.com/p/chromium/issues/detail?id=62820
             window.clearTimeout( hashTimeout );
             hashTimeout = window.setTimeout(function () {
-                history.pushState({}, '', '#' + el.id);
+                window.location.hash = "#/" + el.id;
             }, 1000);
             
             var target = {
