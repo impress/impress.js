@@ -135,7 +135,7 @@
         var meta = $("meta[name='viewport']") || document.createElement("meta");
         // hardcoding these values looks pretty bad, as they kind of depend on the content
         // so they should be at least configurable
-        meta.content = "width=1024, minimum-scale=0.75, maximum-scale=0.75, user-scalable=no";
+        meta.content = "width=device-width, minimum-scale=1, maximum-scale=1, user-scalable=no";
         if (meta.parentNode != document.head) {
             meta.name = 'viewport';
             document.head.appendChild(meta);
