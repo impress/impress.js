@@ -149,7 +149,9 @@
         // probably will get extended (and configurable) later
         var config = {
             width: 1024,
-            height: 768
+            height: 768,
+            maxScale: 1,
+            minScale: 0
         }
         
         var canvas = document.createElement("div");
@@ -197,13 +199,23 @@
         
         var isStep = function ( el ) {
             return !!(el && el.id && stepData["impress-" + el.id]);
-        }
+        };
         
         var computeWindowScale = function () {
-            var hScale = window.innerHeight / config.height;
-            var wScale = window.innerWidth / config.width;
-            return hScale > wScale ? wScale : hScale;
-        }
+            var hScale = window.innerHeight / config.height,
+                wScale = window.innerWidth / config.width,
+                scale = hScale > wScale ? wScale : hScale;
+            
+            if (config.maxScale && scale > config.maxScale) {
+                scale = config.maxScale;
+            }
+            
+            if (config.minScale && scale < config.minScale) {
+                scale = config.minScale;
+            }
+            
+            return scale;
+        };
         
         steps.forEach(function ( el, idx ) {
             var data = el.dataset,
