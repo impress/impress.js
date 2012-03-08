@@ -123,7 +123,11 @@
         width: 1024,
         height: 768,
         maxScale: 1,
-        minScale: 0
+        minScale: 0,
+        
+        perspective: 1000,
+        
+        transitionDuration: 1000,
     };
     
     var impress = window.impress = function ( rootId ) {
@@ -162,7 +166,11 @@
             width: toNumber(rootData.width,    defaults.width),
             height: toNumber(rootData.height,   defaults.height),
             maxScale: toNumber(rootData.maxScale, defaults.maxScale),
-            minScale: toNumber(rootData.minScale, defaults.minScale)
+            minScale: toNumber(rootData.minScale, defaults.minScale),
+            
+            perspective: toNumber(rootData.perspective, defaults.perspective),
+            
+            transitionDuration: toNumber(rootData.transitionDuration, defaults.transitionDuration),
         }
         
         var canvas = document.createElement("div");
@@ -196,7 +204,7 @@
         css(root, {
             top: "50%",
             left: "50%",
-            transform: perspective(1000)
+            transform: perspective( config.perspective )
         });
         css(canvas, props);
         
@@ -301,7 +309,7 @@
             window.clearTimeout( hashTimeout );
             hashTimeout = window.setTimeout(function () {
                 window.location.hash = "#/" + el.id;
-            }, 1000);
+            }, config.transitionDuration);
             
             var target = {
                 rotate: {
@@ -322,7 +330,8 @@
             
             // if presentation starts (nothing is active yet)
             // don't animate (set duration to 0)
-            var duration = (active) ? "1s" : "0";
+            var duration = (active) ? config.transitionDuration + "ms" : "0ms",
+                delay = (config.transitionDuration / 2) + "ms";
             
             if (force) {
                 windowScale = computeWindowScale();
@@ -331,15 +340,16 @@
             css(root, {
                 // to keep the perspective look similar for different scales
                 // we need to 'scale' the perspective, too
-                transform: perspective( 1000 / (target.scale * windowScale) ) + scale(target.scale * windowScale),
+                transform: perspective( config.perspective / (target.scale * windowScale) )
+                         + scale(target.scale * windowScale),
                 transitionDuration: duration,
-                transitionDelay: (zoomin ? "500ms" : "0ms")
+                transitionDelay: (zoomin ? delay : "0ms")
             });
             
             css(canvas, {
                 transform: rotate(target.rotate, true) + translate(target.translate),
                 transitionDuration: duration,
-                transitionDelay: (zoomin ? "0ms" : "500ms")
+                transitionDelay: (zoomin ? "0ms" : delay)
             });
             
             current = target;
