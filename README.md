@@ -20,6 +20,11 @@ It's an (un)fortunate coincidence that a Open/LibreOffice presentation tool is c
 VERSION HISTORY
 -----------------
 
+### 0.4pre ([browse](http://github.com/bartaz/impress.js/))
+
+**currently in development**
+
+
 ### 0.3 ([browse](http://github.com/bartaz/impress.js/tree/0.3), [zip](http://github.com/bartaz/impress.js/zipball/0.3), [tar](http://github.com/bartaz/impress.js/tarball/0.3))
 
 * minor CSS 3D fixes
@@ -92,6 +97,8 @@ EXAMPLES AND DEMOS
 
 [Careers in Free and Open Source Software](http://exequiel09.github.com/symposium-presentation/) by Exequiel Ceasar Navarrete [@ichigo1411](http://twitter.com/ichigo1411)
 
+[HTML5 Future : to infinity and beyond!](http://sylvainw.github.com/HTML5-Future/index_en.html) by Sylvain Weber [@sylvainw](http://twitter.com/sylvainw)
+
 ### Websites and portfolios
 
 [lioshi.com](http://lioshi.com) by @lioshi
@@ -102,6 +109,7 @@ EXAMPLES AND DEMOS
 
 [museum140](http://www.youtube.com/watch?v=ObLiikJEt94) Shorty Award promo video [entirely made with ImpressJS](http://thingsinjars.com/post/446/museum140-shorty/) by [@thingsinjars](http://twitter.com/thingsinjars)
 
+[electricanimal.co.uk](http://www.electricanimal.co.uk) by [@elecmal](http://twitter.com/elecmal)
 
 If you have used impress.js in your presentation (or website) and would like to have it listed here,
 please contact me via GitHub or send me a pull request to updated `README.md` file.
@@ -179,5 +187,8 @@ requires polyfills to work.
 LICENSE
 ---------
 
-Copyright 2011-2012 Bartek Szopka. Released under MIT License.
+Copyright 2011-2012 Bartek Szopka
+
+Released under the MIT and GPL Licenses.
+
 

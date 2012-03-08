@@ -4,13 +4,14 @@
  * impress.js is a presentation tool based on the power of CSS3 transforms and transitions
  * in modern browsers and inspired by the idea behind prezi.com.
  *
- * MIT Licensed.
  *
  * Copyright 2011-2012 Bartek Szopka (@bartaz)
  *
+ * Released under the MIT and GPL Licenses.
+ *
  * ------------------------------------------------
  *  author:  Bartek Szopka
- *  version: 0.3
+ *  version: 0.4pre (in development)
  *  url:     http://bartaz.github.com/impress.js/
  *  source:  http://github.com/bartaz/impress.js/
  */
@@ -96,7 +97,7 @@
     
     var getElementFromUrl = function () {
         // get id from url # by removing `#` or `#/` from the beginning,
-        // so both "fallback" `#slide-id` and "enhanced" `#/slide-id` will work
+        // so both `#slide-id` and "legacy" `#/slide-id` will work
         return byId( window.location.hash.replace(/^#\/?/,"") );
     };
     
@@ -251,11 +252,10 @@
             
             root.className = "step-" + el.id;
             
-            // `#/step-id` is used instead of `#step-id` to prevent default browser
-            // scrolling to element in hash
-            //
-            // and it has to be set after animation finishes, because in chrome it
+            // Setting fragment URL with `history.pushState`
+            // and it has to be set after animation finishes, because in Chrome it
             // causes transtion being laggy
+            // BUG: http://code.google.com/p/chromium/issues/detail?id=62820
             window.clearTimeout( hashTimeout );
             hashTimeout = window.setTimeout(function () {
                 window.location.hash = "#/" + el.id;
@@ -371,7 +371,7 @@
         // check if event target (or any of its parents is a link)
         var target = event.target;
         while ( (target.tagName != "A") &&
-                (target != document.body) ) {
+                (target != document.documentElement) ) {
             target = target.parentNode;
         }
         
@@ -395,7 +395,7 @@
         var target = event.target;
         // find closest step element
         while ( !target.classList.contains("step") &&
-                (target != document.body) ) {
+                (target != document.documentElement) ) {
             target = target.parentNode;
         }
         
