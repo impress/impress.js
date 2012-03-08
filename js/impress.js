@@ -65,6 +65,10 @@
         return el;
     }
     
+    var toNumber = function (numeric, fallback) {
+        return isNaN(numeric) ? (fallback || 0) : Number(numeric);
+    };
+    
     var byId = function ( id ) {
         return document.getElementById(id);
     }
@@ -115,6 +119,13 @@
     
     var roots = {};
     
+    var defaults = {
+        width: 1024,
+        height: 768,
+        maxScale: 1,
+        minScale: 0
+    };
+    
     var impress = window.impress = function ( rootId ) {
 
         rootId = rootId || "impress";
@@ -145,13 +156,13 @@
             document.head.appendChild(meta);
         }
         
-        // configuration object
-        // probably will get extended (and configurable) later
+        // initialize configuration object
+        var rootData = root.dataset;
         var config = {
-            width: 1024,
-            height: 768,
-            maxScale: 1,
-            minScale: 0
+            width: toNumber(rootData.width,    defaults.width),
+            height: toNumber(rootData.height,   defaults.height),
+            maxScale: toNumber(rootData.maxScale, defaults.maxScale),
+            minScale: toNumber(rootData.minScale, defaults.minScale)
         }
         
         var canvas = document.createElement("div");
@@ -221,16 +232,16 @@
             var data = el.dataset,
                 step = {
                     translate: {
-                        x: data.x || 0,
-                        y: data.y || 0,
-                        z: data.z || 0
+                        x: toNumber(data.x),
+                        y: toNumber(data.y),
+                        z: toNumber(data.z)
                     },
                     rotate: {
-                        x: data.rotateX || 0,
-                        y: data.rotateY || 0,
-                        z: data.rotateZ || data.rotate || 0
+                        x: toNumber(data.rotateX),
+                        y: toNumber(data.rotateY),
+                        z: toNumber(data.rotateZ || data.rotate)
                     },
-                    scale: data.scale || 1,
+                    scale: toNumber(data.scale, 1),
                     el: el
                 };
             
@@ -294,16 +305,16 @@
             
             var target = {
                 rotate: {
-                    x: -parseInt(step.rotate.x, 10),
-                    y: -parseInt(step.rotate.y, 10),
-                    z: -parseInt(step.rotate.z, 10)
+                    x: -step.rotate.x,
+                    y: -step.rotate.y,
+                    z: -step.rotate.z,
                 },
                 translate: {
                     x: -step.translate.x,
                     y: -step.translate.y,
                     z: -step.translate.z
                 },
-                scale: 1 / parseFloat(step.scale)
+                scale: 1 / step.scale
             };
             
             // check if the transition is zooming in or not
