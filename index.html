@@ -11,7 +11,7 @@
                         .-.'`.  ;   .'`.-.           
                __      / : ___\ ;  /___ ; \      __  
              ,'_ ""--.:__;".-.";: :".-.":__;.--"" _`,
-             :' `.t""--.. '<@.`;_  ',@>` ..--""j.' `;
+             :' `.t""--.. '<@.`;_  ',@:` ..--""j.' `;
                   `:-.._J '-.-'L__ `-- ' L_..-;'     
                     "-.__ ;  .-"  "-.  : __.-"       
                         L ' /.------.\ ' J           
@@ -273,6 +273,15 @@
     
     This class is used by this hint below. Check CSS file to see how it's shown with delayed CSS animation.
     
+    ...
+    
+    And when it comes to this piece of JavaScript below ... kids, don't do this at home ;)
+    It's just a quick and dirty workaround to get different content for touch devices.
+    In a real world it should be at least placed in separate JS file ... and the touch content should be
+    probably just hidden somewhere in HTML, not hard-coded in the script.
+    
+    Just sayin' ;)
+    
 -->
 <div class="hint">
     <p>Use a spacebar or arrow keys to navigate</p>
@@ -294,8 +303,8 @@ if ("ontouchstart" in document.documentElement) {
     
     You also need to call a `impress()` function to initialize impress.js presentation.
     And you should do it in the end of your document. Not only because it's a good practice, but also
-    because I should be done when the whole document is ready.
-    Of course you can wrap it in any kind of "DOM ready" event, but I was to lazy to do so ;)
+    because it should be done when the whole document is ready.
+    Of course you can wrap it in any kind of "DOM ready" event, but I was too lazy to do so ;)
     
 -->
 <script src="js/impress.js"></script>

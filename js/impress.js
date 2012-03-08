@@ -406,7 +406,7 @@
         // check if event target (or any of its parents is a link)
         var target = event.target;
         while ( (target.tagName != "A") &&
-                (target != document.body) ) {
+                (target != document.documentElement) ) {
             target = target.parentNode;
         }
         
@@ -430,7 +430,7 @@
         var target = event.target;
         // find closest step element
         while ( !target.classList.contains("step") &&
-                (target != document.body) ) {
+                (target != document.documentElement) ) {
             target = target.parentNode;
         }
         
