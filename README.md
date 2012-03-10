@@ -111,6 +111,8 @@ EXAMPLES AND DEMOS
 
 [electricanimal.co.uk](http://www.electricanimal.co.uk) by [@elecmal](http://twitter.com/elecmal)
 
+[iWed.in](http://www.iwed.in) by [@ManiKantaG](http://twitter.com/ManiKantaG) (intro animation using impress, with some custom code for autoplay, pause & skip)
+
 If you have used impress.js in your presentation (or website) and would like to have it listed here,
 please contact me via GitHub or send me a pull request to updated `README.md` file.
 
