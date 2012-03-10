@@ -30,6 +30,10 @@ VERSION HISTORY
   `data-height` (in px, defaults to 768), `max-scale` (defaults to 1), `min-scale` (defaults to 0)
 * `goto` API function was renamed to `stepTo` because `goto` is a future reserved work in JavaScript,
   so **please make sure to update your code**
+* fallback `impress-not-supported` class is now set on `body` element instead of `#impress` element and it's
+  replaced with `impress-supported` when browser supports all required features
+* classes `step-ID` used to indicate progress of the presentation are now renamed to `impress-on-ID` and are
+  set on `body` element, so **please make sure to update your code**
 * basic validation of configuration options
 * couple of typos and bugs fixed
 * favicon added ;)
