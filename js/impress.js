@@ -16,6 +16,9 @@
  *  source:  http://github.com/bartaz/impress.js/
  */
 
+/*jshint bitwise:true, curly:true, eqeqeq:true, forin:true, latedef:true, newcap:true,
+         noarg:true, noempty:true, undef:true, strict:true, browser:true */
+
 (function ( document, window ) {
     'use strict';
 
@@ -116,7 +119,7 @@
     var impressSupported = ( pfx("perspective") !== null ) &&
                            ( body.classList ) &&
                            ( body.dataset ) &&
-                           ( ua.search(/(iphone)|(ipod)|(android)/) == -1 );
+                           ( ua.search(/(iphone)|(ipod)|(android)/) === -1 );
     
     if (!impressSupported) {
         // we can't be sure that `classList` is supported
@@ -158,7 +161,7 @@
         // hardcoding these values looks pretty bad, as they kind of depend on the content
         // so they should be at least configurable
         meta.content = "width=device-width, minimum-scale=1, maximum-scale=1, user-scalable=no";
-        if (meta.parentNode != document.head) {
+        if (meta.parentNode !== document.head) {
             meta.name = 'viewport';
             document.head.appendChild(meta);
         }
@@ -281,7 +284,7 @@
         var windowScale = computeWindowScale();
         
         var stepTo = function ( el, force ) {
-            if ( !isStep(el) || (el == active && !force) ) {
+            if ( !isStep(el) || (el === active && !force) ) {
                 // selected element is not defined as step or is already active
                 return false;
             }
@@ -422,14 +425,14 @@
     
     // prevent default keydown action when one of supported key is pressed
     document.addEventListener("keydown", function ( event ) {
-        if ( event.keyCode == 9 || ( event.keyCode >= 32 && event.keyCode <= 34 ) || (event.keyCode >= 37 && event.keyCode <= 40) ) {
+        if ( event.keyCode === 9 || ( event.keyCode >= 32 && event.keyCode <= 34 ) || (event.keyCode >= 37 && event.keyCode <= 40) ) {
             event.preventDefault();
         }
     }, false);
     
     // trigger impress action on keyup
     document.addEventListener("keyup", function ( event ) {
-        if ( event.keyCode == 9 || ( event.keyCode >= 32 && event.keyCode <= 34 ) || (event.keyCode >= 37 && event.keyCode <= 40) ) {
+        if ( event.keyCode === 9 || ( event.keyCode >= 32 && event.keyCode <= 34 ) || (event.keyCode >= 37 && event.keyCode <= 40) ) {
             switch( event.keyCode ) {
                 case 33: // pg up
                 case 37: // left
@@ -454,16 +457,16 @@
         // event delegation with "bubbling"
         // check if event target (or any of its parents is a link)
         var target = event.target;
-        while ( (target.tagName != "A") &&
-                (target != document.documentElement) ) {
+        while ( (target.tagName !== "A") &&
+                (target !== document.documentElement) ) {
             target = target.parentNode;
         }
         
-        if ( target.tagName == "A" ) {
+        if ( target.tagName === "A" ) {
             var href = target.getAttribute("href");
             
             // if it's a link to presentation step, target this step
-            if ( href && href[0] == '#' ) {
+            if ( href && href[0] === '#' ) {
                 target = document.getElementById( href.slice(1) );
             }
         }
@@ -479,7 +482,7 @@
         var target = event.target;
         // find closest step element
         while ( !target.classList.contains("step") &&
-                (target != document.documentElement) ) {
+                (target !== document.documentElement) ) {
             target = target.parentNode;
         }
         
