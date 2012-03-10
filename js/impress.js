@@ -429,12 +429,13 @@
             step.classList.add("future");
         });
         
-        document.addEventListener("impressStepEnter", function (event) {
+        root.addEventListener("impressStepEnter", function (event) {
+            event.target.classList.remove("past");
             event.target.classList.remove("future");
             event.target.classList.add("present");
         }, false);
         
-        document.addEventListener("impressStepLeave", function (event) {
+        root.addEventListener("impressStepLeave", function (event) {
             event.target.classList.remove("present");
             event.target.classList.add("past");
         }, false);
@@ -447,7 +448,7 @@
         // and it has to be set after animation finishes, because in Chrome it
         // causes transtion being laggy
         // BUG: http://code.google.com/p/chromium/issues/detail?id=62820
-        document.addEventListener("impressStepEnter", function (event) {
+        root.addEventListener("impressStepEnter", function (event) {
             window.location.hash = "#/" + event.target.id;
         }, false);
         
