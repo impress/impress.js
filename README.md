@@ -159,6 +159,18 @@ please contact me via GitHub or send me a pull request to updated `README.md` fi
 
 
 
+WANT TO CONTRIBUTE?
+---------------------
+
+If you've found a bug or have a great idea for new feature let me know by [adding your suggestion]
+(http://github.com/bartaz/impress.js/issues/new) to [issues list](https://github.com/bartaz/impress.js/issues).
+
+If you have fixed a bug or implemented a feature that you'd like to share, send your pull request against [dev branch]
+(http://github.com/bartaz/impress.js/tree/dev). But remember that I only accept code that fits my vision of impress.js
+and my coding standards - so make sure you are open for discussion :)
+
+
+
 BROWSER SUPPORT
 -----------------
 
