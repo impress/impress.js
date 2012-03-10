@@ -424,6 +424,21 @@
             return stepTo(next);
         };
         
+        // STEP CLASSES
+        steps.forEach(function (step) {
+            step.classList.add("future");
+        });
+        
+        document.addEventListener("impressStepEnter", function (event) {
+            event.target.classList.remove("future");
+            event.target.classList.add("present");
+        }, false);
+        
+        document.addEventListener("impressStepLeave", function (event) {
+            event.target.classList.remove("present");
+            event.target.classList.add("past");
+        }, false);
+        
         // HASH CHANGE
         
         // `#/step-id` is used instead of `#step-id` to prevent default browser
