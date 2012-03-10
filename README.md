@@ -20,9 +20,9 @@ It's an (un)fortunate coincidence that a Open/LibreOffice presentation tool is c
 VERSION HISTORY
 -----------------
 
-### 0.4pre ([browse](http://github.com/bartaz/impress.js/))
+### 0.4 ([browse](http://github.com/bartaz/impress.js/tree/0.4), [zip](http://github.com/bartaz/impress.js/zipball/0.4), [tar](http://github.com/bartaz/impress.js/tarball/0.4))
 
-**currently in development**
+#### CHANGELOG
 
 * configuration options on `#impress` element: `data-perspective` (in px, defaults so 1000),
   `data-transition-duration` (in ms, defaults to 1000)
@@ -38,14 +38,42 @@ VERSION HISTORY
 * couple of typos and bugs fixed
 * favicon added ;)
 
+
+#### UPGRADING FROM PREVIOUS VERSIONS
+
+If in your custom JavaScript code you were using `goto()` function from impress.js API make sure to change it
+to `stepTo()`.
+
+If in your CSS you were using classes based on currently active step with `step-` prefix, such as `step-bored`
+(where `bored` is the id of the step element) make sure to change it to `impress-on-` prefix
+(for example `impress-on-bored`). Also in previous versions these classes were assigned to `#impress` element
+and now they are added to `body` element, so if your CSS code depends on this, it also should be updated.
+
+Same happened to `impress-not-supported` class name - it was moved from `#impress` element to `body`, so update
+your CSS if it's needed.
+
+#### NOTE ON BLACKBERRY PLAYBOOK
+
+Changes and fixes added in this version have broken the experience on Blackberry Playbook with OS in version 1.0.
+It happened due to a bug in the Playbook browser in this version. Fortunately in version 2.0 of Playbook OS this
+bug was fixed and impress.js works fine.
+
+So currently impress.js work only on Blackberry Playbook with latest OS. Fortunately, [it seems that most of the
+users](http://twitter.com/n_adam_stanley/status/178188611827679233) [are quite quick with updating their devices]
+(http://twitter.com/brcewane/status/178230406196379648)
+
+
+
 ### 0.3 ([browse](http://github.com/bartaz/impress.js/tree/0.3), [zip](http://github.com/bartaz/impress.js/zipball/0.3), [tar](http://github.com/bartaz/impress.js/tarball/0.3))
+
+#### CHANGELOG
 
 * minor CSS 3D fixes
 * basic API to control the presentation flow from JavaScript
 * touch event support
 * basic support for iPad (iOS 5 and iOS 4 with polyfills) and Blackberry Playbook
 
-**UPGRADING FROM PREVIOUS VERSIONS**
+#### UPGRADING FROM PREVIOUS VERSIONS
 
 Because API was introduced the way impress.js script is initialized was changed a bit. You not only has to include
 `impress.js` script file, but also call `impress()` function.
