@@ -112,6 +112,22 @@
         return byId( window.location.hash.replace(/^#\/?/,"") );
     };
     
+    var computeWindowScale = function ( config ) {
+        var hScale = window.innerHeight / config.height,
+            wScale = window.innerWidth / config.width,
+            scale = hScale > wScale ? wScale : hScale;
+        
+        if (config.maxScale && scale > config.maxScale) {
+            scale = config.maxScale;
+        }
+        
+        if (config.minScale && scale < config.minScale) {
+            scale = config.minScale;
+        }
+        
+        return scale;
+    };
+    
     // CHECK SUPPORT
     var body = document.body;
     
@@ -199,6 +215,8 @@
         
         var steps = $$(".step", root);
         
+        var windowScale = computeWindowScale( config );
+        
         // SETUP
         // set initial values and defaults
         
@@ -220,7 +238,7 @@
         css(root, {
             top: "50%",
             left: "50%",
-            transform: perspective( config.perspective )
+            transform: perspective( config.perspective/windowScale ) + scale( windowScale )
         });
         css(canvas, props);
         
@@ -234,22 +252,6 @@
         
         var isStep = function ( el ) {
             return !!(el && el.id && stepData["impress-" + el.id]);
-        };
-        
-        var computeWindowScale = function () {
-            var hScale = window.innerHeight / config.height,
-                wScale = window.innerWidth / config.width,
-                scale = hScale > wScale ? wScale : hScale;
-            
-            if (config.maxScale && scale > config.maxScale) {
-                scale = config.maxScale;
-            }
-            
-            if (config.minScale && scale < config.minScale) {
-                scale = config.minScale;
-            }
-            
-            return scale;
         };
         
         steps.forEach(function ( el, idx ) {
@@ -285,7 +287,7 @@
             });
             
         });
-
+        
         var active = null;
         
         // step events
@@ -309,7 +311,6 @@
                 triggerEvent(step, "impressStepLeave");
             }
         };
-
         
         // transitionEnd event handler
         
@@ -324,8 +325,6 @@
         };
         root.addEventListener(transitionEnd, onTransitionEnd, false);
         canvas.addEventListener(transitionEnd, onTransitionEnd, false);
-        
-        var windowScale = computeWindowScale();
         
         var stepTo = function ( el, force ) {
             if ( !isStep(el) || (el === active && !force) ) {
