@@ -16,6 +16,9 @@
  *  source:  http://github.com/bartaz/impress.js/
  */
 
+/*jshint bitwise:true, curly:true, eqeqeq:true, forin:true, latedef:true, newcap:true,
+         noarg:true, noempty:true, undef:true, strict:true, browser:true */
+
 (function ( document, window ) {
     'use strict';
 
@@ -44,7 +47,7 @@
             }
 
             return memory[ prop ];
-        }
+        };
 
     })();
 
@@ -57,13 +60,13 @@
         for ( key in props ) {
             if ( props.hasOwnProperty(key) ) {
                 pkey = pfx(key);
-                if ( pkey != null ) {
+                if ( pkey !== null ) {
                     el.style[pkey] = props[key];
                 }
             }
         }
         return el;
-    }
+    };
     
     var toNumber = function (numeric, fallback) {
         return isNaN(numeric) ? (fallback || 0) : Number(numeric);
@@ -71,7 +74,7 @@
     
     var byId = function ( id ) {
         return document.getElementById(id);
-    }
+    };
     
     var $ = function ( selector, context ) {
         context = context || document;
@@ -113,10 +116,10 @@
     var body = document.body;
     
     var ua = navigator.userAgent.toLowerCase();
-    var impressSupported = ( pfx("perspective") != null ) &&
+    var impressSupported = ( pfx("perspective") !== null ) &&
                            ( body.classList ) &&
                            ( body.dataset ) &&
-                           ( ua.search(/(iphone)|(ipod)|(android)/) == -1 );
+                           ( ua.search(/(iphone)|(ipod)|(android)/) === -1 );
     
     if (!impressSupported) {
         // we can't be sure that `classList` is supported
@@ -137,7 +140,7 @@
         
         perspective: 1000,
         
-        transitionDuration: 1000,
+        transitionDuration: 1000
     };
     
     var impress = window.impress = function ( rootId ) {
@@ -158,7 +161,7 @@
         // hardcoding these values looks pretty bad, as they kind of depend on the content
         // so they should be at least configurable
         meta.content = "width=device-width, minimum-scale=1, maximum-scale=1, user-scalable=no";
-        if (meta.parentNode != document.head) {
+        if (meta.parentNode !== document.head) {
             meta.name = 'viewport';
             document.head.appendChild(meta);
         }
@@ -173,8 +176,8 @@
             
             perspective: toNumber(rootData.perspective, defaults.perspective),
             
-            transitionDuration: toNumber(rootData.transitionDuration, defaults.transitionDuration),
-        }
+            transitionDuration: toNumber(rootData.transitionDuration, defaults.transitionDuration)
+        };
         
         var canvas = document.createElement("div");
         canvas.className = "canvas";
@@ -201,7 +204,7 @@
             transformOrigin: "top left",
             transition: "all 0s ease-in-out",
             transformStyle: "preserve-3d"
-        }
+        };
         
         css(root, props);
         css(root, {
@@ -281,7 +284,7 @@
         var windowScale = computeWindowScale();
         
         var stepTo = function ( el, force ) {
-            if ( !isStep(el) || (el == active && !force) ) {
+            if ( !isStep(el) || (el === active && !force) ) {
                 // selected element is not defined as step or is already active
                 return false;
             }
@@ -319,7 +322,7 @@
                 rotate: {
                     x: -step.rotate.x,
                     y: -step.rotate.y,
-                    z: -step.rotate.z,
+                    z: -step.rotate.z
                 },
                 translate: {
                     x: -step.translate.x,
@@ -341,11 +344,12 @@
                 windowScale = computeWindowScale();
             }
             
+            var targetScale = target.scale * windowScale;
+            
             css(root, {
                 // to keep the perspective look similar for different scales
                 // we need to 'scale' the perspective, too
-                transform: perspective( config.perspective / (target.scale * windowScale) )
-                         + scale(target.scale * windowScale),
+                transform: perspective( config.perspective / targetScale ) + scale( targetScale ),
                 transitionDuration: duration,
                 transitionDelay: (zoomin ? delay : "0ms")
             });
@@ -394,13 +398,15 @@
             prev: prev
         });
 
-    }
+    };
 })(document, window);
 
 // EVENTS
 
 (function ( document, window ) {
     'use strict';
+    
+    var impress = window.impress;
     
     // throttling function calls, by Remy Sharp
     // http://remysharp.com/2010/07/21/throttling-function-calls/
@@ -419,25 +425,25 @@
     
     // prevent default keydown action when one of supported key is pressed
     document.addEventListener("keydown", function ( event ) {
-        if ( event.keyCode == 9 || ( event.keyCode >= 32 && event.keyCode <= 34 ) || (event.keyCode >= 37 && event.keyCode <= 40) ) {
+        if ( event.keyCode === 9 || ( event.keyCode >= 32 && event.keyCode <= 34 ) || (event.keyCode >= 37 && event.keyCode <= 40) ) {
             event.preventDefault();
         }
     }, false);
     
     // trigger impress action on keyup
     document.addEventListener("keyup", function ( event ) {
-        if ( event.keyCode == 9 || ( event.keyCode >= 32 && event.keyCode <= 34 ) || (event.keyCode >= 37 && event.keyCode <= 40) ) {
+        if ( event.keyCode === 9 || ( event.keyCode >= 32 && event.keyCode <= 34 ) || (event.keyCode >= 37 && event.keyCode <= 40) ) {
             switch( event.keyCode ) {
-                case 33: ; // pg up
-                case 37: ; // left
-                case 38:   // up
+                case 33: // pg up
+                case 37: // left
+                case 38: // up
                          impress().prev();
                          break;
-                case 9:  ; // tab
-                case 32: ; // space
-                case 34: ; // pg down
-                case 39: ; // right
-                case 40:   // down
+                case 9:  // tab
+                case 32: // space
+                case 34: // pg down
+                case 39: // right
+                case 40: // down
                          impress().next();
                          break;
             }
@@ -451,16 +457,16 @@
         // event delegation with "bubbling"
         // check if event target (or any of its parents is a link)
         var target = event.target;
-        while ( (target.tagName != "A") &&
-                (target != document.documentElement) ) {
+        while ( (target.tagName !== "A") &&
+                (target !== document.documentElement) ) {
             target = target.parentNode;
         }
         
-        if ( target.tagName == "A" ) {
+        if ( target.tagName === "A" ) {
             var href = target.getAttribute("href");
             
             // if it's a link to presentation step, target this step
-            if ( href && href[0] == '#' ) {
+            if ( href && href[0] === '#' ) {
                 target = document.getElementById( href.slice(1) );
             }
         }
@@ -476,7 +482,7 @@
         var target = event.target;
         // find closest step element
         while ( !target.classList.contains("step") &&
-                (target != document.documentElement) ) {
+                (target !== document.documentElement) ) {
             target = target.parentNode;
         }
         
@@ -505,7 +511,7 @@
     }, false);
     
     // rescale presentation when window is resized
-    window.addEventListener("resize", throttle(function (event) {
+    window.addEventListener("resize", throttle(function () {
         // force going to active step again, to trigger rescaling
         impress().stepTo( document.querySelector(".active"), true );
     }, 250), false);
