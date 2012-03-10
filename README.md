@@ -111,6 +111,8 @@ EXAMPLES AND DEMOS
 
 [electricanimal.co.uk](http://www.electricanimal.co.uk) by [@elecmal](http://twitter.com/elecmal)
 
+[t3kila.com](http://www.t3kila.com) by Romain Wurtz
+
 If you have used impress.js in your presentation (or website) and would like to have it listed here,
 please contact me via GitHub or send me a pull request to updated `README.md` file.
 
