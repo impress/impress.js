@@ -24,6 +24,16 @@ VERSION HISTORY
 
 **CURRENTLY IN DEVELOPMENT**
 
+#### CHANGELOG
+
+* events added when step is entered and left - custom `impressStepEnter` and `impressStepLeave` events are triggered
+  on step elements and can be handled like any other DOM events (with `addEventListener`)
+* additional `past`, `present` and `future` classes are added to step elements
+    - `future` class appears on steps that were not yet visited
+    - `present` class appears on currently visible step - it's different from `active` class as `present` class
+       is added when transition finishes (step is entered)
+    - `past` class is added to already visited steps (when the step is left)
+
 
 ### 0.4 ([browse](http://github.com/bartaz/impress.js/tree/0.4), [zip](http://github.com/bartaz/impress.js/zipball/0.4), [tar](http://github.com/bartaz/impress.js/tarball/0.4))
 
