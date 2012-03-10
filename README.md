@@ -24,6 +24,15 @@ VERSION HISTORY
 
 **currently in development**
 
+* configuration options on `#impress` element: `data-perspective` (in px, defaults so 1000),
+  `data-transition-duration` (in ms, defaults to 1000)
+* automatic scaling to fit window size, with configuration options:  `data-width` (in px, defaults to 1024),
+  `data-height` (in px, defaults to 768), `max-scale` (defaults to 1), `min-scale` (defaults to 0)
+* `goto` API function was renamed to `stepTo` because `goto` is a future reserved work in JavaScript,
+  so **please make sure to update your code**
+* basic validation of configuration options
+* couple of typos and bugs fixed
+* favicon added ;)
 
 ### 0.3 ([browse](http://github.com/bartaz/impress.js/tree/0.3), [zip](http://github.com/bartaz/impress.js/zipball/0.3), [tar](http://github.com/bartaz/impress.js/tarball/0.3))
 
@@ -110,6 +119,8 @@ EXAMPLES AND DEMOS
 [museum140](http://www.youtube.com/watch?v=ObLiikJEt94) Shorty Award promo video [entirely made with ImpressJS](http://thingsinjars.com/post/446/museum140-shorty/) by [@thingsinjars](http://twitter.com/thingsinjars)
 
 [electricanimal.co.uk](http://www.electricanimal.co.uk) by [@elecmal](http://twitter.com/elecmal)
+
+[t3kila.com](http://www.t3kila.com) by Romain Wurtz
 
 If you have used impress.js in your presentation (or website) and would like to have it listed here,
 please contact me via GitHub or send me a pull request to updated `README.md` file.
