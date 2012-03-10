@@ -110,12 +110,22 @@
     };
     
     // CHECK SUPPORT
+    var body = document.body;
     
     var ua = navigator.userAgent.toLowerCase();
     var impressSupported = ( pfx("perspective") != null ) &&
-                           ( document.body.classList ) &&
-                           ( document.body.dataset ) &&
+                           ( body.classList ) &&
+                           ( body.dataset ) &&
                            ( ua.search(/(iphone)|(ipod)|(android)/) == -1 );
+    
+    if (!impressSupported) {
+        // we can't be sure that `classList` is supported
+        body.className += " impress-not-supported ";
+        return;
+    } else {
+        body.classList.remove("impress-not-supported");
+        body.classList.add("impress-supported");
+    }
     
     var roots = {};
     
@@ -142,13 +152,6 @@
         // DOM ELEMENTS
         
         var root = byId( rootId );
-        
-        if (!impressSupported) {
-            root.className = "impress-not-supported";
-            return;
-        } else {
-            root.className = "";
-        }
         
         // viewport updates for iPad
         var meta = $("meta[name='viewport']") || document.createElement("meta");
@@ -188,7 +191,7 @@
         
         document.documentElement.style.height = "100%";
         
-        css(document.body, {
+        css(body, {
             height: "100%",
             overflow: "hidden"
         });
@@ -297,10 +300,11 @@
             
             if ( active ) {
                 active.classList.remove("active");
+                body.classList.remove("impress-on-" + active.id);
             }
             el.classList.add("active");
             
-            root.className = "step-" + el.id;
+            body.classList.add("impress-on-" + el.id);
             
             // Setting fragment URL with `history.pushState`
             // and it has to be set after animation finishes, because in Chrome it

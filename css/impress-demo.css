@@ -169,7 +169,7 @@ a,iframe,
     transition:         opacity 1s,         transform 0.5s 1s;
 }
 
-.step-bored + .hint {
+.impress-on-bored .hint {
     opacity: 1;
     
     -webkit-transition: opacity 1s 5s, -webkit-transform 0.5s;
@@ -427,7 +427,7 @@ a,iframe,
 
 /* on overview step everything is visible */
 
-#impress.step-overview .step {
+.impress-on-overview .step {
     opacity: 1;
     cursor: pointer;
 }

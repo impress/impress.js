@@ -95,29 +95,44 @@
     <link rel="shortcut icon" href="favicon.png" />
     <link rel="apple-touch-icon" href="apple-touch-icon.png" />
 </head>
-<body>
 
 <!--
     
-    That's the wrapper for your presentation steps. In this element all the impress.js magic happens.
-    It doesn't have to be a `<div>`. Only `id` is important here as that's how the script find it.
+    Body element is used by impress.js to set some useful class names, that will allow you to detect
+    the support and state of the presentation in CSS or other scripts.
     
-    It's worth to notice the `impress-not-supported` class. This class means, that browser doesn't
-    support features required by impress.js, so you can apply some fallback styles in your CSS.
+    First very useful class name is `impress-not-supported`. This class means, that browser doesn't
+    support features required by impress.js, so you should apply some fallback styles in your CSS.
     It's not necessary to add it manually on this element. If the script detects that browser is not
     good enough it will add this class, but keeping it in HTML means that users without JavaScript
     will also get fallback styles.
     
-    The class name on this element also depends on currently active presentation step. More details about
-    it can be found below, when `hint` element is being described.
+    When impress.js script detects that browser supports all required features, this class name will
+    be removed.
+    
+    The class name on body element also depends on currently active presentation step. More details about
+    it can be found later, when `hint` element is being described.
     
 -->
-<div id="impress" class="impress-not-supported">
+<body class="impress-not-supported">
 
-    <div class="fallback-message">
-        <p>Your browser <b>doesn't support the features required</b> by impress.js, so you are presented with a simplified version of this presentation.</p>
-        <p>For the best experience please use the latest <b>Chrome</b>, <b>Safari</b> or <b>Firefox</b> browser. Upcoming version 10 of Internet Explorer <i>should</i> also handle it.</p>
-    </div>
+<!--
+    For example this fallback message is only visible when there is `impress-not-supported` class on body.
+-->
+<div class="fallback-message">
+    <p>Your browser <b>doesn't support the features required</b> by impress.js, so you are presented with a simplified version of this presentation.</p>
+    <p>For the best experience please use the latest <b>Chrome</b>, <b>Safari</b> or <b>Firefox</b> browser.</p>
+</div>
+
+<!--
+    
+    Now that's the core element used by impress.js.
+    
+    That's the wrapper for your presentation steps. In this element all the impress.js magic happens.
+    It doesn't have to be a `<div>`. Only `id` is important here as that's how the script find it.
+    
+-->
+<div id="impress">
 
     <!--
         
@@ -267,19 +282,20 @@
     
     But it can show you how to use impress.js features in creative way.
     
-    When the presentation step is shown (selected) it's element get's the class of "active" and `#impress` root
-    element get's the class based on active step id `step-ID` (where ID is the step id)... It probably is not
-    so clear because of all these IDs in here, so for example when the first step (the one with id of `bored`)
-    is active, `#impress` element get a class of `step-bored`.
+    When the presentation step is shown (selected) its element gets the class of "active" and the body element
+    gets the class based on active step id `impress-on-ID` (where ID is the step's id)... It may not be
+    so clear because of all these "ids" in previous sentence, so for example when the first step (the one with
+    the id of `bored`) is active, body element gets a class of `impress-on-bored`.
     
-    This class is used by this hint below. Check CSS file to see how it's shown with delayed CSS animation.
+    This class is used by this hint below. Check CSS file to see how it's shown with delayed CSS animation when
+    the first step of presentation is visible for a couple of seconds.
     
     ...
     
     And when it comes to this piece of JavaScript below ... kids, don't do this at home ;)
-    It's just a quick and dirty workaround to get different content for touch devices.
+    It's just a quick and dirty workaround to get different hint text for touch devices.
     In a real world it should be at least placed in separate JS file ... and the touch content should be
-    probably just hidden somewhere in HTML, not hard-coded in the script.
+    probably just hidden somewhere in HTML - not hard-coded in the script.
     
     Just sayin' ;)
     
