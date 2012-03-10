@@ -108,7 +108,7 @@
     
     var getElementFromUrl = function () {
         // get id from url # by removing `#` or `#/` from the beginning,
-        // so both `#slide-id` and "legacy" `#/slide-id` will work
+        // so both "fallback" `#slide-id` and "enhanced" `#/slide-id` will work
         return byId( window.location.hash.replace(/^#\/?/,"") );
     };
     
@@ -129,6 +129,16 @@
         body.classList.remove("impress-not-supported");
         body.classList.add("impress-supported");
     }
+    
+    // cross-browser transitionEnd event name
+    // based on https://developer.mozilla.org/en/CSS/CSS_transitions
+    var transitionEnd = ({
+            'transition':'transitionEnd',
+            'OTransition':'oTransitionEnd',
+            'msTransition':'MSTransitionEnd', // who knows how it will end up?
+            'MozTransition':'transitionend',
+            'WebkitTransition':'webkitTransitionEnd'
+        })[pfx("transition")];
     
     var roots = {};
     
@@ -276,10 +286,44 @@
             
         });
 
-        // making given step active
-
         var active = null;
-        var hashTimeout = null;
+        
+        // step events
+        
+        var triggerEvent = function (el, eventName) {
+            var event = document.createEvent("CustomEvent");
+            event.initCustomEvent(eventName, true, true);
+            el.dispatchEvent(event);
+        };
+        
+        var lastEntered = null;
+        var onStepEnter = function (step) {
+            if (lastEntered !== step) {
+                triggerEvent(step, "impressStepEnter");
+                lastEntered = step;
+            }
+        };
+        
+        var onStepLeave = function (step) {
+            if (lastEntered === step) {
+                triggerEvent(step, "impressStepLeave");
+            }
+        };
+
+        
+        // transitionEnd event handler
+        
+        var expectedTransitionTarget = null;
+        
+        var onTransitionEnd = function (event) {
+            // we only care about transitions on `root` and `canvas` elements
+            if (event.target === expectedTransitionTarget) {
+                onStepEnter(active);
+                event.stopPropagation(); // prevent propagation from `canvas` to `root`
+            }
+        };
+        root.addEventListener(transitionEnd, onTransitionEnd, false);
+        canvas.addEventListener(transitionEnd, onTransitionEnd, false);
         
         var windowScale = computeWindowScale();
         
@@ -309,15 +353,6 @@
             
             body.classList.add("impress-on-" + el.id);
             
-            // Setting fragment URL with `history.pushState`
-            // and it has to be set after animation finishes, because in Chrome it
-            // causes transtion being laggy
-            // BUG: http://code.google.com/p/chromium/issues/detail?id=62820
-            window.clearTimeout( hashTimeout );
-            hashTimeout = window.setTimeout(function () {
-                window.location.hash = "#/" + el.id;
-            }, config.transitionDuration);
-            
             var target = {
                 rotate: {
                     x: -step.rotate.x,
@@ -337,8 +372,8 @@
             
             // if presentation starts (nothing is active yet)
             // don't animate (set duration to 0)
-            var duration = (active) ? config.transitionDuration + "ms" : "0ms",
-                delay = (config.transitionDuration / 2) + "ms";
+            var duration = (active) ? config.transitionDuration : 0,
+                delay = (config.transitionDuration / 2);
             
             if (force) {
                 windowScale = computeWindowScale();
@@ -346,22 +381,32 @@
             
             var targetScale = target.scale * windowScale;
             
+            expectedTransitionTarget = target.scale > current.scale ? root : canvas;
+            
+            if (active) {
+                onStepLeave(active);
+            }
+            
             css(root, {
                 // to keep the perspective look similar for different scales
                 // we need to 'scale' the perspective, too
                 transform: perspective( config.perspective / targetScale ) + scale( targetScale ),
-                transitionDuration: duration,
-                transitionDelay: (zoomin ? delay : "0ms")
+                transitionDuration: duration + "ms",
+                transitionDelay: (zoomin ? delay : 0) + "ms"
             });
             
             css(canvas, {
                 transform: rotate(target.rotate, true) + translate(target.translate),
-                transitionDuration: duration,
-                transitionDelay: (zoomin ? "0ms" : delay)
+                transitionDuration: duration + "ms",
+                transitionDelay: (zoomin ? 0 : delay) + "ms"
             });
             
             current = target;
             active = el;
+            
+            if (duration === 0) {
+                onStepEnter(active);
+            }
             
             return el;
         };
@@ -379,6 +424,18 @@
             
             return stepTo(next);
         };
+        
+        // HASH CHANGE
+        
+        // `#/step-id` is used instead of `#step-id` to prevent default browser
+        // scrolling to element in hash
+        //
+        // and it has to be set after animation finishes, because in Chrome it
+        // causes transtion being laggy
+        // BUG: http://code.google.com/p/chromium/issues/detail?id=62820
+        document.addEventListener("impressStepEnter", function (event) {
+            window.location.hash = "#/" + event.target.id;
+        }, false);
         
         window.addEventListener("hashchange", function () {
             stepTo( getElementFromUrl() );
