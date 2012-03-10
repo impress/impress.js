@@ -277,7 +277,7 @@
         
         var windowScale = computeWindowScale();
         
-        var goto = function ( el, force ) {
+        var stepTo = function ( el, force ) {
             if ( !isStep(el) || (el == active && !force) ) {
                 // selected element is not defined as step or is already active
                 return false;
@@ -362,18 +362,18 @@
             var prev = steps.indexOf( active ) - 1;
             prev = prev >= 0 ? steps[ prev ] : steps[ steps.length-1 ];
             
-            return goto(prev);
+            return stepTo(prev);
         };
         
         var next = function () {
             var next = steps.indexOf( active ) + 1;
             next = next < steps.length ? steps[ next ] : steps[ 0 ];
             
-            return goto(next);
+            return stepTo(next);
         };
         
         window.addEventListener("hashchange", function () {
-            goto( getElementFromUrl() );
+            stepTo( getElementFromUrl() );
         }, false);
         
         window.addEventListener("orientationchange", function () {
@@ -382,10 +382,10 @@
         
         // START 
         // by selecting step defined in url or first step of the presentation
-        goto(getElementFromUrl() || steps[0]);
+        stepTo(getElementFromUrl() || steps[0]);
 
         return (roots[ "impress-root-" + rootId ] = {
-            goto: goto,
+            stepTo: stepTo,
             next: next,
             prev: prev
         });
@@ -461,7 +461,7 @@
             }
         }
         
-        if ( impress().goto(target) ) {
+        if ( impress().stepTo(target) ) {
             event.stopImmediatePropagation();
             event.preventDefault();
         }
@@ -476,7 +476,7 @@
             target = target.parentNode;
         }
         
-        if ( impress().goto(target) ) {
+        if ( impress().stepTo(target) ) {
             event.preventDefault();
         }
     }, false);
@@ -503,7 +503,7 @@
     // rescale presentation when window is resized
     window.addEventListener("resize", throttle(function (event) {
         // force going to active step again, to trigger rescaling
-        impress().goto( document.querySelector(".active"), true );
+        impress().stepTo( document.querySelector(".active"), true );
     }, 250), false);
 })(document, window);
 
