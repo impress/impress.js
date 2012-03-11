@@ -20,6 +20,7 @@ It's an (un)fortunate coincidence that a Open/LibreOffice presentation tool is c
 VERSION HISTORY
 -----------------
 
+
 ### 0.5dev
 
 **CURRENTLY IN DEVELOPMENT**
@@ -33,6 +34,17 @@ VERSION HISTORY
     - `present` class appears on currently visible step - it's different from `active` class as `present` class
        is added when transition finishes (step is entered)
     - `past` class is added to already visited steps (when the step is left)
+
+
+### 0.4.1 ([browse](http://github.com/bartaz/impress.js/tree/0.4.1), [zip](http://github.com/bartaz/impress.js/zipball/0.4.1), [tar](http://github.com/bartaz/impress.js/tarball/0.4.1))
+
+#### BUGFIX RELEASE
+
+Changes is version 0.4 introduced a bug causing JavaScript errors being thrown all over the place in fallback mode.
+This release fixes this issue.
+
+It also adds a flag `impress.supported` that can be used in JavaScript to check if impress.js is supported in the browser.
+
 
 
 ### 0.4 ([browse](http://github.com/bartaz/impress.js/tree/0.4), [zip](http://github.com/bartaz/impress.js/zipball/0.4), [tar](http://github.com/bartaz/impress.js/tarball/0.4))
