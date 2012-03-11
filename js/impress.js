@@ -124,7 +124,6 @@
     if (!impressSupported) {
         // we can't be sure that `classList` is supported
         body.className += " impress-not-supported ";
-        return;
     } else {
         body.classList.remove("impress-not-supported");
         body.classList.add("impress-supported");
@@ -144,7 +143,11 @@
     };
     
     var impress = window.impress = function ( rootId ) {
-
+        
+        if (!impressSupported) {
+            return null;
+        }
+        
         rootId = rootId || "impress";
         
         // if already initialized just return the API
@@ -399,6 +402,9 @@
         });
 
     };
+    
+    impress.supported = impressSupported;
+    
 })(document, window);
 
 // EVENTS
@@ -407,6 +413,11 @@
     'use strict';
     
     var impress = window.impress;
+    
+    // if impress is not supported don't add any handlers
+    if (!impress.supported) {
+        return;
+    }
     
     // throttling function calls, by Remy Sharp
     // http://remysharp.com/2010/07/21/throttling-function-calls/
