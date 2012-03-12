@@ -86,6 +86,12 @@
         return arrayify( context.querySelectorAll(selector) );
     };
     
+    var triggerEvent = function (el, eventName, detail) {
+        var event = document.createEvent("CustomEvent");
+        event.initCustomEvent(eventName, true, true, detail);
+        el.dispatchEvent(event);
+    };
+    
     var translate = function ( t ) {
         return " translate3d(" + t.x + "px," + t.y + "px," + t.z + "px) ";
     };
@@ -191,21 +197,31 @@
             return roots["impress-root-" + rootId];
         }
         
-        var stepData = {};
+        // data of all presentation steps
+        var stepsData = {};
         
-        var isStep = function ( el ) {
-            return !!(el && el.id && stepData["impress-" + el.id]);
-        };
+        // element of currently active step
+        var activeStep = null;
         
-        var active = null;
+        // current state (position, rotation and scale) of the presentation
+        var currentState = null;
+        
+        // array of step elements
+        var steps = null;
+        
+        // configuration options
+        var config = null;
+        
+        // scale factor of the browser window
+        var windowScale = null;        
+        
+        // root presentation elements
+        var root = byId( rootId );
+        var canvas = document.createElement("div");
+        
+        var initialized = false;
         
         // step events
-        
-        var triggerEvent = function (el, eventName, detail) {
-            var event = document.createEvent("CustomEvent");
-            event.initCustomEvent(eventName, true, true, detail);
-            el.dispatchEvent(event);
-        };
         
         var lastEntered = null;
         var onStepEnter = function (step) {
@@ -228,28 +244,10 @@
         var onTransitionEnd = function (event) {
             // we only care about transitions on `root` and `canvas` elements
             if (event.target === expectedTransitionTarget) {
-                onStepEnter(active);
+                onStepEnter(activeStep);
                 event.stopPropagation(); // prevent propagation from `canvas` to `root`
             }
         };
-        
-        // current state (position, rotation and scale) of the presentation
-        var currentState = null;
-        
-        // array of step elements
-        var steps = null;
-        
-        // configuration options
-        var config = null;
-        
-        // scale factor of the browser window
-        var windowScale = null;        
-        
-        // root presentation elements
-        var root = byId( rootId );
-        var canvas = document.createElement("div");
-        
-        var initialized = false;
         
         var initStep = function ( el, idx ) {
             var data = el.dataset,
@@ -272,7 +270,7 @@
                 el.id = "step-" + (idx + 1);
             }
             
-            stepData["impress-" + el.id] = step;
+            stepsData["impress-" + el.id] = step;
             
             css(el, {
                 position: "absolute",
@@ -356,7 +354,9 @@
         };
         
         var stepTo = function ( el, force ) {
-            if ( !initialized || !isStep(el) || (el === active && !force) ) {
+            if ( !initialized ||
+                 !(el && el.id && stepsData["impress-" + el.id]) || // element is not a step
+                 (el === activeStep && !force) ) {
                 // selected element is not defined as step or is already active
                 return false;
             }
@@ -371,11 +371,11 @@
             // If you are reading this and know any better way to handle it, I'll be glad to hear about it!
             window.scrollTo(0, 0);
             
-            var step = stepData["impress-" + el.id];
+            var step = stepsData["impress-" + el.id];
             
-            if ( active ) {
-                active.classList.remove("active");
-                body.classList.remove("impress-on-" + active.id);
+            if ( activeStep ) {
+                activeStep.classList.remove("active");
+                body.classList.remove("impress-on-" + activeStep.id);
             }
             el.classList.add("active");
             
@@ -400,7 +400,7 @@
             
             // if presentation starts (nothing is active yet)
             // don't animate (set duration to 0)
-            var duration = (active) ? config.transitionDuration : 0,
+            var duration = (activeStep) ? config.transitionDuration : 0,
                 delay = (config.transitionDuration / 2);
             
             if (force) {
@@ -411,8 +411,8 @@
             
             expectedTransitionTarget = target.scale > currentState.scale ? root : canvas;
             
-            if (active) {
-                onStepLeave(active);
+            if (activeStep) {
+                onStepLeave(activeStep);
             }
             
             css(root, {
@@ -430,24 +430,24 @@
             });
             
             currentState = target;
-            active = el;
+            activeStep = el;
             
             if (duration === 0) {
-                onStepEnter(active);
+                onStepEnter(activeStep);
             }
             
             return el;
         };
         
         var prev = function () {
-            var prev = steps.indexOf( active ) - 1;
+            var prev = steps.indexOf( activeStep ) - 1;
             prev = prev >= 0 ? steps[ prev ] : steps[ steps.length-1 ];
             
             return stepTo(prev);
         };
         
         var next = function () {
-            var next = steps.indexOf( active ) + 1;
+            var next = steps.indexOf( activeStep ) + 1;
             next = next < steps.length ? steps[ next ] : steps[ 0 ];
             
             return stepTo(next);
