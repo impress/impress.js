@@ -338,6 +338,9 @@
             root.addEventListener(transitionEnd, onTransitionEnd, false);
             canvas.addEventListener(transitionEnd, onTransitionEnd, false);
             
+            body.classList.remove("impress-disabled");
+            body.classList.add("impress-enabled");
+            
             // get and init steps
             steps = $$(".step", root);            
             steps.forEach( initStep );
@@ -493,6 +496,8 @@
             // by selecting step defined in url or first step of the presentation
             stepTo(getElementFromUrl() || steps[0]);
         }, false);
+        
+        body.classList.add("impress-disabled");
         
         return (roots[ "impress-root-" + rootId ] = {
             init: init,

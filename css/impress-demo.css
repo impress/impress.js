@@ -490,6 +490,7 @@ body     { pointer-events: none; }
     margin-bottom: 10px;
 }
 
+.impress-disabled .step,
 .impress-not-supported .step {
     position: relative;
     opacity: 1;
