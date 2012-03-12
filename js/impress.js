@@ -168,10 +168,20 @@
         transitionDuration: 1000
     };
     
+    var empty = function () { return false; };
+    
     var impress = window.impress = function ( rootId ) {
         
+        // if impress.js is not supported by the browser return a dummy API
+        // it may not be a perfect solution but we return early and avoid
+        // running code that may use features not implemented in the browser
         if (!impressSupported) {
-            return null;
+            return {
+                init: empty,
+                stepTo: empty,
+                prev: empty,
+                next: empty
+            };
         }
         
         rootId = rootId || "impress";
@@ -191,9 +201,9 @@
         
         // step events
         
-        var triggerEvent = function (el, eventName) {
+        var triggerEvent = function (el, eventName, detail) {
             var event = document.createEvent("CustomEvent");
-            event.initCustomEvent(eventName, true, true, {});
+            event.initCustomEvent(eventName, true, true, detail);
             el.dispatchEvent(event);
         };
         
@@ -342,7 +352,7 @@
             
             initialized = true;
             
-            triggerEvent(root, "impressInit");
+            triggerEvent(root, "impressInit", { api: roots[ "impress-root-" + rootId ] });
         };
         
         var stepTo = function ( el, force ) {
@@ -502,13 +512,6 @@
 (function ( document, window ) {
     'use strict';
     
-    var impress = window.impress;
-    
-    // if impress is not supported don't add any handlers
-    if (!impress.supported) {
-        return;
-    }
-    
     // throttling function calls, by Remy Sharp
     // http://remysharp.com/2010/07/21/throttling-function-calls/
     var throttle = function (fn, delay) {
@@ -522,99 +525,105 @@
         };
     };
     
-    // keyboard navigation handlers
-    
-    // prevent default keydown action when one of supported key is pressed
-    document.addEventListener("keydown", function ( event ) {
-        if ( event.keyCode === 9 || ( event.keyCode >= 32 && event.keyCode <= 34 ) || (event.keyCode >= 37 && event.keyCode <= 40) ) {
-            event.preventDefault();
-        }
-    }, false);
-    
-    // trigger impress action on keyup
-    document.addEventListener("keyup", function ( event ) {
-        if ( event.keyCode === 9 || ( event.keyCode >= 32 && event.keyCode <= 34 ) || (event.keyCode >= 37 && event.keyCode <= 40) ) {
-            switch( event.keyCode ) {
-                case 33: // pg up
-                case 37: // left
-                case 38: // up
-                         impress().prev();
-                         break;
-                case 9:  // tab
-                case 32: // space
-                case 34: // pg down
-                case 39: // right
-                case 40: // down
-                         impress().next();
-                         break;
-            }
-            
-            event.preventDefault();
-        }
-    }, false);
-    
-    // delegated handler for clicking on the links to presentation steps
-    document.addEventListener("click", function ( event ) {
-        // event delegation with "bubbling"
-        // check if event target (or any of its parents is a link)
-        var target = event.target;
-        while ( (target.tagName !== "A") &&
-                (target !== document.documentElement) ) {
-            target = target.parentNode;
-        }
+    document.addEventListener("impressInit", function (event) {
+        var api = event.detail.api;
         
-        if ( target.tagName === "A" ) {
-            var href = target.getAttribute("href");
-            
-            // if it's a link to presentation step, target this step
-            if ( href && href[0] === '#' ) {
-                target = document.getElementById( href.slice(1) );
-            }
-        }
+        // keyboard navigation handlers
         
-        if ( impress().stepTo(target) ) {
-            event.stopImmediatePropagation();
-            event.preventDefault();
-        }
-    }, false);
-    
-    // delegated handler for clicking on step elements
-    document.addEventListener("click", function ( event ) {
-        var target = event.target;
-        // find closest step element
-        while ( !target.classList.contains("step") &&
-                (target !== document.documentElement) ) {
-            target = target.parentNode;
-        }
-        
-        if ( impress().stepTo(target) ) {
-            event.preventDefault();
-        }
-    }, false);
-    
-    // touch handler to detect taps on the left and right side of the screen
-    document.addEventListener("touchstart", function ( event ) {
-        if (event.touches.length === 1) {
-            var x = event.touches[0].clientX,
-                width = window.innerWidth * 0.3,
-                result = null;
-                
-            if ( x < width ) {
-                result = impress().prev();
-            } else if ( x > window.innerWidth - width ) {
-                result = impress().next();
-            }
-            
-            if (result) {
+        // prevent default keydown action when one of supported key is pressed
+        document.addEventListener("keydown", function ( event ) {
+            if ( event.keyCode === 9 || ( event.keyCode >= 32 && event.keyCode <= 34 ) || (event.keyCode >= 37 && event.keyCode <= 40) ) {
                 event.preventDefault();
             }
-        }
+        }, false);
+        
+        // trigger impress action on keyup
+        document.addEventListener("keyup", function ( event ) {
+            if ( event.keyCode === 9 || ( event.keyCode >= 32 && event.keyCode <= 34 ) || (event.keyCode >= 37 && event.keyCode <= 40) ) {
+                switch( event.keyCode ) {
+                    case 33: // pg up
+                    case 37: // left
+                    case 38: // up
+                             api.prev();
+                             break;
+                    case 9:  // tab
+                    case 32: // space
+                    case 34: // pg down
+                    case 39: // right
+                    case 40: // down
+                             api.next();
+                             break;
+                }
+                
+                event.preventDefault();
+            }
+        }, false);
+        
+        // delegated handler for clicking on the links to presentation steps
+        document.addEventListener("click", function ( event ) {
+            // event delegation with "bubbling"
+            // check if event target (or any of its parents is a link)
+            var target = event.target;
+            while ( (target.tagName !== "A") &&
+                    (target !== document.documentElement) ) {
+                target = target.parentNode;
+            }
+            
+            if ( target.tagName === "A" ) {
+                var href = target.getAttribute("href");
+                
+                // if it's a link to presentation step, target this step
+                if ( href && href[0] === '#' ) {
+                    target = document.getElementById( href.slice(1) );
+                }
+            }
+            
+            if ( api.stepTo(target) ) {
+                event.stopImmediatePropagation();
+                event.preventDefault();
+            }
+        }, false);
+        
+        // delegated handler for clicking on step elements
+        document.addEventListener("click", function ( event ) {
+            var target = event.target;
+            // find closest step element
+            while ( !target.classList.contains("step") &&
+                    (target !== document.documentElement) ) {
+                target = target.parentNode;
+            }
+            
+            if ( api.stepTo(target) ) {
+                event.preventDefault();
+            }
+        }, false);
+        
+        // touch handler to detect taps on the left and right side of the screen
+        document.addEventListener("touchstart", function ( event ) {
+            if (event.touches.length === 1) {
+                var x = event.touches[0].clientX,
+                    width = window.innerWidth * 0.3,
+                    result = null;
+                    
+                if ( x < width ) {
+                    result = api.prev();
+                } else if ( x > window.innerWidth - width ) {
+                    result = api.next();
+                }
+                
+                if (result) {
+                    event.preventDefault();
+                }
+            }
+        }, false);
+        
+        // rescale presentation when window is resized
+        window.addEventListener("resize", throttle(function () {
+            // force going to active step again, to trigger rescaling
+            api.stepTo( document.querySelector(".active"), true );
+        }, 250), false);
+        
     }, false);
-    
-    // rescale presentation when window is resized
-    window.addEventListener("resize", throttle(function () {
-        // force going to active step again, to trigger rescaling
-        impress().stepTo( document.querySelector(".active"), true );
-    }, 250), false);
+        
 })(document, window);
 
