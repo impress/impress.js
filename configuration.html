@@ -1,0 +1,329 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Generate Configuration for impress.js</title>
+<style type="text/css">
+<!--
+#nav {
+	width: 200px;
+	float: left;
+}
+
+#drop_zone {
+	width: 120px;
+	border: 2px dashed #bbb;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	padding: 25px;
+	text-align: center;
+	color: #bbb;
+	display: none;
+}
+
+#slides {
+	max-height: 500px;
+	overflow: auto;
+}
+
+#slides div {
+	border: 1px dotted #000;
+	width: 150px;
+	height: 40px;
+	text-align: center;
+	padding-top: 15px;
+	margin-bottom: 5px;
+	cursor: pointer;
+}
+
+#slides div.select {
+	border: 2px solid #f00;
+	cursor: default;
+}
+
+#config {
+	float: left;
+	width: 800px;
+}
+
+textarea {
+	width: 99%;
+	height: 90px;
+}
+
+input[type=button] {
+	border: 1px solid #000;
+	min-width: 64px;
+	cursor: pointer;
+}
+-->
+</style>
+<script src="js/json-format.js" type="text/javascript"></script>
+<script>
+<!--
+var defaultConfig = {
+	attribute: {
+		"id": "",
+		"class": ["step"],
+
+		"data-x": 0,
+		"data-y": 0,
+		"data-z": 0,
+
+		"data-rotate-x": 0,
+		"data-rotate-y": 0,
+		"data-rotate-z": 0,
+		//"data-rotate": 0,
+
+		"data-scale": 1
+	},
+	content: ""
+};
+var presentation = [];
+
+/*
+init the layout
+*/
+function init(index) {
+	showConfig(index || 0);
+}
+
+/*
+show slides navigation
+*/
+function showNav() {
+	var result = [];
+	for (var i = 0; i < presentation.length; i++) {
+		result.push("<div onclick='javascript: saveConfig(parseInt(document.getElementsByName(\"index\")[0].value)); showConfig(" + i + ");'>" + (i + 1) + "</div>");
+	}
+	document.getElementById("slides").innerHTML = result.join("");
+}
+
+/*
+show the configuration of chosen slide
+*/
+function showConfig(index) {
+	var config = index < presentation.length? presentation[index] : deepObjCopy(defaultConfig);
+
+	if (index >= presentation.length) {
+		presentation.push(config);
+	}
+	showNav();
+	document.getElementById("slides").childNodes[index].removeAttribute("onclick");
+	document.getElementById("slides").childNodes[index].setAttribute("class", "select");
+	document.getElementById("slides").scrollTop = getY(document.getElementById("slides").childNodes[index]) - getY(document.getElementById("slides"));
+
+	document.getElementsByName("index")[0].value = index;
+	for (var name in defaultConfig["attribute"]) {
+		var altName = name;
+		if (name == "data-rotate") {
+			altName = "data-rotate-z";
+		}
+		document.getElementsByName(altName)[0].value = toString(presentation[index]["attribute"][name] || defaultConfig["attribute"][name]);
+	}
+	document.getElementsByName("content")[0].value = toString(presentation[index]["content"], "\n");
+}
+
+/*
+add a new slide
+*/
+function addSlide(index) {
+	saveConfig(index);
+
+	showConfig(presentation.length);
+	saveConfig(presentation.length - 1);
+	if (index < presentation.length - 1) {
+		var config = presentation.pop();
+		presentation.splice(index + 1, 0, config);
+	}
+	init(index + 1);
+}
+
+/*
+delete a slide
+*/
+function deleteSlide(index) {
+	if (index >= 0 && index < presentation.length) {
+		presentation.splice(index, 1);
+		init(index % presentation.length);
+	}
+}
+
+/*
+save the current config
+*/
+function saveConfig(index) {
+	for (var i in defaultConfig["attribute"]) {
+		var temp = document.getElementsByName(i)[0].value || defaultConfig["attribute"][i];
+		presentation[index]["attribute"][i] = (temp == "" || isNaN(temp))? temp : parseFloat(temp);
+	}
+	presentation[index]["content"] = document.getElementsByName("content")[0].value.split("\n");
+}
+
+/*
+import the configuration data for presentation
+*/
+
+function importConfig(config) {
+	if (config.replace(/[\r\n]/g, "").search(/^\s*$/) == -1) {
+		eval("(" + config + ")");
+		init();
+	}
+}
+
+/*
+show a rectangular selection region to get configuration file
+*/
+
+function showZone4importConfig() {
+	document.getElementById("drop_zone").style.display = (document.getElementById("drop_zone").style.display == "block")? "none" : "block";
+}
+
+/*
+export the configuration data for presentation
+*/
+function exportConfig() {
+	if (presentation.length > 0) {
+		presentation[0]["attribute"]["id"] = "bored";
+		document.getElementById("output").value = "presentation = " + JSONFormat(JSON.stringify(presentation)) + "\n";
+	}
+}
+
+function getY(e) {
+	var y = e.offsetTop;
+	while (e.offsetParent != null) {
+		e = e.offsetParent;
+		y += e.offsetTop;
+	}
+
+	return y;
+}
+
+/*
+(Javascript Recursive Object Copy, Deep Object Copy, Pass By Value)[http://www.overset.com/2007/07/11/javascript-recursive-object-copy-deep-object-copy-pass-by-value/]
+*/
+function deepObjCopy(dupeObj) {
+	var retObj = new Object();
+
+	if (typeof(dupeObj) == 'object') {
+		if (typeof(dupeObj.length) != 'undefined')
+			var retObj = new Array();
+		for (var objInd in dupeObj) {
+			if (typeof(dupeObj[objInd]) == 'object') {
+				retObj[objInd] = deepObjCopy(dupeObj[objInd]);
+			} else if (typeof(dupeObj[objInd]) == 'string') {
+				retObj[objInd] = dupeObj[objInd];
+			} else if (typeof(dupeObj[objInd]) == 'number') {
+				retObj[objInd] = dupeObj[objInd];
+			} else if (typeof(dupeObj[objInd]) == 'boolean') {
+				retObj[objInd] = (dupeObj[objInd] == true)? true : false;
+			}
+		}
+	}
+
+	return retObj;
+}
+
+function toString(data, sep) {
+	return typeof data == "object"? data.join(sep || " ") : data;
+}
+//-->
+</script>
+<script type="text/javascript">
+<!--
+/*
+(Reading local files in JavaScript)[http://www.html5rocks.com/en/tutorials/file/dndfiles/]
+*/
+
+function handleFileSelect(evt) {
+	evt["currentTarget"].style.display = "none";
+
+	evt.stopPropagation();
+	evt.preventDefault();
+
+	var files = evt.dataTransfer.files; // FileList object
+	if (!files.length) {
+		alert("Please select a file!");
+		return;
+	}
+
+	var file = files[0];
+	var start = 0;
+	var stop = file.size;
+
+	var reader = new FileReader();
+
+	reader.onloadend = function (evt) {
+		if (evt.target.readyState == FileReader.DONE) {
+			importConfig(evt.target.result);
+		}
+	};
+
+	if (file.webkitSlice) {
+		var blob = file.webkitSlice(start, stop);
+	} else if (file.mozSlice) {
+		var blob = file.mozSlice(start, stop);
+	}
+	reader.readAsBinaryString(blob);
+}
+
+function handleDragOver(evt) {
+	evt.stopPropagation();
+	evt.preventDefault();
+	evt.dataTransfer.dropEffect = "copy"; // Explicitly show this is a copy
+}
+
+// Setup the dnd listeners
+window.onload = function () {
+	init();
+
+	var dropZone = document.getElementById("drop_zone");
+	dropZone.addEventListener("dragover", handleDragOver, false);
+	dropZone.addEventListener("drop", handleFileSelect, false);
+};
+//-->
+</script>
+</head>
+<body>
+<h1>Generate Configuration for <a href="https://github.com/bartaz/impress.js" target="_blank">impress.js</a></h1>
+<!--<label>Title: </label><input type="text" name="title">-->
+<div id="nav">
+	<div>
+		<input type="button" value="import" title="import from a configuration file" onclick="javascript: showZone4importConfig();" />&nbsp;<input type="button" value="export" title="export to a configuration file" onclick="javascript: saveConfig(parseInt(document.getElementsByName('index')[0].value)); exportConfig();" />
+	</div>
+	<div id="drop_zone">Drop presentation configuration file here</div>
+	<div id="slides"></div>
+</div>
+<div id="config">
+	<div>
+		<input type="button" value="-" title="delete this slide" onclick="javascript: deleteSlide(parseInt(document.getElementsByName('index')[0].value));" />&nbsp;<input type="button" value="+" title="add a new slide after this one" onclick="javascript: addSlide(parseInt(document.getElementsByName('index')[0].value));" />
+	</div>
+	<input type="hidden" name="index" />
+	<fieldset>
+		<legend>attribute</legend>
+		<fieldset>
+			<legend>position</legend>
+			<label>x: </label><input type="text" name="data-x">&nbsp;<label>y: </label><input type="text" name="data-y">&nbsp;<label>z: </label><input type="text" name="data-z">
+		</fieldset>
+		<fieldset>
+			<legend>rotate</legend>
+			<label>x: </label><input type="text" name="data-rotate-x">&nbsp;<label>y: </label><input type="text" name="data-rotate-y">&nbsp;<label>z: </label><input type="text" name="data-rotate-z">
+		</fieldset>
+		<fieldset>
+			<legend>miscellaneous</legend>
+			<label>scale: </label><input type="text" name="data-scale"><br />
+			<label>id: </label><input type="text" name="id">&nbsp;<label>class: </label><input type="text" name="class">
+		</fieldset>
+	</fieldset>
+	<fieldset>
+		<legend>content (<a href="http://daringfireball.net/projects/markdown/" target="_blank">markdown</a> supported)</legend>
+		<textarea name="content"></textarea>
+	</fieldset>
+	<fieldset>
+		<legend>export (<input type="button" value="import from this" onclick="javascript: importConfig(document.getElementById('output').value);" />)</legend>
+		<textarea id="output"></textarea>
+	</fieldset>
+</div>
+</body>
+</html>
