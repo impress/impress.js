@@ -181,83 +181,67 @@
             return roots["impress-root-" + rootId];
         }
         
-        // DOM ELEMENTS
-        
-        var root = byId( rootId );
-        
-        // viewport updates for iPad
-        var meta = $("meta[name='viewport']") || document.createElement("meta");
-        // hardcoding these values looks pretty bad, as they kind of depend on the content
-        // so they should be at least configurable
-        meta.content = "width=device-width, minimum-scale=1, maximum-scale=1, user-scalable=no";
-        if (meta.parentNode !== document.head) {
-            meta.name = 'viewport';
-            document.head.appendChild(meta);
-        }
-        
-        // initialize configuration object
-        var rootData = root.dataset;
-        var config = {
-            width: toNumber(rootData.width,    defaults.width),
-            height: toNumber(rootData.height,   defaults.height),
-            maxScale: toNumber(rootData.maxScale, defaults.maxScale),
-            minScale: toNumber(rootData.minScale, defaults.minScale),
-            
-            perspective: toNumber(rootData.perspective, defaults.perspective),
-            
-            transitionDuration: toNumber(rootData.transitionDuration, defaults.transitionDuration)
-        };
-        
-        var canvas = document.createElement("div");
-        canvas.className = "canvas";
-        
-        arrayify( root.childNodes ).forEach(function ( el ) {
-            canvas.appendChild( el );
-        });
-        root.appendChild(canvas);
-        
-        var steps = $$(".step", root);
-        
-        var windowScale = computeWindowScale( config );
-        
-        // SETUP
-        // set initial values and defaults
-        
-        document.documentElement.style.height = "100%";
-        
-        css(body, {
-            height: "100%",
-            overflow: "hidden"
-        });
-
-        var props = {
-            position: "absolute",
-            transformOrigin: "top left",
-            transition: "all 0s ease-in-out",
-            transformStyle: "preserve-3d"
-        };
-        
-        css(root, props);
-        css(root, {
-            top: "50%",
-            left: "50%",
-            transform: perspective( config.perspective/windowScale ) + scale( windowScale )
-        });
-        css(canvas, props);
-        
-        var current = {
-            translate: { x: 0, y: 0, z: 0 },
-            rotate:    { x: 0, y: 0, z: 0 },
-            scale:     1
-        };
-
         var stepData = {};
         
         var isStep = function ( el ) {
             return !!(el && el.id && stepData["impress-" + el.id]);
         };
         
-        steps.forEach(function ( el, idx ) {
+        var active = null;
+        
+        // step events
+        
+        var triggerEvent = function (el, eventName) {
+            var event = document.createEvent("CustomEvent");
+            event.initCustomEvent(eventName, true, true, {});
+            el.dispatchEvent(event);
+        };
+        
+        var lastEntered = null;
+        var onStepEnter = function (step) {
+            if (lastEntered !== step) {
+                triggerEvent(step, "impressStepEnter");
+                lastEntered = step;
+            }
+        };
+        
+        var onStepLeave = function (step) {
+            if (lastEntered === step) {
+                triggerEvent(step, "impressStepLeave");
+            }
+        };
+        
+        // transitionEnd event handler
+        
+        var expectedTransitionTarget = null;
+        
+        var onTransitionEnd = function (event) {
+            // we only care about transitions on `root` and `canvas` elements
+            if (event.target === expectedTransitionTarget) {
+                onStepEnter(active);
+                event.stopPropagation(); // prevent propagation from `canvas` to `root`
+            }
+        };
+        
+        // current state (position, rotation and scale) of the presentation
+        var currentState = null;
+        
+        // array of step elements
+        var steps = null;
+        
+        // configuration options
+        var config = null;
+        
+        // scale factor of the browser window
+        var windowScale = null;        
+        
+        // root presentation elements
+        var root = byId( rootId );
+        var canvas = document.createElement("div");
+        
+        var initialized = false;
+        
+        var initStep = function ( el, idx ) {
             var data = el.dataset,
                 step = {
                     translate: {
@@ -288,49 +272,81 @@
                            scale(step.scale),
                 transformStyle: "preserve-3d"
             });
+        };
+        
+        var init = function () {
+            if (initialized) { return; }
             
-        });
-        
-        var active = null;
-        
-        // step events
-        
-        var triggerEvent = function (el, eventName) {
-            var event = document.createEvent("CustomEvent");
-            event.initCustomEvent(eventName, true, true);
-            el.dispatchEvent(event);
-        };
-        
-        var lastEntered = null;
-        var onStepEnter = function (step) {
-            if (lastEntered !== step) {
-                triggerEvent(step, "impressStepEnter");
-                lastEntered = step;
+            // setup viewport for mobile devices
+            var meta = $("meta[name='viewport']") || document.createElement("meta");
+            meta.content = "width=device-width, minimum-scale=1, maximum-scale=1, user-scalable=no";
+            if (meta.parentNode !== document.head) {
+                meta.name = 'viewport';
+                document.head.appendChild(meta);
             }
+            
+            // initialize configuration object
+            var rootData = root.dataset;
+            config = {
+                width: toNumber( rootData.width, defaults.width ),
+                height: toNumber( rootData.height, defaults.height ),
+                maxScale: toNumber( rootData.maxScale, defaults.maxScale ),
+                minScale: toNumber( rootData.minScale, defaults.minScale ),                
+                perspective: toNumber( rootData.perspective, defaults.perspective ),
+                transitionDuration: toNumber( rootData.transitionDuration, defaults.transitionDuration )
+            };
+            
+            windowScale = computeWindowScale( config );
+            
+            // wrap steps with "canvas" element
+            arrayify( root.childNodes ).forEach(function ( el ) {
+                canvas.appendChild( el );
+            });
+            root.appendChild(canvas);
+            
+            // set initial styles
+            document.documentElement.style.height = "100%";
+            
+            css(body, {
+                height: "100%",
+                overflow: "hidden"
+            });
+            
+            var rootStyles = {
+                position: "absolute",
+                transformOrigin: "top left",
+                transition: "all 0s ease-in-out",
+                transformStyle: "preserve-3d"
+            };
+            
+            css(root, rootStyles);
+            css(root, {
+                top: "50%",
+                left: "50%",
+                transform: perspective( config.perspective/windowScale ) + scale( windowScale )
+            });
+            css(canvas, rootStyles);
+            
+            root.addEventListener(transitionEnd, onTransitionEnd, false);
+            canvas.addEventListener(transitionEnd, onTransitionEnd, false);
+            
+            // get and init steps
+            steps = $$(".step", root);            
+            steps.forEach( initStep );
+            
+            currentState = {
+                translate: { x: 0, y: 0, z: 0 },
+                rotate:    { x: 0, y: 0, z: 0 },
+                scale:     1
+            };
+            
+            initialized = true;
+            
+            triggerEvent(root, "impressInit");
         };
-        
-        var onStepLeave = function (step) {
-            if (lastEntered === step) {
-                triggerEvent(step, "impressStepLeave");
-            }
-        };
-        
-        // transitionEnd event handler
-        
-        var expectedTransitionTarget = null;
-        
-        var onTransitionEnd = function (event) {
-            // we only care about transitions on `root` and `canvas` elements
-            if (event.target === expectedTransitionTarget) {
-                onStepEnter(active);
-                event.stopPropagation(); // prevent propagation from `canvas` to `root`
-            }
-        };
-        root.addEventListener(transitionEnd, onTransitionEnd, false);
-        canvas.addEventListener(transitionEnd, onTransitionEnd, false);
         
         var stepTo = function ( el, force ) {
-            if ( !isStep(el) || (el === active && !force) ) {
+            if ( !initialized || !isStep(el) || (el === active && !force) ) {
                 // selected element is not defined as step or is already active
                 return false;
             }
@@ -370,7 +386,7 @@
             };
             
             // check if the transition is zooming in or not
-            var zoomin = target.scale >= current.scale;
+            var zoomin = target.scale >= currentState.scale;
             
             // if presentation starts (nothing is active yet)
             // don't animate (set duration to 0)
@@ -378,12 +394,12 @@
                 delay = (config.transitionDuration / 2);
             
             if (force) {
-                windowScale = computeWindowScale();
+                windowScale = computeWindowScale(config);
             }
             
             var targetScale = target.scale * windowScale;
             
-            expectedTransitionTarget = target.scale > current.scale ? root : canvas;
+            expectedTransitionTarget = target.scale > currentState.scale ? root : canvas;
             
             if (active) {
                 onStepLeave(active);
@@ -403,7 +419,7 @@
                 transitionDelay: (zoomin ? 0 : delay) + "ms"
             });
             
-            current = target;
+            currentState = target;
             active = el;
             
             if (duration === 0) {
@@ -427,47 +443,49 @@
             return stepTo(next);
         };
         
-        // STEP CLASSES
-        steps.forEach(function (step) {
-            step.classList.add("future");
-        });
-        
-        root.addEventListener("impressStepEnter", function (event) {
-            event.target.classList.remove("past");
-            event.target.classList.remove("future");
-            event.target.classList.add("present");
+        root.addEventListener("impressInit", function(){
+            // STEP CLASSES
+            steps.forEach(function (step) {
+                step.classList.add("future");
+            });
+            
+            root.addEventListener("impressStepEnter", function (event) {
+                event.target.classList.remove("past");
+                event.target.classList.remove("future");
+                event.target.classList.add("present");
+            }, false);
+            
+            root.addEventListener("impressStepLeave", function (event) {
+                event.target.classList.remove("present");
+                event.target.classList.add("past");
+            }, false);
+            
         }, false);
         
-        root.addEventListener("impressStepLeave", function (event) {
-            event.target.classList.remove("present");
-            event.target.classList.add("past");
+        root.addEventListener("impressInit", function(){       
+            // HASH CHANGE
+            
+            // `#/step-id` is used instead of `#step-id` to prevent default browser
+            // scrolling to element in hash
+            //
+            // and it has to be set after animation finishes, because in Chrome it
+            // causes transtion being laggy
+            // BUG: http://code.google.com/p/chromium/issues/detail?id=62820
+            root.addEventListener("impressStepEnter", function (event) {
+                window.location.hash = "#/" + event.target.id;
+            }, false);
+            
+            window.addEventListener("hashchange", function () {
+                stepTo( getElementFromUrl() );
+            }, false);
+            
+            // START 
+            // by selecting step defined in url or first step of the presentation
+            stepTo(getElementFromUrl() || steps[0]);
         }, false);
         
-        // HASH CHANGE
-        
-        // `#/step-id` is used instead of `#step-id` to prevent default browser
-        // scrolling to element in hash
-        //
-        // and it has to be set after animation finishes, because in Chrome it
-        // causes transtion being laggy
-        // BUG: http://code.google.com/p/chromium/issues/detail?id=62820
-        root.addEventListener("impressStepEnter", function (event) {
-            window.location.hash = "#/" + event.target.id;
-        }, false);
-        
-        window.addEventListener("hashchange", function () {
-            stepTo( getElementFromUrl() );
-        }, false);
-        
-        window.addEventListener("orientationchange", function () {
-            window.scrollTo(0, 0);
-        }, false);
-        
-        // START 
-        // by selecting step defined in url or first step of the presentation
-        stepTo(getElementFromUrl() || steps[0]);
-
         return (roots[ "impress-root-" + rootId ] = {
+            init: init,
             stepTo: stepTo,
             next: next,
             prev: prev

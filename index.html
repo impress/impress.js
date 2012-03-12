@@ -318,14 +318,14 @@ if ("ontouchstart" in document.documentElement) {
     
     In here I just include full source of the script to make it more readable.
     
-    You also need to call a `impress()` function to initialize impress.js presentation.
+    You also need to call a `impress().init()` function to initialize impress.js presentation.
     And you should do it in the end of your document. Not only because it's a good practice, but also
     because it should be done when the whole document is ready.
     Of course you can wrap it in any kind of "DOM ready" event, but I was too lazy to do so ;)
     
 -->
 <script src="js/impress.js"></script>
-<script>impress();</script>
+<script>impress().init();</script>
 
 <!--
     
@@ -337,6 +337,7 @@ if ("ontouchstart" in document.documentElement) {
     
     and you will get three functions you can call:
     
+        `api.init()` - initializes the presentation,
         `api.next()` - moves to next step of the presentation,
         `api.prev()` - moves to previous step of the presentation
         `api.stepTo( stepElement ) - moves the presentation to given step element (the DOM element of the step).
