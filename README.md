@@ -27,7 +27,12 @@ VERSION HISTORY
 
 #### CHANGELOG
 
-* events added when step is entered and left - custom `impressStepEnter` and `impressStepLeave` events are triggered
+* API changed, so that `impress()` function no longer automatically initialize presentation; new method called `init`
+  was added to API and it should be used to start the presentation
+* event `impress-init` is triggered on root presentation element (`#impress` by default) when presentation is initialized
+* new CSS classes were added: `impress-disabled` is added to body element by the impress.js script and it's changed to 
+  `impress-enabled` when `init()` function is called
+* events added when step is entered and left - custom `impress-step-enter` and `impress-step-leave` events are triggered
   on step elements and can be handled like any other DOM events (with `addEventListener`)
 * additional `past`, `present` and `future` classes are added to step elements
     - `future` class appears on steps that were not yet visited
