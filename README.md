@@ -45,6 +45,9 @@ VERSION HISTORY
     - you can give it a number of step you want to go to: `impress().goto(7)`
     - or its id: `impress().goto("the-best-slide-ever")`
     - of course DOM element is still acceptable: `impress().goto( document.getElementById("overview") )`
+* and if it's not enough, `goto()` also accepts second parameter to define the transition duration in ms, for example
+  `impress().goto("make-it-quick", 300)` or `impress().goto("now", 0)`
+
 
 ### 0.4.1 ([browse](http://github.com/bartaz/impress.js/tree/0.4.1), [zip](http://github.com/bartaz/impress.js/zipball/0.4.1), [tar](http://github.com/bartaz/impress.js/tarball/0.4.1))
 

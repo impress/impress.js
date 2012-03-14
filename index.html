@@ -340,8 +340,9 @@ if ("ontouchstart" in document.documentElement) {
         `api.init()` - initializes the presentation,
         `api.next()` - moves to next step of the presentation,
         `api.prev()` - moves to previous step of the presentation,
-        `api.goto( idx | id | element )` - moves the presentation to the step given by its index number,
-                                           id or the DOM element.
+        `api.goto( idx | id | element, [duration] )` - moves the presentation to the step given by its index number
+                id or the DOM element; second parameter can be used to define duration of the transition in ms,
+                but it's optional - if not provided default transition duration for the presentation will be used.
     
     You can also simply call `impress()` again to get the API, so `impress().next()` is also allowed.
     Don't worry, it wont initialize the presentation again.

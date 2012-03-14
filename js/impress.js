@@ -365,10 +365,10 @@
             return (step && step.id && stepsData["impress-" + step.id]) ? step : null;
         };
         
-        var goto = function ( el, force ) {
+        var goto = function ( el, duration ) {
             
-            if ( !initialized || !(el = getStep(el)) || (el === activeStep && !force) ) {
-                // selected element is not defined as step or is already active
+            if ( !initialized || !(el = getStep(el)) ) {
+                // presentation not initialized or given element is not a step
                 return false;
             }
             
@@ -409,12 +409,10 @@
             // check if the transition is zooming in or not
             var zoomin = target.scale >= currentState.scale;
             
-            // if presentation starts (nothing is active yet)
-            // don't animate (set duration to 0)
-            var duration = (activeStep) ? config.transitionDuration : 0,
-                delay = (config.transitionDuration / 2);
+            duration = toNumber(duration, config.transitionDuration);
+            var delay = (duration / 2);
             
-            if (force) {
+            if (el === activeStep) {
                 windowScale = computeWindowScale(config);
             }
             
@@ -486,6 +484,8 @@
         root.addEventListener("impress-init", function(){       
             // HASH CHANGE
             
+            var lastHash = "";
+            
             // `#/step-id` is used instead of `#step-id` to prevent default browser
             // scrolling to element in hash
             //
@@ -493,16 +493,19 @@
             // causes transtion being laggy
             // BUG: http://code.google.com/p/chromium/issues/detail?id=62820
             root.addEventListener("impress-step-enter", function (event) {
-                window.location.hash = "#/" + event.target.id;
+                window.location.hash = lastHash = "#/" + event.target.id;
             }, false);
             
             window.addEventListener("hashchange", function () {
-                goto( getElementFromUrl() );
+                // don't go twice to same element
+                if (window.location.hash !== lastHash) {
+                    goto( getElementFromUrl() );
+                }
             }, false);
             
             // START 
             // by selecting step defined in url or first step of the presentation
-            goto(getElementFromUrl() || steps[0]);
+            goto(getElementFromUrl() || steps[0], 0);
         }, false);
         
         body.classList.add("impress-disabled");
@@ -633,7 +636,7 @@
         // rescale presentation when window is resized
         window.addEventListener("resize", throttle(function () {
             // force going to active step again, to trigger rescaling
-            api.goto( document.querySelector(".active"), true );
+            api.goto( document.querySelector(".active"), 500 );
         }, 250), false);
         
     }, false);
