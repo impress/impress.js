@@ -41,6 +41,10 @@ VERSION HISTORY
     - `past` class is added to already visited steps (when the step is left)
 * and good news, `goto()` API method is back! it seems that `goto` **was** a future reserved word but isn't anymore,
   so we can use this short and pretty name instead of camelCassy `stepTo` - and yes, that means API changed again...
+* additionally `goto()` method now supports new types of parameters:
+    - you can give it a number of step you want to go to: `impress().goto(7)`
+    - or its id: `impress().goto("the-best-slide-ever")`
+    - of course DOM element is still acceptable: `impress().goto( document.getElementById("overview") )`
 
 ### 0.4.1 ([browse](http://github.com/bartaz/impress.js/tree/0.4.1), [zip](http://github.com/bartaz/impress.js/zipball/0.4.1), [tar](http://github.com/bartaz/impress.js/tarball/0.4.1))
 

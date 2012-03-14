@@ -356,10 +356,18 @@
             triggerEvent(root, "impress-init", { api: roots[ "impress-root-" + rootId ] });
         };
         
+        var getStep = function ( step ) {
+            if (typeof step === "number") {
+                step = step < 0 ? steps[ steps.length + step] : steps[ step ];
+            } else if (typeof step === "string") {
+                step = byId(step);
+            }
+            return (step && step.id && stepsData["impress-" + step.id]) ? step : null;
+        };
+        
         var goto = function ( el, force ) {
-            if ( !initialized ||
-                 !(el && el.id && stepsData["impress-" + el.id]) || // element is not a step
-                 (el === activeStep && !force) ) {
+            
+            if ( !initialized || !(el = getStep(el)) || (el === activeStep && !force) ) {
                 // selected element is not defined as step or is already active
                 return false;
             }

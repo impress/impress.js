@@ -339,8 +339,9 @@ if ("ontouchstart" in document.documentElement) {
     
         `api.init()` - initializes the presentation,
         `api.next()` - moves to next step of the presentation,
-        `api.prev()` - moves to previous step of the presentation
-        `api.goto( stepElement ) - moves the presentation to given step element (the DOM element of the step).
+        `api.prev()` - moves to previous step of the presentation,
+        `api.goto( idx | id | element )` - moves the presentation to the step given by its index number,
+                                           id or the DOM element.
     
     You can also simply call `impress()` again to get the API, so `impress().next()` is also allowed.
     Don't worry, it wont initialize the presentation again.
