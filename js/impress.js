@@ -184,7 +184,7 @@
         if (!impressSupported) {
             return {
                 init: empty,
-                stepTo: empty,
+                goto: empty,
                 prev: empty,
                 next: empty
             };
@@ -356,7 +356,7 @@
             triggerEvent(root, "impress-init", { api: roots[ "impress-root-" + rootId ] });
         };
         
-        var stepTo = function ( el, force ) {
+        var goto = function ( el, force ) {
             if ( !initialized ||
                  !(el && el.id && stepsData["impress-" + el.id]) || // element is not a step
                  (el === activeStep && !force) ) {
@@ -446,14 +446,14 @@
             var prev = steps.indexOf( activeStep ) - 1;
             prev = prev >= 0 ? steps[ prev ] : steps[ steps.length-1 ];
             
-            return stepTo(prev);
+            return goto(prev);
         };
         
         var next = function () {
             var next = steps.indexOf( activeStep ) + 1;
             next = next < steps.length ? steps[ next ] : steps[ 0 ];
             
-            return stepTo(next);
+            return goto(next);
         };
         
         root.addEventListener("impress-init", function(){
@@ -489,19 +489,19 @@
             }, false);
             
             window.addEventListener("hashchange", function () {
-                stepTo( getElementFromUrl() );
+                goto( getElementFromUrl() );
             }, false);
             
             // START 
             // by selecting step defined in url or first step of the presentation
-            stepTo(getElementFromUrl() || steps[0]);
+            goto(getElementFromUrl() || steps[0]);
         }, false);
         
         body.classList.add("impress-disabled");
         
         return (roots[ "impress-root-" + rootId ] = {
             init: init,
-            stepTo: stepTo,
+            goto: goto,
             next: next,
             prev: prev
         });
@@ -583,7 +583,7 @@
                 }
             }
             
-            if ( api.stepTo(target) ) {
+            if ( api.goto(target) ) {
                 event.stopImmediatePropagation();
                 event.preventDefault();
             }
@@ -598,7 +598,7 @@
                 target = target.parentNode;
             }
             
-            if ( api.stepTo(target) ) {
+            if ( api.goto(target) ) {
                 event.preventDefault();
             }
         }, false);
@@ -625,7 +625,7 @@
         // rescale presentation when window is resized
         window.addEventListener("resize", throttle(function () {
             // force going to active step again, to trigger rescaling
-            api.stepTo( document.querySelector(".active"), true );
+            api.goto( document.querySelector(".active"), true );
         }, 250), false);
         
     }, false);

@@ -39,7 +39,8 @@ VERSION HISTORY
     - `present` class appears on currently visible step - it's different from `active` class as `present` class
        is added when transition finishes (step is entered)
     - `past` class is added to already visited steps (when the step is left)
-
+* and good news, `goto()` API method is back! it seems that `goto` **was** a future reserved word but isn't anymore,
+  so we can use this short and pretty name instead of camelCassy `stepTo` - and yes, that means API changed again...
 
 ### 0.4.1 ([browse](http://github.com/bartaz/impress.js/tree/0.4.1), [zip](http://github.com/bartaz/impress.js/zipball/0.4.1), [tar](http://github.com/bartaz/impress.js/tarball/0.4.1))
 
