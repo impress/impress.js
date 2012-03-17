@@ -245,7 +245,9 @@
             return scale;
         };
         
-        steps.forEach(function ( el, idx ) {
+        // translate, rotate and scale presentation element according to data
+        
+        var drawEl = function ( el, idx ) {
             var data = el.dataset,
                 step = {
                     translate: {
@@ -277,7 +279,11 @@
                 transformStyle: "preserve-3d"
             });
             
-        });
+        }
+        
+        // draw all the steps
+        
+        steps.forEach(drawEl);
 
         // making given step active
 
@@ -398,7 +404,8 @@
         return (roots[ "impress-root-" + rootId ] = {
             stepTo: stepTo,
             next: next,
-            prev: prev
+            prev: prev,
+            drawEl: drawEl
         });
 
     };
