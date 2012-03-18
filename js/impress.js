@@ -226,14 +226,14 @@
         var lastEntered = null;
         var onStepEnter = function (step) {
             if (lastEntered !== step) {
-                triggerEvent(step, "impress-step-enter");
+                triggerEvent(step, "impress:stepenter");
                 lastEntered = step;
             }
         };
         
         var onStepLeave = function (step) {
             if (lastEntered === step) {
-                triggerEvent(step, "impress-step-leave");
+                triggerEvent(step, "impress:stepleave");
             }
         };
         
@@ -353,7 +353,7 @@
             
             initialized = true;
             
-            triggerEvent(root, "impress-init", { api: roots[ "impress-root-" + rootId ] });
+            triggerEvent(root, "impress:init", { api: roots[ "impress-root-" + rootId ] });
         };
         
         var getStep = function ( step ) {
@@ -462,26 +462,26 @@
             return goto(next);
         };
         
-        root.addEventListener("impress-init", function(){
+        root.addEventListener("impress:init", function(){
             // STEP CLASSES
             steps.forEach(function (step) {
                 step.classList.add("future");
             });
             
-            root.addEventListener("impress-step-enter", function (event) {
+            root.addEventListener("impress:stepenter", function (event) {
                 event.target.classList.remove("past");
                 event.target.classList.remove("future");
                 event.target.classList.add("present");
             }, false);
             
-            root.addEventListener("impress-step-leave", function (event) {
+            root.addEventListener("impress:stepleave", function (event) {
                 event.target.classList.remove("present");
                 event.target.classList.add("past");
             }, false);
             
         }, false);
         
-        root.addEventListener("impress-init", function(){       
+        root.addEventListener("impress:init", function(){       
             // HASH CHANGE
             
             var lastHash = "";
@@ -492,7 +492,7 @@
             // and it has to be set after animation finishes, because in Chrome it
             // causes transtion being laggy
             // BUG: http://code.google.com/p/chromium/issues/detail?id=62820
-            root.addEventListener("impress-step-enter", function (event) {
+            root.addEventListener("impress:stepenter", function (event) {
                 window.location.hash = lastHash = "#/" + event.target.id;
             }, false);
             
@@ -541,7 +541,7 @@
         };
     };
     
-    document.addEventListener("impress-init", function (event) {
+    document.addEventListener("impress:init", function (event) {
         var api = event.detail.api;
         
         // keyboard navigation handlers
