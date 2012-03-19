@@ -234,6 +234,7 @@
         var onStepLeave = function (step) {
             if (lastEntered === step) {
                 triggerEvent(step, "impress:stepleave");
+                lastEntered = null;
             }
         };
         
@@ -420,7 +421,7 @@
             
             expectedTransitionTarget = target.scale > currentState.scale ? root : canvas;
             
-            if (activeStep) {
+            if (activeStep && activeStep !== el) {
                 onStepLeave(activeStep);
             }
             
