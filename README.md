@@ -21,9 +21,7 @@ VERSION HISTORY
 -----------------
 
 
-### 0.5dev
-
-**CURRENTLY IN DEVELOPMENT**
+### 0.5 ([browse](http://github.com/bartaz/impress.js/tree/0.5), [zip](http://github.com/bartaz/impress.js/zipball/0.5), [tar](http://github.com/bartaz/impress.js/tarball/0.5))
 
 #### CHANGELOG
 
@@ -47,6 +45,14 @@ VERSION HISTORY
     - of course DOM element is still acceptable: `impress().goto( document.getElementById("overview") )`
 * and if it's not enough, `goto()` also accepts second parameter to define the transition duration in ms, for example
   `impress().goto("make-it-quick", 300)` or `impress().goto("now", 0)`
+
+#### UPGRADING FROM PREVIOUS VERSIONS
+
+Version 0.4 changed `goto` API method into `stepTo`. It turned out that `goto` is not a reserved word anymore, so it
+can be used in JavaScript. That's why version 0.5 brings it back and removes `stepTo`.
+
+So if you have been using version 0.4 and have any reference to `stepTo` API method make sure to change it to `goto`.
+
 
 
 ### 0.4.1 ([browse](http://github.com/bartaz/impress.js/tree/0.4.1), [zip](http://github.com/bartaz/impress.js/zipball/0.4.1), [tar](http://github.com/bartaz/impress.js/tarball/0.4.1))
