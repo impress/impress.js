@@ -20,6 +20,41 @@ It's an (un)fortunate coincidence that a Open/LibreOffice presentation tool is c
 VERSION HISTORY
 -----------------
 
+
+### 0.5 ([browse](http://github.com/bartaz/impress.js/tree/0.5), [zip](http://github.com/bartaz/impress.js/zipball/0.5), [tar](http://github.com/bartaz/impress.js/tarball/0.5))
+
+#### CHANGELOG
+
+* API changed, so that `impress()` function no longer automatically initialize presentation; new method called `init`
+  was added to API and it should be used to start the presentation
+* event `impress:init` is triggered on root presentation element (`#impress` by default) when presentation is initialized
+* new CSS classes were added: `impress-disabled` is added to body element by the impress.js script and it's changed to 
+  `impress-enabled` when `init()` function is called
+* events added when step is entered and left - custom `impress:stepenter` and `impress:stepleave` events are triggered
+  on step elements and can be handled like any other DOM events (with `addEventListener`)
+* additional `past`, `present` and `future` classes are added to step elements
+    - `future` class appears on steps that were not yet visited
+    - `present` class appears on currently visible step - it's different from `active` class as `present` class
+       is added when transition finishes (step is entered)
+    - `past` class is added to already visited steps (when the step is left)
+* and good news, `goto()` API method is back! it seems that `goto` **was** a future reserved word but isn't anymore,
+  so we can use this short and pretty name instead of camelCassy `stepTo` - and yes, that means API changed again...
+* additionally `goto()` method now supports new types of parameters:
+    - you can give it a number of step you want to go to: `impress().goto(7)`
+    - or its id: `impress().goto("the-best-slide-ever")`
+    - of course DOM element is still acceptable: `impress().goto( document.getElementById("overview") )`
+* and if it's not enough, `goto()` also accepts second parameter to define the transition duration in ms, for example
+  `impress().goto("make-it-quick", 300)` or `impress().goto("now", 0)`
+
+#### UPGRADING FROM PREVIOUS VERSIONS
+
+Version 0.4 changed `goto` API method into `stepTo`. It turned out that `goto` is not a reserved word anymore, so it
+can be used in JavaScript. That's why version 0.5 brings it back and removes `stepTo`.
+
+So if you have been using version 0.4 and have any reference to `stepTo` API method make sure to change it to `goto`.
+
+
+
 ### 0.4.1 ([browse](http://github.com/bartaz/impress.js/tree/0.4.1), [zip](http://github.com/bartaz/impress.js/zipball/0.4.1), [tar](http://github.com/bartaz/impress.js/tarball/0.4.1))
 
 #### BUGFIX RELEASE
@@ -28,6 +63,7 @@ Changes is version 0.4 introduced a bug causing JavaScript errors being thrown a
 This release fixes this issue.
 
 It also adds a flag `impress.supported` that can be used in JavaScript to check if impress.js is supported in the browser.
+
 
 
 ### 0.4 ([browse](http://github.com/bartaz/impress.js/tree/0.4), [zip](http://github.com/bartaz/impress.js/zipball/0.4), [tar](http://github.com/bartaz/impress.js/tarball/0.4))
