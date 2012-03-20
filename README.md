@@ -48,6 +48,10 @@ VERSION HISTORY
 
 #### UPGRADING FROM PREVIOUS VERSIONS
 
+In current version calling `impress()` doesn't automatically initialize the presentation. You need to call `init()`
+function from the API. So in a place were you called `impress()` to initialize impress.js simply change this call
+to `impress().init()`.
+
 Version 0.4 changed `goto` API method into `stepTo`. It turned out that `goto` is not a reserved word anymore, so it
 can be used in JavaScript. That's why version 0.5 brings it back and removes `stepTo`.
 
