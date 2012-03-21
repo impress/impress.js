@@ -21,6 +21,15 @@ VERSION HISTORY
 -----------------
 
 
+### 0.5.1 ([browse](http://github.com/bartaz/impress.js/tree/0.5.1), [zip](http://github.com/bartaz/impress.js/zipball/0.5.1), [tar](http://github.com/bartaz/impress.js/tarball/0.5.1))
+
+#### BUGFIX RELEASE
+
+Changes in version 0.5 introduced a bug (#126) that was preventing clicks on links (or any clickable elements) on
+currently active step. This release fixes this issue.
+
+
+
 ### 0.5 ([browse](http://github.com/bartaz/impress.js/tree/0.5), [zip](http://github.com/bartaz/impress.js/zipball/0.5), [tar](http://github.com/bartaz/impress.js/tarball/0.5))
 
 #### CHANGELOG
