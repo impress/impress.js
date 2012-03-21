@@ -11,7 +11,7 @@
  *
  * ------------------------------------------------
  *  author:  Bartek Szopka
- *  version: 0.5
+ *  version: 0.5.1
  *  url:     http://bartaz.github.com/impress.js/
  *  source:  http://github.com/bartaz/impress.js/
  */
@@ -604,8 +604,8 @@
         // delegated handler for clicking on step elements
         document.addEventListener("click", function ( event ) {
             var target = event.target;
-            // find closest step element
-            while ( !target.classList.contains("step") &&
+            // find closest step element that is not active
+            while ( !(target.classList.contains("step") && !target.classList.contains("active")) &&
                     (target !== document.documentElement) ) {
                 target = target.parentNode;
             }
