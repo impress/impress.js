@@ -199,6 +199,8 @@ EXAMPLES AND DEMOS
 
 [HTML5 Future : to infinity and beyond!](http://sylvainw.github.com/HTML5-Future/index_en.html) by Sylvain Weber [@sylvainw](http://twitter.com/sylvainw)
 
+[Intro to Node.js](http://introtonode.herokuapp.com/) ([src](https://github.com/leisms/IntroToNode)) by Le Zhang [@le_isms](http://twitter.com/le_isms)
+
 ### Websites and portfolios
 
 [lioshi.com](http://lioshi.com) by @lioshi
