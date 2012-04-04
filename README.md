@@ -20,7 +20,16 @@ It's an (un)fortunate coincidence that a Open/LibreOffice presentation tool is c
 VERSION HISTORY
 -----------------
 
-### 0.5.3 (in development)
+### 0.5.3 ([browse](http://github.com/bartaz/impress.js/tree/0.5.3), [zip](http://github.com/bartaz/impress.js/zipball/0.5.3), [tar](http://github.com/bartaz/impress.js/tarball/0.5.3))
+
+#### BUGFIX RELEASE
+
+Version 0.5 introduced events including `impress:stepenter`, but this event was not triggered properly in some
+specific transition types (for example when only scale was changing between steps). It was caused by the fact that
+in such cases expected `transitionend` event was not triggered.
+
+This version fixes this issue. Unfortunately modern `transitionend` event is no longer used to detect when the
+transition has finished, but old school (and more reliable) `setTimeout` is used.
 
 
 ### 0.5.2 ([browse](http://github.com/bartaz/impress.js/tree/0.5.2), [zip](http://github.com/bartaz/impress.js/zipball/0.5.2), [tar](http://github.com/bartaz/impress.js/tarball/0.5.2))

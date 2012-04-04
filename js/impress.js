@@ -11,7 +11,7 @@
  *
  * ------------------------------------------------
  *  author:  Bartek Szopka
- *  version: 0.5.3 (in development)
+ *  version: 0.5.3
  *  url:     http://bartaz.github.com/impress.js/
  *  source:  http://github.com/bartaz/impress.js/
  */
@@ -213,7 +213,7 @@
     
     // IMPRESS.JS API
     
-    // And that's where intresting things will start to happen.
+    // And that's where interesting things will start to happen.
     // It's the core `impress` function that returns the impress.js API
     // for a presentation based on the element with given id ('impress'
     // by default).
@@ -539,7 +539,7 @@
             // So I decided that I'd rather make the code simpler than use shiny new `transitionend`.
             //
             // If you want learn something interesting and see how it was done with `transitionend` go back to
-            // verison 0.5.2 of impress.js on GitHub.
+            // version 0.5.2 of impress.js: http://github.com/bartaz/impress.js/blob/0.5.2/js/impress.js
             window.clearTimeout(stepEnterTimeout);
             stepEnterTimeout = window.setTimeout(function() {
                 onStepEnter(activeStep);
