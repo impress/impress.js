@@ -191,17 +191,6 @@
     
     // GLOBALS AND DEFAULTS
     
-    // Getting cross-browser transitionEnd event name.
-    // It's hard to detect it, so we are using the list based on
-    // https://developer.mozilla.org/en/CSS/CSS_transitions
-    var transitionEnd = ({
-            'transition'       : 'transitionEnd',
-            'OTransition'      : 'oTransitionEnd',
-            'msTransition'     : 'MSTransitionEnd', // who knows how it will end up?
-            'MozTransition'    : 'transitionend',
-            'WebkitTransition' : 'webkitTransitionEnd'
-        })[pfx("transition")];
-    
     // This is were the root elements of all impress.js instances will be kept.
     // Yes, this means you can have more than one instance on a page, but I'm not
     // sure if it makes any sense in practice ;)
@@ -304,33 +293,6 @@
             }
         };
         
-        // To detect the moment when the transition to step element finished
-        // we need to handle the transitionEnd event.
-        //
-        // It may not sound very hard but to makes things a little bit more
-        // complicated there are two elements being animated separately:
-        // `root` (used for scaling) and `canvas` for translate and rotations.
-        // Transitions on them are triggered with different delays (to make
-        // visually nice and 'natural' looking transitions), so we need to know
-        // that both of them are finished.
-        //
-        // It sounds like a simple counter to two would be enough. Unfortunately
-        // if there is no change in the transform value (for example scale doesn't
-        // change between two steps) only one transition (and transitionEnd event)
-        // will be triggered.
-        //
-        // So to properly detect when the transitions finished we need to keep
-        // the `expectedTransitionTarget` (that can be one of `root` or `canvas`)
-        // and only call `onStepEnter` then transition ended on the expected one.
-        
-        var expectedTransitionTarget = null;
-        
-        var onTransitionEnd = function (event) {
-            if (event.target === expectedTransitionTarget) {
-                onStepEnter(activeStep);
-            }
-        };
-        
         // `initStep` initializes given step element by reading data from its
         // data attributes and setting correct styles.
         var initStep = function ( el, idx ) {
@@ -421,8 +383,6 @@
             });
             css(canvas, rootStyles);
             
-            root.addEventListener(transitionEnd, onTransitionEnd, false);
-            
             body.classList.remove("impress-disabled");
             body.classList.add("impress-enabled");
             
@@ -454,6 +414,9 @@
             }
             return (step && step.id && stepsData["impress-" + step.id]) ? step : null;
         };
+        
+        // used to reset timeout for `impress:stepenter` event
+        var stepEnterTimeout = null;
         
         // `goto` API function that moves to step given with `el` parameter (by index, id or element),
         // with a transition `duration` optionally given as second parameter.
@@ -518,18 +481,19 @@
             
             var targetScale = target.scale * windowScale;
             
-            // Because one of the transition is delayed depending on zoom direction,
-            // the last transition will happen on `root` or `canvas` element.
-            // Here we store the expected transition event target, to be able to correctly
-            // trigger `impress:stepenter` event.
-            expectedTransitionTarget = target.scale > currentState.scale ? root : canvas;
-            
             // trigger leave of currently active element (if it's not the same step again)
             if (activeStep && activeStep !== el) {
                 onStepLeave(activeStep);
             }
             
-            // alter transforms of `root` and `canvas` to trigger transitions
+            // Now we alter transforms of `root` and `canvas` to trigger transitions.
+            //
+            // And here is why there are two elements: `root` and `canvas` - they are
+            // being animated separately:
+            // `root` is used for scaling and `canvas` for translate and rotations.
+            // Transitions on them are triggered with different delays (to make
+            // visually nice and 'natural' looking transitions), so we need to know
+            // that both of them are finished.
             css(root, {
                 // to keep the perspective look similar for different scales
                 // we need to 'scale' the perspective, too
@@ -544,14 +508,42 @@
                 transitionDelay: (zoomin ? 0 : delay) + "ms"
             });
             
+            // Here is a tricky part...
+            //
+            // If there is no change in scale or no change in rotation and translation, it means there was actually
+            // no delay - because there was no transition on `root` or `canvas` elements.
+            // We want to trigger `impress:stepenter` event in the correct moment, so here we compare the current
+            // and target values to check if delay should be taken into account.
+            //
+            // I know that this `if` statement looks scary, but it's pretty simple when you know what is going on
+            // - it's simply comparing all the values.
+            if ( currentState.scale === target.scale ||
+                (currentState.rotate.x === target.rotate.x && currentState.rotate.y === target.rotate.y &&
+                 currentState.rotate.z === target.rotate.z && currentState.translate.x === target.translate.x &&
+                 currentState.translate.y === target.translate.y && currentState.translate.z === target.translate.z) ) {
+                delay = 0;
+            }
+            
             // store current state
             currentState = target;
             activeStep = el;
             
-            // manually trigger enter event if duration was set to 0
-            if (duration === 0) {
+            // And here is where we trigger `impress:stepenter` event.
+            // We simply set up a timeout to fire it taking transition duration (and possible delay) into account.
+            //
+            // I really wanted to make it in more elegant way. The `transitionend` event seemed to be the best way
+            // to do it, but the fact that I'm using transitions on two separate elements and that the `transitionend`
+            // event is only triggered when there was a transition (change in the values) caused some bugs and 
+            // made the code really complicated, cause I had to handle all the conditions separately. And it still
+            // needed a `setTimeout` fallback for the situations when there is no transition at all.
+            // So I decided that I'd rather make the code simpler than use shiny new `transitionend`.
+            //
+            // If you want learn something interesting and see how it was done with `transitionend` go back to
+            // verison 0.5.2 of impress.js on GitHub.
+            window.clearTimeout(stepEnterTimeout);
+            stepEnterTimeout = window.setTimeout(function() {
                 onStepEnter(activeStep);
-            }
+            }, duration + delay);
             
             return el;
         };
