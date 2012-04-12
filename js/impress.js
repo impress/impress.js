@@ -202,10 +202,11 @@
         height: 768,
         maxScale: 1,
         minScale: 0,
-        
+
         perspective: 1000,
-        
-        transitionDuration: 1000
+
+        transitionDuration: 1000,
+        transitionTimingFunction: 'linear'
     };
     
     // it's just an empty function ... and a useless comment.
@@ -270,27 +271,20 @@
         // `impress:stepleave` is triggered when the step is left (the
         // transition to next step just starts).
         
-        // reference to last entered step
-        var lastEntered = null;
-        
-        // `onStepEnter` is called whenever the step element is entered
-        // but the event is triggered only if the step is different than
-        // last entered step.
-        var onStepEnter = function (step) {
-            if (lastEntered !== step) {
-                triggerEvent(step, "impress:stepenter");
-                lastEntered = step;
-            }
+        // `onStepEnter` is called whenever the step element is entered.
+        var onStepEnter = function (to, from) {
+            triggerEvent(to, "impress:stepenter", {
+                from:   from?from.id:null,
+                to:     to?to.id:null
+            });
         };
         
-        // `onStepLeave` is called whenever the step element is left
-        // but the event is triggered only if the step is the same as
-        // last entered step.
-        var onStepLeave = function (step) {
-            if (lastEntered === step) {
-                triggerEvent(step, "impress:stepleave");
-                lastEntered = null;
-            }
+        // `onStepLeave` is called whenever the step element is left.
+        var onStepLeave = function (from, to) {
+            triggerEvent(from, "impress:stepleave", {
+                from:   from?from.id:null,
+                to:     to?to.id:null
+            });
         };
         
         // `initStep` initializes given step element by reading data from its
@@ -346,10 +340,11 @@
             config = {
                 width: toNumber( rootData.width, defaults.width ),
                 height: toNumber( rootData.height, defaults.height ),
-                maxScale: toNumber( rootData.maxScale, defaults.maxScale ),
-                minScale: toNumber( rootData.minScale, defaults.minScale ),                
+                maxScale: toNumber( rootData.maxscale, defaults.maxScale ),
+                minScale: toNumber( rootData.minscale, defaults.minScale ),                
                 perspective: toNumber( rootData.perspective, defaults.perspective ),
-                transitionDuration: toNumber( rootData.transitionDuration, defaults.transitionDuration )
+                transitionDuration: toNumber( rootData.transitionduration, defaults.transitionDuration ),
+                transitionTimingFunction: rootData.transitiontimingfunction || defaults.transitionTimingFunction
             };
             
             windowScale = computeWindowScale( config );
@@ -483,7 +478,7 @@
             
             // trigger leave of currently active element (if it's not the same step again)
             if (activeStep && activeStep !== el) {
-                onStepLeave(activeStep);
+                onStepLeave(activeStep, el);
             }
             
             // Now we alter transforms of `root` and `canvas` to trigger transitions.
@@ -499,13 +494,15 @@
                 // we need to 'scale' the perspective, too
                 transform: perspective( config.perspective / targetScale ) + scale( targetScale ),
                 transitionDuration: duration + "ms",
-                transitionDelay: (zoomin ? delay : 0) + "ms"
+                transitionDelay: (zoomin ? delay : 0) + "ms",
+                transitionTimingFunction: config.transitionTimingFunction
             });
             
             css(canvas, {
                 transform: rotate(target.rotate, true) + translate(target.translate),
                 transitionDuration: duration + "ms",
-                transitionDelay: (zoomin ? 0 : delay) + "ms"
+                transitionDelay: (zoomin ? 0 : delay) + "ms",
+                transitionTimingFunction: config.transitionTimingFunction
             });
             
             // Here is a tricky part...
@@ -524,9 +521,6 @@
                 delay = 0;
             }
             
-            // store current state
-            currentState = target;
-            activeStep = el;
             
             // And here is where we trigger `impress:stepenter` event.
             // We simply set up a timeout to fire it taking transition duration (and possible delay) into account.
@@ -541,9 +535,17 @@
             // If you want learn something interesting and see how it was done with `transitionend` go back to
             // version 0.5.2 of impress.js: http://github.com/bartaz/impress.js/blob/0.5.2/js/impress.js
             window.clearTimeout(stepEnterTimeout);
-            stepEnterTimeout = window.setTimeout(function() {
-                onStepEnter(activeStep);
-            }, duration + delay);
+            stepEnterTimeout = window.setTimeout((function() {
+                var from    = el,
+                    to      = activeStep;
+                return function() {
+                    onStepEnter(from, to);
+                }
+            })(), duration + delay);
+            
+            // store current state
+            currentState = target;
+            activeStep = el;
             
             return el;
         };
@@ -583,15 +585,24 @@
                 step.classList.add("future");
             });
             
+            // reference to last entered step
+            var lastEntered = null;
+            
             root.addEventListener("impress:stepenter", function (event) {
-                event.target.classList.remove("past");
-                event.target.classList.remove("future");
-                event.target.classList.add("present");
+                if(event.target != lastEntered) {
+                    event.target.classList.remove("past");
+                    event.target.classList.remove("future");
+                    event.target.classList.add("present");
+                }
+                lastEntered = event.target;
             }, false);
             
             root.addEventListener("impress:stepleave", function (event) {
-                event.target.classList.remove("present");
-                event.target.classList.add("past");
+                if(event.target === lastEntered) {
+                    event.target.classList.remove("present");
+                    event.target.classList.add("past");
+                }
+                lastEntered = null;
             }, false);
             
         }, false);
@@ -656,6 +667,8 @@
 (function ( document, window ) {
     'use strict';
     
+    if(!impress.supported)
+        return;
     // throttling function calls, by Remy Sharp
     // http://remysharp.com/2010/07/21/throttling-function-calls/
     var throttle = function (fn, delay) {
@@ -678,10 +691,42 @@
         var api = event.detail.api;
         
         // KEYBOARD NAVIGATION HANDLERS
+
+        var timeout,
+            actionKeys = {
+                32: api.next, // space
+                33: api.prev, // pg up
+                34: api.next, // pg down
+                37: api.prev, // left
+                38: api.prev, // up
+                39: api.next, // right
+                40: api.next, // down
+                72: function() { // h
+                    var hint = document.querySelector(".hint");
+                    if(hint.classList.contains("show")) {
+                        hint.classList.remove("show");
+                        throttle(function() {
+                            hint.style.display = 'none';
+                        }, 1000);
+                    } else {
+                        setTimeout(function() {
+                            hint.classList.add("show");
+                        },1);
+                        hint.style.display = 'block';
+                    }
+
+                },
+                79: function() {  // o
+                    if(document.body.classList.contains('impress-on-overview'))
+                        history.back();
+                    else
+                        api.goto('overview');
+                }
+            }
         
         // Prevent default keydown action when one of supported key is pressed.
         document.addEventListener("keydown", function ( event ) {
-            if ( event.keyCode === 9 || ( event.keyCode >= 32 && event.keyCode <= 34 ) || (event.keyCode >= 37 && event.keyCode <= 40) ) {
+            if ( actionKeys.hasOwnProperty(event.keyCode) ) {
                 event.preventDefault();
             }
         }, false);
@@ -702,22 +747,8 @@
         //   as another way to moving to next step... And yes, I know that for the sake of
         //   consistency I should add [shift+tab] as opposite action...
         document.addEventListener("keyup", function ( event ) {
-            if ( event.keyCode === 9 || ( event.keyCode >= 32 && event.keyCode <= 34 ) || (event.keyCode >= 37 && event.keyCode <= 40) ) {
-                switch( event.keyCode ) {
-                    case 33: // pg up
-                    case 37: // left
-                    case 38: // up
-                             api.prev();
-                             break;
-                    case 9:  // tab
-                    case 32: // space
-                    case 34: // pg down
-                    case 39: // right
-                    case 40: // down
-                             api.next();
-                             break;
-                }
-                
+            if ( actionKeys.hasOwnProperty(event.keyCode) ) {
+                actionKeys[event.keyCode]();
                 event.preventDefault();
             }
         }, false);
