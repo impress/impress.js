@@ -163,7 +163,29 @@
         
         return scale;
     };
-    
+    var makeclass = function(elem){
+             if(elem.classList == undefined){
+    		if(elem.className.baseVal != undefined) var s = true;
+    		else var s = false;
+    		elem.classList = {
+    			has: function hasClass(cls) {
+    				if(s) return elem.className.baseVal.match(new RegExp('(\\s|^)'+cls+'(\\s|$)'))
+    				else  elem.className.match(new RegExp('(\\s|^)'+cls+'(\\s|$)'));
+					},
+
+				add: function addClass(cls) {
+   						if (!this.has(elem,cls)) elem.className += " "+cls;
+					},
+
+				remove: function removeClass(cls) {
+   						 if (this.has(elem,cls)) {
+        					var reg = new RegExp('(\\s|^)'+cls+'(\\s|$)');
+        					elem.className=elem.className.replace(reg,' ');
+    					}
+					},
+    		}
+    	}
+    };
     // CHECK SUPPORT
     var body = document.body;
     
@@ -440,6 +462,7 @@
             var step = stepsData["impress-" + el.id];
             
             if ( activeStep ) {
+            	makeclass(activeStep);
                 activeStep.classList.remove("active");
                 body.classList.remove("impress-on-" + activeStep.id);
             }
@@ -580,6 +603,7 @@
         root.addEventListener("impress:init", function(){
             // STEP CLASSES
             steps.forEach(function (step) {
+                makeclass(step)
                 step.classList.add("future");
             });
             
