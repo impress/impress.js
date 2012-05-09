@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>impress.js directional navigation</title>
+    <link rel="stylesheet" type="text/css" href="css/impress-demo.css">
+    <style type="text/css">
+      div.step > h2 { font-style: italic; }
+      div.step p a { font-style: italic; }
+    </style>
+</head>
+<body class="impress-not-supported impress-disabled">
+
+  <div id="impress" data-start="front">
+
+  <div id="front" class="step"
+    data-x="0" data-y="0"
+    data-up="top" data-left="left" data-down="bottom"
+  >
+    <h2>1. front</h2>
+    <p>
+      use arrow keys to navigate directionally:
+      &darr; <a href="#bottom">bottom</a>,
+      &larr; <a href="#left">left</a>,
+      &rarr; <a href="#right">right</a>,
+      or use tab/space to navigate in order (should go
+      <a href="#right">right</a>,
+      <a href="#top">top</a>,
+      <a href="#left">left</a>,
+      <a href="#bottom">bottom</a>,
+      <a href="#bottom">front</a>, ..
+    </p>
+  </div>
+
+  <div id="right" class="step"
+    data-x="900" data-y="0" data-z="-500" data-rotate-y="90"
+    data-up="top" data-left="front" data-down="bottom" data-right="right"
+  >
+    <h2>2. right</h2>
+    <p>
+      &darr; <a href="#bottom">bottom</a>,
+      &larr; <a href="#front">front</a>,
+      &uarr;/tab/space <a href="#top">top</a>
+    </p>
+  </div>
+
+  <div id="top" class="step"
+    data-x="0" data-y="-500" data-z="-400" data-rotate-x="90"
+    data-left="left" data-right="right" data-up="top" data-down="front"
+  >
+    <h2>3. top</h2>
+    <p>&darr; front, &larr; left, &rarr; right, tab/space left</p>
+  </div>
+
+  <div id="left" class="step"
+    data-x="-900" data-y="0" data-z="-500" data-rotate-y="-90"
+    data-left="left" data-right="front" data-up="top" data-down="bottom"
+  >
+    <h2>4. left</h2>
+    <p>
+      &rarr; <a href="#front">front</a>,
+      &uarr; <a href="#top">top</a>
+      &darr;/tab/space <a href="#bottom">bottom</a>
+    </p>
+  </div>
+
+  <div id="bottom" class="step"
+    data-x="0" data-y="500" data-z="-400" data-rotate-x="-90"
+    data-left="left" data-right="right" data-up="front" data-down="bottom"
+  >
+    <h2>5. bottom</h2>
+    <p>
+      &larr; <a href="#left">left</a>,
+      &rarr; <a href="#right">right</a>,
+      &uarr;/tab/space <a href="#front">front</a>
+    </p>
+  </div>
+
+</div>
+<script type="text/javascript" src="js/impress.js"></script>
+<script type="text/javascript">
+  var preso = impress(); // loads api, assigns "impress-supported" or "impress-not-supported" class on body
+  preso.init(); // starts presentation mode
+</script>
+</body>
+</html>

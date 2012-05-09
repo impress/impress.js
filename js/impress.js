@@ -168,7 +168,7 @@
     var body = document.body;
     
     var ua = navigator.userAgent.toLowerCase();
-    var impressSupported = 
+    var impressSupported =
                           // browser should support CSS 3D transtorms 
                            ( pfx("perspective") !== null ) &&
                            
@@ -188,7 +188,7 @@
         body.classList.remove("impress-not-supported");
         body.classList.add("impress-supported");
     }
-    
+
     // GLOBALS AND DEFAULTS
     
     // This is were the root elements of all impress.js instances will be kept.
@@ -216,8 +216,9 @@
     // And that's where interesting things will start to happen.
     // It's the core `impress` function that returns the impress.js API
     // for a presentation based on the element with given id ('impress'
-    // by default).
-    var impress = window.impress = function ( rootId ) {
+    // by default).  Takes an optional second element for selecting the
+    // individual steps (defaults to ".step")
+    var impress = window.impress = function ( rootId, stepSelector ) {
         
         // If impress.js is not supported by the browser return a dummy API
         // it may not be a perfect solution but we return early and avoid
@@ -238,6 +239,9 @@
             return roots["impress-root-" + rootId];
         }
         
+        // selector for steps
+        if (!stepSelector) stepSelector = ".step";
+
         // data of all presentation steps
         var stepsData = {};
         
@@ -249,6 +253,9 @@
         
         // array of step elements
         var steps = null;
+
+        // element of step to start on
+        var startStep = null;
         
         // configuration options
         var config = null;
@@ -309,8 +316,17 @@
                         z: toNumber(data.rotateZ || data.rotate)
                     },
                     scale: toNumber(data.scale, 1),
-                    el: el
+                    el: el,
                 };
+
+            // set up any explicit navigation links
+            ["prev", "next", "up", "down", "left", "right"].forEach(function (dir) {
+              if (dir in data) {
+                var target = $("#" + data[dir]);
+                console.log(dir, data[dir], target);
+                step[dir] = target;
+              }
+            });
             
             if ( !el.id ) {
                 el.id = "step-" + (idx + 1);
@@ -355,7 +371,7 @@
             windowScale = computeWindowScale( config );
             
             // wrap steps with "canvas" element
-            arrayify( root.childNodes ).forEach(function ( el ) {
+            arrayify( root.childNodes ).forEach(function ( el ) { // TODO: this is all children--should limit to just steps?
                 canvas.appendChild( el );
             });
             root.appendChild(canvas);
@@ -387,8 +403,12 @@
             body.classList.add("impress-enabled");
             
             // get and init steps
-            steps = $$(".step", root);
+            steps = $$(stepSelector, root);
             steps.forEach( initStep );
+
+            // figure the startStep as give by the root's the data-start attribute
+            // (if not given then goto() will use the first step in document order)
+            if (root.dataset && root.dataset.start) startStep = $("#" + root.dataset.start, root);
             
             // set a default initial state of the canvas
             currentState = {
@@ -547,23 +567,30 @@
             
             return el;
         };
-        
-        // `prev` API function goes to previous step (in document order)
+
+        var activeStepData = function () { return stepsData["impress-" + activeStep.id]; }
+
+        // Ordered navigation: next/prev
+
+        // `prev` API function goes to previous step (explicit from data-prev or in document order)
         var prev = function () {
-            var prev = steps.indexOf( activeStep ) - 1;
-            prev = prev >= 0 ? steps[ prev ] : steps[ steps.length-1 ];
-            
-            return goto(prev);
+            return goto(activeStepData().prev || steps[(steps.indexOf(activeStep) + steps.length - 1) % steps.length]);
         };
         
-        // `next` API function goes to next step (in document order)
+        // `next` API function goes to next step (explicit from data-next or in document order)
         var next = function () {
-            var next = steps.indexOf( activeStep ) + 1;
-            next = next < steps.length ? steps[ next ] : steps[ 0 ];
-            
-            return goto(next);
+            return goto(activeStepData().next || steps[(steps.indexOf(activeStep) + 1) % steps.length]);
         };
         
+        // Directional navigation: left/up/right/down
+
+        // These can be set explicitly via data-[direction] attributes, or
+        // down and right fallback to next(), and up and left fallback to prev()
+        var up = function () { return activeStepData().up ? goto(activeStepData().up) : prev(); }
+        var left = function () { return activeStepData().left ? goto(activeStepData().left) : prev(); }
+        var down = function () { return activeStepData().down ? goto(activeStepData().down) : next(); }
+        var right = function () { return activeStepData().right ? goto(activeStepData().right) : next(); }
+
         // Adding some useful classes to step elements.
         //
         // All the steps that have not been shown yet are given `future` class.
@@ -625,7 +652,7 @@
             
             // START 
             // by selecting step defined in url or first step of the presentation
-            goto(getElementFromHash() || steps[0], 0);
+            goto(getElementFromHash() || startStep || steps[0], 0);
         }, false);
         
         body.classList.add("impress-disabled");
@@ -635,7 +662,11 @@
             init: init,
             goto: goto,
             next: next,
-            prev: prev
+            prev: prev,
+            up: up,
+            right: right,
+            down: down,
+            left: left
         });
 
     };
@@ -701,21 +732,26 @@
         //   positioning. I didn't want to just prevent this default action, so I used [tab]
         //   as another way to moving to next step... And yes, I know that for the sake of
         //   consistency I should add [shift+tab] as opposite action...
+        //
+        // [kpw] There are now two flavors of navigation: step ordered and directional
+        //       tab, pg down, and space all take you to the next step.  The behavior
+        //       of directional keys depends on whether the steps give specific directions,
+        //       if not then down and right fallback to next, and up and left fallback to prev.
         document.addEventListener("keyup", function ( event ) {
             if ( event.keyCode === 9 || ( event.keyCode >= 32 && event.keyCode <= 34 ) || (event.keyCode >= 37 && event.keyCode <= 40) ) {
                 switch( event.keyCode ) {
+                    // directional nav (arrow keys)
+                    case 37: api.left(); break;
+                    case 38: api.up(); break;
+                    case 39: api.right(); break;
+                    case 40: api.down(); break;
+                    // ordered nav
                     case 33: // pg up
-                    case 37: // left
-                    case 38: // up
-                             api.prev();
-                             break;
+                             api.prev(); break;
                     case 9:  // tab
-                    case 32: // space
                     case 34: // pg down
-                    case 39: // right
-                    case 40: // down
-                             api.next();
-                             break;
+                    case 32: // space
+                             api.next(); break;
                 }
                 
                 event.preventDefault();
