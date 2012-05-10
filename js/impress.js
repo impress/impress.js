@@ -613,7 +613,9 @@
                 menu.appendChild(newEl);
             });
 
-            // And append the menu to #impress
+            // And append the menu to the body.
+            // Appending it to #impress would mess things up, since
+            // `position: absolute` wouldn't work anymore on it.
             document.body.appendChild(menu);
         };
         
