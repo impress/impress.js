@@ -662,6 +662,66 @@ a:focus {
 }
 
 /*
+    Before the end, this is the menu part.
+
+    It's quite simple. It's almost hidden by default, and it shows itself
+    with an animation when hovered. If you hover out, it goes back to its
+    original state.
+*/
+.menu {
+    position: absolute;
+    width: 0%;
+    height: 0%;
+    top: 0px;
+    right: 0px;
+    overflow: hidden;
+    white-space: nowrap;
+    padding: 50px 0px 0px 0px;
+    background: #ddd;
+    border-radius: 10px;
+
+    -webkit-transition-property: width, height, padding;
+    -webkit-transition-duration: 1s;
+    -webkit-transition-timing-function: ease-out;
+    -moz-transition-property: width, height, padding;
+    -moz-transition-duration: 1s;
+    -moz-transition-timing-function: ease-out;
+    -ms-transition-property: width, height, padding;
+    -ms-transition-duration: 1s;
+    -ms-transition-timing-function: ease-out;
+    -o-transition-property: width, height, padding;
+    -o-transition-duration: 1s;
+    -o-transition-timing-function: ease-out;
+    transition-property: width, height, padding;
+    transition-duration: 1s;
+    transition-timing-function: ease-out;
+}
+
+.menu:hover {
+    width: 10%;
+    height: 100%;
+    padding: 50px 0px 0px 10px;
+}
+
+.menu-item {
+    cursor: pointer;
+    padding: 5px;
+    border: 1px solid #ccc;
+    margin: 5px 0;
+}
+
+.menu-button {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    padding: 10px;
+    background: #DDD;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+}
+
+/*
     And as the last thing there is a workaround for quite strange bug.
     It happens a lot in Chrome. I don't remember if I've seen it in Firefox.
     
@@ -678,12 +738,15 @@ a:focus {
     https://developer.mozilla.org/en/CSS/pointer-events
     
     There is one very important thing to notice about this workaround - it makes
-    everything 'unclickable' except what's in #impress element.
+    everything 'unclickable' except what's in #impress or the .menu element.
     
     So use it wisely ... or don't use at all.
 */
 .impress-enabled          { pointer-events: none }
-.impress-enabled #impress { pointer-events: auto }
+.impress-enabled #impress,
+.impress-enabled .menu {
+    pointer-events: auto;
+}
 
 /*
     There is one funny thing I just realized.

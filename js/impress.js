@@ -227,7 +227,8 @@
                 init: empty,
                 goto: empty,
                 prev: empty,
-                next: empty
+                next: empty,
+                showMenu: empty
             };
         }
         
@@ -563,6 +564,65 @@
             
             return goto(next);
         };
+
+        // Capitalize first letter of string
+        // @see http://stackoverflow.com/a/1026087/851498
+        var capitalize = function( str ) {
+            return str.charAt(0).toUpperCase() + str.slice(1);
+        };
+
+        // `showMenu` API function creates the menu
+        // It defines the names of each entry by the id capitalized.
+        var showMenu = function() {
+            // Create the menu wrapper and the element that will be cloned
+            // for each entry.
+            var menu = document.createElement('div'),
+                frag = document.createDocumentFragment(),
+                el = document.createElement('div');
+
+            // Apply some classes
+            menu.className = 'menu';
+            el.className = 'menu-item';
+
+            // Create an element that will be the "button" and append it
+            // to the menu
+            var button = document.createElement('div');
+            button.className = 'menu-button';
+            button.textContent = 'Menu';
+            menu.appendChild(button);
+
+            // Now, for each div in the first element child of  #impress,
+            // add an entry to the menu
+            arrayify(byId('impress').firstElementChild.children).forEach(
+                    function( child, index ) {
+                var newEl = el.cloneNode(),
+                    i = index + 1, // We don't want to start at 0
+                    text = i + '. ' + capitalize(child.id);
+
+
+                // Set the text of the new element
+                newEl.textContent = text;
+
+                // Add an onclick event to the new element
+                // We need to use a closure to make sure the index is correct
+                (function( index ) {
+                    newEl.addEventListener('click', function() {
+                        goto(index);
+                    });
+                }( index ));
+
+                // And append the new element to the menu
+                frag.appendChild(newEl);
+            });
+
+            // Add the frag to the menu
+            menu.appendChild(frag);
+
+            // And append the menu to the body.
+            // Appending it to #impress would mess things up, since
+            // `position: absolute` wouldn't work anymore in it.
+            document.body.appendChild(menu);
+        };
         
         // Adding some useful classes to step elements.
         //
@@ -635,7 +695,8 @@
             init: init,
             goto: goto,
             next: next,
-            prev: prev
+            prev: prev,
+            showMenu: showMenu
         });
 
     };
