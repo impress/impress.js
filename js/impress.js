@@ -258,7 +258,8 @@
         
         // root presentation elements
         var root = byId( rootId );
-        var canvas = document.createElement("div");
+        var canvasScale = document.createElement("div");
+        var canvasRotate = document.createElement("div");
         
         var initialized = false;
         
@@ -293,24 +294,32 @@
             }
         };
         
+        // `getPositionDataFromElement` transforms the data-attributes of an element into
+        // a dictionary that is usable for positioning the element
+        var getPositionDataFromElement = function(el) {
+            var data = el.dataset;
+            var posData = {
+                translate: {
+                    x: toNumber(data.x),
+                    y: toNumber(data.y),
+                    z: toNumber(data.z)
+                },
+                rotate: {
+                    x: toNumber(data.rotateX),
+                    y: toNumber(data.rotateY),
+                    z: toNumber(data.rotateZ || data.rotate)
+                },
+                scale: toNumber(data.scale, 1),
+                el: el
+            };
+            return posData;
+        }
+
         // `initStep` initializes given step element by reading data from its
         // data attributes and setting correct styles.
         var initStep = function ( el, idx ) {
-            var data = el.dataset,
-                step = {
-                    translate: {
-                        x: toNumber(data.x),
-                        y: toNumber(data.y),
-                        z: toNumber(data.z)
-                    },
-                    rotate: {
-                        x: toNumber(data.rotateX),
-                        y: toNumber(data.rotateY),
-                        z: toNumber(data.rotateZ || data.rotate)
-                    },
-                    scale: toNumber(data.scale, 1),
-                    el: el
-                };
+
+            var step = getPositionDataFromElement(el);
             
             if ( !el.id ) {
                 el.id = "step-" + (idx + 1);
@@ -328,6 +337,20 @@
             });
         };
         
+        var initPositionedElement = function(el, idx) {
+
+            var positionData = getPositionDataFromElement(el);
+
+            css(el, {
+                position: "absolute",
+                transform: "translate(-50%,-50%)" +
+                           translate(positionData.translate) +
+                           rotate(positionData.rotate) +
+                           scale(positionData.scale),
+                transformStyle: "preserve-3d"
+            });
+        };
+
         // `init` API function that initializes (and runs) the presentation.
         var init = function () {
             if (initialized) { return; }
@@ -353,12 +376,21 @@
             };
             
             windowScale = computeWindowScale( config );
-            
-            // wrap steps with "canvas" element
-            arrayify( root.childNodes ).forEach(function ( el ) {
-                canvas.appendChild( el );
+
+            // wrap steps with "canvas" elements
+            // we only wrap '.step' elements here so we can have other elements that don't get transformed inside the impress-root as well, like the fallback message
+            $$(".step", root).forEach(function ( el ) {
+                canvasRotate.appendChild( el );
             });
-            root.appendChild(canvas);
+
+            // wrap positioned items with canvas elements.
+            // we wrap .positioned items, because we will use those to put them into absolute positions later
+            $$(".positioned", root).forEach(function(el) {
+                canvasRotate.appendChild(el);
+            });
+                                                
+            canvasScale.appendChild(canvasRotate);
+            root.appendChild(canvasScale);
             
             // set initial styles
             document.documentElement.style.height = "100%";
@@ -368,20 +400,21 @@
                 overflow: "hidden"
             });
             
-            var rootStyles = {
+            var transformationStyles = {
                 position: "absolute",
                 transformOrigin: "top left",
                 transition: "all 0s ease-in-out",
                 transformStyle: "preserve-3d"
             };
             
-            css(root, rootStyles);
-            css(root, {
+            css(canvasScale, transformationStyles);
+            css(canvasScale, {
                 top: "50%",
                 left: "50%",
                 transform: perspective( config.perspective/windowScale ) + scale( windowScale )
             });
-            css(canvas, rootStyles);
+
+            css(canvasRotate, transformationStyles);
             
             body.classList.remove("impress-disabled");
             body.classList.add("impress-enabled");
@@ -389,6 +422,9 @@
             // get and init steps
             steps = $$(".step", root);
             steps.forEach( initStep );
+
+            // get and init positioned elements
+            $$(".positioned", root).forEach(initPositionedElement);
             
             // set a default initial state of the canvas
             currentState = {
@@ -486,32 +522,31 @@
                 onStepLeave(activeStep);
             }
             
-            // Now we alter transforms of `root` and `canvas` to trigger transitions.
+            // Now we alter transforms of `canvasScale` and `canvasRotate` to trigger transitions.
             //
-            // And here is why there are two elements: `root` and `canvas` - they are
+            // And here is why there are two elements: `canvasScale` and `canvasRotate` - they are
             // being animated separately:
-            // `root` is used for scaling and `canvas` for translate and rotations.
+            // `canvasScale` is used for scaling and `canvasRotate` for translate and rotations.
             // Transitions on them are triggered with different delays (to make
             // visually nice and 'natural' looking transitions), so we need to know
             // that both of them are finished.
-            css(root, {
+            css(canvasScale, {
                 // to keep the perspective look similar for different scales
                 // we need to 'scale' the perspective, too
                 transform: perspective( config.perspective / targetScale ) + scale( targetScale ),
                 transitionDuration: duration + "ms",
                 transitionDelay: (zoomin ? delay : 0) + "ms"
             });
-            
-            css(canvas, {
+            css(canvasRotate, {
                 transform: rotate(target.rotate, true) + translate(target.translate),
                 transitionDuration: duration + "ms",
                 transitionDelay: (zoomin ? 0 : delay) + "ms"
             });
-            
+
             // Here is a tricky part...
             //
             // If there is no change in scale or no change in rotation and translation, it means there was actually
-            // no delay - because there was no transition on `root` or `canvas` elements.
+            // no delay - because there was no transition on `canvasScale` or `canvasRotate` elements.
             // We want to trigger `impress:stepenter` event in the correct moment, so here we compare the current
             // and target values to check if delay should be taken into account.
             //
