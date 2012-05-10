@@ -569,7 +569,7 @@
         // @see http://stackoverflow.com/a/1026087/851498
         var capitalize = function( str ) {
             return str.charAt(0).toUpperCase() + str.slice(1);
-        }
+        };
 
         // `showMenu` API function creates the menu
         // It defines the names of each entry by the id capitalized.
@@ -577,6 +577,7 @@
             // Create the menu wrapper and the element that will be cloned
             // for each entry.
             var menu = document.createElement('div'),
+                frag = document.createDocumentFragment(),
                 el = document.createElement('div');
 
             // Apply some classes
@@ -611,8 +612,11 @@
                 }( index ));
 
                 // And append the new element to the menu
-                menu.appendChild(newEl);
+                frag.appendChild(newEl);
             });
+
+            // Add the frag to the menu
+            menu.appendChild(frag);
 
             // And append the menu to the body.
             // Appending it to #impress would mess things up, since
