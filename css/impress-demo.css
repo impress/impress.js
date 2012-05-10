@@ -718,6 +718,7 @@ a:focus {
     background: #DDD;
     border-radius: 5px;
     border: 1px solid #ccc;
+    cursor: pointer;
 }
 
 /*

@@ -590,11 +590,12 @@
             button.textContent = 'Menu';
             menu.appendChild(button);
 
-            // Now, for each div in #impress, add an entry to the menu
-            [].forEach.call(byId('impress').firstElementChild.children,
+            // Now, for each div in the first element child of  #impress,
+            // add an entry to the menu
+            arrayify(byId('impress').firstElementChild.children).forEach(
                     function( child, index ) {
                 var newEl = el.cloneNode(),
-                    i = index + 1,
+                    i = index + 1, // We don't want to start at 0
                     text = i + '. ' + capitalize(child.id);
 
 
@@ -615,7 +616,7 @@
 
             // And append the menu to the body.
             // Appending it to #impress would mess things up, since
-            // `position: absolute` wouldn't work anymore on it.
+            // `position: absolute` wouldn't work anymore in it.
             document.body.appendChild(menu);
         };
         
