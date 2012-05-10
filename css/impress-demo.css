@@ -181,6 +181,17 @@ a:focus {
 }
 
 /*
+    Styling for the freely-positioned elements.
+    We'll style them the same as the slide elements for consistency
+*/
+.positioned {
+    
+    font-family: 'PT Serif', georgia, serif;
+    font-size: 48px;
+    line-height: 1.5;
+}
+
+/*
     ... and we enhance the styles for impress.js.
     
     Basically we remove the margin and make inactive steps a little bit transparent.
@@ -525,6 +536,16 @@ a:focus {
 .impress-on-overview .step {
     opacity: 1;
     cursor: pointer;
+}
+
+/*
+    For the freely-positioned element we will allocate some more space and make the text a bit tighter.
+    Since this text isn't visible on any slide, we can leave it fully opaque all the time.
+*/
+#roamfree {
+    line-height: 1.2em;
+    width: 8em;
+    font-size: 64px;
 }
 
 

@@ -312,6 +312,21 @@
     <div id="overview" class="step" data-x="3000" data-y="1500" data-scale="10">
     </div>
 
+    <!--
+    
+        Did you notice this element in the presentation?
+        It is not positioned in any of the slides, but only visible in the overview slide.
+
+        By setting the class to include `positioned`, you can let impress.js know that the element should be
+        put onto the canvas in the place determined by the parameters. All of the positioning parameters work exactly
+        as the ones for the steps, i.e. you can do `data-x`, `data-y`, `data-z`, `data-rotate`, `data-rotate-z`,
+       `data-rotate-x`, `data-rotate-y` and `scale`.
+    
+    -->
+    <div id="roamfree" class="positioned" data-x="-1400" data-y="4000" data-rotate="" data-scale="5">
+      By the way: did you notice that you can also position elements freely without creating a slide?
+    </div>
+    
 </div>
 
 <!--

@@ -294,24 +294,32 @@
             }
         };
         
+        // `getPositionDataFromElement` transforms the data-attributes of an element into
+        // a dictionary that is usable for positioning the element
+        var getPositionDataFromElement = function(el) {
+            var data = el.dataset;
+            var posData = {
+                translate: {
+                    x: toNumber(data.x),
+                    y: toNumber(data.y),
+                    z: toNumber(data.z)
+                },
+                rotate: {
+                    x: toNumber(data.rotateX),
+                    y: toNumber(data.rotateY),
+                    z: toNumber(data.rotateZ || data.rotate)
+                },
+                scale: toNumber(data.scale, 1),
+                el: el
+            };
+            return posData;
+        }
+
         // `initStep` initializes given step element by reading data from its
         // data attributes and setting correct styles.
         var initStep = function ( el, idx ) {
-            var data = el.dataset,
-                step = {
-                    translate: {
-                        x: toNumber(data.x),
-                        y: toNumber(data.y),
-                        z: toNumber(data.z)
-                    },
-                    rotate: {
-                        x: toNumber(data.rotateX),
-                        y: toNumber(data.rotateY),
-                        z: toNumber(data.rotateZ || data.rotate)
-                    },
-                    scale: toNumber(data.scale, 1),
-                    el: el
-                };
+
+            var step = getPositionDataFromElement(el);
             
             if ( !el.id ) {
                 el.id = "step-" + (idx + 1);
@@ -329,6 +337,20 @@
             });
         };
         
+        var initPositionedElement = function(el, idx) {
+
+            var positionData = getPositionDataFromElement(el);
+
+            css(el, {
+                position: "absolute",
+                transform: "translate(-50%,-50%)" +
+                           translate(positionData.translate) +
+                           rotate(positionData.rotate) +
+                           scale(positionData.scale),
+                transformStyle: "preserve-3d"
+            });
+        };
+
         // `init` API function that initializes (and runs) the presentation.
         var init = function () {
             if (initialized) { return; }
@@ -354,12 +376,19 @@
             };
             
             windowScale = computeWindowScale( config );
-            
-            // wrap steps with "canvas" element
+
+            // wrap steps with "canvas" elements
             // we only wrap '.step' elements here so we can have other elements that don't get transformed inside the impress-root as well, like the fallback message
             $$(".step", root).forEach(function ( el ) {
                 canvasRotate.appendChild( el );
             });
+
+            // wrap positioned items with canvas elements.
+            // we wrap .positioned items, because we will use those to put them into absolute positions later
+            $$(".positioned", root).forEach(function(el) {
+                canvasRotate.appendChild(el);
+            });
+                                                
             canvasScale.appendChild(canvasRotate);
             root.appendChild(canvasScale);
             
@@ -393,6 +422,9 @@
             // get and init steps
             steps = $$(".step", root);
             steps.forEach( initStep );
+
+            // get and init positioned elements
+            $$(".positioned", root).forEach(initPositionedElement);
             
             // set a default initial state of the canvas
             currentState = {
