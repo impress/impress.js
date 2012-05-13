@@ -77,7 +77,7 @@ table {
 /*
     Now here is when interesting things start to appear.
     
-    We set up <body> styles with default font and nice gradient in the background.
+    We set up <body> styles with a default font and nice gradient in the background.
     And yes, there is a lot of repetition there because of -prefixes but we don't
     want to leave anybody behind.
 */
@@ -160,7 +160,7 @@ a:focus {
 /*
     Now let's style the presentation steps.
     
-    We start with basics to make sure it displays correctly in everywhere ...
+    We start with basics to make sure it displays correctly everywhere ...
 */
 
 .step {
@@ -204,7 +204,7 @@ a:focus {
     
     ;)
     
-    They cover everything what you see on first three steps of the demo.
+    They cover everything that you see on first three steps of the demo.
 */
 .slide {
     display: block;
@@ -244,7 +244,7 @@ a:focus {
     
     I agree that this may be not the most efficient, object-oriented and
     scalable way of styling, but most of steps have quite a custom look
-    and typography tricks here and there, so they had to be styles separately.
+    and typography tricks here and there, so they had to be styled separately.
 
     First is the title step with a big <h1> (no room for padding) and some
     3D positioning along Z axis.
@@ -344,7 +344,7 @@ a:focus {
 }
 
 /*
-    ... 'rotating' to rotate quater of a second later ...
+    ... 'rotating' to rotate quarter of a second later ...
 */
 #ing.present .rotating {
     -webkit-transform: rotate(-10deg);
@@ -361,7 +361,7 @@ a:focus {
 }
 
 /*
-    ... and 'scaling' to scale down after another quater of a second.
+    ... and 'scaling' to scale down after another quarter of a second.
 */
 #ing.present .scaling {
     -webkit-transform: scale(0.7);
@@ -391,7 +391,7 @@ a:focus {
 
 /*
     There is nothing really special about 'use the source, Luke' step, too,
-    except maybe of the Yoda background.
+    except maybe the Yoda background.
     
     As you can see below I've 'hard-coded' it in data URL.
     That's not the best way to serve images, but because that's just this one
@@ -433,7 +433,7 @@ a:focus {
     Below we position each word separately along Z axis and we want it to transition
     to default position in 0.5s when the step gets `present` class.
     
-    Quite a simple idea, but lot's of styles and prefixes.
+    Quite a simple idea, but lots of styles and prefixes.
 */
 #its-in-3d span,
 #its-in-3d b {
@@ -647,10 +647,10 @@ a:focus {
     transform:         translateY(0px);
     
     /*
-        Now for fade in transition we have the oposite situation from the one
+        Now for the fade in transition we have the oposite situation from the one
         above.
         
-        First after 4.5s delay we animate the transform property to move the hint
+        Only after 4.5s delay we animate the transform property to move the hint
         into its correct position and after that we fade it in with opacity 
         transition.
     */
@@ -662,7 +662,7 @@ a:focus {
 }
 
 /*
-    And as the last thing there is a workaround for quite strange bug.
+    And as the last thing there is a workaround for quite a strange bug.
     It happens a lot in Chrome. I don't remember if I've seen it in Firefox.
     
     Sometimes the element positioned in 3D (especially when it's moved back
@@ -671,7 +671,7 @@ a:focus {
     
     To prevent this, I decided to make <body> non clickable by setting 
     pointer-events property to `none` value.
-    Value if this property is inherited, so to make everything else clickable
+    The value of this property is inherited, so to make everything else clickable
     I bring it back on the #impress element.
     
     If you want to know more about `pointer-events` here are some docs:
@@ -690,7 +690,7 @@ a:focus {
     
     Thanks to this workaround above everything except #impress element is invisible
     for click events. That means that the hint element is also not clickable.
-    So basically all of this transforms and delayed transitions trickery was probably
+    So basically all of the transforms and delayed transitions trickery was probably
     not needed at all...
     
     But it was fun to learn about it, wasn't it?
