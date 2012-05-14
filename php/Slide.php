@@ -1,6 +1,4 @@
 <?php
-
-	/* Each Slide instance defines a new step in the */
 	class Slide {
 		public
 			$attributes = array(
@@ -32,6 +30,14 @@
 				$this->attributes[$attr] = $val;
 			
 			return $this;
+		}
+		
+		public function get($name) {
+			if($name == 'content')
+				return $content;
+			if($name == 'class')
+				return $classes;
+			return $attribute[$name];
 		}
 		
 		public function getHTML() {
