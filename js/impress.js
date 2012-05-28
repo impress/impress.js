@@ -225,7 +225,7 @@
         if (!impressSupported) {
             return {
                 init: empty,
-                goto: empty,
+                goto_func: empty,
                 prev: empty,
                 next: empty
             };
@@ -418,9 +418,9 @@
         // used to reset timeout for `impress:stepenter` event
         var stepEnterTimeout = null;
         
-        // `goto` API function that moves to step given with `el` parameter (by index, id or element),
+        // `goto_func` API function that moves to step given with `el` parameter (by index, id or element),
         // with a transition `duration` optionally given as second parameter.
-        var goto = function ( el, duration ) {
+        var goto_func = function ( el, duration ) {
             
             if ( !initialized || !(el = getStep(el)) ) {
                 // presentation not initialized or given element is not a step
@@ -553,7 +553,7 @@
             var prev = steps.indexOf( activeStep ) - 1;
             prev = prev >= 0 ? steps[ prev ] : steps[ steps.length-1 ];
             
-            return goto(prev);
+            return goto_func(prev);
         };
         
         // `next` API function goes to next step (in document order)
@@ -561,7 +561,7 @@
             var next = steps.indexOf( activeStep ) + 1;
             next = next < steps.length ? steps[ next ] : steps[ 0 ];
             
-            return goto(next);
+            return goto_func(next);
         };
         
         // Adding some useful classes to step elements.
@@ -615,17 +615,17 @@
             window.addEventListener("hashchange", function () {
                 // When the step is entered hash in the location is updated
                 // (just few lines above from here), so the hash change is 
-                // triggered and we would call `goto` again on the same element.
+                // triggered and we would call `goto_func` again on the same element.
                 //
                 // To avoid this we store last entered hash and compare.
                 if (window.location.hash !== lastHash) {
-                    goto( getElementFromHash() );
+                    goto_func( getElementFromHash() );
                 }
             }, false);
             
             // START 
             // by selecting step defined in url or first step of the presentation
-            goto(getElementFromHash() || steps[0], 0);
+            goto_func(getElementFromHash() || steps[0], 0);
         }, false);
         
         body.classList.add("impress-disabled");
@@ -633,7 +633,7 @@
         // store and return API for given impress.js root element
         return (roots[ "impress-root-" + rootId ] = {
             init: init,
-            goto: goto,
+            goto_func: goto_func,
             next: next,
             prev: prev
         });
@@ -741,7 +741,7 @@
                 }
             }
             
-            if ( api.goto(target) ) {
+            if ( api.goto_func(target) ) {
                 event.stopImmediatePropagation();
                 event.preventDefault();
             }
@@ -756,7 +756,7 @@
                 target = target.parentNode;
             }
             
-            if ( api.goto(target) ) {
+            if ( api.goto_func(target) ) {
                 event.preventDefault();
             }
         }, false);
@@ -784,7 +784,7 @@
         // rescale presentation when window is resized
         window.addEventListener("resize", throttle(function () {
             // force going to active step again, to trigger rescaling
-            api.goto( document.querySelector(".active"), 500 );
+            api.goto_func( document.querySelector(".active"), 500 );
         }, 250), false);
         
     }, false);
