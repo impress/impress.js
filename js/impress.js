@@ -383,6 +383,11 @@
             });
             css(canvas, rootStyles);
             
+            // preserve-3d on all elements. Fixes flickering with 3d transforms in Firefox.
+            arrayify( root.getElementsByTagName( '*' ) ).forEach(function( el ) {
+                css( el, { transformStyle: 'preserve-3d' } );
+            });
+            
             body.classList.remove("impress-disabled");
             body.classList.add("impress-enabled");
             
