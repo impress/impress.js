@@ -283,12 +283,9 @@
             }
         };
         // `onStepGoto` is called whenever moving to a new step (as apposed to already entered)
-        // but the event is triggered only if the step is different than
-        // last entered step.
         var onStepGoto = function (step) {
             if (lastEntered !== step) {
                 triggerEvent(step, "impress:stepgoto");
-                lastEntered = step;
             }
         };
         // `onStepLeave` is called whenever the step element is left
