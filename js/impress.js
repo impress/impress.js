@@ -282,7 +282,15 @@
                 lastEntered = step;
             }
         };
-        
+        // `onStepGoto` is called whenever moving to a new step (as apposed to already entered)
+        // but the event is triggered only if the step is different than
+        // last entered step.
+        var onStepGoto = function (step) {
+            if (lastEntered !== step) {
+                triggerEvent(step, "impress:stepgoto");
+                lastEntered = step;
+            }
+        };
         // `onStepLeave` is called whenever the step element is left
         // but the event is triggered only if the step is the same as
         // last entered step.
@@ -482,8 +490,10 @@
             var targetScale = target.scale * windowScale;
             
             // trigger leave of currently active element (if it's not the same step again)
+            // and trigger goto
             if (activeStep && activeStep !== el) {
                 onStepLeave(activeStep);
+                onStepGoto(el);
             }
             
             // Now we alter transforms of `root` and `canvas` to trigger transitions.
