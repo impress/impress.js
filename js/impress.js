@@ -164,30 +164,8 @@
         return scale;
     };
     
-    // CHECK SUPPORT
+    
     var body = document.body;
-    
-    var ua = navigator.userAgent.toLowerCase();
-    var impressSupported = 
-                          // browser should support CSS 3D transtorms 
-                           ( pfx("perspective") !== null ) &&
-                           
-                          // and `classList` and `dataset` APIs
-                           ( body.classList ) &&
-                           ( body.dataset ) &&
-                           
-                          // but some mobile devices need to be blacklisted,
-                          // because their CSS 3D support or hardware is not
-                          // good enough to run impress.js properly, sorry...
-                           ( ua.search(/(iphone)|(ipod)|(android)/) === -1 );
-    
-    if (!impressSupported) {
-        // we can't be sure that `classList` is supported
-        body.className += " impress-not-supported ";
-    } else {
-        body.classList.remove("impress-not-supported");
-        body.classList.add("impress-supported");
-    }
     
     // GLOBALS AND DEFAULTS
     
@@ -218,19 +196,6 @@
     // for a presentation based on the element with given id ('impress'
     // by default).
     var impress = window.impress = function ( rootId ) {
-        
-        // If impress.js is not supported by the browser return a dummy API
-        // it may not be a perfect solution but we return early and avoid
-        // running code that may use features not implemented in the browser.
-        if (!impressSupported) {
-            return {
-                init: empty,
-                goto: empty,
-                prev: empty,
-                next: empty
-            };
-        }
-        
         rootId = rootId || "impress";
         
         // if given root is already initialized just return the API
@@ -628,8 +593,6 @@
             goto(getElementFromHash() || steps[0], 0);
         }, false);
         
-        body.classList.add("impress-disabled");
-        
         // store and return API for given impress.js root element
         return (roots[ "impress-root-" + rootId ] = {
             init: init,
@@ -639,9 +602,6 @@
         });
 
     };
-    
-    // flag that can be used in JS to check if browser have passed the support test
-    impress.supported = impressSupported;
     
 })(document, window);
 
