@@ -94,6 +94,8 @@
     
     <link rel="shortcut icon" href="favicon.png" />
     <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+    
+    <script src="depedencies/Modernizr/modernizr.js"></script>
 </head>
 
 <!--
@@ -114,7 +116,7 @@
     it can be found later, when `hint` element is being described.
     
 -->
-<body class="impress-not-supported">
+<body>
 
 <!--
     For example this fallback message is only visible when there is `impress-not-supported` class on body.
@@ -360,8 +362,17 @@ if ("ontouchstart" in document.documentElement) {
     Of course you can wrap it in any kind of "DOM ready" event, but I was too lazy to do so ;)
     
 -->
-<script src="js/impress.js"></script>
-<script>impress().init();</script>
+<script src="js/detection.js"></script>
+<script src="depedencies/yepnope.js/yepnope.js"></script>
+<script>
+yepnope([{
+  test: Modernizr.impress,
+  yep : 'js/impress.js',
+  callback: function(url, result, key) {
+      if(result) { impress().init(); }
+  }
+}]);
+</script>
 
 <!--
     
