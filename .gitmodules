@@ -1,0 +1,7 @@
+[submodule "Modernizr"]
+    path = depedencies/Modernizr
+    url = git://github.com/Modernizr/Modernizr.git
+
+[submodule "yepnope.js"]
+    path = "depedencies/yepnope.js"
+    url = git://github.com/SlexAxton/yepnope.js.git
