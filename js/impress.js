@@ -146,6 +146,17 @@
         return byId( window.location.hash.replace(/^#\/?/,"") );
     };
     
+    // `getElementFromUrl` returns an element located by id from url part of
+    // window location. It needs a pattern containing the :step variable
+    var getElementFromUrl = function (pattern) {
+        var patternParts = pattern.split(":step");
+        var id = window.location.pathname.replace(patternParts[0], "");
+        if(patternParts.length > 1) {
+            id = id.replace(patternParts[1], "");
+        }
+        return byId( id );
+    };
+    
     // `computeWindowScale` counts the scale factor between window size and size
     // defined for the presentation in the config.
     var computeWindowScale = function ( config ) {
@@ -183,7 +194,9 @@
         
         perspective: 1000,
         
-        transitionDuration: 1000
+        transitionDuration: 1000,
+        
+        pushStatePattern: null
     };
     
     // it's just an empty function ... and a useless comment.
@@ -314,7 +327,8 @@
                 maxScale: toNumber( rootData.maxScale, defaults.maxScale ),
                 minScale: toNumber( rootData.minScale, defaults.minScale ),                
                 perspective: toNumber( rootData.perspective, defaults.perspective ),
-                transitionDuration: toNumber( rootData.transitionDuration, defaults.transitionDuration )
+                transitionDuration: toNumber( rootData.transitionDuration, defaults.transitionDuration ),
+                pushStatePattern: rootData.pushStatePattern || defaults.pushStatePattern
             };
             
             windowScale = computeWindowScale( config );
@@ -564,8 +578,8 @@
         // Adding hash change support.
         root.addEventListener("impress:init", function(){
             
-            // last hash detected
-            var lastHash = "";
+            // last step detected
+            var lastStep = "";
             
             // `#/step-id` is used instead of `#step-id` to prevent default browser
             // scrolling to element in hash.
@@ -574,7 +588,12 @@
             // makes transtion laggy.
             // BUG: http://code.google.com/p/chromium/issues/detail?id=62820
             root.addEventListener("impress:stepenter", function (event) {
-                window.location.hash = lastHash = "#/" + event.target.id;
+                if (config.pushStatePattern) {
+                    lastStep = config.pushStatePattern.replace(":step", event.target.id);
+                    window.history.pushState(null, null, lastStep);
+                } else {
+                    window.location.hash = lastStep = "#/" + event.target.id;
+                }
             }, false);
             
             window.addEventListener("hashchange", function () {
@@ -583,14 +602,18 @@
                 // triggered and we would call `goto` again on the same element.
                 //
                 // To avoid this we store last entered hash and compare.
-                if (window.location.hash !== lastHash) {
+                if (window.location.hash !== lastStep) {
                     goto( getElementFromHash() );
                 }
             }, false);
             
             // START 
             // by selecting step defined in url or first step of the presentation
-            goto(getElementFromHash() || steps[0], 0);
+            if (config.pushStatePattern) {
+                goto( getElementFromUrl(config.pushStatePattern) );
+            } else {
+                goto(getElementFromHash() || steps[0], 0);
+            }
         }, false);
         
         // store and return API for given impress.js root element
