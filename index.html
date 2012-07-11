@@ -368,8 +368,8 @@ if ("ontouchstart" in document.documentElement) {
 yepnope([{
   test: Modernizr.impress,
   yep : ['js/impress.js', 'js/impress_slideshow.js'],
-  callback: function(url, result, key) {
-      if(result) { impress().init(); }
+  complete: function() {
+      impress().init();
   }
 }]);
 </script>
