@@ -20,6 +20,16 @@ It's an (un)fortunate coincidence that a Open/LibreOffice presentation tool is c
 VERSION HISTORY
 -----------------
 
+### 0.6.0 ([browse](http://github.com/ricardrobin/impress.js/tree/0.6.0), [zip](http://github.com/ricardrobin/impress.js/zipball/0.6.0), [tar](http://github.com/ricardrobin/impress.js/tarball/0.6.0))
+
+This is a custom version made by Robin Ricard.
+
+#### CHANGELOG
+
+* Separation between navigation logic (slide-based) and main API
+* Adds pushState api support
+* The detection is made by Modernizr
+
 ### 0.5.3 ([browse](http://github.com/bartaz/impress.js/tree/0.5.3), [zip](http://github.com/bartaz/impress.js/zipball/0.5.3), [tar](http://github.com/bartaz/impress.js/tarball/0.5.3))
 
 #### BUGFIX RELEASE

@@ -153,7 +153,7 @@ a:focus {
     margin-bottom: 10px;
 }
 
-.impress-supported .fallback-message {
+.impress .fallback-message {
     display: none;
 }
 
@@ -185,7 +185,7 @@ a:focus {
     
     Basically we remove the margin and make inactive steps a little bit transparent.
 */
-.impress-enabled .step {
+.impress .step {
     margin: 0;
     opacity: 0.3;
 
@@ -196,7 +196,7 @@ a:focus {
     transition:         opacity 1s;
 }
 
-.impress-enabled .step.active { opacity: 1 }
+.impress .step.active { opacity: 1 }
 
 /*
     These 'slide' step styles were heavily inspired by HTML5 Slides:
@@ -628,7 +628,7 @@ a:focus {
 /*
     Now we 'enable' the hint when presentation is initialized ...
 */
-.impress-enabled .hint { display: block }
+.impress .hint { display: block }
 
 /*
     ... and we will show it when the first step (with id 'bored') is active.
@@ -682,8 +682,8 @@ a:focus {
     
     So use it wisely ... or don't use at all.
 */
-.impress-enabled          { pointer-events: none }
-.impress-enabled #impress { pointer-events: auto }
+.impress          { pointer-events: none }
+.impress #impress { pointer-events: auto }
 
 /*
     There is one funny thing I just realized.
