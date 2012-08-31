@@ -1,23 +1,23 @@
 /**
- * impress.js
- *
- * impress.js is a presentation tool based on the power of CSS3 transforms and transitions
- * in modern browsers and inspired by the idea behind prezi.com.
- *
- *
- * Copyright 2011-2012 Bartek Szopka (@bartaz)
- *
- * Released under the MIT and GPL Licenses.
- *
- * ------------------------------------------------
- *  author:  Bartek Szopka
- *  version: 0.5.3
- *  url:     http://bartaz.github.com/impress.js/
- *  source:  http://github.com/bartaz/impress.js/
- */
+* impress.js
+*
+* impress.js is a presentation tool based on the power of CSS3 transforms and transitions
+* in modern browsers and inspired by the idea behind prezi.com.
+*
+*
+* Copyright 2011-2012 Bartek Szopka (@bartaz)
+*
+* Released under the MIT and GPL Licenses.
+*
+* ------------------------------------------------
+* author: Bartek Szopka
+* version: 0.5.3
+* url: http://bartaz.github.com/impress.js/
+* source: http://github.com/bartaz/impress.js/
+*/
 
 /*jshint bitwise:true, curly:true, eqeqeq:true, forin:true, latedef:true, newcap:true,
-         noarg:true, noempty:true, undef:true, strict:true, browser:true */
+noarg:true, noempty:true, undef:true, strict:true, browser:true */
 
 // You are one of those who like to know how thing work inside?
 // Let me show you the cogs that make impress.js run...
@@ -32,14 +32,14 @@
     var pfx = (function () {
         
         var style = document.createElement('dummy').style,
-            prefixes = 'Webkit Moz O ms Khtml'.split(' '),
-            memory = {};
+        prefixes = 'Webkit Moz O ms Khtml'.split(' '),
+        memory = {};
         
         return function ( prop ) {
             if ( typeof memory[ prop ] === "undefined" ) {
                 
                 var ucProp  = prop.charAt(0).toUpperCase() + prop.substr(1),
-                    props   = (prop + ' ' + prefixes.join(ucProp + ' ') + ucProp).split(' ');
+                props   = (prop + ' ' + prefixes.join(ucProp + ' ') + ucProp).split(' ');
                 
                 memory[ prop ] = null;
                 for ( var i in props ) {
@@ -122,8 +122,8 @@
     // as second parameter.
     var rotate = function ( r, revert ) {
         var rX = " rotateX(" + r.x + "deg) ",
-            rY = " rotateY(" + r.y + "deg) ",
-            rZ = " rotateZ(" + r.z + "deg) ";
+        rY = " rotateY(" + r.y + "deg) ",
+        rZ = " rotateZ(" + r.z + "deg) ";
         
         return revert ? rZ+rY+rX : rX+rY+rZ;
     };
@@ -150,8 +150,8 @@
     // defined for the presentation in the config.
     var computeWindowScale = function ( config ) {
         var hScale = window.innerHeight / config.height,
-            wScale = window.innerWidth / config.width,
-            scale = hScale > wScale ? wScale : hScale;
+        wScale = window.innerWidth / config.width,
+        scale = hScale > wScale ? wScale : hScale;
         
         if (config.maxScale && scale > config.maxScale) {
             scale = config.maxScale;
@@ -168,18 +168,18 @@
     var body = document.body;
     
     var ua = navigator.userAgent.toLowerCase();
-    var impressSupported = 
-                          // browser should support CSS 3D transtorms 
-                           ( pfx("perspective") !== null ) &&
+    var impressSupported =
+    // browser should support CSS 3D transtorms
+    ( pfx("perspective") !== null ) &&
                            
-                          // and `classList` and `dataset` APIs
-                           ( body.classList ) &&
-                           ( body.dataset ) &&
+    // and `classList` and `dataset` APIs
+    ( body.classList ) &&
+    ( body.dataset ) &&
                            
-                          // but some mobile devices need to be blacklisted,
-                          // because their CSS 3D support or hardware is not
-                          // good enough to run impress.js properly, sorry...
-                           ( ua.search(/(iphone)|(ipod)|(android)/) === -1 );
+    // but some mobile devices need to be blacklisted,
+    // because their CSS 3D support or hardware is not
+    // good enough to run impress.js properly, sorry...
+    ( ua.search(/(iphone)|(ipod)|(android)/) === -1 );
     
     if (!impressSupported) {
         // we can't be sure that `classList` is supported
@@ -254,7 +254,7 @@
         var config = null;
         
         // scale factor of the browser window
-        var windowScale = null;        
+        var windowScale = null;
         
         // root presentation elements
         var root = byId( rootId );
@@ -265,7 +265,7 @@
         // STEP EVENTS
         //
         // There are currently two step events triggered by impress.js
-        // `impress:stepenter` is triggered when the step is shown on the 
+        // `impress:stepenter` is triggered when the step is shown on the
         // screen (the transition from the previous one is finished) and
         // `impress:stepleave` is triggered when the step is left (the
         // transition to next step just starts).
@@ -297,20 +297,25 @@
         // data attributes and setting correct styles.
         var initStep = function ( el, idx ) {
             var data = el.dataset,
-                step = {
-                    translate: {
-                        x: toNumber(data.x),
-                        y: toNumber(data.y),
-                        z: toNumber(data.z)
-                    },
-                    rotate: {
-                        x: toNumber(data.rotateX),
-                        y: toNumber(data.rotateY),
-                        z: toNumber(data.rotateZ || data.rotate)
-                    },
-                    scale: toNumber(data.scale, 1),
-                    el: el
-                };
+            step = {
+                translate: {
+                    x: toNumber(data.x),
+                    y: toNumber(data.y),
+                    z: toNumber(data.z)
+                },
+                rotate: {
+                    x: toNumber(data.rotateX),
+                    y: toNumber(data.rotateY),
+                    z: toNumber(data.rotateZ || data.rotate)
+                },
+                scale: toNumber(data.scale, 1),
+                multistep: [],
+                el: el
+            };
+            // separating the substeps that were given as a string
+            if(data.multistep){
+                step.multistep = data.multistep.split(' ');
+            }
             
             if ( !el.id ) {
                 el.id = "step-" + (idx + 1);
@@ -321,9 +326,9 @@
             css(el, {
                 position: "absolute",
                 transform: "translate(-50%,-50%)" +
-                           translate(step.translate) +
-                           rotate(step.rotate) +
-                           scale(step.scale),
+                translate(step.translate) +
+                rotate(step.rotate) +
+                scale(step.scale),
                 transformStyle: "preserve-3d"
             });
         };
@@ -347,7 +352,7 @@
                 width: toNumber( rootData.width, defaults.width ),
                 height: toNumber( rootData.height, defaults.height ),
                 maxScale: toNumber( rootData.maxScale, defaults.maxScale ),
-                minScale: toNumber( rootData.minScale, defaults.minScale ),                
+                minScale: toNumber( rootData.minScale, defaults.minScale ),
                 perspective: toNumber( rootData.perspective, defaults.perspective ),
                 transitionDuration: toNumber( rootData.transitionDuration, defaults.transitionDuration )
             };
@@ -519,8 +524,8 @@
             // - it's simply comparing all the values.
             if ( currentState.scale === target.scale ||
                 (currentState.rotate.x === target.rotate.x && currentState.rotate.y === target.rotate.y &&
-                 currentState.rotate.z === target.rotate.z && currentState.translate.x === target.translate.x &&
-                 currentState.translate.y === target.translate.y && currentState.translate.z === target.translate.z) ) {
+                    currentState.rotate.z === target.rotate.z && currentState.translate.x === target.translate.x &&
+                    currentState.translate.y === target.translate.y && currentState.translate.z === target.translate.z) ) {
                 delay = 0;
             }
             
@@ -533,7 +538,7 @@
             //
             // I really wanted to make it in more elegant way. The `transitionend` event seemed to be the best way
             // to do it, but the fact that I'm using transitions on two separate elements and that the `transitionend`
-            // event is only triggered when there was a transition (change in the values) caused some bugs and 
+            // event is only triggered when there was a transition (change in the values) caused some bugs and
             // made the code really complicated, cause I had to handle all the conditions separately. And it still
             // needed a `setTimeout` fallback for the situations when there is no transition at all.
             // So I decided that I'd rather make the code simpler than use shiny new `transitionend`.
@@ -550,14 +555,61 @@
         
         // `prev` API function goes to previous step (in document order)
         var prev = function () {
+            // Checks if the step contains substeps
+            var multistep = stepsData['impress-'+activeStep.id].multistep;
+            if(multistep != ''){
+                if(activeStep.classList.contains('multiStepping')){
+                    for(var oneStep in multistep){
+                        if(activeStep.classList.contains(multistep[oneStep])){
+                            activeStep.classList.remove(multistep[oneStep]);
+                            if(oneStep != 0){
+                                activeStep.classList.add(multistep[parseInt(oneStep)-1]);
+                            }else{
+                                activeStep.classList.remove('multiStepping');
+                            }
+                            return true;
+                        }
+                    }
+                }
+            }
+            
             var prev = steps.indexOf( activeStep ) - 1;
             prev = prev >= 0 ? steps[ prev ] : steps[ steps.length-1 ];
+            
+            // Prepares the next step to be shown (so the previous one) if it needs so
+            multistep = stepsData['impress-'+prev.id].multistep;
+            if(multistep != ''){
+                prev.classList.add('multiStepping');
+                prev.classList.add(multistep[multistep.length - 1]);
+            }
             
             return goto(prev);
         };
         
         // `next` API function goes to next step (in document order)
         var next = function () {
+            // Checks if the step contains substeps
+            var multistep = stepsData['impress-'+activeStep.id].multistep;
+            if(multistep != ''){
+                if(activeStep.classList.contains('multiStepping')){
+                    for(var oneStep in multistep){
+                        if(activeStep.classList.contains(multistep[oneStep])){
+                            activeStep.classList.remove(multistep[oneStep]);
+                            if(multistep[parseInt(oneStep)+1] != undefined){
+                                activeStep.classList.add(multistep[parseInt(oneStep)+1]);
+                                return true;
+                            }else{
+                                activeStep.classList.remove('multiStepping');
+                            }
+                        }
+                    }
+                }else{
+                    activeStep.classList.add('multiStepping');
+                    activeStep.classList.add(multistep[0]);
+                    return true;
+                }
+            }
+            
             var next = steps.indexOf( activeStep ) + 1;
             next = next < steps.length ? steps[ next ] : steps[ 0 ];
             
@@ -601,7 +653,7 @@
             
             // last hash detected
             var lastHash = "";
-            
+		
             // `#/step-id` is used instead of `#step-id` to prevent default browser
             // scrolling to element in hash.
             //
@@ -614,7 +666,7 @@
             
             window.addEventListener("hashchange", function () {
                 // When the step is entered hash in the location is updated
-                // (just few lines above from here), so the hash change is 
+                // (just few lines above from here), so the hash change is
                 // triggered and we would call `goto` again on the same element.
                 //
                 // To avoid this we store last entered hash and compare.
@@ -623,7 +675,7 @@
                 }
             }, false);
             
-            // START 
+            // START
             // by selecting step defined in url or first step of the presentation
             goto(getElementFromHash() || steps[0], 0);
         }, false);
@@ -673,7 +725,7 @@
     document.addEventListener("impress:init", function (event) {
         // Getting API from event data.
         // So you don't event need to know what is the id of the root element
-        // or anything. `impress:init` event data gives you everything you 
+        // or anything. `impress:init` event data gives you everything you
         // need to control the presentation that was just initialized.
         var api = event.detail.api;
         
@@ -687,7 +739,7 @@
         }, false);
         
         // Trigger impress action (next or prev) on keyup.
-        
+      
         // Supported keys are:
         // [space] - quite common in presentation software to move forward
         // [up] [right] / [down] [left] - again common and natural addition,
@@ -707,15 +759,15 @@
                     case 33: // pg up
                     case 37: // left
                     case 38: // up
-                             api.prev();
-                             break;
+                        api.prev();
+                        break;
                     case 9:  // tab
                     case 32: // space
                     case 34: // pg down
                     case 39: // right
                     case 40: // down
-                             api.next();
-                             break;
+                        api.next();
+                        break;
                 }
                 
                 event.preventDefault();
@@ -728,7 +780,7 @@
             // check if event target (or any of its parents is a link)
             var target = event.target;
             while ( (target.tagName !== "A") &&
-                    (target !== document.documentElement) ) {
+                (target !== document.documentElement) ) {
                 target = target.parentNode;
             }
             
@@ -752,7 +804,7 @@
             var target = event.target;
             // find closest step element that is not active
             while ( !(target.classList.contains("step") && !target.classList.contains("active")) &&
-                    (target !== document.documentElement) ) {
+                (target !== document.documentElement) ) {
                 target = target.parentNode;
             }
             
@@ -766,8 +818,8 @@
         document.addEventListener("touchstart", function ( event ) {
             if (event.touches.length === 1) {
                 var x = event.touches[0].clientX,
-                    width = window.innerWidth * 0.3,
-                    result = null;
+                width = window.innerWidth * 0.3,
+                result = null;
                     
                 if ( x < width ) {
                     result = api.prev();
