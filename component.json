@@ -1,0 +1,5 @@
+{
+  "name": "impress-js",
+  "version": "0.5.3",
+  "main": "./js/impress.js",
+}
