@@ -751,7 +751,7 @@
         document.addEventListener("click", function ( event ) {
             var target = event.target;
             // find closest step element that is not active
-            while ( !(target.classList.contains("step") && !target.classList.contains("active")) &&
+            while ( !(target.classList && target.classList.contains("step") && !target.classList.contains("active")) &&
                     (target !== document.documentElement) ) {
                 target = target.parentNode;
             }
