@@ -309,8 +309,14 @@
                         z: toNumber(data.rotateZ || data.rotate)
                     },
                     scale: toNumber(data.scale, 1),
+		            multistep: [],
                     el: el
                 };
+
+            // separating the substeps that were given as a string
+            if(data.multistep){
+                step.multistep = data.multistep.split(' ');
+            }
             
             if ( !el.id ) {
                 el.id = "step-" + (idx + 1);
@@ -550,14 +556,61 @@
         
         // `prev` API function goes to previous step (in document order)
         var prev = function () {
+            // Checks if the step contains substeps
+            var multistep = stepsData['impress-'+activeStep.id].multistep;
+            if(multistep != ''){
+                if(activeStep.classList.contains('multiStepping')){
+                    for(var oneStep in multistep){
+                        if(activeStep.classList.contains(multistep[oneStep])){
+                            activeStep.classList.remove(multistep[oneStep]);
+                            if(oneStep != 0){
+                                activeStep.classList.add(multistep[parseInt(oneStep)-1]);
+                            }else{
+                                activeStep.classList.remove('multiStepping');
+                            }
+                            return true;
+                        }
+                    }
+                }
+            }
+            
             var prev = steps.indexOf( activeStep ) - 1;
             prev = prev >= 0 ? steps[ prev ] : steps[ steps.length-1 ];
+            
+            // Prepares the next step to be shown (so the previous one) if it needs so
+            multistep = stepsData['impress-'+prev.id].multistep;
+            if(multistep != ''){
+                prev.classList.add('multiStepping');
+                prev.classList.add(multistep[multistep.length - 1]);
+            }
             
             return goto(prev);
         };
         
         // `next` API function goes to next step (in document order)
         var next = function () {
+            // Checks if the step contains substeps
+            var multistep = stepsData['impress-'+activeStep.id].multistep;
+            if(multistep != ''){
+                if(activeStep.classList.contains('multiStepping')){
+                    for(var oneStep in multistep){
+                        if(activeStep.classList.contains(multistep[oneStep])){
+                            activeStep.classList.remove(multistep[oneStep]);
+                            if(multistep[parseInt(oneStep)+1] != undefined){
+                                activeStep.classList.add(multistep[parseInt(oneStep)+1]);
+                                return true;
+                            }else{
+                                activeStep.classList.remove('multiStepping');
+                            }
+                        }
+                    }
+                }else{
+                    activeStep.classList.add('multiStepping');
+                    activeStep.classList.add(multistep[0]);
+                    return true;
+                }
+            }
+            
             var next = steps.indexOf( activeStep ) + 1;
             next = next < steps.length ? steps[ next ] : steps[ 0 ];
             

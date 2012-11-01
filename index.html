@@ -262,6 +262,31 @@
         <p>by <b class="positioning">positioning</b>, <b class="rotating">rotating</b> and <b class="scaling">scaling</b> them on an infinite canvas</p>
     </div>
 
+    <!--
+        
+        This step introduces substeps.
+	
+        Substeps allow a single step to be called more than once in a row, adding a class
+        everytime, which allows to make parts of the page appear or change when the visitor asks to continue
+        the navigation.
+	
+        It is created using the data-multistep parametter. The value should be a space-separated-list
+        of classes.
+
+        When the step is shown, none of the classes are used. Then, it adds the class "multiStepping"
+        and the first of the classes contained in data-multistep. Then the second is added and the first
+        removed. When the last is reached, both classes (the last one and "multiStepping") are removed
+        and the next step is shown.
+	
+    -->
+    <div id="substeps" data-multistep="substeps_container_1 substeps_container_2" class="step" data-x="4500" data-y="-3000" data-rotate="0" data-scale="6">
+        <p>and by creating <b>substeps</b></p>
+        <ul>
+            <li class="substep1 substep2">that may come</li>
+            <li class="substep2"><b>one by one</b></li>
+        </ul>
+    </div>
+    
     <div id="imagination" class="step" data-x="6700" data-y="-300" data-scale="6">
         <p>the only <b>limit</b> is your <b class="imagination">imagination</b></p>
     </div>
