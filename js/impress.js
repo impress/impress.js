@@ -272,6 +272,7 @@
         
         // reference to last entered step
         var lastEntered = null;
+        var lastEnteredSub = null;
         
         // `onStepEnter` is called whenever the step element is entered
         // but the event is triggered only if the step is different than
@@ -282,6 +283,17 @@
                 lastEntered = step;
             }
         };
+
+        // `onSubstepEnter` is called whenever the step element is entered
+        // but the event is triggered only if the step is different than
+        // last entered step.
+        var onSubstepEnter = function (step,substep) {
+            activeStep.setAttribute("data-active-substep", substep);
+            triggerEvent(step, "impress:substepenter");
+            if (lastEnteredSub !== substep) {
+                lastEnteredSub = substep;
+            }
+        };
         
         // `onStepLeave` is called whenever the step element is left
         // but the event is triggered only if the step is the same as
@@ -290,6 +302,16 @@
             if (lastEntered === step) {
                 triggerEvent(step, "impress:stepleave");
                 lastEntered = null;
+            }
+        };
+        
+        // `onStepLeave` is called whenever the step element is left
+        // but the event is triggered only if the step is the same as
+        // last entered step.
+        var onSubstepLeave = function (step,substep) {
+            if (lastEnteredSub === substep) {
+                triggerEvent(step, "impress:substepleave");
+                lastEnteredSub = null;
             }
         };
         
@@ -562,9 +584,11 @@
                 if(activeStep.classList.contains('multiStepping')){
                     for(var oneStep in multistep){
                         if(activeStep.classList.contains(multistep[oneStep])){
+                            onSubstepLeave(activeStep,multistep[oneStep]);
                             activeStep.classList.remove(multistep[oneStep]);
                             if(oneStep != 0){
                                 activeStep.classList.add(multistep[parseInt(oneStep)-1]);
+                                onSubstepEnter(activeStep,multistep[parseInt(oneStep)-1]);
                             }else{
                                 activeStep.classList.remove('multiStepping');
                             }
@@ -582,11 +606,12 @@
             if(multistep != ''){
                 prev.classList.add('multiStepping');
                 prev.classList.add(multistep[multistep.length - 1]);
+                onSubstepEnter(activeStep,multistep[multistep.length - 1]);
             }
             
             return goto(prev);
         };
-        
+
         // `next` API function goes to next step (in document order)
         var next = function () {
             // Checks if the step contains substeps
@@ -595,9 +620,11 @@
                 if(activeStep.classList.contains('multiStepping')){
                     for(var oneStep in multistep){
                         if(activeStep.classList.contains(multistep[oneStep])){
+                            onSubstepLeave(activeStep,multistep[oneStep]);
                             activeStep.classList.remove(multistep[oneStep]);
                             if(multistep[parseInt(oneStep)+1] != undefined){
                                 activeStep.classList.add(multistep[parseInt(oneStep)+1]);
+                                onSubstepEnter(activeStep,multistep[parseInt(oneStep)+1]);
                                 return true;
                             }else{
                                 activeStep.classList.remove('multiStepping');
@@ -607,6 +634,7 @@
                 }else{
                     activeStep.classList.add('multiStepping');
                     activeStep.classList.add(multistep[0]);
+                    onSubstepEnter(activeStep,multistep[0]);
                     return true;
                 }
             }
