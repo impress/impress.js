@@ -227,7 +227,10 @@
                 init: empty,
                 goto: empty,
                 prev: empty,
-                next: empty
+                next: empty,
+                blackout: empty,
+                whiteout: empty,
+				fullscreen: empty
             };
         }
         
@@ -259,6 +262,9 @@
         // root presentation elements
         var root = byId( rootId );
         var canvas = document.createElement("div");
+		
+		// element for remembering the fullscreen state
+		var inFullscreen = false;
         
         var initialized = false;
         
@@ -563,6 +569,60 @@
             
             return goto(next);
         };
+		
+        // `whiteout` API function to whiteout screen
+        var whiteout = function () {
+			overlay('#FFF');
+        };
+        // `blackout` API function goes to blackout screen
+        var blackout = function () {
+			overlay('#000');			
+        };
+		
+        // function show overlay over the whole screen
+        var overlay = function (color) {
+			var overlay = document.getElementById("impress-bwout-overlay");
+			if(overlay == null){
+				overlay = document.createElement('div');
+				overlay.id = 'impress-bwout-overlay';
+				document.body.appendChild(overlay);
+			}
+			if(overlay.classList.contains("impress-bwout-transition")){
+				overlay.classList.remove("impress-bwout-transition");
+			}else{
+				css(overlay, {
+					background:color,
+				});
+				window.setTimeout(function(){overlay.classList.add("impress-bwout-transition");}, 25);
+			}
+			
+        };
+		
+		var fullscreen = function (){
+			if(!inFullscreen){
+				var elem = document.body;
+				
+				if (elem.requestFullScreen){
+					elem.requestFullScreen();
+				}
+				else if (elem.mozRequestFullScreen) {
+					elem.mozRequestFullScreen();
+				}
+				else if (elem.webkitRequestFullScreen) {
+					elem.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
+				}
+			}else{
+				if (document.cancelFullScreen) {
+					document.cancelFullScreen();
+				} else if (document.mozCancelFullScreen) {
+					document.mozCancelFullScreen();
+				} else if (document.webkitCancelFullScreen) {
+					document.webkitCancelFullScreen();
+				}
+			}
+			
+			inFullscreen = !inFullscreen;
+		}
         
         // Adding some useful classes to step elements.
         //
@@ -635,7 +695,10 @@
             init: init,
             goto: goto,
             next: next,
-            prev: prev
+            prev: prev,
+            blackout: blackout,
+            whiteout: whiteout,
+			fullscreen: fullscreen
         });
 
     };
@@ -681,7 +744,7 @@
         
         // Prevent default keydown action when one of supported key is pressed.
         document.addEventListener("keydown", function ( event ) {
-            if ( event.keyCode === 9 || ( event.keyCode >= 32 && event.keyCode <= 34 ) || (event.keyCode >= 37 && event.keyCode <= 40) ) {
+            if ( event.keyCode === 9 || ( event.keyCode >= 32 && event.keyCode <= 34 ) || (event.keyCode >= 37 && event.keyCode <= 40) || event.keyCode == 66 || event.keyCode == 87 || event.keyCode == 70) {
                 event.preventDefault();
             }
         }, false);
@@ -702,7 +765,7 @@
         //   as another way to moving to next step... And yes, I know that for the sake of
         //   consistency I should add [shift+tab] as opposite action...
         document.addEventListener("keyup", function ( event ) {
-            if ( event.keyCode === 9 || ( event.keyCode >= 32 && event.keyCode <= 34 ) || (event.keyCode >= 37 && event.keyCode <= 40) ) {
+            if ( event.keyCode === 9 || ( event.keyCode >= 32 && event.keyCode <= 34 ) || (event.keyCode >= 37 && event.keyCode <= 40)  || event.keyCode == 66 || event.keyCode == 87 || event.keyCode == 70) {
                 switch( event.keyCode ) {
                     case 33: // pg up
                     case 37: // left
@@ -715,6 +778,15 @@
                     case 39: // right
                     case 40: // down
                              api.next();
+                             break;
+                    case 66: // b
+                             api.blackout();
+                             break;
+                    case 70: // b
+                             api.fullscreen();
+                             break;
+                    case 87: // w
+                             api.whiteout();
                              break;
                 }
                 
