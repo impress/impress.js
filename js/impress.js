@@ -620,6 +620,8 @@
 					document.webkitCancelFullScreen();
 				}
 			}
+			
+			inFullscreen = !inFullscreen;
 		}
         
         // Adding some useful classes to step elements.
