@@ -661,6 +661,24 @@ a:focus {
     transition:         opacity 1s 5s,         transform 0.5s 4.5s;
 }
 
+/* 
+	For blackout/whiteout the whole sreen during a presentation.
+	The transition is used for both, fading in and out.
+*/
+#impress-bwout-overlay{
+	position: fixed;
+	opacity:0;
+	top:0;
+	bottom: 0;
+	left:0;
+	right: 0;
+	z-index: 2999;
+	transition: opacity 0.5s ease 0s;
+}
+#impress-bwout-overlay.impress-bwout-transition {
+  opacity:1;
+}
+
 /*
     And as the last thing there is a workaround for quite strange bug.
     It happens a lot in Chrome. I don't remember if I've seen it in Firefox.
