@@ -596,7 +596,7 @@
         };
 		
 		var fullscreen = function (){
-			var elem = document.getElementById("impress_wrapper");
+			var elem = document.body;
 			
 			if (elem.requestFullScreen){
 				elem.requestFullScreen();
