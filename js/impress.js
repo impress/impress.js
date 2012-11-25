@@ -262,6 +262,9 @@
         // root presentation elements
         var root = byId( rootId );
         var canvas = document.createElement("div");
+		
+		// element for remembering the fullscreen state
+		var inFullscreen = false;
         
         var initialized = false;
         
@@ -596,16 +599,26 @@
         };
 		
 		var fullscreen = function (){
-			var elem = document.body;
-			
-			if (elem.requestFullScreen){
-				elem.requestFullScreen();
-			}
-			else if (elem.mozRequestFullScreen) {
-				elem.mozRequestFullScreen();
-			}
-			else if (elem.webkitRequestFullScreen) {
-				elem.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
+			if(!inFullscreen){
+				var elem = document.body;
+				
+				if (elem.requestFullScreen){
+					elem.requestFullScreen();
+				}
+				else if (elem.mozRequestFullScreen) {
+					elem.mozRequestFullScreen();
+				}
+				else if (elem.webkitRequestFullScreen) {
+					elem.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
+				}
+			}else{
+				if (document.cancelFullScreen) {
+					document.cancelFullScreen();
+				} else if (document.mozCancelFullScreen) {
+					document.mozCancelFullScreen();
+				} else if (document.webkitCancelFullScreen) {
+					document.webkitCancelFullScreen();
+				}
 			}
 		}
         
