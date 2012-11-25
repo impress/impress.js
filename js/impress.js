@@ -229,7 +229,8 @@
                 prev: empty,
                 next: empty,
                 blackout: empty,
-                whiteout: empty
+                whiteout: empty,
+				fullscreen: empty
             };
         }
         
@@ -574,27 +575,39 @@
         var blackout = function () {
 			overlay('#000');			
         };
+		
         // function show overlay over the whole screen
         var overlay = function (color) {
-			var old_overlay = document.getElementById("overlay");
-			if(old_overlay != null){
-				document.body.removeChild(old_overlay);
-			}else{
-				var overlay = document.createElement('div');
-				overlay.id= 'overlay';
-				css(overlay, {
-					position:"fixed",
-					background:color,
-					top:0,
-					bottom: 0,
-					left:0,
-					right: 0,
-					zIndex: 2999,
-				});
+			var overlay = document.getElementById("impress-bwout-overlay");
+			if(overlay == null){
+				overlay = document.createElement('div');
+				overlay.id = 'impress-bwout-overlay';
 				document.body.appendChild(overlay);
+			}
+			if(overlay.classList.contains("impress-bwout-transition")){
+				overlay.classList.remove("impress-bwout-transition");
+			}else{
+				css(overlay, {
+					background:color,
+				});
+				window.setTimeout(function(){overlay.classList.add("impress-bwout-transition");}, 25);
 			}
 			
         };
+		
+		var fullscreen = function (){
+			var elem = document.getElementById("impress_wrapper");
+			
+			if (elem.requestFullScreen){
+				elem.requestFullScreen();
+			}
+			else if (elem.mozRequestFullScreen) {
+				elem.mozRequestFullScreen();
+			}
+			else if (elem.webkitRequestFullScreen) {
+				elem.webkitRequestFullScreen();
+			}
+		}
         
         // Adding some useful classes to step elements.
         //
@@ -669,7 +682,8 @@
             next: next,
             prev: prev,
             blackout: blackout,
-            whiteout: whiteout
+            whiteout: whiteout,
+			fullscreen: fullscreen
         });
 
     };
@@ -715,7 +729,7 @@
         
         // Prevent default keydown action when one of supported key is pressed.
         document.addEventListener("keydown", function ( event ) {
-            if ( event.keyCode === 9 || ( event.keyCode >= 32 && event.keyCode <= 34 ) || (event.keyCode >= 37 && event.keyCode <= 40) || event.keyCode == 66 || event.keyCode == 87) {
+            if ( event.keyCode === 9 || ( event.keyCode >= 32 && event.keyCode <= 34 ) || (event.keyCode >= 37 && event.keyCode <= 40) || event.keyCode == 66 || event.keyCode == 87 || event.keyCode == 70) {
                 event.preventDefault();
             }
         }, false);
@@ -736,7 +750,7 @@
         //   as another way to moving to next step... And yes, I know that for the sake of
         //   consistency I should add [shift+tab] as opposite action...
         document.addEventListener("keyup", function ( event ) {
-            if ( event.keyCode === 9 || ( event.keyCode >= 32 && event.keyCode <= 34 ) || (event.keyCode >= 37 && event.keyCode <= 40)  || event.keyCode == 66 || event.keyCode == 87) {
+            if ( event.keyCode === 9 || ( event.keyCode >= 32 && event.keyCode <= 34 ) || (event.keyCode >= 37 && event.keyCode <= 40)  || event.keyCode == 66 || event.keyCode == 87 || event.keyCode == 70) {
                 switch( event.keyCode ) {
                     case 33: // pg up
                     case 37: // left
@@ -752,6 +766,9 @@
                              break;
                     case 66: // b
                              api.blackout();
+                             break;
+                    case 70: // b
+                             api.fullscreen();
                              break;
                     case 87: // w
                              api.whiteout();

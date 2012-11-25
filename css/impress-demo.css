@@ -683,6 +683,17 @@ a:focus {
   opacity:1;
 }
 
+/* 
+	Wrapper used for fullscreen mode
+*/
+
+#impress_wrapper{
+	position: fixed;
+	top:0;
+	bottom: 0;
+	left:0;
+	right: 0;
+}
 /*
     And as the last thing there is a workaround for quite strange bug.
     It happens a lot in Chrome. I don't remember if I've seen it in Firefox.
