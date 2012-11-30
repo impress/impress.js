@@ -202,7 +202,7 @@
         height: 768,
         maxScale: 1,
         minScale: 0,
-        enableHistory: 0,
+        enableHistory: 1,
         
         perspective: 1000,
         
