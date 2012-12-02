@@ -298,6 +298,11 @@
                 lastEntered = null;
             }
         };
+		
+        // `onStartTransition` is called whenever a transition to a step element starts
+        var onStartTransition = function (currentStep, target){
+            triggerEvent(target, "impress:starttransition", { current: currentStep, next: target });
+		}
         
         // `initStep` initializes given step element by reading data from its
         // data attributes and setting correct styles.
@@ -405,7 +410,7 @@
             
             initialized = true;
             
-            triggerEvent(root, "impress:init", { api: roots[ "impress-root-" + rootId ] });
+            triggerEvent(root, "impress:init", { api: roots[ "impress-root-" + rootId ], steps: steps, stepsData : stepsData });
         };
         
         // `getStep` is a helper function that returns a step element defined by parameter.
@@ -489,8 +494,11 @@
             
             // trigger leave of currently active element (if it's not the same step again)
             if (activeStep && activeStep !== el) {
-                onStepLeave(activeStep);
+                onStepLeave(activeStep, el);
             }
+			
+			// trigger that a new transition starts
+            onStartTransition(activeStep, el);
             
             // Now we alter transforms of `root` and `canvas` to trigger transitions.
             //
@@ -765,33 +773,36 @@
         //   as another way to moving to next step... And yes, I know that for the sake of
         //   consistency I should add [shift+tab] as opposite action...
         document.addEventListener("keyup", function ( event ) {
-            if ( event.keyCode === 9 || ( event.keyCode >= 32 && event.keyCode <= 34 ) || (event.keyCode >= 37 && event.keyCode <= 40)  || event.keyCode == 66 || event.keyCode == 87 || event.keyCode == 70) {
-                switch( event.keyCode ) {
-                    case 33: // pg up
-                    case 37: // left
-                    case 38: // up
-                             api.prev();
-                             break;
-                    case 9:  // tab
-                    case 32: // space
-                    case 34: // pg down
-                    case 39: // right
-                    case 40: // down
-                             api.next();
-                             break;
-                    case 66: // b
-                             api.blackout();
-                             break;
-                    case 70: // b
-                             api.fullscreen();
-                             break;
-                    case 87: // w
-                             api.whiteout();
-                             break;
-                }
-                
-                event.preventDefault();
-            }
+			var wasRegisteredKey = true;
+			switch( event.keyCode ) {
+				case 33: // pg up
+				case 37: // left
+				case 38: // up
+						 api.prev();
+						 break;
+				case 9:  // tab
+				case 32: // space
+				case 34: // pg down
+				case 39: // right
+				case 40: // down
+						 api.next();
+						 break;
+				case 66: // b
+						 api.blackout();
+						 break;
+				case 70: // f
+						 api.fullscreen();
+						 break;
+				case 87: // w
+						 api.whiteout();
+						 break;
+				default:
+						 wasRegisteredKey = false;
+						 break;
+			}
+			if(wasRegisteredKey)
+				event.preventDefault();
+            
         }, false);
         
         // delegated handler for clicking on the links to presentation steps
