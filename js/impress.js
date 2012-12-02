@@ -292,6 +292,11 @@
                 lastEntered = null;
             }
         };
+		
+        // `onStartTransition` is called whenever a transition to a step element starts
+        var onStartTransition = function (currentStep, target){
+            triggerEvent(target, "impress:starttransition", { current: currentStep, next: target });
+		};
         
         // `initStep` initializes given step element by reading data from its
         // data attributes and setting correct styles.
@@ -485,6 +490,9 @@
             if (activeStep && activeStep !== el) {
                 onStepLeave(activeStep);
             }
+			
+			// trigger that a new transition starts
+            onStartTransition(activeStep, el);
             
             // Now we alter transforms of `root` and `canvas` to trigger transitions.
             //
