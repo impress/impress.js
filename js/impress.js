@@ -281,6 +281,9 @@
                 triggerEvent(step, "impress:stepenter");
                 lastEntered = step;
             }
+			if(stepsData["impress-" + step.id].onenter != undefined){
+				eval('('+stepsData["impress-" + step.id].onenter+')();');
+			}
         };
         
         // `onStepLeave` is called whenever the step element is left
@@ -291,6 +294,9 @@
                 triggerEvent(step, "impress:stepleave");
                 lastEntered = null;
             }
+			if(stepsData["impress-" + step.id].onexit != undefined){
+				eval('('+stepsData["impress-" + step.id].onexit+')();');
+			}
         };
         
         // `initStep` initializes given step element by reading data from its
@@ -309,7 +315,9 @@
                         z: toNumber(data.rotateZ || data.rotate)
                     },
                     scale: toNumber(data.scale, 1),
-                    el: el
+                    el: el,
+					onenter: data.execEnter,
+					onexit: eval(data.execExit),
                 };
             
             if ( !el.id ) {
