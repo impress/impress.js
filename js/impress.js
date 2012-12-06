@@ -85,6 +85,22 @@
         return isNaN(numeric) ? (fallback || 0) : Number(numeric);
     };
     
+	// `toNumberRelative` returns the value or adds it to the base if
+	// it contains a +=/-= sign
+    var toNumberRelative = function (numeric, base, fallback) {
+		var n;
+		if (numeric == undefined) {
+			n = fallback || 0;
+		} else if (numeric.substring(0,2) == '+=') {
+			n = base + toNumber(numeric.substring(2,numeric.length));
+		} else if (numeric.substring(0,2) == '-=') {
+			n = base - toNumber(numeric.substring(2,numeric.length));
+		} else {
+			n = toNumber(numeric, base);
+		}
+		return n;
+    };
+    
     // `byId` returns element with given `id` - you probably have guessed that ;)
     var byId = function ( id ) {
         return document.getElementById(id);
@@ -303,6 +319,13 @@
         var onStartTransition = function (currentStep, target){
             triggerEvent(target, "impress:starttransition", { current: currentStep, next: target });
 		};
+		
+		// `prev_step` first point to start is 0,0,0
+		var prev_step = {
+			translate: { x: 0, y: 0, z: 0 },
+			rotate:    { x: 0, y: 0, z: 0 },
+			scale:     1
+		};
         
         // `initStep` initializes given step element by reading data from its
         // data attributes and setting correct styles.
@@ -310,18 +333,19 @@
             var data = el.dataset,
                 step = {
                     translate: {
-                        x: toNumber(data.x),
-                        y: toNumber(data.y),
-                        z: toNumber(data.z)
+                        x: toNumberRelative(data.x, prev_step.translate.x),
+                        y: toNumberRelative(data.y, prev_step.translate.y),
+                        z: toNumberRelative(data.z, prev_step.translate.z)
                     },
                     rotate: {
-                        x: toNumber(data.rotateX),
-                        y: toNumber(data.rotateY),
-                        z: toNumber(data.rotateZ || data.rotate)
+                        x: toNumberRelative(data.rotateX, prev_step.rotate.x),
+                        y: toNumberRelative(data.rotateY, prev_step.rotate.y),
+                        z: toNumberRelative(data.rotateZ || data.rotate, prev_step.rotate.z)
                     },
-                    scale: toNumber(data.scale, 1),
+                    scale: toNumberRelative(data.scale, prev_step.scale,1),
                     el: el
                 };
+			prev_step = step;
             
             if ( !el.id ) {
                 el.id = "step-" + (idx + 1);
@@ -401,6 +425,7 @@
             steps = $$(".step", root);
             steps.forEach( initStep );
             
+            alert(JSON.stringify(stepsData));
             // set a default initial state of the canvas
             currentState = {
                 translate: { x: 0, y: 0, z: 0 },
