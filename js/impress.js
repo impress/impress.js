@@ -317,7 +317,7 @@
                     scale: toNumber(data.scale, 1),
                     el: el,
 					onenter: data.execEnter,
-					onexit: eval(data.execExit),
+					onexit: data.execExit,
                 };
             
             if ( !el.id ) {
