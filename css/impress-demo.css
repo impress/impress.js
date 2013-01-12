@@ -244,7 +244,7 @@ a:focus {
     
     I agree that this may be not the most efficient, object-oriented and
     scalable way of styling, but most of steps have quite a custom look
-    and typography tricks here and there, so they had to be styles separately.
+    and typography tricks here and there, so they had to be styled separately.
 
     First is the title step with a big <h1> (no room for padding) and some
     3D positioning along Z axis.
@@ -344,7 +344,7 @@ a:focus {
 }
 
 /*
-    ... 'rotating' to rotate quater of a second later ...
+    ... 'rotating' to rotate a quarter of a second later ...
 */
 #ing.present .rotating {
     -webkit-transform: rotate(-10deg);
@@ -361,7 +361,7 @@ a:focus {
 }
 
 /*
-    ... and 'scaling' to scale down after another quater of a second.
+    ... and 'scaling' to scale down after another quarter of a second.
 */
 #ing.present .scaling {
     -webkit-transform: scale(0.7);
