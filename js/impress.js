@@ -710,6 +710,11 @@
                              api.prev();
                              break;
                     case 9:  // tab
+                             if( event.shiftKey ) { // if shift key is pressed, move to previous step
+                                 api.prev(); 
+                                 event.preventDefault();
+                                 return;
+                             }
                     case 32: // space
                     case 34: // pg down
                     case 39: // right
