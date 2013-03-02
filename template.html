@@ -1,0 +1,103 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=1024" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+
+    <title></title>
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+
+    <!--
+        Impress.js doesn't depend on any external stylesheet. Script adds all styles it needs for
+	presentation to work. These first three stylesheets provide some basics that you'll
+	probably find useful, but it is totally safe to remove them and start from scratch.
+    -->
+    <link href="css/reset.css" rel="stylesheet" />
+    <link href="css/framework.css" rel="stylesheet" />
+    <link href="css/hint-magic.css" rel="stylesheet" />
+</head>
+
+<body class="impress-not-supported">
+
+<div class="fallback-message">
+    <p>Your browser <b>doesn't support the features required</b> by impress.js, so you are presented with a simplified version of this presentation.</p>
+    <p>For the best experience please use the latest <b>Chrome</b>, <b>Safari</b> or <b>Firefox</b> browser.</p>
+</div>
+
+<div id="impress">
+    <!--
+        * `data-x`, `data-y`, `data-z` - they define the position of **the center** of step element on
+            the canvas in pixels; their default value is 0;
+        * `data-rotate-x`, `data-rotate-y`, 'data-rotate-z`, `data-rotate` - they define the rotation of
+            the element around given axis in degrees; their default value is 0; `data-rotate` and `data-rotate-z`
+            are exactly the same;
+        * `data-scale` - defines the scale of step element; default value is 1
+        
+        These values are used by impress.js in CSS transformation functions, so for more information consult
+        CSS transfrom docs: https://developer.mozilla.org/en/CSS/transform
+    -->
+
+    <!--
+        This slide has id 'bored' to make the hint-magic.css work; feel free to use another name,
+	but you'll need to update the css if you still want the hint.
+    -->
+    <div id="bored" class="step slide" data-x="-1000" data-y="-1500">
+        Slide 1
+    </div>
+
+    <div class="step slide" data-x="0" data-y="-1500">
+        Slide 2
+    </div>
+
+    <div class="step slide" data-x="1000" data-y="-1500">
+        Slide 3
+    </div>
+
+    <div id="slide_with_scale" class="step" data-x="0" data-y="0" data-scale="4">
+        This slide has scaling
+    </div>
+
+    <div id="slide_with_rotation" class="step" data-x="850" data-y="3000" data-rotate="90" data-scale="5">
+        This slide has rotation
+    </div>
+
+    <div id="slide_with_z_axis" class="step" data-x="2825" data-y="2325" data-z="-3000" data-rotate="300" data-scale="1">
+        This slide went into the Z axis
+    </div>
+
+    <div id="slide_with_3d" class="step" data-x="6200" data-y="4300" data-z="-100" data-rotate-x="-40" data-rotate-y="10" data-scale="2">
+        This slide has 3D
+    </div>
+
+    <div id="overview" class="step" data-x="3000" data-y="1500" data-scale="10">
+    </div>
+
+</div>
+
+<div class="hint">
+    <p>Use a spacebar or arrow keys to navigate</p>
+</div>
+<script>
+    if ("ontouchstart" in document.documentElement) { 
+        document.querySelector(".hint").innerHTML = "<p>Tap on the left or right to navigate</p>";
+    }
+</script>
+
+<!--
+    var api = impress();
+    `api.init()` - initializes the presentation,
+    `api.next()` - moves to next step of the presentation,
+    `api.prev()` - moves to previous step of the presentation,
+    `api.goto( idx | id | element, [duration] )` - moves the presentation to the step given by its index number
+         id or the DOM element; second parameter can be used to define duration of the transition in ms,
+         but it's optional - if not provided default transition duration for the presentation will be used.
+-->
+<script src="js/impress.js"></script>
+<script>impress().init();</script>
+
+</body>
+</html>
+
