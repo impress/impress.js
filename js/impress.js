@@ -346,10 +346,10 @@
             config = {
                 width: toNumber( rootData.width, defaults.width ),
                 height: toNumber( rootData.height, defaults.height ),
-                maxScale: toNumber( rootData.maxScale, defaults.maxScale ),
-                minScale: toNumber( rootData.minScale, defaults.minScale ),                
+                maxScale: toNumber( rootData.maxscale, defaults.maxScale ),
+                minScale: toNumber( rootData.minscale, defaults.minScale ),                
                 perspective: toNumber( rootData.perspective, defaults.perspective ),
-                transitionDuration: toNumber( rootData.transitionDuration, defaults.transitionDuration )
+                transitionDuration: toNumber( rootData.transitionduration, defaults.transitionDuration )
             };
             
             windowScale = computeWindowScale( config );
