@@ -279,7 +279,7 @@ Fortunately some tablets seem to have good enough hardware support and browsers 
 Currently impress.js presentations should work on iPad and Blackberry Playbook.
 
 In theory iPhone should also be able to run it (as it runs the same software as iPad), but I haven't
-found a good way to handle it's small screen.
+found a good way to handle its small screen.
 
 Also note that iOS supports `classList` and `dataset` APIs starting with version 5, so iOS 4.X and older
 requires polyfills to work.
