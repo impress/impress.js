@@ -43,6 +43,7 @@ Feel free to add your own example presentations (or websites) there.
 If you want to learn even more there is a [list of tutorials and other learning resources](https://github.com/bartaz/impress.js/wiki/impress.js-tutorials-and-other-learning-resources)
 on the wiki, too.
 
+These is also a book available about [Building impressive presentations with impress.js](http://www.packtpub.com/building-impressive-presentations-with-impressjs/book) by Rakhitha Nimesh Ratnayake.
 
 
 WANT TO CONTRIBUTE?
