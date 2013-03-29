@@ -190,6 +190,12 @@
     }
     
     // GLOBALS AND DEFAULTS
+
+    // element of the key step
+    var keyStep = document.getElementsByClassName('keyStep')[0];     
+
+    // Element storing the previously viewed step for going to/from the "Key" step.
+    var stepBeforeKey = null;
     
     // This is were the root elements of all impress.js instances will be kept.
     // Yes, this means you can have more than one instance on a page, but I'm not
@@ -197,7 +203,7 @@
     var roots = {};
     
     // some default config values.
-    var defaults = {
+    var defaults = {        
         width: 1024,
         height: 768,
         maxScale: 1,
@@ -242,7 +248,7 @@
         var stepsData = {};
         
         // element of currently active step
-        var activeStep = null;
+        var activeStep = null;              
         
         // current state (position, rotation and scale) of the presentation
         var currentState = null;
@@ -417,6 +423,17 @@
         
         // used to reset timeout for `impress:stepenter` event
         var stepEnterTimeout = null;
+
+
+        var togglekey = function () {                      
+            if ( activeStep == keyStep ) {
+                goto(getStep(stepBeforeKey), 500);
+            }
+            else {
+            stepBeforeKey = activeStep; 
+            return goto(keyStep, 500);
+            }
+        }
         
         // `goto` API function that moves to step given with `el` parameter (by index, id or element),
         // with a transition `duration` optionally given as second parameter.
@@ -546,7 +563,7 @@
             }, duration + delay);
             
             return el;
-        };
+        };        
         
         // `prev` API function goes to previous step (in document order)
         var prev = function () {
@@ -634,6 +651,7 @@
         return (roots[ "impress-root-" + rootId ] = {
             init: init,
             goto: goto,
+            togglekey: togglekey,
             next: next,
             prev: prev
         });
@@ -656,6 +674,9 @@
 (function ( document, window ) {
     'use strict';
     
+    //Determines if the presentation has a key step.    
+    var hasKeyStep = document.getElementsByClassName('keyStep')[0] != null;
+
     // throttling function calls, by Remy Sharp
     // http://remysharp.com/2010/07/21/throttling-function-calls/
     var throttle = function (fn, delay) {
@@ -679,8 +700,13 @@
         
         // KEYBOARD NAVIGATION HANDLERS
         
-        // Prevent default keydown action when one of supported key is pressed.
+        // Prevent default keydown action when one of supported keys is pressed.
         document.addEventListener("keydown", function ( event ) {
+            if (hasKeyStep) {
+                if (event.keyCode === 75) {
+                    event.preventDefault();
+                }
+            }
             if ( event.keyCode === 9 || ( event.keyCode >= 32 && event.keyCode <= 34 ) || (event.keyCode >= 37 && event.keyCode <= 40) ) {
                 event.preventDefault();
             }
@@ -701,8 +727,8 @@
         //   positioning. I didn't want to just prevent this default action, so I used [tab]
         //   as another way to moving to next step... And yes, I know that for the sake of
         //   consistency I should add [shift+tab] as opposite action...
-        document.addEventListener("keyup", function ( event ) {
-            if ( event.keyCode === 9 || ( event.keyCode >= 32 && event.keyCode <= 34 ) || (event.keyCode >= 37 && event.keyCode <= 40) ) {
+        document.addEventListener("keyup", function ( event ) {                        
+            if ( event.keyCode === 9 || event.keyCode === 75 || ( event.keyCode >= 32 && event.keyCode <= 34 ) || (event.keyCode >= 37 && event.keyCode <= 40) ) {
                 switch( event.keyCode ) {
                     case 33: // pg up
                     case 37: // left
@@ -715,7 +741,10 @@
                     case 39: // right
                     case 40: // down
                              api.next();
-                             break;
+                             break;                    
+                }
+                if (hasKeyStep && event.keyCode === 75) {
+                    api.togglekey();
                 }
                 
                 event.preventDefault();
