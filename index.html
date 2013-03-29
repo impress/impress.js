@@ -201,12 +201,13 @@
         down (4 times) to make it back to it's correct size.
         
     -->
-    <div id="title" class="step" data-x="0" data-y="0" data-scale="4">
+    <div id="title" class="step keyStep" data-x="0" data-y="0" data-scale="4">
         <span class="try">then you should try</span>
         <h1>impress.js<sup>*</sup></h1>
         <span class="footnote"><sup>*</sup> no rhyme intended</span>
-    </div>
 
+        <p style="font-size: 20px;">(This is the <b>key</b> step, press 'k' to toggle<br/> between it and your current step!)</p>
+    </div>
     <!--
         
         This element introduces rotation.
@@ -219,10 +220,26 @@
         <p>It's a <strong>presentation tool</strong> <br/>
         inspired by the idea behind <a href="http://prezi.com">prezi.com</a> <br/>
         and based on the <strong>power of CSS3 transforms and transitions</strong> in modern browsers.</p>
+    </div>    
+
+    <!--
+
+        Have a key step that you want to refer to over-and-over through out your
+        presentation? Easy! Just add the class `keyStep` to it and you can toggle 
+        your view from the step you are currently on to the key step by pressing 'k'
+        on your keyboard!
+
+    -->
+
+    <div id="key" class="step" data-x="-1100" data-y="1300" data-scale="3">
+        <h1>Have a <b>KEY</b> step that you'd like to refer to over and over again?</h1>
+        <br/>
+        <p style="font-size: 40px;"><i>Easy! Just press 'k' to toggle your view.</i></p>
+        <p style="font-size: 20px;">(It will take you to the key step, or back to the previous step you were viewing.)</p>
     </div>
 
     <div id="big" class="step" data-x="3500" data-y="2100" data-rotate="180" data-scale="6">
-        <p>visualize your <b>big</b> <span class="thoughts">thoughts</span></p>
+        <p>visualize your <b>big</b> <span class="thoughts">thoughts</span></p>        
     </div>
 
     <!--
@@ -235,7 +252,7 @@
         
     -->
     <div id="tiny" class="step" data-x="2825" data-y="2325" data-z="-3000" data-rotate="300" data-scale="1">
-        <p>and <b>tiny</b> ideas</p>
+        <p>and <b>tiny</b> ideas</p>        
     </div>
 
     <!--
