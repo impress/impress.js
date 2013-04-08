@@ -678,14 +678,26 @@
         var api = event.detail.api;
         
         // KEYBOARD NAVIGATION HANDLERS
+
+        function isInteractive (element) {
+            var interactive = Array.prototype.slice.call(document.querySelectorAll("[data-keyboard-capture=true], textarea, input"));
+
+            return interactive.some(function (interactiveElement) {
+                return (interactiveElement == element) || (interactiveElement.contains(element));
+            });
+        }
         
         // Prevent default keydown action when one of supported key is pressed.
         document.addEventListener("keydown", function ( event ) {
+            if(isInteractive(event.target)) {
+                return;
+            }
+
             if ( event.keyCode === 9 || ( event.keyCode >= 32 && event.keyCode <= 34 ) || (event.keyCode >= 37 && event.keyCode <= 40) ) {
                 event.preventDefault();
             }
         }, false);
-        
+
         // Trigger impress action (next or prev) on keyup.
         
         // Supported keys are:
@@ -702,6 +714,10 @@
         //   as another way to moving to next step... And yes, I know that for the sake of
         //   consistency I should add [shift+tab] as opposite action...
         document.addEventListener("keyup", function ( event ) {
+            if(isInteractive(event.target)) {
+                return;
+            }
+
             if ( event.keyCode === 9 || ( event.keyCode >= 32 && event.keyCode <= 34 ) || (event.keyCode >= 37 && event.keyCode <= 40) ) {
                 switch( event.keyCode ) {
                     case 33: // pg up
