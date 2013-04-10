@@ -274,7 +274,7 @@ Fortunately, as these are JavaScript APIs there are polyfill libraries that patc
 with these APIs.
 
 For example IE10 is said to support CSS 3D transforms and transitions, but it doesn't have `classList`
-not `dataset` APIs implemented at the moment. So including polyfill libraries *should* help IE10
+nor `dataset` APIs implemented at the moment. So including polyfill libraries *should* help IE10
 with running impress.js.
 
 
