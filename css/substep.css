@@ -81,7 +81,7 @@ ul {
 }
 
 
-.overload {
+#non-substeps.present .overload {
   display: inline-block;
   -webkit-animation-timing-function: ease-out;
   -webkit-animation: shazam 5s;
