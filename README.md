@@ -1,7 +1,7 @@
 impress.js with substeps!
 ============
 
-This is a fork of impress.js that adds sub-step capability.  For documentation on everything else about impress.js, see the parent project documentation.
+This is a fork of impress.js that adds sub-step capability.  For documentation on everything else about impress.js, read that [documentation](https://github.com/bartaz/impress.js).
 
 ## Using substeps
 
