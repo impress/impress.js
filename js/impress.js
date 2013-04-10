@@ -163,6 +163,44 @@
         
         return scale;
     };
+
+    // Simple helper to list any substeps within an element
+    var getSubsteps = function (element) {
+        return $$(".substep", element);
+    };    
+
+    var getActiveSubstep = function (element) {
+        return $(".present", element);
+    };
+
+    // Returns the first substep element marked as future
+    // or false if there are no future substeps
+    var getNextSubstep = function(element) {
+        var result = false;
+        var substeps = getSubsteps(element);
+        if (substeps.length > 0) {
+            var futureSubsteps = $$(".future", element);
+            if (futureSubsteps.length > 0) {
+                result = futureSubsteps[0];
+            }
+        }
+        return result;
+    }
+
+    // Returns the last substep element marked as past
+    // or false if there are no past substeps
+    var getPreviousSubstep = function(element) {
+        var result = false;
+        var substeps = getSubsteps(element);
+        if (substeps.length > 0) {
+            var pastSubsteps = $$(".past", element);
+            if (pastSubsteps.length > 0) {
+                result = pastSubsteps[pastSubsteps.length - 1];
+            }
+        }
+        return result;
+    }
+
     
     // CHECK SUPPORT
     var body = document.body;
@@ -326,6 +364,20 @@
                            scale(step.scale),
                 transformStyle: "preserve-3d"
             });
+
+            // need to prepare substeps with 'future'
+            // just like steps are handled
+            // doing this per step, rather than across the entire document
+            // but maybe it would be better to do this globally?
+            // since the substep list is only used within an element
+            // I didn't see the need for a global substep list
+            if (getSubsteps(el).length > 0) {
+                getSubsteps(el).forEach(
+                    function(substep){
+                        substep.classList.add("future");
+                    }
+                );
+            }
         };
         
         // `init` API function that initializes (and runs) the presentation.
@@ -550,18 +602,43 @@
         
         // `prev` API function goes to previous step (in document order)
         var prev = function () {
-            var prev = steps.indexOf( activeStep ) - 1;
-            prev = prev >= 0 ? steps[ prev ] : steps[ steps.length-1 ];
-            
-            return goto(prev);
+
+            if (getActiveSubstep(activeStep)) {
+                var activeSubstep = getActiveSubstep(activeStep);
+                activeSubstep.classList.remove("present");
+                activeSubstep.classList.add("future");
+                activeSubstep.classList.remove("active");
+
+                if (getPreviousSubstep()) {
+                    var previousSubstep = getPreviousSubstep(activeStep);
+                    previousSubstep.classList.remove("past");
+                    previousSubstep.classList.add("present");
+                }
+            } else  {
+                var prev = steps.indexOf( activeStep ) - 1;
+                prev = prev >= 0 ? steps[ prev ] : steps[ steps.length-1 ];
+                return goto(prev);
+            }
         };
         
         // `next` API function goes to next step (in document order)
         var next = function () {
-            var next = steps.indexOf( activeStep ) + 1;
-            next = next < steps.length ? steps[ next ] : steps[ 0 ];
-            
-            return goto(next);
+
+            if (getNextSubstep(activeStep)) {
+                if (getActiveSubstep(activeStep)) {
+                    var activeSubstep = getActiveSubstep(activeStep);
+                    activeSubstep.classList.remove("present");
+                    activeSubstep.classList.add("past");
+                }
+                var nextSubstep = getNextSubstep(activeStep);
+                nextSubstep.classList.remove("future");
+                nextSubstep.classList.add("present");
+                nextSubstep.classList.add("active");
+            } else {
+                var next = steps.indexOf( activeStep ) + 1;
+                next = next < steps.length ? steps[ next ] : steps[ 0 ];
+                return goto(next);
+            }
         };
         
         // Adding some useful classes to step elements.
@@ -786,6 +863,7 @@
             // force going to active step again, to trigger rescaling
             api.goto( document.querySelector(".active"), 500 );
         }, 250), false);
+
         
     }, false);
         
