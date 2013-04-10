@@ -26,6 +26,7 @@ p.note {
   color: #666;
 }
 
+/* this removes the bullet from ul elements */
 ul {
   text-align: left;
   margin-left: 15%;
@@ -33,11 +34,12 @@ ul {
   font-size: 1.8rem;
 }
 
-
+/* forcing a width onto all steps */
 .step {
   width: 900px;
 }
 
+/* this makes the bullet come back as '>' */
 .substep:before {
   content: ">";
   font-weight: bold;
@@ -48,7 +50,7 @@ ul {
   color: rgb(100, 135, 195);
 }
 
-/* give all steps a light opacity */
+/* give all steps a light opacity by default */
 .impress-enabled .step {
     opacity: 0.2;
     -webkit-transition: opacity 1s;
@@ -58,11 +60,18 @@ ul {
     transition:         opacity 1s;
 }
 
-/* bring up to full opacity when active */
+/* bring steps up to full opacity when active */
 .impress-enabled .step.active { 
   opacity: 1;
 }
 
+
+/*
+  This selector will grab all substeps in a browser that
+  is impress.js compatible, and set their opacity to zero.
+  This also sets up any property change to be transitioned
+  over 1 second
+*/
 .impress-enabled .substep {
   opacity: 0;
   -webkit-transition: all 1s;
@@ -72,15 +81,28 @@ ul {
   transition:         all 1s;  
 }
 
+/*
+  if a substep gets set to active it will get an
+  opacity of 1, transitioned over 1 second by the 
+  previous selector 
+*/
 .impress-enabled .substep.active {
   opacity: 1;
 }
 
+/*
+  when a substep has focus it is 'present'
+  so we add some color to make it all fancy
+*/
 .impress-enabled .substep.present { 
   color: rgb(100, 135, 195);
 }
 
-
+/*
+  this is just a silly animation for the 
+  information overload text on the 
+  non-substep example
+*/
 #non-substeps.present .overload {
   display: inline-block;
   -webkit-animation-timing-function: ease-out;
@@ -89,8 +111,20 @@ ul {
   -webkit-animation-delay: 3s;
 }
 
+/*
+  actual animation function
+*/
 @-webkit-keyframes shazam {
   0% {-webkit-transform: scale(0.4, 0.4) rotate(0deg); opacity: 0.3;}
   50% {opacity: 1.0; }
   100% {-webkit-transform: scale(1.9, 1.9) rotate(359deg); opacity: 0;}
+}
+
+/* 
+  just setting the div substep styles 
+  to something sensible 
+*/
+#works-on-divs-too div {
+  margin-left: 15%;
+  font-size: 1.8rem;
 }
