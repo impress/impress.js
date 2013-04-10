@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=1024" />
+  <title>impress.js - substep example - by tehfoo</title>
+
+  <link rel="stylesheet" href="css/impress-demo.css">
+  <link rel="stylesheet" href="css/substep.css">
+
+
+</head>
+<body>
+
+  <heading id="header">impress.js - <span class="blue">substep example</span> - by tehfoo</heading>
+
+  <div id="impress">
+
+  <div id="introduction" class="step" data-x="0" data-y="0">
+    <h1 class="line">Substep Example</h1>
+    <p>This is a really simple example of a presentation with substeps.</p>  
+    <p>Ready?</p>
+    <p>Use space or right arrow to go to the next step!</p>
+  </div>
+
+  <div id="with-substeps" class="step" data-x="1200" data-y="1500" data-scale="1.5" data-rotate="90">
+    <h1 class="line">Can Haz Substep?</h1>
+    <ul>
+      <li class="substep">Sure!</li>
+      <li class="substep">Why not?</li>
+      <li class="substep">Just add the 'substep' class</li>
+      <li class="substep">and amaze your friends</li>
+      <li class="substep">with substep goodness!</li>
+    </ul>
+  </div>
+
+  <div id="non-substeps" class="step" data-x="250" data-y="3000" data-scale="2" data-rotate="180">
+    <h1 class="line">These are not substeps...</h1>
+    <ul>
+      <li>Quelle Horreur!</li>
+      <li>Just regular old bullets</li>
+      <li>make for <span class="overload">information overload</span></li>
+      <li>so your audience is reading</li>
+      <li>instead of listening.</li>
+    </ul>
+  </div>
+
+
+  <div id="back-steps" class="step" data-x="-1200" data-y="1500" data-scale="1.5" data-rotate="270">
+    <h1 class="line">Did you notice?</h1>
+    <ul>
+      <li class="substep">You can go backward still!</li>
+      <li class="substep">Yeah, I know, it's pretty cool.</li>
+      <li class="substep">If you can't figure out how on your own</li>
+      <li class="substep">look at the arrow keys</li>
+      <li class="substep">and think about it real hard...</li>
+    </ul>
+  </div>
+
+
+  <div id="outroduction" class="step" data-x="-1500" data-y="0">
+    <h1 class="line">That's all.<sup>*</sup></h1>
+    <p>Thanks for playing</p>  
+    <p class="note"><sup>*</sup> note that slides don't re-init, 
+      so if you go forward through the steps again, everything will
+      be active.  Reload on the next step to start over.</p>
+  </div>
+
+
+  </div> <!-- end impress div -->
+
+  <script src="js/impress.js"></script>
+  <script>impress().init();</script>
+
+</body>
+</html>
