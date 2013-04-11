@@ -12,33 +12,33 @@
 </head>
 <body>
 
-  <heading id="header">impress.js - <span class="blue">substep example</span> - by tehfoo</heading>
+  <heading id="header">impress.js - <span>substep example</span> - by tehfoo</heading>
 
   <div id="impress">
 
     <div id="introduction" class="step" data-x="0" data-y="0">
-      <h1 class="line">Substep Example</h1>
-      <p>This is a really simple example of a presentation with substeps.</p>  
-      <p>Ready?</p>
-      <p>Use space or right arrow to go to the next step!</p>
+      <h1 class="line">impress.js - substep example</h1>
+      <p>This is an example of a presentation with substeps.</p>  
+      <p>Use the space bar or right arrow key to go to the next step,<br> keep pressing to reveal substeps!</p>
+      <h2 class="blue">Ready?<h2>
     </div>
 
     <div id="with-substeps" class="step" data-x="1200" data-y="1500" data-scale="1.5" data-rotate="90">
       <h1 class="line">Can Haz Substep?</h1>
       <ul>
-        <li class="substep">Sure!</li>
-        <li class="substep">Just add the 'substep' class</li>
-        <li class="substep">and amaze your friends</li>
-        <li class="substep">with substep goodness!</li>
+        <li id="ss-1" class="substep">Sure!</li>
+        <li id="ss-2" class="substep">Just add the 'substep' class</li>
+        <li id="ss-3" class="substep">and amaze your friends</li>
+        <li id="ss-4" class="substep">with substep goodness!</li>
       </ul>
     </div>
 
     <div id="non-substeps" class="step" data-x="250" data-y="3000" data-scale="2" data-rotate="180">
       <h1 class="line">These are not substeps...</h1>
-      <ul>
+      <ul class="boring-list">
         <li>Quelle Horreur!</li>
-        <li>Just regular old bullets</li>
-        <li>make for <span class="overload">information overload</span></li>
+        <li>Using regular old bullets</li>
+        <li>makes for <span class="overload">information overload</span></li>
         <li>so your audience is reading</li>
         <li>instead of listening.</li>
       </ul>
@@ -58,10 +58,10 @@
 
     <div id="outroduction" class="step" data-x="-1500" data-y="0">
       <h1 class="line">That's all.<sup>*</sup></h1>
-      <p>Thanks for playing</p>  
-      <p class="note"><sup>*</sup> note that slides don't re-init, 
-        so if you go forward through the steps again, everything will
-        be active.  Reload on the next step to start over.</p>
+      <p>Thanks for playing!</p>  
+      <p class="note"><sup>*</sup> note that slides don't re-init. 
+        If you go forward through the steps again, everything will
+        be active.  <br>Reload on the next step to start over.</p>
     </div>
 
 
