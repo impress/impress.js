@@ -169,7 +169,7 @@
         return $$(".substep", element);
     };    
 
-    var getActiveSubstep = function (element) {
+    var getPresentSubstep = function (element) {
         return $(".present", element);
     };
 
@@ -200,6 +200,44 @@
         }
         return result;
     }
+
+    // helper for navigation forward a substep
+    var substepForward = function (element) {
+        if (getPresentSubstep(element)) {
+            var presentSubstep = getPresentSubstep(element);
+            presentSubstep.classList.remove("present");
+            presentSubstep.classList.add("past");
+            triggerEvent(presentSubstep, "impress:substep-exit");
+        }
+        var nextSubstep = getNextSubstep(element);
+        nextSubstep.classList.remove("future");
+        nextSubstep.classList.add("present");
+        nextSubstep.classList.add("active");
+        // trigger events
+        triggerEvent(nextSubstep, "impress:substep-active");
+        triggerEvent(nextSubstep, "impress:substep-enter");
+    }
+
+
+
+    // helper for navigation back a substep
+    var substepBackward = function (element) {
+        var presentSubstep = getPresentSubstep(element);
+        presentSubstep.classList.remove("present");
+        presentSubstep.classList.add("future");
+        presentSubstep.classList.remove("active");
+
+         // trigger events
+        triggerEvent(presentSubstep, "impress:substep-inactive");
+        triggerEvent(presentSubstep, "impress:substep-exit");
+
+        if (getPreviousSubstep()) {
+            var previousSubstep = getPreviousSubstep(element);
+            previousSubstep.classList.remove("past");
+            previousSubstep.classList.add("present");
+            triggerEvent(previousSubstep, "impress:substep-enter");   
+        }
+    };
 
     
     // CHECK SUPPORT
@@ -366,11 +404,6 @@
             });
 
             // need to prepare substeps with 'future'
-            // just like steps are handled
-            // doing this per step, rather than across the entire document
-            // but maybe it would be better to do this globally?
-            // since the substep list is only used within an element
-            // I didn't see the need for a global substep list
             if (getSubsteps(el).length > 0) {
                 getSubsteps(el).forEach(
                     function(substep){
@@ -601,20 +634,16 @@
         };
         
         // `prev` API function goes to previous step (in document order)
+        // or backs up one stubstep if a present substep is found
         var prev = function () {
 
-            if (getActiveSubstep(activeStep)) {
-                var activeSubstep = getActiveSubstep(activeStep);
-                activeSubstep.classList.remove("present");
-                activeSubstep.classList.add("future");
-                activeSubstep.classList.remove("active");
-
-                if (getPreviousSubstep()) {
-                    var previousSubstep = getPreviousSubstep(activeStep);
-                    previousSubstep.classList.remove("past");
-                    previousSubstep.classList.add("present");
-                }
+            if (getPresentSubstep(activeStep)) {
+                // if this step has a substep in present state
+                // substepBackward. This is not exposed in API
+                // because substeps cannot be deep linked
+                substepBackward(activeStep);
             } else  {
+                // when no present substep goto previous step
                 var prev = steps.indexOf( activeStep ) - 1;
                 prev = prev >= 0 ? steps[ prev ] : steps[ steps.length-1 ];
                 return goto(prev);
@@ -623,23 +652,19 @@
         
         // `next` API function goes to next step (in document order)
         var next = function () {
-
             if (getNextSubstep(activeStep)) {
-                if (getActiveSubstep(activeStep)) {
-                    var activeSubstep = getActiveSubstep(activeStep);
-                    activeSubstep.classList.remove("present");
-                    activeSubstep.classList.add("past");
-                }
-                var nextSubstep = getNextSubstep(activeStep);
-                nextSubstep.classList.remove("future");
-                nextSubstep.classList.add("present");
-                nextSubstep.classList.add("active");
+                // if a future substep is found in this step
+                // substepForward.  This is not exposed in API 
+                // because substeps cannot be deep linked
+                substepForward(activeStep);
             } else {
+                // when no future substeps are available goto next step
                 var next = steps.indexOf( activeStep ) + 1;
                 next = next < steps.length ? steps[ next ] : steps[ 0 ];
                 return goto(next);
             }
         };
+
         
         // Adding some useful classes to step elements.
         //
@@ -863,7 +888,6 @@
             // force going to active step again, to trigger rescaling
             api.goto( document.querySelector(".active"), 500 );
         }, 250), false);
-
         
     }, false);
         
