@@ -15,9 +15,6 @@ h1 {
   color: rgb(100, 135, 195);
   font-size: 2.2rem;
   font-weight: bold;
-}
-
-h1.line {
   border-bottom: 0.0625rem solid #C8C8C8;
 }
 
@@ -42,7 +39,6 @@ p.note {
   color: #666;
 }
 
-/* this removes the bullet from ul elements */
 ul {
   text-align: left;
   margin-left: 15%;
@@ -58,15 +54,13 @@ ul.boring-list {
   width: 900px;
 }
 
-/* this makes the bullet come back as '>' */
+/* 
+  this highlights substeps with '>' 
+*/
 .substep:before {
   content: ">";
   font-weight: bold;
   padding-right: 3px;
-}
-
-.blue {
-  color: rgb(100, 135, 195);
 }
 
 /* give all steps a light opacity by default */
