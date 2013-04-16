@@ -1,36 +1,55 @@
+body {
+  font-family: 'Open Sans', sans-serif;
+  min-height: 740px;
+
+  background: rgb(215, 215, 215);
+  background: -webkit-gradient(radial, 50% 50%, 0, 50% 50%, 500, from(rgb(240, 240, 240)), to(rgb(190, 190, 190)));
+  background: -webkit-radial-gradient(rgb(240, 240, 240), rgb(190, 190, 190));
+  background:    -moz-radial-gradient(rgb(240, 240, 240), rgb(190, 190, 190));
+  background:     -ms-radial-gradient(rgb(240, 240, 240), rgb(190, 190, 190));
+  background:      -o-radial-gradient(rgb(240, 240, 240), rgb(190, 190, 190));
+  background:         radial-gradient(rgb(240, 240, 240), rgb(190, 190, 190));
+}
 
 #header {
   position: absolute;
-  top: .5rem;
-  left: 3rem;
+  top: 2rem;
+  left: 6rem;
+  font-size: 1.4rem;
+  background-color: rgb(230, 230, 230);
+  border: 1px solid rgb(190, 190, 190);
+  border-top: 1px solid rgb(170, 170, 170);
+  border-left: 1px solid rgb(170, 170, 170);
+  padding: 8px 12px;
 }
 
-#header span {
+a, a:visited {
   color: rgb(100, 135, 195);
-  font-weight: bold;
+  text-decoration: none;
 }
 
 
 h1 {
-  color: rgb(100, 135, 195);
   font-size: 2.2rem;
   font-weight: bold;
-  border-bottom: 0.0625rem solid #C8C8C8;
+  color: rgb(100, 135, 195);
+  border-bottom: 1px solid #C8C8C8;
 }
 
+
 h2 {
-  text-align: right;
   margin-right: 100px;
-  font-size: 1.9rem;
   margin-bottom: 20px;
-    color: rgb(100, 135, 195);
+  font-size: 1.9rem;
   font-weight: bold;
+  text-align: right;
+  color: rgb(100, 135, 195);
 }
 
 p {
-  font-size: 1.8rem;
   margin: 25px 0;
   margin-left: 60px;
+  font-size: 1.8rem;
   line-height: 2rem;
 }
 
@@ -40,9 +59,10 @@ p.note {
 }
 
 ul {
-  text-align: left;
   margin-left: 15%;
   font-size: 1.8rem;
+  text-align: left;
+  list-style: none;
 }
 
 ul.boring-list {
@@ -51,7 +71,16 @@ ul.boring-list {
 
 /* forcing a width onto all steps */
 .step {
+  position: relative;
+  margin: 20px auto;
   width: 900px;
+  padding: 40px;
+
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing:    border-box;
+    -ms-box-sizing:     border-box;
+    -o-box-sizing:      border-box;
+    box-sizing:         border-box;
 }
 
 /* 
@@ -65,12 +94,12 @@ ul.boring-list {
 
 /* give all steps a light opacity by default */
 .impress-enabled .step {
-    opacity: 0.2;
-    -webkit-transition: opacity 1s;
-    -moz-transition:    opacity 1s;
-    -ms-transition:     opacity 1s;
-    -o-transition:      opacity 1s;
-    transition:         opacity 1s;
+  opacity: 0.2;
+  -webkit-transition: opacity 1s;
+  -moz-transition:    opacity 1s;
+  -ms-transition:     opacity 1s;
+  -o-transition:      opacity 1s;
+  transition:         opacity 1s;
 }
 
 /* bring steps up to full opacity when active */
@@ -146,16 +175,21 @@ ul.boring-list {
   position the hidden divs off screen
 */
 #works-on-divs-too div {
-  font-size: 1.8rem;
   position: absolute;
   left: -500px;
+  font-size: 1.8rem;
 }
 
 /* 
-  let them trainstion on screen when active 
+  let them transition on screen when active 
 */
 #works-on-divs-too div.active {
   position: relative;
   left: 0;
   margin-left: 15% 
 }
+
+.right {
+  float: right;
+}
+

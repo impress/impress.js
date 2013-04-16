@@ -3,28 +3,34 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=1024" />
-  <title>impress.js - substep example - by tehfoo</title>
+  <title>impress.js - substep fork - by tehfoo</title>
 
-  <link rel="stylesheet" href="css/impress-demo.css">
+  <link rel="stylesheet" src="//normalize-css.googlecode.com/svn/trunk/normalize.css" />
   <link rel="stylesheet" href="css/substep.css">
 
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
 
 </head>
 <body>
 
-  <heading id="header">impress.js - <span>substep example</span> - by tehfoo</heading>
+  <heading id="header">
+      <span>impress.js </span>
+      <a href="http://github.com/tehfoo/impress.js" target="_blank"> - substep fork - </a>
+      <span>by tehfoo</span>
+  </heading>
 
   <div id="impress">
 
     <div id="introduction" class="step" data-x="0" data-y="0">
-      <h1>impress.js - substep example</h1>
+      <h1 class="line">impress.js - substep example</h1>
       <p>This is an example of a presentation with substeps.</p>  
-      <p>Use the space bar or right arrow key to go to the next step,<br> keep pressing to reveal substeps!</p>
+      <p>Use space bar or right arrow to go to the next step. </p>
+      <p>Keep pressing to reveal substeps!</p>
       <h2>Ready?<h2>
     </div>
 
     <div id="can-haz" class="step" data-x="1200" data-y="1500" data-scale="1.5" data-rotate="90">
-      <h1>Can Haz Substep?</h1>
+      <h1 class="line">Can Haz Substep?</h1>
       <ul>
         <li class="substep">Sure!</li>
         <li class="substep">Just add the 'substep' class</li>
@@ -34,7 +40,7 @@
     </div>
 
     <div id="or-not" class="step" data-x="250" data-y="3000" data-scale="2" data-rotate="180">
-      <h1>These are not substeps...</h1>
+      <h1 class="line">These are not substeps...</h1>
       <ul class="boring-list">
         <li>Quelle Horreur!</li>
         <li>Using regular old bullets</li>
@@ -46,7 +52,7 @@
 
 
     <div id="try-back" class="step" data-x="-1200" data-y="1500" data-scale="1.5" data-rotate="270">
-      <h1>Did you notice?</h1>
+      <h1 class="line">Did you notice?</h1>
       <div id="works-on-divs-too">
         <div class="substep">You can go backward still!</div>
         <div class="substep">If you can't figure out how</div>
@@ -57,11 +63,12 @@
 
 
     <div id="outroduction" class="step" data-x="-1500" data-y="0">
-      <h1>That's all.<sup>*</sup></h1>
+      <h1 class="line">That's all.<sup>*</sup></h1>
       <p>Thanks for playing!</p>  
       <p class="note"><sup>*</sup> note that slides don't re-init. 
         If you go forward through the steps again, everything will
         be active.  <br>Reload on the next step to start over.</p>
+      <a href="http://github.com/tehfoo/impress.js" class="right" target="_blank">See the code on Github</a>
     </div>
 
 
