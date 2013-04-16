@@ -13,14 +13,50 @@
 </head>
 <body>
 
+  <!--
+                    8               o                       
+                    8               8                       
+      .oPYo. o    o 8oPYo. .oPYo.  o8P .oPYo. .oPYo. .oPYo. 
+      Yb..   8    8 8    8 Yb..     8  8oooo8 8    8 Yb..   
+        'Yb. 8    8 8    8   'Yb.   8  8.     8    8   'Yb. 
+      `YooP' `YooP' `YooP' `YooP'   8  `Yooo' 8YooP' `YooP' 
+      :.....::.....::.....::.....:::..::.....:8 ....::.....:
+      ::::::::::::::::::::::::::::::::::::::::8 ::::::::::::
+      ::::::::::::::::::::::::::::::::::::::::..::::::::::::
+      :::::::::::::::::::  an impress.js fork, by tehfoo  ::
+      ::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+    Substeps are easy...  you can use these comments to see how they are done.
+    NOTE: you will also have to add CSS for the '.substep' class to make anything happen
+    See the css/substep.css for more details.
+
+    If it's not entirely clear, you need the forked 'impress.js' script from this project's 
+    js folder to make substeps work.  Otherwise, everything else is exactly the same as 
+    the upstream impress.js, so you can use that project's docs, examples, etc.
+
+  -->
+
+
+  <!--    
+    This header isn't part of the impress steps.  It stays put because it
+    has absolute positioning in the css
+  -->
   <heading id="header">
       <span>impress.js </span>
       <a href="http://github.com/tehfoo/impress.js" target="_blank"> - substep fork - </a>
       <span>by tehfoo</span>
   </heading>
 
+  <!-- Anything handled by impress.js must be inside this #impress div -->
   <div id="impress">
 
+    <!-- 
+
+      Here is a regular impress.js step.  RTFM on impress.js to understand how this works, 
+      but the TL;DR is the data-FOO properties are telling impress where to position each step.
+      Adding class="step" is what lets impress.js know this is a step in your presentation 
+
+    -->
     <div id="introduction" class="step" data-x="0" data-y="0">
       <h1 class="line">impress.js - substep example</h1>
       <p>This is an example of a presentation with substeps.</p>  
@@ -29,6 +65,17 @@
       <h2>Ready?<h2>
     </div>
 
+    <!-- 
+      
+      This where the money gets made.  By adding class="substep" to the list elements, they
+      become substeps for impress.js to navigate.  They do not understand any of the data-FOO 
+      properties.  All that happens is impress.js adds 'future', 'present', 'active', and 'past'
+      to the substep elements, almost exactly the way impress.js handles steps.
+
+      The almost part is around the 'active' class.  Substeps stay 'active' one you have been 
+      over them.  A normal 'step' is only active when it's 'present'.
+
+    -->
     <div id="can-haz" class="step" data-x="1200" data-y="1500" data-scale="1.5" data-rotate="90">
       <h1 class="line">Can Haz Substep?</h1>
       <ul>
@@ -39,6 +86,13 @@
       </ul>
     </div>
 
+    <!-- 
+
+      Look, ma!  Another regular step!  This is here to illustrate that you can mix substeps into a
+      a regular flow and the navigation makes sense.  Going backwark, the substeps will get played
+      back, and the 'active' class will be removed when they return to being 'future' substeps.
+
+    -->
     <div id="or-not" class="step" data-x="250" data-y="3000" data-scale="2" data-rotate="180">
       <h1 class="line">These are not substeps...</h1>
       <ul class="boring-list">
@@ -50,7 +104,12 @@
       </ul>
     </div>
 
+    <!--
 
+      By now you get it.  I'll just wait quietly while YOU tell ME how this step works. 
+      Hint: all you have to do is add a CSS classname...
+      
+    -->
     <div id="try-back" class="step" data-x="-1200" data-y="1500" data-scale="1.5" data-rotate="270">
       <h1 class="line">Did you notice?</h1>
       <div id="works-on-divs-too">
@@ -61,7 +120,12 @@
       </div>
     </div>
 
+    <!--
 
+     See how easy that was?  Booya!  Feel free to give me mad props for making
+     the world a better place to live.  Or just say 'hi'!  Or don't.
+
+   -->
     <div id="outroduction" class="step" data-x="-1500" data-y="0">
       <h1 class="line">That's all.<sup>*</sup></h1>
       <p>Thanks for playing!</p>  
@@ -71,9 +135,20 @@
       <a href="http://github.com/tehfoo/impress.js" class="right" target="_blank">See the code on Github</a>
     </div>
 
+    <!--
+
+      If you use this, and you like it, and you notice my pull request never makes it back into the
+      the upstream impress.js, maybe just give them a little nudge.  I'd rather not maintain an
+      impress.js fork going forward.
+
+    -->
 
   </div> <!-- end impress div -->
 
+ <!-- 
+  Again, RTFM on impress.js to know everything else... like what this little script 
+  is doing. It's kinda important!
+ -->
   <script src="js/impress.js"></script>
   <script>impress().init();</script>
 
