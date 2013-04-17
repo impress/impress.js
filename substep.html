@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=1024" />
+  <title>impress.js - substep example</title>
+
+  <link rel="stylesheet" src="//normalize-css.googlecode.com/svn/trunk/normalize.css" />
+  <link rel="stylesheet" href="css/substep.css">
+
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+
+</head>
+<body>
+
+  <!--
+                    8               o                       
+                    8               8                       
+      .oPYo. o    o 8oPYo. .oPYo.  o8P .oPYo. .oPYo. .oPYo. 
+      Yb..   8    8 8    8 Yb..     8  8oooo8 8    8 Yb..   
+        'Yb. 8    8 8    8   'Yb.   8  8.     8    8   'Yb. 
+      `YooP' `YooP' `YooP' `YooP'   8  `Yooo' 8YooP' `YooP' 
+      :.....::.....::.....::.....:::..::.....:8 ....::.....:
+      ::::::::::::::::::::::::::::::::::::::::8 ::::::::::::
+      ::::::::::::::::::::::::::::::::::::::::..::::::::::::
+      ::::::::::::::::::   an impress.js contribution    :::
+      ::::::::::::::::::                    by tehfoo    :::
+      ::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+    Substeps are easy...  you can use these comments to see how they are done.
+    NOTE: you will also have to add CSS for the '.substep' class to make anything happen
+    See the css/substep.css for more details.
+
+    For general detail on using impress.js, or how it works, view the source 
+    of index.html instead.
+
+  -->
+
+
+  <!--    
+    This header isn't part of the impress steps.  It stays put because it
+    has absolute positioning in the css
+  -->
+  <heading id="header">
+      impress.js <span class="blue">substep</span> example
+  </heading>
+
+  <!-- Anything handled by impress.js must be inside this #impress div -->
+  <div id="impress">
+
+    <!-- 
+
+      Here is a regular impress.js step.  View source on impress.js to understand how this works, 
+      but the TL;DR is the data-FOO properties are telling impress where to position each step.
+      Adding class="step" is what lets impress.js know this is a step in your presentation 
+
+    -->
+    <div id="introduction" class="step" data-x="0" data-y="0">
+      <h1 class="line">impress.js - substep example</h1>
+      <p>This is an example of a presentation with substeps.</p>  
+      <p>Use space bar or right arrow to go to the next step. </p>
+      <p>Keep pressing to reveal substeps!</p>
+      <h2>Ready?<h2>
+    </div>
+
+    <!-- 
+      
+      This where the money gets made.  By adding class="substep" to the list elements, they
+      become substeps for impress.js to navigate.  They do not understand any of the data-FOO 
+      properties.  All that happens is impress.js adds 'future', 'present', 'active', and 'past'
+      to the substep elements, almost exactly the way impress.js handles steps.
+
+      I say almost because of the 'active' class.  Substeps stay 'active' once you have been 
+      over them.  A normal 'step' is only active when it's 'present'.
+
+    -->
+    <div id="can-haz" class="step" data-x="1200" data-y="1500" data-scale="1.5" data-rotate="90">
+      <h1 class="line">Can Haz Substep?</h1>
+      <ul>
+        <li class="substep">Sure!</li>
+        <li class="substep">Just add the 'substep' class</li>
+        <li class="substep">and amaze your friends</li>
+        <li class="substep">with substep goodness!</li>
+      </ul>
+    </div>
+
+    <!-- 
+
+      Look, ma!  Another regular step!  This is here to illustrate that you can mix substeps into a
+      a regular flow and the navigation makes sense.  Going backward, the substeps will get played
+      back, and the 'active' class will be removed when they return to being 'future' substeps.
+
+    -->
+    <div id="or-not" class="step" data-x="250" data-y="3000" data-scale="2" data-rotate="180">
+      <h1 class="line">These are not substeps...</h1>
+      <ul class="boring-list">
+        <li>Quelle Horreur!</li>
+        <li>Using regular old bullets</li>
+        <li>makes for <span class="overload">information overload</span></li>
+        <li>so your audience is reading</li>
+        <li>instead of listening.</li>
+      </ul>
+    </div>
+
+    <!--
+
+      By now you get it.  I'll just wait quietly while YOU tell ME how this step works. 
+      Hint: all you have to do is add a CSS classname...
+      
+    -->
+    <div id="try-back" class="step" data-x="-1200" data-y="1500" data-scale="1.5" data-rotate="270">
+      <h1 class="line">Did you notice?</h1>
+      <div id="works-on-divs-too">
+        <div class="substep">You can go backward still!</div>
+        <div class="substep">If you can't figure out how</div>
+        <div class="substep">look at the arrow keys</div>
+        <div class="substep">and think about it real hard...</div>
+      </div>
+    </div>
+
+    <!--
+
+     See how easy that was?  Booya!  Feel free to give tehfoo mad props for making
+     the world a better place to live.  Or just say 'hi'!  Or don't.  impress.js was
+     pretty badass without substeps, and now it's probably too 'powerpointish' ;)
+
+   -->
+    <div id="outroduction" class="step" data-x="-1500" data-y="0">
+      <h1 class="line">That's all.<sup>*</sup></h1>
+      <p>Thanks for playing!</p>  
+      <p class="note"><sup>*</sup> note that slides don't re-init. 
+        If you go forward through the steps again, everything will
+        be active.  <br>Reload on the next step to start over.</p>
+      <a href="http://github.com/tehfoo/" class="right" target="_blank">Thanks, tehfoo!</a>
+    </div>
+
+
+  </div> <!-- end impress div -->
+
+ <!-- 
+  Again, RTFM via the source of index.html to know everything else about impress.js... 
+  like what this little script is doing. It's kinda important!
+ -->
+  <script src="js/impress.js"></script>
+  <script>impress().init();</script>
+
+</body>
+</html>

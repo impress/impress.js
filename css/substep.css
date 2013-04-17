@@ -1,0 +1,199 @@
+body {
+  font-family: 'Open Sans', sans-serif;
+  min-height: 740px;
+
+  background: rgb(215, 215, 215);
+  background: -webkit-gradient(radial, 50% 50%, 0, 50% 50%, 500, from(rgb(240, 240, 240)), to(rgb(190, 190, 190)));
+  background: -webkit-radial-gradient(rgb(240, 240, 240), rgb(190, 190, 190));
+  background:    -moz-radial-gradient(rgb(240, 240, 240), rgb(190, 190, 190));
+  background:     -ms-radial-gradient(rgb(240, 240, 240), rgb(190, 190, 190));
+  background:      -o-radial-gradient(rgb(240, 240, 240), rgb(190, 190, 190));
+  background:         radial-gradient(rgb(240, 240, 240), rgb(190, 190, 190));
+}
+
+#header {
+  position: absolute;
+  top: 2rem;
+  left: 6rem;
+  font-size: 1.4rem;
+  background-color: rgb(230, 230, 230);
+  border: 1px solid rgb(190, 190, 190);
+  border-top: 1px solid rgb(170, 170, 170);
+  border-left: 1px solid rgb(170, 170, 170);
+  padding: 8px 12px;
+}
+
+#header .blue {
+  color: rgb(100, 135, 195);;
+}
+
+a, a:visited {
+  color: rgb(100, 135, 195);
+  text-decoration: none;
+}
+
+
+h1 {
+  font-size: 2.2rem;
+  font-weight: bold;
+  color: rgb(100, 135, 195);
+  border-bottom: 1px solid #C8C8C8;
+}
+
+
+h2 {
+  margin-right: 100px;
+  margin-bottom: 20px;
+  font-size: 1.9rem;
+  font-weight: bold;
+  text-align: right;
+  color: rgb(100, 135, 195);
+}
+
+p {
+  margin: 25px 0;
+  margin-left: 60px;
+  font-size: 1.8rem;
+  line-height: 2rem;
+}
+
+p.note {
+  font-size: 1rem;
+  color: #666;
+}
+
+ul {
+  margin-left: 15%;
+  font-size: 1.8rem;
+  text-align: left;
+  list-style: none;
+}
+
+ul.boring-list {
+  list-style: disc;
+}
+
+/* forcing a width onto all steps */
+.step {
+  position: relative;
+  margin: 20px auto;
+  width: 900px;
+  padding: 40px;
+
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing:    border-box;
+    -ms-box-sizing:     border-box;
+    -o-box-sizing:      border-box;
+    box-sizing:         border-box;
+}
+
+/* 
+  this highlights substeps with '>' 
+*/
+.substep:before {
+  content: ">";
+  font-weight: bold;
+  padding-right: 3px;
+}
+
+/* give all steps a light opacity by default */
+.impress-enabled .step {
+  opacity: 0.2;
+  -webkit-transition: opacity 1s;
+  -moz-transition:    opacity 1s;
+  -ms-transition:     opacity 1s;
+  -o-transition:      opacity 1s;
+  transition:         opacity 1s;
+}
+
+/* bring steps up to full opacity when active */
+.impress-enabled .step.active { 
+  opacity: 1;
+}
+
+
+/*
+  This selector will grab all substeps in a browser that
+  is impress.js compatible, and set their opacity to zero.
+  This also sets up any property change to be transitioned
+  over 1 second
+*/
+.impress-enabled .substep {
+  opacity: 0;
+  -webkit-transition: all 1s;
+  -moz-transition:    all 1s;
+  -ms-transition:     all 1s;
+  -o-transition:      all 1s;
+  transition:         all 1s;  
+}
+
+/*
+  if a substep gets set to active it will get an
+  opacity of 1, transitioned over 1 second by the 
+  previous selector 
+*/
+.impress-enabled .substep.active {
+  opacity: 1;
+}
+
+/*
+  when a substep has focus it is 'present'
+  so we add some color to make it all fancy
+*/
+.impress-enabled .substep.present { 
+  color: rgb(100, 135, 195);
+}
+
+/*
+  this is just a silly animation for the 
+  information overload text on the 
+  non-substep example
+*/
+#non-substeps.present .overload {
+  display: inline-block;
+  -webkit-animation-timing-function: ease-out;
+  -webkit-animation: shazam 5s;
+  -webkit-animation-iteration-count: 5; 
+  -webkit-animation-delay: 3s;
+}
+
+/*
+  actual animation function
+*/
+@-webkit-keyframes shazam {
+  0% {-webkit-transform: scale(0.4, 0.4) rotate(0deg); opacity: 0.3;}
+  50% {opacity: 1.0; }
+  100% {-webkit-transform: scale(1.9, 1.9) rotate(359deg); opacity: 0;}
+}
+
+/* 
+  just setting the div substep styles 
+  to something interesting...
+  containing div needs a forced height 
+*/
+#works-on-divs-too {
+  height: 400px;
+}
+
+/*
+  position the hidden divs off screen
+*/
+#works-on-divs-too div {
+  position: absolute;
+  left: -500px;
+  font-size: 1.8rem;
+}
+
+/* 
+  let them transition on screen when active 
+*/
+#works-on-divs-too div.active {
+  position: relative;
+  left: 0;
+  margin-left: 15% 
+}
+
+.right {
+  float: right;
+}
+
