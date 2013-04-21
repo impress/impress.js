@@ -587,6 +587,24 @@
                 event.target.classList.remove("past");
                 event.target.classList.remove("future");
                 event.target.classList.add("present");
+
+                // Since the impress:stepleave might leave our step in an
+                // inconsistent state (when we access the step by something else
+                // than next();) we fixe the classes
+                var presentFound = false;
+                steps.forEach(function (step) {
+                    if (step.classList.contains("present")) {
+                        presentFound = true;
+                        return true;
+                    }
+                    if (presentFound) {
+                        step.classList.remove("past");
+                        step.classList.add("future");
+                    } else {
+                        step.classList.remove("future");
+                        step.classList.add("past");
+                    }
+                });
             }, false);
             
             root.addEventListener("impress:stepleave", function (event) {
