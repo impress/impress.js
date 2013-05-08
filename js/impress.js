@@ -231,7 +231,7 @@
         triggerEvent(presentSubstep, "impress:substep-inactive");
         triggerEvent(presentSubstep, "impress:substep-exit");
 
-        if (getPreviousSubstep()) {
+        if (getPreviousSubstep(element)) {
             var previousSubstep = getPreviousSubstep(element);
             previousSubstep.classList.remove("past");
             previousSubstep.classList.add("present");
