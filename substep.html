@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=1024" />
+
   <title>impress.js - substep example</title>
 
   <link rel="stylesheet" src="//normalize-css.googlecode.com/svn/trunk/normalize.css" />
@@ -33,7 +34,6 @@
 
     For general detail on using impress.js, or how it works, view the source 
     of index.html instead.
-
   -->
 
 
@@ -70,7 +70,7 @@
       properties.  All that happens is impress.js adds 'future', 'present', 'active', and 'past'
       to the substep elements, almost exactly the way impress.js handles steps.
 
-      I say almost because of the 'active' class.  Substeps stay 'active' once you have been 
+      The almost part is around the 'active' class.  Substeps stay 'active' one you have been 
       over them.  A normal 'step' is only active when it's 'present'.
 
     -->
@@ -119,11 +119,7 @@
     </div>
 
     <!--
-
-     See how easy that was?  Booya!  Feel free to give tehfoo mad props for making
-     the world a better place to live.  Or just say 'hi'!  Or don't.  impress.js was
-     pretty badass without substeps, and now it's probably too 'powerpointish' ;)
-
+     See how easy that was?  Booya!  
    -->
     <div id="outroduction" class="step" data-x="-1500" data-y="0">
       <h1 class="line">That's all.<sup>*</sup></h1>
@@ -131,15 +127,15 @@
       <p class="note"><sup>*</sup> note that slides don't re-init. 
         If you go forward through the steps again, everything will
         be active.  <br>Reload on the next step to start over.</p>
-      <a href="http://github.com/tehfoo/" class="right" target="_blank">Thanks, tehfoo!</a>
+      <a href="http://github.com/tehfoo/" class="right" target="_blank">Substeps contributed by tehfoo!</a>
     </div>
-
-
   </div> <!-- end impress div -->
 
  <!-- 
+
   Again, RTFM via the source of index.html to know everything else about impress.js... 
   like what this little script is doing. It's kinda important!
+ 
  -->
   <script src="js/impress.js"></script>
   <script>impress().init();</script>
