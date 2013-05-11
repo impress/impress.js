@@ -401,7 +401,23 @@
             
             triggerEvent(root, "impress:init", { api: roots[ "impress-root-" + rootId ] });
         };
-        
+
+        // `configure` shall be use to define configuration of impress,
+        // configuration is stored in the root node. The only used key right
+        // is "pastfuturepolicy" than can take the value "steps-order" to use the
+        // steps order to affect the "past" and "future" classes on steps.
+        var configure = function (key, value) {
+            root.dataset[key] = value;
+        };
+
+        // `getConfigurationValue` is a helper to access configuration
+        var getConfigurationValue = function (key) {
+            if (!(key in root.dataset)) {
+                return undefined;
+            }
+            return root.dataset[key];
+        };
+
         // `getStep` is a helper function that returns a step element defined by parameter.
         // If a number is given, step with index given by the number is returned, if a string
         // is given step element with such id is returned, if DOM element is given it is returned
@@ -588,9 +604,14 @@
                 event.target.classList.remove("future");
                 event.target.classList.add("present");
 
+                if (getConfigurationValue("pastfuturepolicy") !== "steps-order") {
+                    return;
+                }
+
                 // Since the impress:stepleave might leave our step in an
-                // inconsistent state (when we access the step by something else
-                // than next();) we fixe the classes
+                // inconsistent state under pastfuturepolicy="steps-order"
+                // (when we access the step by something else than next();)
+                // we fixe the classes
                 var presentFound = false;
                 steps.forEach(function (step) {
                     if (step.classList.contains("present")) {
@@ -651,6 +672,7 @@
         // store and return API for given impress.js root element
         return (roots[ "impress-root-" + rootId ] = {
             init: init,
+            configure: configure,
             goto: goto,
             next: next,
             prev: prev
