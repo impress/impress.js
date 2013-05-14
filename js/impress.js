@@ -784,7 +784,7 @@
         // rescale presentation when window is resized
         window.addEventListener("resize", throttle(function () {
             // force going to active step again, to trigger rescaling
-            api.goto( document.querySelector(".active"), 500 );
+            api.goto( document.querySelector(".step.active"), 500 );
         }, 250), false);
         
     }, false);
