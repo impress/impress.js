@@ -427,6 +427,14 @@
                 return false;
             }
             
+            if ( el.classList.contains("skip") ) {
+                var skippedOffset = steps.indexOf(activeStep) > steps.indexOf(el) ? -1 : 1;
+                var skipped = steps.indexOf(el) + skippedOffset;
+                skipped = skipped < steps.length ? steps[skipped] : steps[0];
+                goto(skipped);
+                return false;
+            }
+            
             // Sometimes it's possible to trigger focus on first link with some keyboard action.
             // Browser in such a case tries to scroll the page to make this element visible
             // (even that body overflow is set to hidden) and it breaks our careful positioning.
