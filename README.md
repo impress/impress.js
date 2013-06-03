@@ -9,6 +9,12 @@ transitions in modern browsers and inspired by the idea behind prezi.com.
 impress.js may not help you if you have nothing interesting to say ;)
 
 
+WANT TO IMPRESS WITH YOUR IMPRESS.JS?
+---------------------------------------
+
+[![impress.js - Beyond the Presentation Challenge](http://bartaz.github.io/impress.js/img/impressjs-challengepost-banner.png)](http://impressjs.challengepost.com)
+
+
 HOW TO USE IT
 ---------------
 
