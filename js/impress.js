@@ -227,7 +227,8 @@
                 init: empty,
                 goto: empty,
                 prev: empty,
-                next: empty
+                next: empty,
+                getActiveStep: empty
             };
         }
         
@@ -564,6 +565,11 @@
             return goto(next);
         };
         
+        // `getActiveStep` API function to get active step
+        var getActiveStep = function () {
+            return (activeStep) ? activeStep : document.createElement('div');
+        };
+        
         // Adding some useful classes to step elements.
         //
         // All the steps that have not been shown yet are given `future` class.
@@ -635,7 +641,8 @@
             init: init,
             goto: goto,
             next: next,
-            prev: prev
+            prev: prev,
+            getActiveStep: getActiveStep
         });
 
     };
