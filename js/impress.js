@@ -400,6 +400,13 @@
             initialized = true;
             
             triggerEvent(root, "impress:init", { api: roots[ "impress-root-" + rootId ] });
+            
+            // checking if menu is enabled 
+            var menuAdded = (document.getElementsByClassName('add-menu')[0]!= undefined) && (document.getElementsByClassName('add-menu')[0].id=="impress");
+            
+            if (menuAdded){
+                addMenu(steps, activeStep);
+            }
         };
         
         // `getStep` is a helper function that returns a step element defined by parameter.
@@ -545,6 +552,9 @@
                 onStepEnter(activeStep);
             }, duration + delay);
             
+            // Updates the current steps in the progress bar
+            updateMenu(steps.length, steps.indexOf( activeStep ));
+
             return el;
         };
         
@@ -552,7 +562,7 @@
         var prev = function () {
             var prev = steps.indexOf( activeStep ) - 1;
             prev = prev >= 0 ? steps[ prev ] : steps[ steps.length-1 ];
-            
+
             return goto(prev);
         };
         
@@ -560,7 +570,7 @@
         var next = function () {
             var next = steps.indexOf( activeStep ) + 1;
             next = next < steps.length ? steps[ next ] : steps[ 0 ];
-            
+
             return goto(next);
         };
         
@@ -655,7 +665,7 @@
 // and treat more like a 'plugins'.
 (function ( document, window ) {
     'use strict';
-    
+
     // throttling function calls, by Remy Sharp
     // http://remysharp.com/2010/07/21/throttling-function-calls/
     var throttle = function (fn, delay) {
@@ -721,45 +731,50 @@
                 event.preventDefault();
             }
         }, false);
+
+        // checking if menu is enabled
+        var menuAdded = (document.getElementsByClassName('add-menu')[0]!= undefined) && (document.getElementsByClassName('add-menu')[0].id=="impress");
         
-        // delegated handler for clicking on the links to presentation steps
-        document.addEventListener("click", function ( event ) {
-            // event delegation with "bubbling"
-            // check if event target (or any of its parents is a link)
-            var target = event.target;
-            while ( (target.tagName !== "A") &&
-                    (target !== document.documentElement) ) {
-                target = target.parentNode;
-            }
-            
-            if ( target.tagName === "A" ) {
-                var href = target.getAttribute("href");
-                
-                // if it's a link to presentation step, target this step
-                if ( href && href[0] === '#' ) {
-                    target = document.getElementById( href.slice(1) );
+        if (!menuAdded){
+            // delegated handler for clicking on the links to presentation steps
+            document.addEventListener("click", function ( event ) {
+                // event delegation with "bubbling"
+                // check if event target (or any of its parents is a link)
+                var target = event.target;
+                while ( (target.tagName !== "A") &&
+                        (target !== document.documentElement) ) {
+                    target = target.parentNode;
                 }
-            }
+                
+                if ( target.tagName === "A" ) {
+                    var href = target.getAttribute("href");
+                    
+                    // if it's a link to presentation step, target this step
+                    if ( href && href[0] === '#' ) {
+                        target = document.getElementById( href.slice(1) );
+                    }
+                }
+                
+                if ( api.goto(target) ) {
+                    event.stopImmediatePropagation();
+                    event.preventDefault();
+                }
+            }, false);
             
-            if ( api.goto(target) ) {
-                event.stopImmediatePropagation();
-                event.preventDefault();
-            }
-        }, false);
-        
-        // delegated handler for clicking on step elements
-        document.addEventListener("click", function ( event ) {
-            var target = event.target;
-            // find closest step element that is not active
-            while ( !(target.classList.contains("step") && !target.classList.contains("active")) &&
-                    (target !== document.documentElement) ) {
-                target = target.parentNode;
-            }
-            
-            if ( api.goto(target) ) {
-                event.preventDefault();
-            }
-        }, false);
+            // delegated handler for clicking on step elements
+            document.addEventListener("click", function ( event ) {
+                var target = event.target;
+                // find closest step element that is not active
+                while ( !(target.classList.contains("step") && !target.classList.contains("active")) &&
+                        (target !== document.documentElement) ) {
+                    target = target.parentNode;
+                }
+                
+                if ( api.goto(target) ) {
+                    event.preventDefault();
+                }
+            }, false);
+        }
         
         // touch handler to detect taps on the left and right side of the screen
         // based on awesome work of @hakimel: https://github.com/hakimel/reveal.js
@@ -790,6 +805,50 @@
     }, false);
         
 })(document, window);
+
+
+/**
+Adds the lower menu bar to the impress 
+which includes a progress bar and arrows to next and prev
+**/
+function addMenu(steps, activeStep){
+    var menu = document.createElement("div");
+    menu.className='bottom-menu';
+    menu.innerHTML="<div class='arrow-left'></div><div class='arrow-right'></div><center><progress class='progress-bar' value='" + (steps.indexOf( activeStep ) + 1) + "' max='"+ steps.length +"'/></center>";
+
+    var spanShit = "<center><span class='curr-step'>" + (steps.indexOf( activeStep ) + 1) + "</span>";
+    spanShit+="<span class='sep-step'>/</span>";
+    spanShit+="<span class='steps-length'>" + (steps.length) + "</span></center>";
+
+    menu.innerHTML+=spanShit;
+    document.body.appendChild(menu);
+
+
+    document.addEventListener("click", function ( event ) {
+        console.log(event.target);
+        var target = event.target;
+        // find closest step element that is not active
+        if (target.classList.contains("arrow-left")) {
+            impress().prev();
+        } else if ( target.classList.contains("arrow-right") ) {
+            impress().next();
+        }
+
+    }, false);
+
+}
+
+/**
+This function apdates the progress bar in the menu
+**/
+function updateMenu(steps,activeStep){
+    var currStep = activeStep+1;
+    if ((document.getElementsByClassName('curr-step')[0] != undefined) &&
+        (document.getElementsByClassName('progress-bar')[0] != undefined)){
+        document.getElementsByClassName('curr-step')[0].innerText=currStep;
+        document.getElementsByClassName('progress-bar')[0].value=currStep;
+    }
+}
 
 // THAT'S ALL FOLKS!
 //
