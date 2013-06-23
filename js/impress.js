@@ -293,22 +293,27 @@
             }
         };
         
+        // `options` is global variable that hold user-passed object,
+        // containing data for each `step` el
+        var options = {};
+        
         // `initStep` initializes given step element by reading data from its
         // data attributes and setting correct styles.
         var initStep = function ( el, idx ) {
             var data = el.dataset,
+                option = options[el.id],
                 step = {
                     translate: {
-                        x: toNumber(data.x),
-                        y: toNumber(data.y),
-                        z: toNumber(data.z)
+                        x: toNumber(data.x, (option)? option.x : 0),
+                        y: toNumber(data.y, (option)? option.y : 0),
+                        z: toNumber(data.z, (option)? option.z : 0)
                     },
                     rotate: {
-                        x: toNumber(data.rotateX),
-                        y: toNumber(data.rotateY),
-                        z: toNumber(data.rotateZ || data.rotate)
+                        x: toNumber(data.rotateX, (option)? option.rx : 0),
+                        y: toNumber(data.rotateY, (option)? option.ry : 0),
+                        z: toNumber(data.rotateZ || data.rotate, (option)? option.rz || option.r : 0)
                     },
-                    scale: toNumber(data.scale, 1),
+                    scale: toNumber(data.scale, (option)? option.scale : 1),
                     el: el
                 };
             
@@ -329,8 +334,11 @@
         };
         
         // `init` API function that initializes (and runs) the presentation.
-        var init = function () {
+        // Added optional options object as parameter.
+        var init = function (argOptions) {
             if (initialized) { return; }
+            
+            options = argOptions || options;
             
             // First we set up the viewport for mobile devices.
             // For some reason iPad goes nuts when it is not done properly.
@@ -784,7 +792,7 @@
         // rescale presentation when window is resized
         window.addEventListener("resize", throttle(function () {
             // force going to active step again, to trigger rescaling
-            api.goto( document.querySelector(".active"), 500 );
+            api.goto( document.querySelector(".step.active"), 500 );
         }, 250), false);
         
     }, false);
