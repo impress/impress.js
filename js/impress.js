@@ -309,9 +309,9 @@
                         z: toNumber(data.z, (option)? option.z : 0)
                     },
                     rotate: {
-                        x: toNumber(data.rotateX, (option)? option.rx : 0),
-                        y: toNumber(data.rotateY, (option)? option.ry : 0),
-                        z: toNumber(data.rotateZ || data.rotate, (option)? option.rz || option.r : 0)
+                        x: toNumber(data.rotateX, (option)? option.rotateX : 0),
+                        y: toNumber(data.rotateY, (option)? option.rotateY : 0),
+                        z: toNumber(data.rotateZ || data.rotate, (option)? option.rotateZ || option.rotate : 0)
                     },
                     scale: toNumber(data.scale, (option)? option.scale : 1),
                     el: el
