@@ -301,7 +301,7 @@
         // data attributes and setting correct styles.
         var initStep = function ( el, idx ) {
             var data = el.dataset,
-                option = options[el.id],
+                option = options['steps'][el.id],
                 step = {
                     translate: {
                         x: toNumber(data.x, (option)? option.x : 0),
