@@ -761,6 +761,26 @@
             }
         }, false);
         
+        // The audio/video tag controls
+        document.addEventListener("click", function(e){
+                 if (e.target.nodeName == "VIDEO" || e.target.nodeName == "AUDIO") {
+                          var target = e.target;
+                          // Take decision by checking state of this tag
+                          if (target.autoplay && target.getAttribute("playing") == null) {
+                                    target.pause();
+                                    target.setAttribute("playing", false);
+                                    return true;
+                           }
+                          if ( !target.getAttribute("playing") ) {
+                                   target.play();
+                                   target.setAttribute("playing", true);
+                          } else {
+                                   target.pause();
+                                   target.setAttribute("playing", false);
+                          }
+                 }
+        }, false);
+        
         // touch handler to detect taps on the left and right side of the screen
         // based on awesome work of @hakimel: https://github.com/hakimel/reveal.js
         document.addEventListener("touchstart", function ( event ) {
