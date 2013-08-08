@@ -21,7 +21,7 @@
 
 // You are one of those who like to know how things work inside?
 // Let me show you the cogs that make impress.js run...
-(function ( document, window ) {
+(function ( document, window, undefined ) {
     'use strict';
     
     // HELPER FUNCTIONS
@@ -36,7 +36,7 @@
             memory = {};
         
         return function ( prop ) {
-            if ( typeof memory[ prop ] === "undefined" ) {
+            if ( typeof memory[ prop ] === undefined ) {
                 
                 var ucProp  = prop.charAt(0).toUpperCase() + prop.substr(1),
                     props   = (prop + ' ' + prefixes.join(ucProp + ' ') + ucProp).split(' ');
