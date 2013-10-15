@@ -23,8 +23,8 @@ Sorry.
 Fortunately there are some guys on GitHub that got quite excited with the idea of building
 editing tool for impress.js. Let's hope they will manage to do it.
 
-EXPLORE THE CODE IN WEB IDE
----------------------------
+VIEW & RUN IN WEB IDE
+---------------------
 Click on the button below to view the code in a Web IDE. Feel free to edit the code then run it from Tools->Preview->Project.
 
 [![IDE](https://codio-public.s3.amazonaws.com/sharing/demo-in-ide.png)](https://codio.com/p/create/?from_github=bartaz/impress.js)
