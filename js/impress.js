@@ -205,7 +205,9 @@
 
         perspective: 1000,
 
-        transitionDuration: 1000
+        transitionDuration: 1000,
+
+        touchNavigation: true
     };
 
     // it's just an empty function ... and a useless comment.
@@ -349,7 +351,8 @@
                 maxScale: toNumber( rootData.maxScale, defaults.maxScale ),
                 minScale: toNumber( rootData.minScale, defaults.minScale ),
                 perspective: toNumber( rootData.perspective, defaults.perspective ),
-                transitionDuration: toNumber( rootData.transitionDuration, defaults.transitionDuration )
+                transitionDuration: toNumber( rootData.transitionDuration, defaults.transitionDuration ),
+                touchNavigation: !!toNumber( rootData.touchNavigation, defaults.touchNavigation )
             };
 
             windowScale = computeWindowScale( config );
@@ -623,6 +626,29 @@
                 }
             }, false);
 
+            if (config.touchNavigation) {
+                // touch handler to detect taps on the left and right side of the screen
+                // based on awesome work of @hakimel: https://github.com/hakimel/reveal.js
+                document.addEventListener("touchstart", function ( event ) {
+
+                    if (event.touches.length === 1) {
+                        var x = event.touches[0].clientX,
+                            width = window.innerWidth * 0.3,
+                            result = null;
+
+                        if ( x < width ) {
+                            result = prev();
+                        } else if ( x > window.innerWidth - width ) {
+                            result = next();
+                        }
+
+                        if (result) {
+                            event.preventDefault();
+                        }
+                    }
+                }, false);
+            }
+
             // START
             // by selecting step defined in url or first step of the presentation
             goto(getElementFromHash() || steps[0], 0);
@@ -758,26 +784,6 @@
 
             if ( api.goto(target) ) {
                 event.preventDefault();
-            }
-        }, false);
-
-        // touch handler to detect taps on the left and right side of the screen
-        // based on awesome work of @hakimel: https://github.com/hakimel/reveal.js
-        document.addEventListener("touchstart", function ( event ) {
-            if (event.touches.length === 1) {
-                var x = event.touches[0].clientX,
-                    width = window.innerWidth * 0.3,
-                    result = null;
-
-                if ( x < width ) {
-                    result = api.prev();
-                } else if ( x > window.innerWidth - width ) {
-                    result = api.next();
-                }
-
-                if (result) {
-                    event.preventDefault();
-                }
             }
         }, false);
 
