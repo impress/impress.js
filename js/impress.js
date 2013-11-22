@@ -207,7 +207,8 @@
 
         transitionDuration: 1000,
 
-        touchNavigation: true
+        touchNavigation: true,
+        clickNavigation: true
     };
 
     // it's just an empty function ... and a useless comment.
@@ -352,7 +353,8 @@
                 minScale: toNumber( rootData.minScale, defaults.minScale ),
                 perspective: toNumber( rootData.perspective, defaults.perspective ),
                 transitionDuration: toNumber( rootData.transitionDuration, defaults.transitionDuration ),
-                touchNavigation: !!toNumber( rootData.touchNavigation, defaults.touchNavigation )
+                touchNavigation: !!toNumber( rootData.touchNavigation, defaults.touchNavigation ),
+                clickNavigation: !!toNumber( rootData.clickNavigation, defaults.clickNavigation )
             };
 
             windowScale = computeWindowScale( config );
@@ -649,6 +651,22 @@
                 }, false);
             }
 
+            if (config.clickNavigation) {
+                // delegated handler for clicking on step elements
+                document.addEventListener("click", function ( event ) {
+                    var target = event.target;
+                    // find closest step element that is not active
+                    while ( !(target.classList.contains("step") && !target.classList.contains("active")) &&
+                            (target !== document.documentElement) ) {
+                        target = target.parentNode;
+                    }
+
+                    if ( goto(target) ) {
+                        event.preventDefault();
+                    }
+                }, false);
+            }
+
             // START
             // by selecting step defined in url or first step of the presentation
             goto(getElementFromHash() || steps[0], 0);
@@ -769,20 +787,6 @@
 
             if ( api.goto(target) ) {
                 event.stopImmediatePropagation();
-                event.preventDefault();
-            }
-        }, false);
-
-        // delegated handler for clicking on step elements
-        document.addEventListener("click", function ( event ) {
-            var target = event.target;
-            // find closest step element that is not active
-            while ( !(target.classList.contains("step") && !target.classList.contains("active")) &&
-                    (target !== document.documentElement) ) {
-                target = target.parentNode;
-            }
-
-            if ( api.goto(target) ) {
                 event.preventDefault();
             }
         }, false);
