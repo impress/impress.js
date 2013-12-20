@@ -84,6 +84,17 @@
     var toNumber = function (numeric, fallback) {
         return isNaN(numeric) ? (fallback || 0) : Number(numeric);
     };
+
+    // `toBool` takes a value given as a bool given as a string parameter and tries to turn
+    // it into a Boolean. If it is not possible it returns false (or other string value
+    // given as `fallback`). Does not convert integer or numeric values.
+
+    // Default JS Boolean constructor behaviour is to convert any non-0 and non-false input to a string. Only returns booleans. Does not raise an error when non-boolean is provided.
+    
+    var toBoolean = function(boolean,fallback){
+      boolFiltered = String(boolean).toLowerCase();
+      return ( boolFiltered === 'false' || boolFiltered) === 'true') ? Boolean(boolFiltered==='true') : (typeof fallback === 'boolean' ? fallback : false);
+    };
     
     // `byId` returns element with given `id` - you probably have guessed that ;)
     var byId = function ( id ) {
@@ -202,6 +213,7 @@
         height: 768,
         maxScale: 1,
         minScale: 0,
+        enableHistory: true,
         
         perspective: 1000,
         
@@ -349,7 +361,8 @@
                 maxScale: toNumber( rootData.maxScale, defaults.maxScale ),
                 minScale: toNumber( rootData.minScale, defaults.minScale ),                
                 perspective: toNumber( rootData.perspective, defaults.perspective ),
-                transitionDuration: toNumber( rootData.transitionDuration, defaults.transitionDuration )
+                transitionDuration: toNumber( rootData.transitionDuration, defaults.transitionDuration ),
+                enableHistory: toBoolean( rootData.enableHistory, defaults.enableHistory ) 
             };
             
             windowScale = computeWindowScale( config );
@@ -608,21 +621,26 @@
             // And it has to be set after animation finishes, because in Chrome it
             // makes transtion laggy.
             // BUG: http://code.google.com/p/chromium/issues/detail?id=62820
-            root.addEventListener("impress:stepenter", function (event) {
-                window.location.hash = lastHash = "#/" + event.target.id;
-            }, false);
-            
-            window.addEventListener("hashchange", function () {
-                // When the step is entered hash in the location is updated
-                // (just few lines above from here), so the hash change is 
-                // triggered and we would call `goto` again on the same element.
-                //
-                // To avoid this we store last entered hash and compare.
-                if (window.location.hash !== lastHash) {
-                    goto( getElementFromHash() );
-                }
-            }, false);
-            
+
+            // JamesMeldrum: Added flag to disable history tracking. Integrated it with defaults - didn't want to mess with your options object too much :D
+            //               On feedback from Bartek, integerated config object, restored defaults.
+
+            if(config.enableHistory){
+                root.addEventListener("impress:stepenter", function (event) {
+                    window.location.hash = lastHash = "#/" + event.target.id;
+                }, false);
+                
+                window.addEventListener("hashchange", function () {
+                    // When the step is entered hash in the location is updated
+                    // (just few lines above from here), so the hash change is 
+                    // triggered and we would call `goto` again on the same element.
+                    //
+                    // To avoid this we store last entered hash and compare.
+                    if (window.location.hash !== lastHash) {
+                        goto( getElementFromHash() );
+                    }
+                }, false);
+            } 
             // START 
             // by selecting step defined in url or first step of the presentation
             goto(getElementFromHash() || steps[0], 0);
