@@ -764,6 +764,16 @@
         // touch handler to detect taps on the left and right side of the screen
         // based on awesome work of @hakimel: https://github.com/hakimel/reveal.js
         document.addEventListener("touchstart", function ( event ) {
+            var interactiveTag = ["A", "INPUT", "SELECT", "TEXTAREA", "BUTTON"];
+            var target = event.target;
+            while ( (interactiveTag.indexOf(target.tagName) === -1) &&
+                    (target !== document.documentElement) ) {
+                target = target.parentNode;
+            }
+            if ( interactiveTag.indexOf(target.tagName) !== -1) {
+                // if it's a tag that's user can interact with don't go to next or prev step
+                return;
+            }
             if (event.touches.length === 1) {
                 var x = event.touches[0].clientX,
                     width = window.innerWidth * 0.3,
