@@ -791,6 +791,32 @@
         
 })(document, window);
 
+// Hide the mouse cursor in fullscreenmode after 3 seconds without movement
+(function(){
+    var mouseMoveTimer = null,
+    isCursorVisible = true;
+
+    function hideCursor() {
+        //isFullscreen
+        if(!window.screenTop && !window.screenY){
+            mouseMoveTimer = null;
+            document.body.style.cursor = "none";
+            isCursorVisible = false;
+        }
+    }
+
+    document.onmousemove = function() {
+        if (mouseMoveTimer) {
+            window.clearTimeout(mouseMoveTimer);
+        }
+        if (!isCursorVisible) {
+            document.body.style.cursor = "default";
+            isCursorVisible = true;
+        }
+        mouseMoveTimer = window.setTimeout(hideCursor, 3000);
+    };
+})();
+
 // THAT'S ALL FOLKS!
 //
 // Thanks for reading it all.
