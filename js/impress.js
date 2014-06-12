@@ -253,6 +253,9 @@
         
         // root presentation elements
         var root = byId( rootId );
+        if (!root) {
+            throw new Error('Impress could not root element by id: "' + rootId + '"');
+        }
         var canvas = document.createElement("div");
         
         var initialized = false;
@@ -645,11 +648,22 @@
 
     // reset helper to reset one or all
     Impress.reset = function( rootId ) {
-        if (rootId) {
+        var remove = function( rootId ) {
+            var root = byId( rootId );
+            root.parentNode.removeChild(root);
             delete Impress.roots["impress-root-" + rootId];
+        };
+        if (rootId) {
+            remove( rootId );
         } else {
-            Impress.roots = {};
+            Object.keys(Impress.roots).map(function(key) { return key.replace("impress-root-", "");}).forEach(remove);
         }
+
+        body.className.split(' ').forEach(function(className) {
+            if (className.indexOf('impress-on-') === 0)
+                body.classList.remove(className);
+        });
+        location.hash = '';
     };
 
     // alias to support the backward compatible impress().init()
