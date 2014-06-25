@@ -190,12 +190,7 @@
     }
     
     // GLOBALS AND DEFAULTS
-    
-    // This is were the root elements of all impress.js instances will be kept.
-    // Yes, this means you can have more than one instance on a page, but I'm not
-    // sure if it makes any sense in practice ;)
-    var roots = {};
-    
+
     // some default config values.
     var defaults = {
         width: 1024,
@@ -217,7 +212,7 @@
     // It's the core `impress` function that returns the impress.js API
     // for a presentation based on the element with given id ('impress'
     // by default).
-    var impress = window.impress = function ( rootId ) {
+    var Impress = window.Impress = function ( rootId ) {
         
         // If impress.js is not supported by the browser return a dummy API
         // it may not be a perfect solution but we return early and avoid
@@ -234,8 +229,8 @@
         rootId = rootId || "impress";
         
         // if given root is already initialized just return the API
-        if (roots["impress-root-" + rootId]) {
-            return roots["impress-root-" + rootId];
+        if (Impress.roots["impress-root-" + rootId]) {
+            return Impress.roots["impress-root-" + rootId];
         }
         
         // data of all presentation steps
@@ -258,6 +253,9 @@
         
         // root presentation elements
         var root = byId( rootId );
+        if (!root) {
+            throw new Error('Impress could not root element by id: "' + rootId + '"');
+        }
         var canvas = document.createElement("div");
         
         var initialized = false;
@@ -399,7 +397,7 @@
             
             initialized = true;
             
-            triggerEvent(root, "impress:init", { api: roots[ "impress-root-" + rootId ] });
+            triggerEvent(root, "impress:init", { api: Impress.roots[ "impress-root-" + rootId ] });
         };
         
         // `getStep` is a helper function that returns a step element defined by parameter.
@@ -631,7 +629,7 @@
         body.classList.add("impress-disabled");
         
         // store and return API for given impress.js root element
-        return (roots[ "impress-root-" + rootId ] = {
+        return (Impress.roots[ "impress-root-" + rootId ] = {
             init: init,
             goto: goto,
             next: next,
@@ -639,10 +637,42 @@
         });
 
     };
-    
+
     // flag that can be used in JS to check if browser have passed the support test
-    impress.supported = impressSupported;
-    
+    Impress.supported = impressSupported;
+
+    // This is were the root elements of all impress.js instances will be kept.
+    // Yes, this means you can have more than one instance on a page, but I'm not
+    // sure if it makes any sense in practice ;)
+    Impress.roots = {};
+
+    // reset helper to reset one or all
+    Impress.reset = function( rootId ) {
+        var remove = function( rootId ) {
+            var root = byId( rootId );
+            root.parentNode.removeChild(root);
+            delete Impress.roots["impress-root-" + rootId];
+        };
+        if (rootId) {
+            remove( rootId );
+        } else {
+            Object.keys(Impress.roots).map(function(key) { return key.replace("impress-root-", "");}).forEach(remove);
+        }
+
+        body.className.split(' ').forEach(function(className) {
+            if (className.indexOf('impress-on-') === 0)
+                body.classList.remove(className);
+        });
+        location.hash = '';
+    };
+
+    // alias to support the backward compatible impress().init()
+    window.impress = function( rootId ) {
+        return new Impress( rootId );
+    };
+    // another alias
+    window.impress.supported = Impress.supported;
+
 })(document, window);
 
 // NAVIGATION EVENTS
