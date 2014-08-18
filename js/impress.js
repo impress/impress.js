@@ -191,7 +191,7 @@
     
     // GLOBALS AND DEFAULTS
     
-    // This is were the root elements of all impress.js instances will be kept.
+    // This is where the root elements of all impress.js instances will be kept.
     // Yes, this means you can have more than one instance on a page, but I'm not
     // sure if it makes any sense in practice ;)
     var roots = {};
