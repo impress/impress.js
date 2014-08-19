@@ -202,7 +202,7 @@ users](http://twitter.com/n_adam_stanley/status/178188611827679233) [are quite q
 
 #### UPGRADING FROM PREVIOUS VERSIONS
 
-Because API was introduced the way impress.js script is initialized was changed a bit. You not only has to include
+Because API was introduced the way impress.js script is initialized was changed a bit. You not only have to include
 `impress.js` script file, but also call `impress()` function.
 
 See the source of `index.html` for example and more details.
