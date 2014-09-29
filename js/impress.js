@@ -550,17 +550,24 @@
         
         // `prev` API function goes to previous step (in document order)
         var prev = function () {
-            var prev = steps.indexOf( activeStep ) - 1;
-            prev = prev >= 0 ? steps[ prev ] : steps[ steps.length-1 ];
+            var active = steps.indexOf( activeStep );
+            var prev = active;
+            do {
+                //add steps.length to fixed flawed JS modulo operator
+                prev = (prev - 1 + steps.length) % steps.length;
+            } while (steps[prev].classList.contains("disabled") && prev !== active);
             
             return goto(prev);
         };
         
         // `next` API function goes to next step (in document order)
         var next = function () {
-            var next = steps.indexOf( activeStep ) + 1;
-            next = next < steps.length ? steps[ next ] : steps[ 0 ];
-            
+            var active = steps.indexOf( activeStep );
+            var next = active;
+            do {
+                next = (next + 1) % steps.length;
+            } while (steps[next].classList.contains("disabled") && next !== active);
+
             return goto(next);
         };
         
