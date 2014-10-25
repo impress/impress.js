@@ -85,6 +85,23 @@
         return isNaN(numeric) ? (fallback || 0) : Number(numeric);
     };
     
+    // `parseNumberParam` takes a string and evaluates expressions and key words to calculate a number.
+    // Possible keywords are pageWidth and pageHeight. If we cannot resolve a number it returns 0 (or other value
+    // given as `fallback`).
+    var parseNumberParam = function (expression, fallback) {
+        if (typeof expression == "string") {
+            //Replace keywords
+            expression = expression.replace("pageWidth", window.innerWidth)
+                                   .replace("pageHeight", window.innerHeight);
+        }
+        var numeric = parseInt(expression);
+        //If it's still not a number eval the expression
+        if (numeric !== expression) {
+            eval('numeric = ' + expression);
+        }
+        return toNumber(numeric, fallback);
+    };
+
     // `byId` returns element with given `id` - you probably have guessed that ;)
     var byId = function ( id ) {
         return document.getElementById(id);
@@ -240,7 +257,10 @@
         
         // data of all presentation steps
         var stepsData = {};
-        
+
+        //Keep track of the previous step positions
+        var previousStepData = null;
+
         // element of currently active step
         var activeStep = null;
         
@@ -296,17 +316,28 @@
         // `initStep` initializes given step element by reading data from its
         // data attributes and setting correct styles.
         var initStep = function ( el, idx ) {
-            var data = el.dataset,
-                step = {
+            var data = el.dataset;
+
+            //Calculate relative positions
+            if (previousStepData != null) {
+                data.x = data.x || ( !isNaN(data.dx) ? parseNumberParam(previousStepData.x) + parseNumberParam(data.dx) : 0 );
+                data.y = data.y || ( !isNaN(data.dy) ? parseNumberParam(previousStepData.y) + parseNumberParam(data.dy) : 0 );
+                data.z = data.z || ( !isNaN(data.dz) ? parseNumberParam(previousStepData.z) + parseNumberParam(data.dz) : 0 );
+            }
+
+            //Store current values for the next step
+            previousStepData = data;
+
+            var step = {
                     translate: {
-                        x: toNumber(data.x),
-                        y: toNumber(data.y),
-                        z: toNumber(data.z)
+                        x: parseNumberParam(data.x),
+                        y: parseNumberParam(data.y),
+                        z: parseNumberParam(data.z)
                     },
                     rotate: {
-                        x: toNumber(data.rotateX),
-                        y: toNumber(data.rotateY),
-                        z: toNumber(data.rotateZ || data.rotate)
+                        x: parseNumberParam(data.rotateX),
+                        y: parseNumberParam(data.rotateY),
+                        z: parseNumberParam(data.rotateZ || data.rotate)
                     },
                     scale: toNumber(data.scale, 1),
                     el: el
@@ -344,8 +375,8 @@
             // initialize configuration object
             var rootData = root.dataset;
             config = {
-                width: toNumber( rootData.width, defaults.width ),
-                height: toNumber( rootData.height, defaults.height ),
+                width: parseNumberParam( rootData.width, defaults.width ),
+                height: parseNumberParam( rootData.height, defaults.height ),
                 maxScale: toNumber( rootData.maxScale, defaults.maxScale ),
                 minScale: toNumber( rootData.minScale, defaults.minScale ),                
                 perspective: toNumber( rootData.perspective, defaults.perspective ),
