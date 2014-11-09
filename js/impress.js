@@ -801,6 +801,8 @@
 		// this variable is set to false by default because some browser may not handle it correclty
 		// example to activate : impress().init(); setCaptureMousewheelEvents(true);
         document.addEventListener("DOMMouseScroll", function ( event ) {
+        	if (!captureMousewheelEvents) return;
+        	
         	var delta = 0;
             if (!event) /* For IE. */
                     event = window.event;
@@ -816,9 +818,9 @@
              * Basically, delta is now positive if wheel was scrolled up,
              * and negative, if wheel was scrolled down.
              */
-            var handle_wheel_event=(captureMousewheelEvents? captureMousewheelEvents:false);
+            
             var result=null;
-            if (delta && handle_wheel_event) {
+            if (delta) {
                 if ( delta > 0 ) {
                     result = api.prev();
                 } else if ( delta < 0 ) {
