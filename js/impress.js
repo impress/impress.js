@@ -14,6 +14,15 @@
  *  version: 0.5.3
  *  url:     http://bartaz.github.com/impress.js/
  *  source:  http://github.com/bartaz/impress.js/
+ *  
+ *  
+ *  -----------------------------------------------
+ *  author:  Tristan Vanrullen
+ *  version: 0.5.3wheel
+ *  source:  http://github.com/TristanV/impress.js/
+ *  adding a mousewheel event listener to move from step to step
+ *  with ideas and event handler from :  http://www.adomas.org/javascript-mouse-wheel/
+ *  adding also a function setCaptureMousewheelEvents(truefalse) to activate this listener from your code
  */
 
 /*jshint bitwise:true, curly:true, eqeqeq:true, forin:true, latedef:true, newcap:true,
@@ -781,6 +790,58 @@
             }
         }, false);
         
+        
+        
+        
+        // now a Mouse Wheel event handler
+        // thanks to http://www.adomas.org/javascript-mouse-wheel/
+		// notice that this handler can be activated or de-acivated in your code 
+		// by setting the variable captureMousewheelEvents to true or false
+		// or by calling the function setCaptureMousewheelEvents(truefalse) 
+		// this variable is set to false by default because some browser may not handle it correclty
+		// example to activate : impress().init(); setCaptureMousewheelEvents(true);
+        document.addEventListener("DOMMouseScroll", function ( event ) {
+        	var delta = 0;
+            if (!event) /* For IE. */
+                    event = window.event;
+            if (event.wheelDelta) { /* IE/Opera. */
+                    delta = event.wheelDelta/120;
+            } else if (event.detail) { /** Mozilla case. */
+                    /** In Mozilla, sign of delta is different than in IE.
+                     * Also, delta is multiple of 3.
+                     */
+                    delta = -event.detail/3;
+            }
+            /** If delta is nonzero, handle it.
+             * Basically, delta is now positive if wheel was scrolled up,
+             * and negative, if wheel was scrolled down.
+             */
+            var handle_wheel_event=(captureMousewheelEvents? captureMousewheelEvents:false);
+            var result=null;
+            if (delta && handle_wheel_event) {
+                if ( delta > 0 ) {
+                    result = api.prev();
+                } else if ( delta < 0 ) {
+                    result = api.next();
+                }
+                if (result) {
+                    event.preventDefault();
+                }
+            }
+                
+            /** Prevent default actions caused by mouse wheel.
+             * That might be ugly, but we handle scrolls somehow
+             * anyway, so don't bother here..
+             */
+            if (event.preventDefault)
+                    event.preventDefault();
+            event.returnValue = false;
+        }, false);
+        
+        
+        
+        
+        
         // rescale presentation when window is resized
         window.addEventListener("resize", throttle(function () {
             // force going to active step again, to trigger rescaling
@@ -790,6 +851,17 @@
     }, false);
         
 })(document, window);
+
+
+
+//Some VARIABLES TO ACTIVATE NAVIGATION EVENTS HANDLERS
+//mouseWheel event handler : toggle on/off mousewheel events capture
+var captureMousewheelEvents=false;
+function setCaptureMousewheelEvents(truefalse) {
+	captureMousewheelEvents = truefalse | false;
+}
+
+
 
 // THAT'S ALL FOLKS!
 //
