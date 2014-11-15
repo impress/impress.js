@@ -794,13 +794,15 @@
         
         
         // now a Mouse Wheel event handler
-        // thanks to http://www.adomas.org/javascript-mouse-wheel/
+        // thanks to http://www.adomas.org/javascript-mouse-wheel/ 
+        // thanks also to http://www.sitepoint.com/html5-javascript-mouse-wheel/ for cross-browser compatibility
 		// notice that this handler can be activated or de-acivated in your code 
 		// by setting the variable captureMousewheelEvents to true or false
 		// or by calling the function setCaptureMousewheelEvents(truefalse) 
 		// this variable is set to false by default because some browser may not handle it correclty
 		// example to activate : impress().init(); setCaptureMousewheelEvents(true);
-        document.addEventListener("DOMMouseScroll", function ( event ) {
+        // the function mouseWheelEventListenerCallback can be added to several listeners (several browsers fire different kinds of events)
+        function mouseWheelEventListenerCallback ( event ) {
         	if (!captureMousewheelEvents) return;
         	
         	var delta = 0;
@@ -838,11 +840,16 @@
             if (event.preventDefault)
                     event.preventDefault();
             event.returnValue = false;
-        }, false);
+        }
         
-        
-        
-        
+        if (document.addEventListener) {
+        	// IE9, Chrome, Safari, Opera
+        	document.addEventListener("mousewheel", mouseWheelEventListenerCallback, false);
+        	// Firefox
+        	document.addEventListener("DOMMouseScroll", mouseWheelEventListenerCallback, false);
+        }
+        // IE 6/7/8
+        else myimage.attachEvent("onmousewheel", mouseWheelEventListenerCallback);
         
         // rescale presentation when window is resized
         window.addEventListener("resize", throttle(function () {
