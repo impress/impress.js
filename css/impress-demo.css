@@ -382,11 +382,29 @@ a:focus {
 */
 
 #imagination {
-    width: 600px;
+    width: 640px;
 }
 
 #imagination .imagination {
     font-size: 78px;
+}
+
+/*
+    The 'substeps' step has some substeps. These substeps are hidden at first and then shown later.
+    1. If the height is not specified, the vertical-center of the step will change when the height changes dynamically.
+       When using substeps that are showing content that alter the height, make sure to specify the height.
+*/
+#substeps {
+    width: 640px;
+    height: 230px; /* 1 */
+}
+
+#substeps .areThere, #substeps .ofCourse {
+    display: none;
+}
+
+#substeps .areThereVisible, #substeps .ofCourceVisible {
+    display: inline-block;
 }
 
 /*
