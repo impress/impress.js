@@ -388,11 +388,6 @@ if ("ontouchstart" in document.documentElement) {
                                                              duration of the transition in ms, but it's optional - if not 
                                                              provided default transition duration for the presentation 
                                                              will be used.
-            
-            `api.addEnterActionToStep( stepId, function )` - Adds a function to the step with the specified stepId (data-stepId). 
-                                                             This function is executed when a step is entered.
-                                                             stepId:   The stepid provided in the data-stepid-attribute.
-                                                             function: The function that should be executed.
                                                              
             `api.addActionToStep( stepId, function )`      - Adds a function to the step with the specified stepId (data-stepId). 
                                                              This function adds a substep to a step. There can be 
@@ -404,11 +399,6 @@ if ("ontouchstart" in document.documentElement) {
                                                              This function is executed when the 'prev'-command is
                                                              executed on a step has already executed at least one
                                                              action (added by addActionToStep (above)). 
-                                                             stepId:   The stepid provided in the data-stepid-attribute.
-                                                             function: The function that should be executed.
-                                                             
-            `api.addLeftActionToStep( stepId, function )`  - Adds a function to the step with the specified stepId (data-stepId).
-                                                             This function is executed when a step is left.
                                                              stepId:   The stepid provided in the data-stepid-attribute.
                                                              function: The function that should be executed.
         

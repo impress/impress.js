@@ -229,9 +229,7 @@
                 prev: empty,
                 next: empty,
                 addActionToStep: empty,
-                addResetActionToStep: empty,
-                addEnterActionToStep: empty,
-                addLeftActionToStep: empty
+                addResetActionToStep: empty
             };
         }
         
@@ -316,9 +314,7 @@
                     el: el,
                     actions: [],
                     activeAction: 0,
-                    resetAction: null,
-                    enterAction: null,
-                    leftAction: null
+                    resetAction: null
                 };
             
             if ( !el.id ) {
@@ -552,9 +548,6 @@
             window.clearTimeout(stepEnterTimeout);
             stepEnterTimeout = window.setTimeout(function() {
                 onStepEnter(activeStep);
-                   
-                var activeStepsData = stepsData['impress-' + activeStep.id];
-                if (activeStepsData.enterAction !== null) activeStepsData.enterAction(activeStepsData.el);
             }, duration + delay);
             
             return el;
@@ -573,8 +566,6 @@
             else {
                 var prev = steps.indexOf( activeStep ) - 1;
                 prev = prev >= 0 ? steps[ prev ] : steps[ steps.length-1 ];
-                
-                if (activeStepsData.leftAction !== null) activeStepsData.leftAction(activeStepsData.el);
                 
                 return goto(prev);
             }
@@ -595,15 +586,8 @@
                 var next = steps.indexOf( activeStep ) + 1;
                 next = next < steps.length ? steps[ next ] : steps[ 0 ];
                 
-                if (activeStepsData.leftAction !== null) activeStepsData.leftAction(activeStepsData.el);
-                
                 return goto(next);
             }
-        };
-
-        // `addEnterActionToStep` API function adds a function to a step which is called when the step is entered      
-        var addEnterActionToStep = function(id, enterAction){
-            stepsData['impress-' + id].enterAction = enterAction;
         };
   
         // `addActionToStep` API function adds a function to a step which is called when next is called.
@@ -616,11 +600,6 @@
         // there already are actions executed on that step
         var addResetActionToStep = function (id, resetAction){
             stepsData['impress-' + id].resetAction = resetAction;
-        };
-        
-        // `addLeftActionToStep` API function adds a function to a step which is called when the step is left
-        var addLeftActionToStep = function(id, leftAction){
-            stepsData['impress-' + id].leftAction = leftAction;
         };
         
         // Adding some useful classes to step elements.
@@ -696,9 +675,7 @@
             next: next,
             prev: prev,
             addActionToStep: addActionToStep,
-            addResetActionToStep: addResetActionToStep,
-            addEnterActionToStep: addEnterActionToStep,
-            addLeftActionToStep: addLeftActionToStep
+            addResetActionToStep: addResetActionToStep
         });
 
     };
