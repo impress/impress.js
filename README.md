@@ -1,5 +1,6 @@
 impress.js
 ============
+This is a fork of impress.js. It supports substeps, but besides that, its the same as the original. 
 
 It's a presentation framework based on the power of CSS3 transforms and 
 transitions in modern browsers and inspired by the idea behind prezi.com.
