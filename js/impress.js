@@ -78,11 +78,17 @@
         return el;
     };
     
+    // Check numeric for used in toNumber() 
+    // from jQuery ( https://github.com/jquery/jquery/blob/2.1-stable/src/core.js#L212 )
+    var isNumeric = window.isNumeric || function (obj) {
+        return !Array.isArray(obj) && (obj - parseFloat(obj) + 1) >= 0;
+    };
+
     // `toNumber` takes a value given as `numeric` parameter and tries to turn
     // it into a number. If it is not possible it returns 0 (or other value
     // given as `fallback`).
     var toNumber = function (numeric, fallback) {
-        return isNaN(numeric) ? (fallback || 0) : Number(numeric);
+        return !isNumeric(numeric) ? (fallback || 0) : Number(numeric);
     };
     
     // `byId` returns element with given `id` - you probably have guessed that ;)
