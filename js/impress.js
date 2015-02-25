@@ -82,7 +82,7 @@
     // it into a number. If it is not possible it returns 0 (or other value
     // given as `fallback`).
     var toNumber = function (numeric, fallback) {
-        return isNaN(numeric || undefined) ? (fallback || 0) : Number(numeric);
+        return isNaN(numeric) ? (fallback || 0) : Number(numeric);
     };
     
     // `byId` returns element with given `id` - you probably have guessed that ;)
