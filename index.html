@@ -52,8 +52,12 @@
     And that's how impress.js presentations are built-- with HTML and CSS code.
     
     Believe me, you need quite decent HTML and CSS skills to be able to use impress.js effectively.
+<<<<<<< HEAD
+    More importantly, you need to be a designer. There are no default styles or layouts for impress.js presentations.
+=======
     And what is even more important is that you need to be a designer too, because there are no default
     styles for impress.js presentations and there is no default or automatic layout for them.
+>>>>>>> origin/dev
     
     You need to design and build it by hand.
     
@@ -77,7 +81,7 @@
 
     <!--
         
-        Impress.js doesn't depend on any external stylesheet. Script adds all styles it needs for
+        Impress.js doesn't depend on any external stylesheets. It adds all of the styles it needs for the
         presentation to work.
         
         This style below contains styles only for demo presentation. Browse it to see how impress.js
@@ -141,7 +145,7 @@
     If you are willing to change this value make sure you understand how CSS perspective works:
     https://developer.mozilla.org/en/CSS/perspective
     
-    But as I said, you won't need it for now, so don't worry - there are some simple but interesing things
+    But as I said, you won't need it for now, so don't worry - there are some simple but interesting things
     right around the corner of this tag ;)
     
 -->
@@ -262,10 +266,16 @@
         <p>by <b class="positioning">positioning</b>, <b class="rotating">rotating</b> and <b class="scaling">scaling</b> them on an infinite canvas</p>
     </div>
 
-    <div id="imagination" class="step" data-x="6700" data-y="-300" data-scale="6">
+    
+    <div id="imagination" class="step" data-x="6700" data-y="-1400" data-scale="6">
         <p>the only <b>limit</b> is your <b class="imagination">imagination</b></p>
     </div>
 
+    <div id="substeps" class="step" data-x="6700" data-y="-100" data-scale="6" data-stepId="substeps">
+        <p>Are there <b>substeps</b> too?</p> 
+        <p><span class="areThere">Are there?</span> <span class="ofCourse">Of course!</span></p>
+    </div>
+    
     <div id="source" class="step" data-x="6300" data-y="2000" data-rotate="20" data-scale="4">
         <p>want to know more?</p>
         <q><a href="http://github.com/bartaz/impress.js">use the source</a>, Luke!</q>
@@ -294,7 +304,7 @@
 
     <!--
         
-        So to make a summary of all the possible attributes used to position presentation steps, we have:
+        So to summarize of all the possible attributes used to position presentation steps, we have:
         
         * `data-x`, `data-y`, `data-z` - they define the position of **the center** of step element on
             the canvas in pixels; their default value is 0;
@@ -361,32 +371,63 @@ if ("ontouchstart" in document.documentElement) {
     
 -->
 <script src="js/impress.js"></script>
-<script>impress().init();</script>
+<script>
+    /*
+        The `impress()` function also gives you access to the API that controls the presentation.
+        
+        Just store the result of the call:
+        
+            var api = impress();
+        
+        and you will get nine functions you can call:
+        
+            `api.init()` - initializes the presentation,
+            
+            `api.next()` - moves to next step of the presentation,
+            
+            `api.prev()` - moves to previous step of the presentation,
+            
+            `api.goto( idx | id | element, [duration] )`   - moves the presentation to the step given by its index number
+                                                             id or the DOM element; second parameter can be used to define 
+                                                             duration of the transition in ms, but it's optional - if not 
+                                                             provided default transition duration for the presentation 
+                                                             will be used.
+                                                             
+            `api.addActionToStep( stepId, function )`      - Adds a function to the step with the specified stepId (data-stepId). 
+                                                             This function adds a substep to a step. There can be 
+                                                             more than one actions per step.
+                                                             stepId:   The stepid provided in the data-stepid-attribute.
+                                                             function: The function that should be executed.
+                                                             
+            `api.addResetActionToStep( stepId, function )` - Adds a function to the step with the specified stepId (data-stepId).
+                                                             This function is executed when the 'prev'-command is
+                                                             executed on a step has already executed at least one
+                                                             action (added by addActionToStep (above)). 
+                                                             stepId:   The stepid provided in the data-stepid-attribute.
+                                                             function: The function that should be executed.
+        
+        You can also simply call `impress()` again to get the API, so `impress().next()` is also allowed.
+        Don't worry, it wont initialize the presentation again.
+        
+        For some example uses of this API check the last part of the source of impress.js where the API
+        is used in event handlers.
+    */
 
-<!--
-    
-    The `impress()` function also gives you access to the API that controls the presentation.
-    
-    Just store the result of the call:
-    
+    // Subscribe to the `impress:init`-event to add the actions to the steps after impress is initialized.
+    document.getElementById("impress").addEventListener("impress:init", function(){ 
         var api = impress();
-    
-    and you will get three functions you can call:
-    
-        `api.init()` - initializes the presentation,
-        `api.next()` - moves to next step of the presentation,
-        `api.prev()` - moves to previous step of the presentation,
-        `api.goto( idx | id | element, [duration] )` - moves the presentation to the step given by its index number
-                id or the DOM element; second parameter can be used to define duration of the transition in ms,
-                but it's optional - if not provided default transition duration for the presentation will be used.
-    
-    You can also simply call `impress()` again to get the API, so `impress().next()` is also allowed.
-    Don't worry, it wont initialize the presentation again.
-    
-    For some example uses of this API check the last part of the source of impress.js where the API
-    is used in event handlers.
-    
--->
+         
+        api.addActionToStep('substeps', function(stepElement){ stepElement.querySelector(".areThere").classList.add("areThereVisible"); });
+        api.addActionToStep('substeps', function(stepElement){ stepElement.querySelector(".ofCourse").classList.add("ofCourceVisible"); });
+        
+        api.addResetActionToStep('substeps', function(stepElement){ 
+            stepElement.querySelector(".areThere").classList.remove("areThereVisible");
+            stepElement.querySelector(".ofCourse").classList.remove("ofCourceVisible");
+        });
+    });
+
+    impress().init();
+</script>
 
 </body>
 </html>
@@ -435,4 +476,3 @@ if ("ontouchstart" in document.documentElement) {
     Cheers!
     
 -->
-

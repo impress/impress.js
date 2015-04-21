@@ -19,7 +19,7 @@
 /*jshint bitwise:true, curly:true, eqeqeq:true, forin:true, latedef:true, newcap:true,
          noarg:true, noempty:true, undef:true, strict:true, browser:true */
 
-// You are one of those who like to know how thing work inside?
+// You are one of those who like to know how things work inside?
 // Let me show you the cogs that make impress.js run...
 (function ( document, window ) {
     'use strict';
@@ -191,7 +191,7 @@
     
     // GLOBALS AND DEFAULTS
     
-    // This is were the root elements of all impress.js instances will be kept.
+    // This is where the root elements of all impress.js instances will be kept.
     // Yes, this means you can have more than one instance on a page, but I'm not
     // sure if it makes any sense in practice ;)
     var roots = {};
@@ -227,7 +227,9 @@
                 init: empty,
                 goto: empty,
                 prev: empty,
-                next: empty
+                next: empty,
+                addActionToStep: empty,
+                addResetActionToStep: empty
             };
         }
         
@@ -309,7 +311,10 @@
                         z: toNumber(data.rotateZ || data.rotate)
                     },
                     scale: toNumber(data.scale, 1),
-                    el: el
+                    el: el,
+                    actions: [],
+                    activeAction: 0,
+                    resetAction: null
                 };
             
             if ( !el.id ) {
@@ -550,18 +555,51 @@
         
         // `prev` API function goes to previous step (in document order)
         var prev = function () {
-            var prev = steps.indexOf( activeStep ) - 1;
-            prev = prev >= 0 ? steps[ prev ] : steps[ steps.length-1 ];
+            var activeStepsData = stepsData['impress-' + activeStep.id];
             
-            return goto(prev);
+            if (activeStepsData.resetAction !== null && activeStepsData.activeAction > 0){
+                activeStepsData.resetAction(activeStepsData.el);
+                activeStepsData.activeAction = 0;
+                
+                return activeStepsData.el;
+            }
+            else {
+                var prev = steps.indexOf( activeStep ) - 1;
+                prev = prev >= 0 ? steps[ prev ] : steps[ steps.length-1 ];
+                
+                return goto(prev);
+            }
         };
         
         // `next` API function goes to next step (in document order)
         var next = function () {
-            var next = steps.indexOf( activeStep ) + 1;
-            next = next < steps.length ? steps[ next ] : steps[ 0 ];
-            
-            return goto(next);
+            var activeStepsData = stepsData['impress-' + activeStep.id];
+            var activeStepsDataActions = activeStepsData.actions;
+ 
+            if (activeStepsData.activeAction != activeStepsDataActions.length && activeStepsDataActions.length != 0){
+                activeStepsDataActions[activeStepsData.activeAction](activeStepsData.el);
+                activeStepsData.activeAction++;
+                
+                return activeStepsData.el;
+            }
+            else {
+                var next = steps.indexOf( activeStep ) + 1;
+                next = next < steps.length ? steps[ next ] : steps[ 0 ];
+                
+                return goto(next);
+            }
+        };
+  
+        // `addActionToStep` API function adds a function to a step which is called when next is called.
+        // There can be more than one action per step.
+        var addActionToStep = function (id, action){
+            stepsData['impress-' + id].actions.push(action);
+        };
+
+        // `addResetActionToStep` API function adds a function to a step which is called when prev is called and 
+        // there already are actions executed on that step
+        var addResetActionToStep = function (id, resetAction){
+            stepsData['impress-' + id].resetAction = resetAction;
         };
         
         // Adding some useful classes to step elements.
@@ -635,7 +673,9 @@
             init: init,
             goto: goto,
             next: next,
-            prev: prev
+            prev: prev,
+            addActionToStep: addActionToStep,
+            addResetActionToStep: addResetActionToStep
         });
 
     };
