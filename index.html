@@ -360,6 +360,7 @@ if ("ontouchstart" in document.documentElement) {
     Of course you can wrap it in any kind of "DOM ready" event, but I was too lazy to do so ;)
     
 -->
+
 <script src="js/impress.js"></script>
 <script>impress().init();</script>
 
@@ -386,6 +387,18 @@ if ("ontouchstart" in document.documentElement) {
     For some example uses of this API check the last part of the source of impress.js where the API
     is used in event handlers.
     
+-->
+
+<script src="js/impress-scroll.js" data-threshold="3"></script>
+
+<!-- 
+
+    Using this script will allow you to present with a wireless mouse if you don't have a presenter. If you
+    don't have a mouse with a flawless scroll sensor, you might want to increase `data-threshold` to something
+    higher. Whenever you hit the cap of the number specified, the slide will change, depending on which way you
+    moved the mouse wheel. It keeps track of which way you scrolled, so nervous back and forth scrolling is 
+    basically ignored until you actually reach the threshold. 
+
 -->
 
 </body>
