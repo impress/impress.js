@@ -9,56 +9,53 @@ License: Free General Public License (GPL)
   'use strict';
 
   var isPlaying, waitTimeout ,
-    audio,video,
+    audio,video,media,currPlaying,
     impressObj = impress(),
     impressGoto = impressObj.goto;
   var TimerID;
+  var SpacingTime = 300; //ms
 
   $(document).on('impress:stepenter', function(event,f) {
     var $currSlide = $(event.target);
-    if(audio) {
-      audio.pause();
-    }
-    if(video) {
-      video.pause();
+    if(currPlaying) {
+      currPlaying.pause();
     }
 
-    audio = $currSlide.find('audio')[0];
-    video = $currSlide.find('video')[0];
+    media = $currSlide.find('audio,video');
+
+    // TODO:
+    // User maybe random play the media manually , but the currently code will cause the play sequence error
+    // because all the event listener using the same [media] jquery object array.
+    //
+    //
 
     // make it play audio first then try to play the video if exist
-    if(audio) {
-      audio.play();
-      if(isPlaying && $currSlide[0] != $currSlide.parent().children().last()[0]) {
-        audio.addEventListener('ended',function() {
-          if(!video){
-            impressObj.goto($currSlide.next());
+    if(media[0]) {
+      currPlaying = media.first()[0];
+      currPlaying.play();
+      media.each(function(){
+        $(this)[0].removeEventListener('ended'); // unbind event if its exist
+        $(this)[0].addEventListener('ended',function() {
+          var nextPlay = $(this).next()[0]
+          if(nextPlay){
+            // play next media
+            currPlaying = nextPlay;
+            currPlaying.play();
           }else{
-            video.play();
+            // go to the next slide
+            if(isPlaying && $currSlide[0] != $currSlide.parent().children().last()[0]) {
+              setTimeout(function(){impressObj.goto($currSlide.next())}, SpacingTime);
+              //impressObj.goto($currSlide.next());
+            } else {
+              isPlaying = false;
+            }
           }
-          audio.removeEventListener('ended');
         });
-      } else {
-        isPlaying = false;
-      }
-    }
-
-    if(video) {
-      if(!audio){
-        video.play();
-      }
-      if(isPlaying && $currSlide[0] != $currSlide.parent().children().last()[0]) {
-        video.addEventListener('ended',function() {
-          impressObj.goto($currSlide.next());
-          video.removeEventListener('ended');
-        });
-      } else {
-        isPlaying = false;
-      }
+      });
     }
 
     clearTimeout(TimerID);
-    if(!audio && !video && waitTimeout > 0 ){
+    if(!media[0] && waitTimeout > 0 ){
       TimerID = setTimeout(function(){impressObj.goto($currSlide.next())}, waitTimeout );
     }
   });
@@ -66,7 +63,7 @@ License: Free General Public License (GPL)
   impressObj.play = function(SecTimeout) {
     isPlaying = true;
     waitTimeout = parseInt(SecTimeout)*1000 ;
-    this.goto(0);
+    //this.goto(0);
   };
 
   impressObj.goto = function($el) {
@@ -77,5 +74,10 @@ License: Free General Public License (GPL)
     }
   }
 
+// TODO:
+// 1. add keydown Listener for <enter> / <esc> for play(resume) / pause event
+//
 
 })(document, jQuery);
+
+
