@@ -23,12 +23,6 @@ License: Free General Public License (GPL)
 
     media = $currSlide.find('audio,video');
 
-    // TODO:
-    // User maybe random play the media manually , but the currently code will cause the play sequence error
-    // because all the event listener using the same [media] jquery object array.
-    //
-    //
-
     // make it play audio first then try to play the video if exist
     if(media[0]) {
       currPlaying = media.first()[0];
@@ -63,7 +57,7 @@ License: Free General Public License (GPL)
   impressObj.play = function(SecTimeout) {
     isPlaying = true;
     waitTimeout = parseInt(SecTimeout)*1000 ;
-    //this.goto(0);
+    this.goto(0);
   };
 
   impressObj.goto = function($el) {
