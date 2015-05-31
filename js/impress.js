@@ -296,12 +296,27 @@
         // `initStep` initializes given step element by reading data from its
         // data attributes and setting correct styles.
         var initStep = function ( el, idx ) {
-            var data = el.dataset,
-                step = {
+            var data = el.dataset;
+            
+            // Get previous step to inherit values from
+            if( idx > 0 ) {
+                var prev = stepsData[ "impress-" + getStep(idx-1).id ];
+            }
+            else {
+                // For the first step, inherit these defaults
+                var prev = { translate: {x:0,y:0,z:0}, relative: {x:0,y:0,z:0} };
+            }
+            // For backward compatibility, we can only inherit the step.translate and step.relative data.
+            var step = {
                     translate: {
-                        x: toNumber(data.x),
-                        y: toNumber(data.y),
-                        z: toNumber(data.z)
+                        x: toNumber(data.x, prev.translate.x),
+                        y: toNumber(data.y, prev.translate.y),
+                        z: toNumber(data.z, prev.translate.z)
+                    },
+                    relative: {
+                        x: toNumber(data.relX, prev.relative.x),
+                        y: toNumber(data.relY, prev.relative.y),
+                        z: toNumber(data.relZ, prev.relative.z)
                     },
                     rotate: {
                         x: toNumber(data.rotateX),
@@ -311,6 +326,16 @@
                     scale: toNumber(data.scale, 1),
                     el: el
                 };
+            // Relative position is ignored/zero if absolute is given.
+            // Note that this also has the effect of resetting any inherited relative values.
+            if(data.x !== undefined) step.relative.x = 0;
+            if(data.y !== undefined) step.relative.y = 0;
+            if(data.z !== undefined) step.relative.z = 0;
+            
+            // Apply relative position (if non-zero)
+            step.translate.x = step.translate.x + step.relative.x;
+            step.translate.y = step.translate.y + step.relative.y;
+            step.translate.z = step.translate.z + step.relative.z;
             
             if ( !el.id ) {
                 el.id = "step-" + (idx + 1);
