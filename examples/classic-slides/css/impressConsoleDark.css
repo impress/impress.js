@@ -1,0 +1,41 @@
+@import url(impressConsole.css);
+
+#impressconsole body {
+    background-color: rgb(100, 100, 100);
+}
+
+#impressconsole div#notes {
+    background-color: rgb(170, 170, 170);
+    border: solid 1px rgb(0, 0, 0);
+}
+
+#impressconsole div#notes .noNotes {
+    color: rgb(200, 200, 200);
+}
+
+#impressconsole iframe {
+    border: solid 1px rgb(0, 0, 0);
+}
+
+#impressconsole div#controls {
+    background-color: rgb(100, 100, 100);
+    background-color: rgba(100, 100, 100, 0.6);
+}
+
+#impressconsole div#prev a, div#next a {
+    background-color: rgb(120, 120, 120);
+    color: rgb(0, 0, 0);
+}
+
+#impressconsole div#prev a:hover, #impressconsole div#next a:hover {
+    background-color: rgb(140, 140, 140);
+}
+
+#impressconsole span.moving {
+    background-color: rgb(200, 0, 0);
+    color: rgb(255, 255, 255);
+}
+
+#impressconsole span.ready {
+    color: rgb(0, 200, 0);
+}

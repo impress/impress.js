@@ -45,7 +45,7 @@
 /*
   The body background is the bacgkround of "everything". Many
   impress.js tools call it the "surface". It could also be a
-  picture or pattern.
+  picture or pattern, but we leave it as light gray.
 */
 
 body {
@@ -57,8 +57,6 @@ body {
 
 /*
     Now let's style the presentation steps.
-
-    We start with basics to make sure it displays correctly in everywhere ...
 */
 
 .step {
@@ -85,10 +83,20 @@ body {
 .impress-enabled .step.active { opacity: 1 }
 
 /*
+    Speaker notes allow you to write comments within the steps, that will not 
+    be displayed as part of the presentation. However, they will be picked up
+    and displayed by impressConsole.js when integrated.
+*/
+
+.notes {
+    display: none;
+}
+
+/*
     These 'slide' step styles were heavily inspired by HTML5 Slides:
     http://html5slides.googlecode.com/svn/trunk/styles.css
     
-    Note that we also use a background image, again to facilitate a common
+    Note that we also use a background image, again just to facilitate a common
     feature from PowerPoint and LibreOffice worlds. In this case the background
     image is just the impress.js favicon - as if it were a company logo or something.
     
@@ -209,7 +217,10 @@ img {
     margin-bottom:   0px;
     margin-top:     20px;    
 }
-/* Specific styles for: .title slides   *******************************************/
+
+/* 
+    Specific styles for: .title slides 
+*/
 
 .title {
     background-image: url(../images/background-title.png);    
@@ -228,13 +239,8 @@ img {
 .title h3 { top: 500px; }
 
 
+
 /* Styles for animating the contents of a slide, such as a img, p, li or span element. ********/
-
-
-/*
-    ... so we define display to `inline-block` to enable transforms and
-    transition duration to 1s ...
-*/
 
 /*
  fly-in class starts from a position outside the slide, then flies into it's correct position.
@@ -255,6 +261,7 @@ img {
 }
 
 /*
+   Fade-in/out is a straightforward fade. Give it enough seconds that all browsers render it clearly.
 */
 .future .fade-in {
     opacity: 0.0;
@@ -268,6 +275,7 @@ img {
     transition: 3s;
 }
 /*
+    Zoom-in.
 */
 .future  .zoom-in {
     transform:        scale(10);
@@ -282,8 +290,6 @@ img {
     transform:        scale(10);
     opacity: 0.0;    
 }
-
-
 
 /*
     And as the last thing there is a workaround for quite strange bug.
