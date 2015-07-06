@@ -701,3 +701,25 @@ a:focus {
     Thanks for reading. I hope you enjoyed it at least as much as I enjoyed writing it
     for you.
 */
+
+/*
+    page footer style, for function showPage
+ */
+footer{
+    position: fixed;
+    bottom: 150px;
+    height: 30px;
+    text-align: center;
+    width: 100%;
+    font-size: 25px;
+    font-weight: 900;
+}
+/*
+    page header progress style, for function showProgress
+ */
+header{
+    position: fixed;
+    top: 0;
+    height: 10px;
+    background-color: #3879d9;
+}
