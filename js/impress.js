@@ -179,7 +179,7 @@
                           // but some mobile devices need to be blacklisted,
                           // because their CSS 3D support or hardware is not
                           // good enough to run impress.js properly, sorry...
-                           ( ua.search(/(iphone)|(ipod)|(android)/) === -1 );
+                           ( ua.search(/(iphone)|(ipod)/) === -1 );
     
     if (!impressSupported) {
         // we can't be sure that `classList` is supported
@@ -761,25 +761,38 @@
             }
         }, false);
         
-        // touch handler to detect taps on the left and right side of the screen
-        // based on awesome work of @hakimel: https://github.com/hakimel/reveal.js
-        document.addEventListener("touchstart", function ( event ) {
-            if (event.touches.length === 1) {
-                var x = event.touches[0].clientX,
-                    width = window.innerWidth * 0.3,
-                    result = null;
-                    
-                if ( x < width ) {
-                    result = api.prev();
-                } else if ( x > window.innerWidth - width ) {
-                    result = api.next();
-                }
-                
-                if (result) {
-                    event.preventDefault();
-                }
+        // Touch handler to detect swiping left and right based on window size.
+        // If the difference in X change is bigger than 1/20 of the screen width,
+        // we simply call an appropriate API function.
+        var lastX = 0;
+        var lastDiff = 0;
+        var threshold = window.innerWidth / 20;
+        var touchCount = 0; // To prevent multi-touch 'jumps' that mess everything up
+
+        document.addEventListener('touchstart', function (event) {
+            console.log(event);
+            if (! touchCount++) {
+                // If touchCount is zero
+                lastX = event.touches[0].clientX;
             }
-        }, false);
+        });
+        document.addEventListener('touchmove', function(event) {
+            var x = event.touches[0].clientX;
+            lastDiff = lastX - x;
+            lastX = x;
+        });
+        document.addEventListener('touchend', function (event) {
+            if (lastDiff < -threshold) {
+                api.prev();
+            } else if (lastDiff > threshold) {
+                api.next();
+            }
+
+            lastX = 0;
+            lastDiff = 0;
+
+            touchCount--;
+        });
         
         // rescale presentation when window is resized
         window.addEventListener("resize", throttle(function () {
