@@ -84,7 +84,21 @@
     var toNumber = function (numeric, fallback) {
         return isNaN(numeric) ? (fallback || 0) : Number(numeric);
     };
-    
+
+    var toNumberAdvanced = function (numeric) {
+        if (!(typeof numeric == 'string')) {
+            return toNumber(numeric);
+        }
+        var ratio = numeric.match(/^([\d\.]+)([wh])$/);
+        if (ratio == null) {
+            return toNumber(numeric);
+        } else {
+            var value = parseFloat(ratio[1]);
+            var multiplier = ratio[2] == 'w' ? window.innerWidth : window.innerHeight;
+            return value * multiplier;
+        }
+    };
+
     // `byId` returns element with given `id` - you probably have guessed that ;)
     var byId = function ( id ) {
         return document.getElementById(id);
@@ -299,9 +313,9 @@
             var data = el.dataset,
                 step = {
                     translate: {
-                        x: toNumber(data.x),
-                        y: toNumber(data.y),
-                        z: toNumber(data.z)
+                        x: toNumberAdvanced(data.x),
+                        y: toNumberAdvanced(data.y),
+                        z: toNumberAdvanced(data.z)
                     },
                     rotate: {
                         x: toNumber(data.rotateX),
@@ -555,7 +569,11 @@
             
             return goto(prev);
         };
-        
+
+        var interpolate = function(a, b, k) {
+            return a + (b - a) * k;
+        };
+
         // `next` API function goes to next step (in document order)
         var next = function () {
             var next = steps.indexOf( activeStep ) + 1;
@@ -563,7 +581,119 @@
             
             return goto(next);
         };
-        
+
+        // Touch handler to detect swiping left and right based on window size.
+        // If the difference in X change is bigger than 1/20 of the screen width,
+        // we simply call an appropriate API function.
+        var startX = 0;
+        var lastX = 0;
+        var lastDX = 0;
+        var threshold = window.innerWidth / 20;
+
+        document.addEventListener('touchstart', function (event) {
+            startX = event.touches[0].clientX;
+            lastX = startX;
+        });
+        document.addEventListener('touchmove', function (event) {
+            var x = event.touches[0].clientX;
+            var diff = x - startX;
+
+            lastDX = lastX - x;
+
+            lastX = x;
+
+            // currentState
+
+            var target;
+            if (diff < 0) {
+                var next = steps.indexOf(activeStep) + 1;
+                target = next < steps.length ? steps[next] : steps[0];
+            } else if (diff > 0) {
+                var prev = steps.indexOf(activeStep) - 1;
+                target = prev >= 0 ? steps[prev] : steps[steps.length - 1];
+            } else {
+                // No move
+                return;
+            }
+
+            var targetStep = stepsData['impress-' + target.id];
+
+            var k = Math.abs(diff) / window.innerWidth;
+
+            //console.log(currentState);
+
+            //console.log(activeStep.id, '->', targetStep.el.id);
+
+
+            var zoomin = targetStep.scale >= currentState.scale;
+
+            // if the same step is re-selected, force computing window scaling,
+            var targetScale = targetStep.scale * windowScale;
+
+            var interpolatedStep = {
+                translate: {
+                    x: interpolate(currentState.translate.x, -targetStep.translate.x, k),
+                    y: interpolate(currentState.translate.y, -targetStep.translate.y, k),
+                    z: interpolate(currentState.translate.z, -targetStep.translate.z, k)
+                },
+                rotate: {
+                    x: interpolate(currentState.rotate.x, -targetStep.rotate.x, k),
+                    y: interpolate(currentState.rotate.y, -targetStep.rotate.y, k),
+                    z: interpolate(currentState.rotate.z, -targetStep.rotate.z, k)
+                },
+                scale: interpolate(currentState.scale, targetScale)
+            };
+
+            css(root, {
+                // to keep the perspective look similar for different scales
+                // we need to 'scale' the perspective, too
+                transform: perspective(config.perspective / interpolatedStep.scale) + scale(interpolatedStep.scale),
+                transitionDuration: "0ms",
+                transitionDelay: "0ms"
+            });
+
+            css(canvas, {
+                transform: rotate(interpolatedStep.rotate, true) + translate(interpolatedStep.translate),
+                transitionDuration: "0ms",
+                transitionDelay: "0ms"
+            });
+        });
+        document.addEventListener('touchend', function (event) {
+            var totalDiff = lastX - startX;
+
+            if (Math.abs(totalDiff) > window.innerWidth / 2) {
+                if (totalDiff > window.innerWidth / 2) {
+                    prev();
+                } else if (totalDiff < -window.innerWidth / 2) {
+                    next();
+                }
+            } else if (Math.abs(lastDX) > threshold) {
+                if (lastDX < -threshold) {
+                    prev();
+                } else if (lastDX > threshold) {
+                    next();
+                }
+            } else {
+                // No movement - move to the same slide
+
+                css(root, {
+                    // to keep the perspective look similar for different scales
+                    // we need to 'scale' the perspective, too
+                    transform: perspective(config.perspective / currentState.scale) + scale(currentState.scale),
+                    transitionDuration: config.transitionDuration + "ms",
+                    transitionDelay: "0ms"
+                });
+
+                css(canvas, {
+                    transform: rotate(currentState.rotate, true) + translate(currentState.translate),
+                    //transitionDuration: duration + "ms",
+                    //transitionDelay: (zoomin ? 0 : delay) + "ms"
+                    transitionDuration: config.transitionDuration + "ms",
+                    transitionDelay: "0ms"
+                });
+            }
+        });
+
         // Adding some useful classes to step elements.
         //
         // All the steps that have not been shown yet are given `future` class.
@@ -760,46 +890,13 @@
                 event.preventDefault();
             }
         }, false);
-        
-        // Touch handler to detect swiping left and right based on window size.
-        // If the difference in X change is bigger than 1/20 of the screen width,
-        // we simply call an appropriate API function.
-        var lastX = 0;
-        var lastDiff = 0;
-        var threshold = window.innerWidth / 20;
-        var touchCount = 0; // To prevent multi-touch 'jumps' that mess everything up
 
-        document.addEventListener('touchstart', function (event) {
-            console.log(event);
-            if (! touchCount++) {
-                // If touchCount is zero
-                lastX = event.touches[0].clientX;
-            }
-        });
-        document.addEventListener('touchmove', function(event) {
-            var x = event.touches[0].clientX;
-            lastDiff = lastX - x;
-            lastX = x;
-        });
-        document.addEventListener('touchend', function (event) {
-            if (lastDiff < -threshold) {
-                api.prev();
-            } else if (lastDiff > threshold) {
-                api.next();
-            }
-
-            lastX = 0;
-            lastDiff = 0;
-
-            touchCount--;
-        });
-        
         // rescale presentation when window is resized
         window.addEventListener("resize", throttle(function () {
             // force going to active step again, to trigger rescaling
             api.goto( document.querySelector(".step.active"), 500 );
         }, 250), false);
-        
+
     }, false);
         
 })(document, window);
