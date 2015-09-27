@@ -656,10 +656,10 @@
         document.addEventListener('touchend', function (event) {
             var totalDiff = lastX - startX;
 
-            if (Math.abs(totalDiff) > window.innerWidth / 2) {
-                if (totalDiff > window.innerWidth / 2) {
+            if (Math.abs(totalDiff) > window.innerWidth / 5 && (totalDiff * lastDX) <= 0) {
+                if (totalDiff > window.innerWidth / 5 && lastDX <= 0) {
                     prev();
-                } else if (totalDiff < -window.innerWidth / 2) {
+                } else if (totalDiff < -window.innerWidth / 5 && lastDX >= 0) {
                     next();
                 }
             } else if (Math.abs(lastDX) > threshold) {
