@@ -668,6 +668,16 @@
             }, delay);
         };
     };
+
+    var triggeredInDisableTags = function(event, disableTags) {
+        if (typeof disableTags !== 'string') return false;
+
+        var element = event.target || event.srcElement;
+        if (element.nodeType === 3)
+          element = element.parentNode;
+
+        return (disableTags.toLowerCase().indexOf(element.tagName.toLowerCase()) >= 0) ? true : false;
+    }    
     
     // wait for impress.js to be initialized
     document.addEventListener("impress:init", function (event) {
@@ -681,6 +691,7 @@
         
         // Prevent default keydown action when one of supported key is pressed.
         document.addEventListener("keydown", function ( event ) {
+            if ( triggeredInDisableTags(event, 'input textarea text')) return;
             if ( event.keyCode === 9 || ( event.keyCode >= 32 && event.keyCode <= 34 ) || (event.keyCode >= 37 && event.keyCode <= 40) ) {
                 event.preventDefault();
             }
@@ -702,6 +713,9 @@
         //   as another way to moving to next step... And yes, I know that for the sake of
         //   consistency I should add [shift+tab] as opposite action...
         document.addEventListener("keyup", function ( event ) {
+            if ( triggeredInDisableTags(event, 'input textarea text')) return;
+
+
             if ( event.keyCode === 9 || ( event.keyCode >= 32 && event.keyCode <= 34 ) || (event.keyCode >= 37 && event.keyCode <= 40) ) {
                 switch( event.keyCode ) {
                     case 33: // pg up
