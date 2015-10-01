@@ -84,20 +84,6 @@
     var toNumber = function (numeric, fallback) {
         return isNaN(numeric) ? (fallback || 0) : Number(numeric);
     };
-
-    var toNumberRelative = function (numeric, base) {
-    var n;
-    if (numeric == undefined) {
-        n = base;
-    } else if (numeric.substring(0,2) == '+=') {
-        n = base + toNumber(numeric.substring(2,numeric.length));
-    } else if (numeric.substring(0,2) == '-=') {
-        n = base - toNumber(numeric.substring(2,numeric.length));
-    } else {
-        n = toNumber(numeric, base);
-    }
-    return n
-    };
     
     // `byId` returns element with given `id` - you probably have guessed that ;)
     var byId = function ( id ) {
@@ -307,31 +293,24 @@
             }
         };
         
-        var prev_step = {
-        translate: { x: 0, y: 0, z: 0 },
-        rotate:    { x: 0, y: 0, z: 0 },
-        scale:     1
-    };
-    
         // `initStep` initializes given step element by reading data from its
         // data attributes and setting correct styles.
         var initStep = function ( el, idx ) {
             var data = el.dataset,
                 step = {
                     translate: {
-                        x: toNumberRelative(data.x, prev_step.translate.x),
-                        y: toNumberRelative(data.y, prev_step.translate.y),
-                        z: toNumberRelative(data.z, prev_step.translate.z)
+                        x: toNumber(data.x),
+                        y: toNumber(data.y),
+                        z: toNumber(data.z)
                     },
                     rotate: {
-                        x: toNumberRelative(data.rotateX, prev_step.rotate.x),
-                        y: toNumberRelative(data.rotateY, prev_step.rotate.y),
-                        z: toNumberRelative(data.rotateZ || data.rotate, prev_step.rotate.z)
+                        x: toNumber(data.rotateX),
+                        y: toNumber(data.rotateY),
+                        z: toNumber(data.rotateZ || data.rotate)
                     },
-                    scale: toNumberRelative(data.scale, prev_step.scale),
+                    scale: toNumber(data.scale, 1),
                     el: el
                 };
-        prev_step = step;
             
             if ( !el.id ) {
                 el.id = "step-" + (idx + 1);
@@ -723,10 +702,12 @@
         //   as another way to moving to next step... And yes, I know that for the sake of
         //   consistency I should add [shift+tab] as opposite action...
         document.addEventListener("keyup", function ( event ) {
+
             if ( event.shiftKey || event.altKey || event.ctrlKey || event.metaKey ){
                 return;
             }
-            if ( event.keyCode === 9 || ( event.keyCode >= 32 && event.keyCode <= 34 ) || (event.keyCode >= 37 && event.keyCode <= 40) || (event.keyCode >= 48 && event.keyCode <=57) || (event.keyCode >= 96 && event.keyCode <= 105)) {
+            
+            if ( event.keyCode === 9 || ( event.keyCode >= 32 && event.keyCode <= 34 ) || (event.keyCode >= 37 && event.keyCode <= 40) ) {
                 switch( event.keyCode ) {
                     case 33: // pg up
                     case 37: // left
@@ -740,49 +721,11 @@
                     case 40: // down
                              api.next();
                              break;
-                    case 49: //1
-                    case 97: //1
-                            api.goto(0);
-                            break;
-                    case 50: //2
-                    case 98: //2
-                            api.goto(1);
-                            break;
-                    case 51: //3
-                    case 99: 
-                            api.goto(2);
-                            break;
-                    case 52: //4
-                    case 100: 
-                            api.goto(3);
-                            break;
-                    case 53: //5
-                    case 101:
-                            api.goto(4);
-                            break;
-                    case 54: //6
-                    case 102: 
-                            api.goto(5);
-                            break;
-                    case 55: //7
-                    case 103: 
-                            api.goto(6);
-                            break;
-                    case 56: //8
-                    case 104: 
-                            api.goto(7);
-                            break;
-                    case 57: //9
-                    case 105:
-                            api.goto(8);
-                            break;
-
                 }
                 
                 event.preventDefault();
             }
         }, false);
-        
         
         // delegated handler for clicking on the links to presentation steps
         document.addEventListener("click", function ( event ) {
