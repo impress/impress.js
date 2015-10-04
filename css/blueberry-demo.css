@@ -165,7 +165,7 @@ a:focus {
 
 .step {
     position: relative;
-    width: 900px;
+    width: 1200px;
     padding: 40px;
     margin: 20px auto;
 
@@ -176,8 +176,8 @@ a:focus {
     box-sizing:         border-box;
 
     font-family: 'Lato 400';
-    font-size: 48px;
-    line-height: 1.5;
+    font-size: 20px;
+    line-height: 25px;
 }
 
 /*
@@ -209,7 +209,7 @@ a:focus {
 .slide {
     display: block;
 
-    width: 900px;
+    width: 1200px;
     height: 700px;
     padding: 40px 60px;
 
@@ -222,8 +222,8 @@ a:focus {
     text-shadow: 0 2px 2px rgba(0, 0, 0, .1);
 
     font-family: 'Lato 400';
-    font-size: 30px;
-    line-height: 36px;
+    font-size: 20px;
+    line-height: 25px;
     letter-spacing: -1px;
 }
 
@@ -320,7 +320,7 @@ a:focus {
 /*
     This step has some animated text ...
 */
-/*#ing { width: 500px }*/
+#cita { width: 1200px }
 
 /*
     ... so we define display to `inline-block` to enable transforms and
@@ -329,7 +329,7 @@ a:focus {
 #cita b {
     display: inline-block;
     -webkit-transition: 0.5s;
-    -moz-transition:    0.5s;
+    -moz-transition:    2s;
     -ms-transition:     0.5s;
     -o-transition:      0.5s;
     transition:         0.5s;
@@ -339,12 +339,12 @@ a:focus {
     ... and we want 'positioning` word to move up a bit when the step gets
     `present` class ...
 */
-#cita .present .positioning {
-    -webkit-transform: translateY(+10px);
-    -moz-transform:    translateY(+10px);
-    -ms-transform:     translateY(+10px);
-    -o-transform:      translateY(+10px);
-    transform:         translateY(+10px);
+.present .positioning {
+    -webkit-transform: translateY(-10px);
+    -moz-transform:    translateY(-10px);
+    -ms-transform:     translateY(-10px);
+    -o-transform:      translateY(-10px);
+    transform:         translateY(-10px);
 }
 
 /*
@@ -367,18 +367,21 @@ a:focus {
 /*
     ... and 'scaling' to scale down after another quarter of a second.
 */
-#cita .present .scaling {
-    -webkit-transform: scale(1.2);
-    -moz-transform:    scale(1.2);
-    -ms-transform:     scale(1.2);
-    -o-transform:      scale(1.2);
-    transform:         scale(1.2);
+#cita b:hover {
 
-    -webkit-transition-delay: 1s;
+    -webkit-transform: scale(1.2) translateY(+15px);
+    -moz-transform:    scale(1.2) translateY(+15px);
+    -ms-transform:     scale(1.2) translateY(+15px);
+    -o-transform:      scale(1.2) translateY(+15px);
+    transform:         scale(1.2) translateY(+15px);
+
+    -moz-transform: color(red);
+
+    -webkit-transition-delay: 0.5s;
     -moz-transition-delay:    1s;
-    -ms-transition-delay:     1s;
-    -o-transition-delay:      1s;
-    transition-delay:         1s;
+    -ms-transition-delay:     0.5s;
+    -o-transition-delay:      0.5s;
+    transition-delay:         0.5s;
 }
 
 /*
