@@ -698,9 +698,7 @@
         //   step, because sometimes browser scrolls viewport because of the focused element?
         //   Well, the [tab] key by default navigates around focusable elements, so clicking
         //   it very often caused scrolling to focused element and breaking impress.js
-        //   positioning. I didn't want to just prevent this default action, so I used [tab]
-        //   as another way to moving to next step... And yes, I know that for the sake of
-        //   consistency I should add [shift+tab] as opposite action...
+        //   positioning. 
         document.addEventListener("keyup", function ( event ) {
             if ( event.keyCode === 9 || ( event.keyCode >= 32 && event.keyCode <= 34 ) || (event.keyCode >= 37 && event.keyCode <= 40) ) {
                 switch( event.keyCode ) {
@@ -709,7 +707,6 @@
                     case 38: // up
                              api.prev();
                              break;
-                    case 9:  // tab
                     case 32: // space
                     case 34: // pg down
                     case 39: // right
