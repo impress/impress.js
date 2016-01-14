@@ -718,10 +718,7 @@
                              break;
                     case 36: // character o
                     case 79: // home 
-                            var overview = document.getElementById("overview");
-                            if (overview) {
-                                api.goto(overview);
-                            }
+                            api.goto("overview");
                             break; 
                 }
                 
