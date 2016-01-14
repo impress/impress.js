@@ -702,7 +702,7 @@
         //   as another way to moving to next step... And yes, I know that for the sake of
         //   consistency I should add [shift+tab] as opposite action...
         document.addEventListener("keyup", function ( event ) {
-            if ( event.keyCode === 9 || ( event.keyCode >= 32 && event.keyCode <= 34 ) || (event.keyCode >= 37 && event.keyCode <= 40) ) {
+            if ( event.keyCode === 9 || ( event.keyCode >= 32 && event.keyCode <= 34 ) || (event.keyCode >= 36 && event.keyCode <= 40) || event.keyCode == 79 ) {
                 switch( event.keyCode ) {
                     case 33: // pg up
                     case 37: // left
@@ -716,12 +716,19 @@
                     case 40: // down
                              api.next();
                              break;
+                    case 36: // character o
+                    case 79: // home 
+                            var overview = document.getElementById("overview");
+                            if (overview) {
+                                api.goto(overview);
+                            }
+                            break; 
                 }
                 
                 event.preventDefault();
             }
         }, false);
-        
+
         // delegated handler for clicking on the links to presentation steps
         document.addEventListener("click", function ( event ) {
             // event delegation with "bubbling"
