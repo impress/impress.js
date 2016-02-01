@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>QUnit tests for impress.js</title>
+  <link rel="stylesheet" href="qunit/qunit.css">
+</head>
+
+
+
+<body class="impress-not-supported">
+  <!-- HTML elements to be tested with QUnit should typically be inside
+       a qunit-fixture div. Unfortunately that just won't work with impress.js
+       as it wants the div#impress element to be a direct child of body. Or
+       something, I don't know, but it didn't work.
+       
+       So we just have an empty qunit-fixture, and then our impress steps
+       just below it. This just means you have to make sure that each
+       QUnit.test() cleans up after itself, can't rely on QUnit to do it now.
+  -->
+  <div id="qunit-fixture">
+  </div>
+
+  <div id="impress">
+    <div class="step" data-x="-1000" data-y="0">First slide</div>
+    <div class="step" data-x="-800" data-y="0">Second slide</div>
+    <div class="step" data-x="-600" data-y="0">Third slide</div>
+    <div class="step" id="fourth" data-x="-400" data-y="0">Fourth slide</div>
+  </div>
+
+  <div id="qunit"></div>
+
+  <script src="../js/impress.js"></script>
+  <script src="qunit/qunit.js"></script>
+  <script src="helpers.js"></script>
+  <script>
+    // In case tests didn't complete, we are left with a hash/anchor pointing somewhere. But we want to start from scratch:
+    window.location.hash = "";    
+    // I don't understand exactly why, but we must call init() before the actual tests
+    impress().init();
+    
+    QUnit.test( "Initialize Impress.js", function( assert ) {
+      assert.ok( impress, 
+                 "impress declared in global scope" );
+// This is the one that doesn't work. Test 17 fails if this is done inside a test()
+//      assert.deepEqual( impress().init(), undefined,
+//                        "impress().init() called." );
+      assert.deepEqual( impress().init(), undefined,
+                        "It's ok to call impress().init() a second time, it's a no-op." );
+      var notSupportedClass = document.body.classList.contains("impress-not-supported");
+      var yesSupportedClass = document.body.classList.contains("impress-supported");
+      if ( !_impressSupported() ) {
+        assert.ok( notSupportedClass,
+                   "body.impress-not-supported class still there." );
+        assert.ok( !yesSupportedClass,
+                   "body.impress-supported class was NOT added." );
+      } else {
+        assert.ok( !notSupportedClass,
+                   "body.impress-not-supported class was removed." );
+        assert.ok( yesSupportedClass,
+                   "body.impress-supported class was added." );
+                   
+        // To be pedantic, we run the rest of these tests inside the else 
+        // brackets as well, meaning that impress.js is tested to be supported.
+        // However, other Qunit.test()s than this will fail miserably if it
+        // weren't supported.
+        assert.ok( !document.body.classList.contains("impress-disabled"),
+                   "body.impress-disabled is removed." );
+        assert.ok( document.body.classList.contains("impress-enabled"),
+                   "body.impress-enabled is added." );
+        
+        var canvas = document.querySelector( "div#impress > div" );
+        assert.ok( !canvas.classList.contains("step") && canvas.id === "",
+                   "Additional 'canvas' div inserted between div#impress root and steps." );
+        assert.equal( canvas.style.transform,
+                      "rotateZ(0deg) rotateY(0deg) rotateX(0deg) translate3d(1000px, 0px, 0px)",
+                      "canvas.style.transform initialized correctly" );
+        assert.equal( canvas.style.transformOrigin,
+                      "left top 0px",
+                      "canvas.style.transformOrigin initialized correctly" );
+        assert.equal( canvas.style.transformStyle,
+                      "preserve-3d",
+                      "canvas.style.transformStyle initialized correctly" );
+        assert.equal( canvas.style.transitionDelay,
+                      "0ms",
+                      "canvas.style.transitionDelay initialized correctly" );
+        // impress.js default values tries to set this to 1000ms, I'm completely confused about why that's not actually set in the browser?
+        assert.equal( canvas.style.transitionDuration,
+                      "0ms",
+                      "canvas.style.transitionDuration initialized correctly" );
+        assert.equal( canvas.style.transitionProperty,
+                      "all",
+                      "canvas.style.transitionProperty initialized correctly" );
+        assert.equal( canvas.style.transitionTimingFunction,
+                      "ease-in-out",
+                      "canvas.style.transitionTimingFunction initialized correctly" );
+                      
+        assert.equal( document.documentElement.style.height,
+                      "100%",
+                      "documentElement.style.height is 100%" );
+        
+        // Steps initialization
+        var step1 = document.querySelector( "div#step-1" );
+        assert.equal( step1.style.position,
+                      "absolute",
+                      "Step position is 'absolute'." );
+
+        assert.ok( step1.classList.contains("active"),
+                   "Step 1 has active css class." );
+        assert.ok( step1.classList.contains("present"),
+                   "Step 1 has present css class." );
+      }
+    });
+
+    // Note: Here we focus on testing the core functionality of moving between
+    // steps, the css classes set and unset, and events triggered.
+    // TODO: more complex animations and check position, transitions, delays, etc...
+    // Those need to be separate html files, and there could be several of them.
+    QUnit.test( "Impress Core API", function( assert ) {
+      // CSS classes are themselves manipulated in event listeners. Wait a short while before checking, to avoid race:
+      var wait = 5; // milliseconds
+      // Remember, when this block of tests is done, we must disable our event listeners
+      var disableListeners = false;
+
+      var doneWithNext = assert.async();
+      var doneWithPrev = assert.async();
+      var step1 = document.querySelector( "div#step-1" );
+      var step2 = document.querySelector( "div#step-2" );
+      var step3 = document.querySelector( "div#step-3" );
+      var step4 = document.querySelector( "div#fourth" );
+      var root  = document.querySelector( "div#impress" );
+
+      // On impress:stepenter, we do some standard assertions. Finally,
+      // we initialize the next transition from this array. 
+      var i = 0;
+      var nextStep = [ { me   : step2,
+                         next : function(){ return impress().goto(2); },
+                         text : "goto(<number>) called and returns ok (2->3)" },
+                       { me   : step3,
+                         next : function(){ return impress().goto("fourth"); },
+                         text : "goto(<string>) called and returns ok (3->4)" },
+                       { me   : step4,
+                         next : function(){ return impress().next(); },
+                         text : "next() wraps around to first step (4->1)" },
+                       { me   : step1,
+                         next : function(){ return impress().prev(); },
+                         text : "prev() wraps around to last step (1->4)" },
+                       { me   : step4,
+                         next : function(){ return impress().prev(); },
+                         text : "prev() called and returns ok (4->3)" },
+                       { me   : step3,
+                         next : false }      
+      ];
+      
+      var assertStepEnter = function( event, registeredListener ) {
+        assert.equal( event.target, nextStep[i].me,
+                      event.target.id + " triggered impress:stepenter event." );
+        assert.ok( event.target.classList.contains("active"),
+                   event.target.id + " set active css class." );
+        assert.ok( event.target.classList.contains("present"),
+                   event.target.id + " set present css class." );
+        assert.ok( !event.target.classList.contains("future"),
+                   event.target.id + " unset future css class." );
+        assert.ok( !event.target.classList.contains("past"),
+                   event.target.id + " unset past css class." );
+
+        if( nextStep[i].next ) {
+          assert.ok( nextStep[i].next(), nextStep[i].text );
+          i++;
+        } else {
+          // Remember to cleanup, since we're operating outside of qunit-fixture
+          root.removeEventListener( "impress:stepenter", registeredListener );
+          doneWithNext();
+        }
+      };
+      
+      root.addEventListener( "impress:stepenter", function( event ) {
+        var registeredListener = this;
+        setTimeout( function() { assertStepEnter( event, registeredListener ) },
+                    wait*2 ); // wait*2 ensures that assertStepLeave is finished 
+                              // first, since here we'll call nextStep.next and i++
+      });
+
+      var prevStep = [ step1 ];
+      for(j=0; j < nextStep.length; j++){
+        prevStep.push( nextStep[j].me );
+      }
+      var assertStepLeave = function( event, registeredListener ) {
+        assert.equal( event.target, prevStep[i],
+                      event.target.id + " triggered impress:stepleave event." );
+        assert.ok( !event.target.classList.contains("active"),
+                   event.target.id + " unset active css class." );
+        assert.ok( !event.target.classList.contains("present"),
+                   event.target.id + " unset present css class." );
+        assert.ok( !event.target.classList.contains("future"),
+                   event.target.id + " unset future css class." );
+        assert.ok( event.target.classList.contains("past"),
+                   event.target.id + " set past css class." );
+        
+        if( i+2 == prevStep.length ) {
+          root.removeEventListener( "impress:stepleave", registeredListener );
+          doneWithPrev();
+        }
+
+      };
+
+      root.addEventListener( "impress:stepleave", function( event ) {
+        var registeredListener = this;
+        setTimeout( function() { assertStepLeave( event, registeredListener ) },
+                    wait );
+      });
+
+      // Do other tests first, then trigger the chain reaction we setup above.
+      assert.deepEqual( impress().goto(document.querySelector( "div#impress" )),
+                        false,
+                        "goto() to a non-step element fails, as it should." );
+      assert.deepEqual( impress().goto(),
+                        false,
+                        "goto(<nothing>) fails, as it should." );
+
+      // This starts executing the chain of event listeners above     
+      assert.ok( impress().next(),
+                 "next() called and returns ok (1->2)" );
+    });
+    
+
+
+
+
+
+    // Note, it's clearly implied in the impress.js code, that when we support
+    // plugins, the keypress api should be a plugin. Then this test of course
+    // should go there as well.
+    QUnit.test( "Keypress API", function( assert ) {
+      var done = assert.async();
+
+    });
+
+    // Cleanup
+    QUnit.test( "Cleanup", function( assert ) {
+      assert.expect(0);
+      // Impress.js will set the hash part of the url, we want to unset it when finished
+      // Otherwise a refresh of browser page would not start tests from step 1
+      window.location.hash = "";    
+      // TODO: add back vertical scrollbar. For now it's necessary to zoom out if 
+      // QUnit output goes past the end of the screen.
+    });
+  </script>
+</body>
+</html>
