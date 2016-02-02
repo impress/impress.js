@@ -136,4 +136,4 @@ found a good way to handle its small screen.
 Also note that iOS supports `classList` and `dataset` APIs starting with version 5, so iOS 4.X and older
 requires polyfills to work.
 
-Copyright 2011-2016 Bartek Szopka - [Licence](LICENCE)
+Copyright 2011-2016 Bartek Szopka - Released under the MIT [License](LICENSE)
