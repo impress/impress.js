@@ -107,6 +107,16 @@ and now they are added to `body` element, so if your CSS code depends on this, i
 Same happened to `impress-not-supported` class name - it was moved from `#impress` element to `body`, so update
 your CSS if it's needed.
 
+#### NOTE ON BLACKBERRY PLAYBOOK
+
+Changes and fixes added in this version have broken the experience on Blackberry Playbook with OS in version 1.0.
+It happened due to a bug in the Playbook browser in this version. Fortunately in version 2.0 of Playbook OS this
+bug was fixed and impress.js works fine.
+
+So currently, on Blackberry Playbook, impress.js work only with latest OS. Fortunately, [it seems that most of the
+users](http://twitter.com/n_adam_stanley/status/178188611827679233) [are quite quick with updating their devices]
+(http://twitter.com/brcewane/status/178230406196379648)
+
 
 ### 0.3 ([browse](http://github.com/bartaz/impress.js/tree/0.3), [zip](http://github.com/bartaz/impress.js/zipball/0.3), [tar](http://github.com/bartaz/impress.js/tarball/0.3))
 

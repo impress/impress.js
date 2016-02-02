@@ -56,7 +56,7 @@ If you have fixed a bug or implemented a feature that you'd like to share, send 
 (http://github.com/bartaz/impress.js/tree/dev). But remember that I only accept code that fits my vision of impress.js
 and my coding standards - so make sure you are open for discussion :)
 
-**Note:** The team has changed, so there will be many changes in the upcoming versions.<br>
+**Note:** The team has changed, so there will be many changes in the upcoming versions.
 If you need informations about versions, check the [changelog](CHANGELOG.md).
 
 
@@ -66,16 +66,6 @@ ABOUT THE NAME
 impress.js name in [courtesy of @skuzniak](http://twitter.com/skuzniak/status/143627215165333504).
 
 It's an (un)fortunate coincidence that a Open/LibreOffice presentation tool is called Impress ;)
-
-#### NOTE ON BLACKBERRY PLAYBOOK
-
-Changes and fixes added in this version have broken the experience on Blackberry Playbook with OS in version 1.0.
-It happened due to a bug in the Playbook browser in this version. Fortunately in version 2.0 of Playbook OS this
-bug was fixed and impress.js works fine.
-
-So currently, on Blackberry Playbook, impress.js work only with latest OS. Fortunately, [it seems that most of the
-users](http://twitter.com/n_adam_stanley/status/178188611827679233) [are quite quick with updating their devices]
-(http://twitter.com/brcewane/status/178230406196379648)
 
 
 BROWSER SUPPORT
@@ -146,10 +136,4 @@ found a good way to handle its small screen.
 Also note that iOS supports `classList` and `dataset` APIs starting with version 5, so iOS 4.X and older
 requires polyfills to work.
 
-
-LICENSE
----------
-
-View the [LICENSE](LICENSE) file for more information.
-
-
+Copyright 2011-2016 Bartek Szopka - [Licence](LICENCE)
