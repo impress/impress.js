@@ -310,7 +310,9 @@
                     },
                     scale: toNumber(data.scale, 1),
                     el: el
-                };
+                },
+                //COLT:
+                notShifts;
             
             if ( !el.id ) {
                 el.id = "step-" + (idx + 1);
@@ -326,6 +328,18 @@
                            scale(step.scale),
                 transformStyle: "preserve-3d"
             });
+
+            //COLT: Add a style here to hide all innerSteps that don't havet he data-steps property
+            // The inner step allows the next and prev buttons to step through things on a slide.
+            // The shift allows for setting css styles on an innerStep through a json object set
+            // to the data-steps property.
+            // I was also going to assign the transition here but that made things transition
+            // intitially on the fade out. So the transition gets assigned on the next call
+            notShifts = el.querySelectorAll('.innerStep:not([data-steps])');
+            for(var i=0;i<notShifts.length;i++){
+                var elem = notShifts[i];
+                css(elem,{opacity: 0});
+            }
         };
         
         // `init` API function that initializes (and runs) the presentation.
@@ -556,12 +570,76 @@
             return goto(prev);
         };
         
+        //COLT: Adding a section here for "inner step" This would allow for bullets to be triggered on next,
+        // as well as transitions, like the "magic move" in keynote.
+        // I was planning on adding this to prev. But I think it would be better to not, once a slide is
+        // advanced through each inner step, it will act as though there are no innerSteps.
         // `next` API function goes to next step (in document order)
         var next = function () {
-            var next = steps.indexOf( activeStep ) + 1;
-            next = next < steps.length ? steps[ next ] : steps[ 0 ];
-            
-            return goto(next);
+            if(activeStep.querySelectorAll('.innerStep:not(.stepped)').length > 0){
+                inner.next();
+            }
+            else{
+                var next = steps.indexOf( activeStep ) + 1;
+                next = next < steps.length ? steps[ next ] : steps[ 0 ];
+
+                return goto(next);
+            }
+        };
+
+        //COLT: The Inner object for innerSteps
+        var inner = {
+            /*  I don't think this is needed. I think it would be better not to have it.
+                prev: function(){
+
+                            },
+                */
+            next: function(){
+                // this is the inner step.
+                // after advancing through the innerStep it marks it as stepped and then ignores
+                // all stepped items.
+                var innerNext = activeStep.querySelectorAll('.innerStep:not(.stepped)')[0], shifts, ind, duration;
+                if(innerNext.dataset && innerNext.dataset.steps){
+                    shifts = activeStep.querySelectorAll('.innerStep[data-steps]:not(.done)');
+
+                    for(var i=0;i<shifts.length;i++){
+                        var elem = shifts[i];
+
+                        ind = shifts[i].dataset && shifts[i].dataset.ind ? shifts[i].dataset.ind : 0;
+                        // assign the default transition at .5s
+                        // if there is a data-duration, then we will use that
+                        // only do this if the ind is at 0 because we don't need to set it more than once.
+                        if(ind === 0){
+                            duration = elem.dataset && elem.dataset.duration ? elem.dataset.duration : '0.5s';
+                            css(elem,{transition: 'all ' + duration + ' ease-out'});
+                        }
+                        // apply all the css in the json object.
+                        // if a transition is specified it will overwrite out default one.
+                        var steps = JSON.parse(elem.dataset.steps);
+                        css(elem,steps[ind]);
+
+                        if(ind >= steps.length - 1){
+                            elem.classList.add('stepped');
+                            //keying off of done here for the innerStep specifically.
+                            elem.classList.add('done');
+                        }
+                        // add one to our data ind.
+                        // I put it in the object itself so that if prev is done in the middle,
+                        // it will pick up where it left off.
+                        // also any element that doesn't have enough "steps" in the json object will be ignored after the last one.
+                        shifts[i].dataset.ind = parseInt(ind,10) + 1;
+                    }
+
+                }
+                else{
+                    // if there is no data-steps, then we treat it as a simple reveal.
+                    duration = innerNext.dataset && innerNext.dataset.duration ? innerNext.dataset.duration : '.5s';
+                    css(innerNext,{transition: 'all ' + duration + ' ease-out'});
+                    innerNext.classList.add('stepped');
+                    css(innerNext,{opacity:1});
+                }
+
+            }
         };
         
         // Adding some useful classes to step elements.
