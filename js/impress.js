@@ -715,6 +715,11 @@
                              api.prev();
                              break;
                     case 9:  // tab
+                             if( event.shiftKey ) { // if shift key is pressed, move to previous step
+                                 api.prev(); 
+                                 event.preventDefault();
+                                 return;
+                             }
                     case 32: // space
                     case 34: // pg down
                     case 39: // right
@@ -767,7 +772,7 @@
         }, false);
         
         // touch handler to detect taps on the left and right side of the screen
-        // based on awesome work of @hakimel: https://github.com/hakimel/reveal.js
+        // based on awesome work of @hakimel: https://github.com/hakimel/reveal.js 
         document.addEventListener("touchstart", function ( event ) {
             if (event.touches.length === 1) {
                 var x = event.touches[0].clientX,
