@@ -378,6 +378,39 @@ a:focus {
 }
 
 /*
+This step introduces substeps.
+At first, it only has one line of text, but after 1 action, it adds one line and changes text color to red, and
+after the second action, adds another line another line and changes the color to green.
+This rule hides the added texts
+*/
+#substeps .substep1,
+#substeps .substep2{
+    display: none;
+}
+
+/*
+Those rules set the style for when the sub steps will be shown
+*/
+#substeps{
+    height:400px;
+    -webkit-transition: color 1s;
+    -moz-transition: color 1s;
+    -ms-transition: color 1s;
+    -o-transition: color 1s;
+    transition: color 1s;
+}
+
+/*
+This rule shows the texts and changes the color when the classes are added
+*/
+.substeps_container_1{color: red;}
+.substeps_container_2{color: green;}
+#substeps.substeps_container_1 .substep1,
+#substeps.substeps_container_2 .substep2{
+    display:block;
+}
+
+/*
     The 'imagination' step is again some boring font-sizing.
 */
 
