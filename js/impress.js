@@ -217,7 +217,7 @@
     // It's the core `impress` function that returns the impress.js API
     // for a presentation based on the element with given id ('impress'
     // by default).
-    var impress = window.impress = function ( rootId ) {
+    var impress = window.impress = function ( rootId, reset ) {
         
         // If impress.js is not supported by the browser return a dummy API
         // it may not be a perfect solution but we return early and avoid
@@ -231,6 +231,9 @@
             };
         }
         
+        if (reset) {
+            roots = {};
+        }
         rootId = rootId || "impress";
         
         // if given root is already initialized just return the API
