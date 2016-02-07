@@ -36,15 +36,12 @@
   <script>
     // In case tests didn't complete, we are left with a hash/anchor pointing somewhere. But we want to start from scratch:
     window.location.hash = "";    
-    // I don't understand exactly why, but we must call init() before the actual tests
-    impress().init();
-    
+
     QUnit.test( "Initialize Impress.js", function( assert ) {
       assert.ok( impress, 
                  "impress declared in global scope" );
-// This is the one that doesn't work. Test 17 fails if this is done inside a test()
-//      assert.deepEqual( impress().init(), undefined,
-//                        "impress().init() called." );
+      assert.deepEqual( impress().init(), undefined,
+                        "impress().init() called." );
       assert.deepEqual( impress().init(), undefined,
                         "It's ok to call impress().init() a second time, it's a no-op." );
       var notSupportedClass = document.body.classList.contains("impress-not-supported");
@@ -62,7 +59,7 @@
                    
         // To be pedantic, we run the rest of these tests inside the else 
         // brackets as well, meaning that impress.js is tested to be supported.
-        // However, other Qunit.test()s than this will fail miserably if it
+        // However, other Qunit.test() blocks than this will fail miserably if it
         // weren't supported.
         assert.ok( !document.body.classList.contains("impress-disabled"),
                    "body.impress-disabled is removed." );
@@ -107,8 +104,6 @@
 
         assert.ok( step1.classList.contains("active"),
                    "Step 1 has active css class." );
-        assert.ok( step1.classList.contains("present"),
-                   "Step 1 has present css class." );
       }
     });
 
@@ -169,17 +164,18 @@
           i++;
         } else {
           // Remember to cleanup, since we're operating outside of qunit-fixture
-          root.removeEventListener( "impress:stepenter", registeredListener );
+          root.removeEventListener( "impress:stepenter", assertStepEnterWrapper );
           doneWithNext();
         }
       };
       
-      root.addEventListener( "impress:stepenter", function( event ) {
-        var registeredListener = this;
-        setTimeout( function() { assertStepEnter( event, registeredListener ) },
+      var assertStepEnterWrapper = function( event ) {
+        setTimeout( function() { assertStepEnter( event ) },
                     wait*2 ); // wait*2 ensures that assertStepLeave is finished 
                               // first, since here we'll call nextStep.next and i++
-      });
+      };
+      root.addEventListener( "impress:stepenter", assertStepEnterWrapper );
+
 
       var prevStep = [ step1 ];
       for(j=0; j < nextStep.length; j++){
@@ -198,17 +194,17 @@
                    event.target.id + " set past css class." );
         
         if( i+2 == prevStep.length ) {
-          root.removeEventListener( "impress:stepleave", registeredListener );
+          root.removeEventListener( "impress:stepleave", assertStepLeaveWrapper );
           doneWithPrev();
         }
 
       };
 
-      root.addEventListener( "impress:stepleave", function( event ) {
-        var registeredListener = this;
-        setTimeout( function() { assertStepLeave( event, registeredListener ) },
+      var assertStepLeaveWrapper = function( event ) {
+        setTimeout( function() { assertStepLeave( event ) },
                     wait );
-      });
+      };
+      root.addEventListener( "impress:stepleave", assertStepLeaveWrapper );
 
       // Do other tests first, then trigger the chain reaction we setup above.
       assert.deepEqual( impress().goto(document.querySelector( "div#impress" )),
@@ -233,7 +229,8 @@
     // should go there as well.
     QUnit.test( "Keypress API", function( assert ) {
       var done = assert.async();
-
+      assert.ok( true, "Placeholder for more tests" );
+      done();
     });
 
     // Cleanup
