@@ -328,6 +328,56 @@
             });
         };
         
+        //return current page's sequence which begin at 1
+        function getCurrent(){
+            var id = (window.location.hash||'#/').split('#/')[1];
+            if('overview'===id) return 0;
+            for(var i=0;i<document.getElementsByClassName('step').length;i++){
+                var page = document.getElementsByClassName('step')[i];
+                if(id === page.getAttribute('id')){
+                    return i+1;
+                }
+            }
+            return 0;
+        }
+        // return count of <div class="page"></div> but exclude <div id="overview"></div>
+        function getTotal(){
+            return document.getElementById('overview')?document.getElementsByClassName('step').length - 1: document.getElementsByClassName('step').length;
+        }
+
+        // `showPage` API function that show current/total at the bottom
+        var showPage = function(){
+            var foot = {};
+            if(document.getElementsByTagName('footer')[0]){
+                foot = document.getElementByTagsName('foot')[0];
+            } else {
+                foot = document.createElement('footer');
+                document.body.appendChild(foot);
+            }
+            foot.innerText = getCurrent()>0?(getCurrent()+'/'+getTotal()):'';
+            window.addEventListener("hashchange", function () {
+                foot.innerText = getCurrent()>0?(getCurrent()+'/'+getTotal()):'';
+            }, false);
+        };
+
+        //`showProgress` API function that show current page percent at the top
+        var showProgress = function(){
+            var head = {};
+            if(document.getElementsByTagName('header')[0]){
+                head = document.getElementByTagsName('header')[0];
+            } else {
+                head = document.createElement('header');
+                document.body.appendChild(head);
+            }
+            var percent = getCurrent()*100.00/getTotal();
+            console.log(percent);
+            head.style.width = percent + '%';
+            window.addEventListener("hashchange", function () {
+                var percent = getCurrent()*100.00/getTotal();
+                head.style.width = percent + '%';
+            }, false);
+        };
+
         // `init` API function that initializes (and runs) the presentation.
         var init = function () {
             if (initialized) { return; }
@@ -635,7 +685,9 @@
             init: init,
             goto: goto,
             next: next,
-            prev: prev
+            prev: prev,
+            showPage: showPage,
+            showProgress: showProgress
         });
 
     };

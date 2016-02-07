@@ -357,10 +357,16 @@ if ("ontouchstart" in document.documentElement) {
     And you should do it in the end of your document. Not only because it's a good practice, but also
     because it should be done when the whole document is ready.
     Of course you can wrap it in any kind of "DOM ready" event, but I was too lazy to do so ;)
+
+    `inpress().showPage()` function to show currentPage/totalPage at the bottom of whole web page
     
 -->
 <script src="js/impress.js"></script>
-<script>impress().init();</script>
+<script>
+    impress().init();
+    impress().showPage();
+    impress().showProgress();
+</script>
 
 <!--
     
