@@ -34,15 +34,17 @@
   <script src="qunit/qunit.js"></script>
   <script src="helpers.js"></script>
   <script>
-    // In case tests didn't complete, we are left with a hash/anchor pointing somewhere. But we want to start from scratch:
-    window.location.hash = "";    
+    QUnit.begin(function( details ) {
+      // In case tests didn't complete, we are left with a hash/anchor pointing somewhere. But we want to start from scratch:
+      window.location.hash = "";    
+    });
 
     QUnit.test( "Initialize Impress.js", function( assert ) {
       assert.ok( impress, 
                  "impress declared in global scope" );
-      assert.deepEqual( impress().init(), undefined,
+      assert.strictEqual( impress().init(), undefined,
                         "impress().init() called." );
-      assert.deepEqual( impress().init(), undefined,
+      assert.strictEqual( impress().init(), undefined,
                         "It's ok to call impress().init() a second time, it's a no-op." );
       var notSupportedClass = document.body.classList.contains("impress-not-supported");
       var yesSupportedClass = document.body.classList.contains("impress-supported");
@@ -59,7 +61,7 @@
                    
         // To be pedantic, we run the rest of these tests inside the else 
         // brackets as well, meaning that impress.js is tested to be supported.
-        // However, other Qunit.test() blocks than this will fail miserably if it
+        // However, other QUnit.test() blocks than this will fail miserably if it
         // weren't supported.
         assert.ok( !document.body.classList.contains("impress-disabled"),
                    "body.impress-disabled is removed." );
@@ -112,135 +114,133 @@
     // TODO: more complex animations and check position, transitions, delays, etc...
     // Those need to be separate html files, and there could be several of them.
     QUnit.test( "Impress Core API", function( assert ) {
-      // CSS classes are themselves manipulated in event listeners. Wait a short while before checking, to avoid race:
+      // impress.js itself uses event listeners to manipulate most CSS classes. 
+      // Wait a short while before checking, to avoid race. 
+      // (See assertStepEnterWrapper and assertStepLeaveWrapper.)
       var wait = 5; // milliseconds
-      // Remember, when this block of tests is done, we must disable our event listeners
-      var disableListeners = false;
 
-      var doneWithNext = assert.async();
-      var doneWithPrev = assert.async();
+      var done = assert.async();
       var step1 = document.querySelector( "div#step-1" );
       var step2 = document.querySelector( "div#step-2" );
       var step3 = document.querySelector( "div#step-3" );
       var step4 = document.querySelector( "div#fourth" );
       var root  = document.querySelector( "div#impress" );
 
-      // On impress:stepenter, we do some standard assertions. Finally,
-      // we initialize the next transition from this array. 
+      // On impress:stepenter, we do some assertions on the "entered" object. 
+      // On impress:stepleave, we do some assertions on the "left" object.
+      // Finally we call next() to initialize the next transition, and it starts all over again. 
       var i = 0;
-      var nextStep = [ { me   : step2,
-                         next : function(){ return impress().goto(2); },
-                         text : "goto(<number>) called and returns ok (2->3)" },
-                       { me   : step3,
-                         next : function(){ return impress().goto("fourth"); },
-                         text : "goto(<string>) called and returns ok (3->4)" },
-                       { me   : step4,
-                         next : function(){ return impress().next(); },
-                         text : "next() wraps around to first step (4->1)" },
-                       { me   : step1,
-                         next : function(){ return impress().prev(); },
-                         text : "prev() wraps around to last step (1->4)" },
-                       { me   : step4,
-                         next : function(){ return impress().prev(); },
-                         text : "prev() called and returns ok (4->3)" },
-                       { me   : step3,
-                         next : false }      
+      var sequence = [ { left    : null, // impress:stepleave is not triggered when leaving step-1 the first time. 
+                         entered : step2,
+                         next    : function(){ return impress().goto(2); },
+                         text    : "goto(<number>) called and returns ok (2->3)" },
+                       { left    : step2,
+                         entered : step3,
+                         next    : function(){ return impress().goto("fourth"); },
+                         text    : "goto(<string>) called and returns ok (3->4)" },
+                       { left    : step3,
+                         entered : step4,
+                         next    : function(){ return impress().next(); },
+                         text    : "next() wraps around to first step (4->1)" },
+                       { left    : step4,
+                         entered : step1,
+                         next    : function(){ return impress().prev(); },
+                         text    : "prev() wraps around to last step (1->4)" },
+                       { left    : step1,
+                         entered : step4,
+                         next    : function(){ return impress().prev(); },
+                         text    : "prev() called and returns ok (4->3)" },
+                       { left    : step4,
+                         entered : step3,
+                         next    : false } // false = end of sequence
       ];
+      // When both assertStepEnter and assertStepLeave are done, we can go to next step in sequence.
+      var readyCount = 1; // 1 because first time impress:stepleave not happening.
+      var readyForNext = function(){
+        readyCount++;
+        if( readyCount % 2 == 0 ) {
+          if( sequence[i].next ) {
+            assert.ok( sequence[i].next(), sequence[i].text );
+            i++;
+            assertImmediately();
+          } else {
+            // Remember to cleanup, since we're operating outside of qunit-fixture
+            root.removeEventListener( "impress:stepenter", assertStepEnterWrapper );
+            root.removeEventListener( "impress:stepleave", assertStepLeaveWrapper );
+            done();
+          }
+        }
+      };
       
+      // Things to check on impress:stepenter event -----------------------------//
       var assertStepEnter = function( event, registeredListener ) {
-        assert.equal( event.target, nextStep[i].me,
+        assert.equal( event.target, sequence[i].entered,
                       event.target.id + " triggered impress:stepenter event." );
-        assert.ok( event.target.classList.contains("active"),
-                   event.target.id + " set active css class." );
         assert.ok( event.target.classList.contains("present"),
                    event.target.id + " set present css class." );
         assert.ok( !event.target.classList.contains("future"),
                    event.target.id + " unset future css class." );
         assert.ok( !event.target.classList.contains("past"),
                    event.target.id + " unset past css class." );
-
-        if( nextStep[i].next ) {
-          assert.ok( nextStep[i].next(), nextStep[i].text );
-          i++;
-        } else {
-          // Remember to cleanup, since we're operating outside of qunit-fixture
-          root.removeEventListener( "impress:stepenter", assertStepEnterWrapper );
-          doneWithNext();
-        }
+        readyForNext();
       };
       
       var assertStepEnterWrapper = function( event ) {
-        setTimeout( function() { assertStepEnter( event ) },
-                    wait*2 ); // wait*2 ensures that assertStepLeave is finished 
-                              // first, since here we'll call nextStep.next and i++
+        setTimeout( function() { assertStepEnter( event ) }, wait ); 
       };
       root.addEventListener( "impress:stepenter", assertStepEnterWrapper );
 
 
-      var prevStep = [ step1 ];
-      for(j=0; j < nextStep.length; j++){
-        prevStep.push( nextStep[j].me );
-      }
+      // Things to check on impress:stepleave event -----------------------------//
       var assertStepLeave = function( event, registeredListener ) {
-        assert.equal( event.target, prevStep[i],
+        assert.equal( event.target, sequence[i].left,
                       event.target.id + " triggered impress:stepleave event." );
-        assert.ok( !event.target.classList.contains("active"),
-                   event.target.id + " unset active css class." );
         assert.ok( !event.target.classList.contains("present"),
                    event.target.id + " unset present css class." );
         assert.ok( !event.target.classList.contains("future"),
                    event.target.id + " unset future css class." );
         assert.ok( event.target.classList.contains("past"),
                    event.target.id + " set past css class." );
-        
-        if( i+2 == prevStep.length ) {
-          root.removeEventListener( "impress:stepleave", assertStepLeaveWrapper );
-          doneWithPrev();
-        }
-
+        readyForNext();
       };
 
       var assertStepLeaveWrapper = function( event ) {
-        setTimeout( function() { assertStepLeave( event ) },
-                    wait );
+        setTimeout( function() { assertStepLeave( event ) }, wait );
       };
       root.addEventListener( "impress:stepleave", assertStepLeaveWrapper );
+      
+      // Things to check immediately after impress().goto() ---------------------------//
+      var assertImmediately = function(){
+        assert.ok( sequence[i].entered.classList.contains("active"),
+                   sequence[i].entered.id + " set active css class." );
+        assert.ok( !sequence[i].left.classList.contains("active"),
+                   sequence[i].left.id + " unset active css class." );      
+      };
 
-      // Do other tests first, then trigger the chain reaction we setup above.
-      assert.deepEqual( impress().goto(document.querySelector( "div#impress" )),
+
+      // Done with setup. Start testing! -----------------------------------------------//
+      // Do no-op tests first, then trigger the sequence of transitions we setup above. //
+
+      assert.strictEqual( impress().goto(document.querySelector( "div#impress" )),
                         false,
                         "goto() to a non-step element fails, as it should." );
-      assert.deepEqual( impress().goto(),
+      assert.strictEqual( impress().goto(),
                         false,
                         "goto(<nothing>) fails, as it should." );
 
-      // This starts executing the chain of event listeners above     
+      // This starts executing the sequence above     
       assert.ok( impress().next(),
                  "next() called and returns ok (1->2)" );
     });
     
 
-
-
-
-
-    // Note, it's clearly implied in the impress.js code, that when we support
-    // plugins, the keypress api should be a plugin. Then this test of course
-    // should go there as well.
-    QUnit.test( "Keypress API", function( assert ) {
-      var done = assert.async();
-      assert.ok( true, "Placeholder for more tests" );
-      done();
-    });
-
     // Cleanup
-    QUnit.test( "Cleanup", function( assert ) {
-      assert.expect(0);
+    QUnit.done(function( details ) {
       // Impress.js will set the hash part of the url, we want to unset it when finished
       // Otherwise a refresh of browser page would not start tests from step 1
       window.location.hash = "";    
-      // TODO: add back vertical scrollbar. For now it's necessary to zoom out if 
-      // QUnit output goes past the end of the screen.
+      // Add back vertical scrollbar so we can read results if there were failures. 
+      document.body.style.overflow = 'auto';
     });
   </script>
 </body>
