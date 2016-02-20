@@ -1,7 +1,7 @@
 impress.js
 ============
 
-It's a presentation framework based on the power of CSS3 transforms and 
+It's a presentation framework based on the power of CSS3 transforms and
 transitions in modern browsers and inspired by the idea behind prezi.com.
 
 **WARNING**
@@ -14,7 +14,7 @@ HOW TO USE IT
 
 [Use the source](http://github.com/bartaz/impress.js/blob/master/index.html), Luke ;)
 
-If you have no idea what I mean by that, or you just clicked that link above and got 
+If you have no idea what I mean by that, or you just clicked that link above and got
 very confused by all these strange characters that got displayed on your screen,
 it's a sign, that impress.js is not for you.
 
@@ -49,12 +49,7 @@ There is also a book available about [Building impressive presentations with imp
 WANT TO CONTRIBUTE?
 ---------------------
 
-If you've found a bug or have a great idea for new feature let me know by [adding your suggestion]
-(http://github.com/bartaz/impress.js/issues/new) to [issues list](https://github.com/bartaz/impress.js/issues).
-
-If you have fixed a bug or implemented a feature that you'd like to share, send your pull request against [dev branch]
-(http://github.com/bartaz/impress.js/tree/dev). But remember that I only accept code that fits my vision of impress.js
-and my coding standards - so make sure you are open for discussion :)
+Please, read the [contributing guidelines](CONTRIBUTING.md) on how to create [Issues](CONTRIBUTING.md#issues) and [Pull Requests](CONTRIBUTING.md#pull-requests).
 
 **Note:** The team has changed, so there will be many changes in the upcoming versions.
 If you need informations about versions, check the [changelog](CHANGELOG.md).
@@ -80,7 +75,7 @@ It doesn't work in Opera, as it doesn't support CSS 3D transforms.
 If you find impress.js working on other browsers, feel free to tell us and we'll update this documentation.
 
 As a presentation tool it was not developed with mobile browsers in mind, but some tablets are good
-enough to run it, so it should work quite well on iPad (iOS 5, or iOS 4 with HTML5 polyfills) and 
+enough to run it, so it should work quite well on iPad (iOS 5, or iOS 4 with HTML5 polyfills) and
 Blackberry Playbook. Inform us of any bug and we will try to fix this.
 
 ### Still interested? Read more...
@@ -108,7 +103,7 @@ transforms support. Transitions between presentation steps are based on CSS tran
 So these two features are required by impress.js to display presentation correctly.
 
 Unfortunately the support for CSS 3D transforms and transitions is not enough for animations to
-run smoothly. If the browser doesn't support hardware acceleration or the graphic card is not 
+run smoothly. If the browser doesn't support hardware acceleration or the graphic card is not
 good enough the transitions will be laggy.
 
 Additionally the code of impress.js relies on APIs proposed in HTML5 specification, including
