@@ -21,6 +21,10 @@
 
 // You are one of those who like to know how things work inside?
 // Let me show you the cogs that make impress.js run...
+
+// Al this script loads only when the complete page is loaded, so you can load the Impress.js <script> tag
+// from the <head> without problems and avoid loading it from the end of the <body> tag
+window.onload = function(){
 (function ( document, window ) {
     'use strict';
     
@@ -795,6 +799,8 @@
     }, false);
         
 })(document, window);
+
+};
 
 // THAT'S ALL FOLKS!
 //
