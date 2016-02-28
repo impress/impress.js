@@ -766,22 +766,27 @@
             }
         }, false);
         
-        // touch handler to detect taps on the left and right side of the screen
-        // based on awesome work of @hakimel: https://github.com/hakimel/reveal.js
+        // touch handler to detect swipe left or right
         document.addEventListener("touchstart", function ( event ) {
             if (event.touches.length === 1) {
-                var x = event.touches[0].clientX,
-                    width = window.innerWidth * 0.3,
-                    result = null;
-                    
-                if ( x < width ) {
-                    result = api.prev();
-                } else if ( x > window.innerWidth - width ) {
-                    result = api.next();
-                }
-                
-                if (result) {
-                    event.preventDefault();
+                //store initial touch location
+                window.xTouch = event.touches[0].clientX;
+            }
+        }, false);
+
+        document.addEventListener("touchend", function( event ) {
+            //ensure that a touch starting point was saved and that there is an endtouch point
+            if (window.xTouch && event.changedTouches.length === 1) {
+                //calculate the difference between starting point and end touch point
+                var difference = window.xTouch - event.changedTouches[0].clientX;
+                //round up to better calculate difference and see if it is over the threshold (180px)
+                if ( Math.abs( difference ) > 180 ){
+                    //if the difference is positive, the swipe was right-to-left. if negative, the swipe was left-to-right
+                    if ( difference > 0 ) {
+                        api.next();
+                    } else {
+                        api.prev();
+                    }
                 }
             }
         }, false);
