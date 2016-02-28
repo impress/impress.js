@@ -273,6 +273,14 @@
         // reference to last entered step
         var lastEntered = null;
         
+        // `onStepEntering` is called whenever the step element is going to be entered
+        // This adds the ability to prep an item to be entered.
+        var onStepEntering = function (step) {
+            if (lastEntered !== step) {
+                triggerEvent(step, "impress:stepentering");
+            }
+        };
+        
         // `onStepEnter` is called whenever the step element is entered
         // but the event is triggered only if the step is different than
         // last entered step.
@@ -583,8 +591,12 @@
                 step.classList.add("future");
             });
             
-            root.addEventListener("impress:stepenter", function (event) {
+            root.addEventListener("impress:stepentering", function (event) {
                 event.target.classList.remove("past");
+                event.target.classList.add("entering");
+            }, false);
+            
+            root.addEventListener("impress:stepenter", function (event) {
                 event.target.classList.remove("future");
                 event.target.classList.add("present");
             }, false);
