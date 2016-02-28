@@ -1,0 +1,26 @@
+{
+  "name": "impress.js",
+  "version": "0.5.3",
+  "description": "It's a presentation framework based on the power of CSS3 transforms and transitions in modern browsers and inspired by the idea behind prezi.com.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bartaz/impress.js.git"
+  },
+  "keywords": [
+    "presentation",
+    "css3",
+    "transitions",
+    "transforms",
+    "beautiful"
+  ],
+  "author": "Bartek Szopka",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bartaz/impress.js/issues"
+  },
+  "homepage": "https://github.com/bartaz/impress.js"
+}
