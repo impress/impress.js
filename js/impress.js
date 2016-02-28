@@ -272,6 +272,21 @@
         
         // reference to last entered step
         var lastEntered = null;
+
+        // reference to last step data for calculating relative position
+        var lastStep = {
+            translate: {
+                x: 0,
+                y: 0,
+                z: 0
+            },
+            rotate: {
+                x: 0,
+                y: 0,
+                z: 0
+            },
+            scale: 1
+        };
         
         // `onStepEnter` is called whenever the step element is entered
         // but the event is triggered only if the step is different than
@@ -297,20 +312,67 @@
         // data attributes and setting correct styles.
         var initStep = function ( el, idx ) {
             var data = el.dataset,
+                rotateData = {},
+                translateData = {},
+                scaleData,
+                step;
+
+                rotateData.x = !data.relative ?
+                       toNumber(data.rotateX) :
+                       (toNumber(data.rotateX)+lastStep.rotate.x);
+                rotateData.y = !data.relative ?
+                       toNumber(data.rotateY) :
+                       (toNumber(data.rotateY)+lastStep.rotate.y);
+                rotateData.z = !data.relative ?
+                       toNumber(data.rotateZ || data.rotate) :
+                       (toNumber(data.rotateZ || data.rotate)+lastStep.rotate.z);
+
+                translateData.x = !data.relative ?
+                        toNumber(data.x) :
+                        (
+                            (Math.cos(lastStep.rotate.y*Math.PI/180)*Math.cos(lastStep.rotate.z*Math.PI/180))*
+                                    toNumber(data.x)+
+                            (-Math.cos(lastStep.rotate.y*Math.PI/180)*Math.sin(lastStep.rotate.z*Math.PI/180))*
+                                    toNumber(data.y)+
+                            (Math.sin(lastStep.rotate.y*Math.PI/180))*
+                                    toNumber(data.z)
+                        )+lastStep.translate.x;
+                translateData.y = !data.relative ?
+                        toNumber(data.y) :
+                        (
+                            (Math.cos(lastStep.rotate.x*Math.PI/180)*Math.sin(lastStep.rotate.z*Math.PI/180)+
+                             Math.sin(lastStep.rotate.x*Math.PI/180)*Math.sin(lastStep.rotate.y*Math.PI/180)*Math.cos(lastStep.rotate.z)*Math.PI/180)*
+                                    toNumber(data.x)+
+                            (Math.cos(lastStep.rotate.x*Math.PI/180)*Math.cos(lastStep.rotate.z*Math.PI/180)-
+                             Math.sin(lastStep.rotate.x*Math.PI/180)*Math.sin(lastStep.rotate.y*Math.PI/180)*Math.sin(lastStep.rotate.z*Math.PI/180))*
+                                    toNumber(data.y)+
+                            (-Math.sin(lastStep.rotate.x*Math.PI/180)*Math.cos(lastStep.rotate.y*Math.PI/180))*
+                                    toNumber(data.z)
+                        )+lastStep.translate.y;
+                translateData.z = !data.relative ?
+                        toNumber(data.z) :
+                        (
+                            (Math.sin(lastStep.rotate.x*Math.PI/180)*Math.sin(lastStep.rotate.z*Math.PI/180)-
+                             Math.cos(lastStep.rotate.x*Math.PI/180)*Math.sin(lastStep.rotate.y*Math.PI/180)*Math.cos(lastStep.rotate.z*Math.PI/180))*
+                                    toNumber(data.x)+
+                            (Math.sin(lastStep.rotate.x*Math.PI/180)*Math.cos(lastStep.rotate.z*Math.PI/180)+
+                             Math.cos(lastStep.rotate.x*Math.PI/180)*Math.sin(lastStep.rotate.y*Math.PI/180)*Math.sin(lastStep.rotate.z*Math.PI/180))*
+                                    toNumber(data.y)+
+                            (Math.cos(lastStep.rotate.x*Math.PI/180)*Math.cos(lastStep.rotate.y*Math.PI/180))*
+                                    toNumber(data.z)
+                        )+lastStep.translate.z;
+                scaleData = !data.relative ?
+                        toNumber(data.scale, 1) :
+                        (toNumber(data.scale, 1)*lastStep.scale);
+
                 step = {
-                    translate: {
-                        x: toNumber(data.x),
-                        y: toNumber(data.y),
-                        z: toNumber(data.z)
-                    },
-                    rotate: {
-                        x: toNumber(data.rotateX),
-                        y: toNumber(data.rotateY),
-                        z: toNumber(data.rotateZ || data.rotate)
-                    },
-                    scale: toNumber(data.scale, 1),
+                    translate: translateData,
+                    rotate: rotateData,
+                    scale: scaleData,
                     el: el
                 };
+
+                lastStep = step;
             
             if ( !el.id ) {
                 el.id = "step-" + (idx + 1);
