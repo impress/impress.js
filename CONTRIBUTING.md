@@ -11,10 +11,11 @@ Guidelines:
 Pull Requests
 -------------
 
-If you have fixed a bug or implemented a feature that you'd like to share, send your [Pull Request](https://help.github.com/articles/using-pull-requests/) against the [master branch]
-(https://github.com/bartaz/impress.js/tree/master). But remember that the team will only accept code that fits the purpose of impress.js
+[Pull Requests](https://help.github.com/articles/using-pull-requests/) should be opened against the [master branch]
+(https://github.com/bartaz/impress.js/tree/master). But remember that the team will only accept code that fits the purpose of impress.js.
 
 Guidelines:
 
+* If proposing a feature, make sure to discuss that as an issue first.
 * Create a new [topic branch](https://github.com/dchelimsky/rspec/wiki/Topic-Branches) for every separate change you make.
 * Make sure impress.js runs successfully on as many browsers as you can test.
