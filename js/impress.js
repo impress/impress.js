@@ -22,7 +22,7 @@
 // You are one of those who like to know how things work inside?
 // Let me show you the cogs that make impress.js run...
 (function ( document, window ) {
-    'use strict';
+    "use strict";
     
     // HELPER FUNCTIONS
     
@@ -31,15 +31,15 @@
     // The code is heavily inspired by Modernizr http://www.modernizr.com/
     var pfx = (function () {
         
-        var style = document.createElement('dummy').style,
-            prefixes = 'Webkit Moz O ms Khtml'.split(' '),
+        var style = document.createElement("dummy").style,
+            prefixes = "Webkit Moz O ms Khtml".split(" "),
             memory = {};
         
         return function ( prop ) {
             if ( typeof memory[ prop ] === "undefined" ) {
                 
                 var ucProp  = prop.charAt(0).toUpperCase() + prop.substr(1),
-                    props   = (prop + ' ' + prefixes.join(ucProp + ' ') + ucProp).split(' ');
+                    props   = (prop + " " + prefixes.join(ucProp + " ") + ucProp).split(" ");
                 
                 memory[ prop ] = null;
                 for ( var i in props ) {
@@ -337,7 +337,7 @@
             var meta = $("meta[name='viewport']") || document.createElement("meta");
             meta.content = "width=device-width, minimum-scale=1, maximum-scale=1, user-scalable=no";
             if (meta.parentNode !== document.head) {
-                meta.name = 'viewport';
+                meta.name = "viewport";
                 document.head.appendChild(meta);
             }
             
@@ -654,7 +654,7 @@
 // In future I think about moving it to make them optional, move to separate files
 // and treat more like a 'plugins'.
 (function ( document, window ) {
-    'use strict';
+    "use strict";
     
     // throttling function calls, by Remy Sharp
     // http://remysharp.com/2010/07/21/throttling-function-calls/
@@ -741,7 +741,7 @@
                 var href = target.getAttribute("href");
                 
                 // if it's a link to presentation step, target this step
-                if ( href && href[0] === '#' ) {
+                if ( href && href[0] === "#" ) {
                     target = document.getElementById( href.slice(1) );
                 }
             }

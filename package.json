@@ -20,5 +20,11 @@
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/bartaz/impress.js/issues"
+  },
+  "scripts": {
+    "lint": "jshint js/impress.js"
+  },
+  "devDependencies": {
+    "jshint": "2.9.1"
   }
 }
