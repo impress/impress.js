@@ -742,8 +742,11 @@
                 api.next();
            };
         });
+<<<<<<< HEAD
         
 
+=======
+>>>>>>> f5ec8b4bd20df3dc47795cc1a1f155b58e068039
         // delegated handler for clicking on the links to presentation steps
         document.addEventListener("click", function ( event ) {
             // event delegation with "bubbling"
