@@ -726,7 +726,17 @@
                 event.preventDefault();
             }
         }, false);
+
+        document.addEventListener("wheel",function(e){
+
+           if(e.wheelDelta>0){
+                api.prev();
+            }else{
+                api.next();
+           };
+        });
         
+
         // delegated handler for clicking on the links to presentation steps
         document.addEventListener("click", function ( event ) {
             // event delegation with "bubbling"
