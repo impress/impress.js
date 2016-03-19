@@ -246,7 +246,7 @@
         
         // current state (position, rotation and scale) of the presentation
         var currentState = null;
-        
+
         // array of step elements
         var steps = null;
         
@@ -259,7 +259,10 @@
         // root presentation elements
         var root = byId( rootId );
         var canvas = document.createElement("div");
-        
+
+        // check whether to use relative positioning or not
+        var relativePositioning = root.attributes.relative ? true : false;
+
         var initialized = false;
         
         // STEP EVENTS
@@ -292,25 +295,57 @@
                 lastEntered = null;
             }
         };
-        
+
+        // `buildStepData` is used to to build
+        var buildStepData = function(step, previousStep) {
+
+            var data = step.dataset;
+
+            var stepData = {
+                translate: {
+                    x: toNumber(data.x),
+                    y: toNumber(data.y),
+                    z: toNumber(data.z)
+                },
+                rotate: {
+                    x: toNumber(data.rotateX),
+                    y: toNumber(data.rotateY),
+                    z: toNumber(data.rotateZ || data.rotate)
+                },
+                scale: toNumber(data.scale, 1),
+                el: step
+            };
+
+            var prevData = previousStep ? stepsData['impress-' + previousStep.id] : null;
+            var notAbsolute = step.attributes.absolute ? false : true;
+
+            if (prevData && notAbsolute) {
+                stepData.translate.x = prevData.translate.x + stepData.translate.x;
+                stepData.translate.y = prevData.translate.y + stepData.translate.y;
+                stepData.translate.z = prevData.translate.z + stepData.translate.z;
+
+                stepData.rotate.x = prevData.rotate.x + stepData.rotate.x;
+                stepData.rotate.y = prevData.rotate.y + stepData.rotate.y;
+                stepData.rotate.z = prevData.rotate.z + stepData.rotate.z;
+            }
+
+            return stepData;
+
+        };
+
         // `initStep` initializes given step element by reading data from its
         // data attributes and setting correct styles.
         var initStep = function ( el, idx ) {
-            var data = el.dataset,
-                step = {
-                    translate: {
-                        x: toNumber(data.x),
-                        y: toNumber(data.y),
-                        z: toNumber(data.z)
-                    },
-                    rotate: {
-                        x: toNumber(data.rotateX),
-                        y: toNumber(data.rotateY),
-                        z: toNumber(data.rotateZ || data.rotate)
-                    },
-                    scale: toNumber(data.scale, 1),
-                    el: el
-                };
+            var step;
+            if (relativePositioning) {
+                var prevStep = null;
+                if (idx > 0)
+                    prevStep = steps[idx - 1];
+
+                step = buildStepData(el, prevStep);
+            } else {
+                step = buildStepData(el);
+            }
             
             if ( !el.id ) {
                 el.id = "step-" + (idx + 1);
