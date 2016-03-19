@@ -1,0 +1,139 @@
+#impressconsole body {
+    background-color: rgb(255, 255, 255);
+    padding: 0;
+    margin: 0;
+    font-family: verdana, arial, sans-serif;
+    font-size: 2vw;
+}
+
+#impressconsole div#console {
+    position: absolute;
+    top: 0.5vw;
+    left: 0.5vw;
+    right: 0.5vw;
+    bottom: 3vw;
+    margin: 0;
+}
+
+#impressconsole div#views, #impressconsole div#notes {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+}
+
+#impressconsole div#views {
+    left: 0;
+    right: 50vw;
+    overflow: hidden;
+}
+
+#impressconsole div#blocker {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+}
+
+#impressconsole div#notes {
+    left: 50vw;
+    right: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding: 0.3ex;
+    background-color: rgb(255, 255, 255);
+    border: solid 1px rgb(120, 120, 120);
+}
+
+#impressconsole div#notes .noNotes {
+    color: rgb(200, 200, 200);
+}
+
+#impressconsole div#notes p {
+    margin-top: 0;
+}
+
+#impressconsole iframe {
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    left: 0;
+    border: solid 1px rgb(120, 120, 120);
+}
+
+#impressconsole iframe#slideView {
+    top: 0;
+    width: 49vw;
+    height: 49vh;
+}
+
+#impressconsole iframe#preView {
+    opacity: 0.7;
+    top: 50vh;
+    width: 30vw;
+    height: 30vh;
+}
+
+#impressconsole div#controls {
+    margin: 0;
+    position: absolute;
+    bottom: 0.25vw;
+    left: 0.5vw;
+    right: 0.5vw;
+    height: 2.5vw;
+    background-color: rgb(255, 255, 255);
+    background-color: rgba(255, 255, 255, 0.6);
+}
+
+#impressconsole div#prev, div#next {
+}
+
+#impressconsole div#prev a, #impressconsole div#next a {
+    display: block;
+    border: solid 1px rgb(70, 70, 70);
+    border-radius: 0.5vw;
+    font-size: 1.5vw;
+    padding: 0.25vw;
+    text-decoration: none;
+    background-color: rgb(220, 220, 220);
+    color: rgb(0, 0, 0);
+}
+
+#impressconsole div#prev a:hover, #impressconsole div#next a:hover {
+    background-color: rgb(245, 245, 245);
+}
+
+#impressconsole div#prev {
+    float: left;
+}
+
+#impressconsole div#next {
+    float: right;
+}
+
+#impressconsole div#status {
+    margin-left: 2em;
+    margin-right: 2em;
+    text-align: center;
+    float: right;
+}
+
+#impressconsole div#clock {
+    margin-left: 2em;
+    margin-right: 2em;
+    text-align: center;
+    float: left;
+}
+
+#impressconsole div#timer {
+    margin-left: 2em;
+    margin-right: 2em;
+    text-align: center;
+    float: left;
+}
+
+#impressconsole span.moving {
+    color: rgb(255, 0, 0);
+}
+
+#impressconsole span.ready {
+    color: rgb(0, 128, 0);
+}
