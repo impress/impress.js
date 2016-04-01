@@ -703,6 +703,12 @@
         //   consistency I should add [shift+tab] as opposite action...
         document.addEventListener("keyup", function ( event ) {
 
+            ///press H button to redirect to the overview page,if your overview changes,
+            //just change the words after #/ for what your overview page's id.
+            if(event.keyCode==72){
+                window.location.replace(window.location.pathname+"#/overview");
+  
+            };
             if ( event.shiftKey || event.altKey || event.ctrlKey || event.metaKey ){
                 return;
             }
@@ -721,12 +727,22 @@
                     case 40: // down
                              api.next();
                              break;
+
                 }
                 
                 event.preventDefault();
             }
         }, false);
-        
+        //add mouse wheel event 
+        document.addEventListener("wheel",function(e){
+
+           if(e.wheelDelta>0){
+                api.prev();
+            }else{
+                api.next();
+           };
+        });
+
         // delegated handler for clicking on the links to presentation steps
         document.addEventListener("click", function ( event ) {
             // event delegation with "bubbling"
