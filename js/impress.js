@@ -399,7 +399,7 @@
             
             initialized = true;
             
-            triggerEvent(root, "impress:init", { api: roots[ "impress-root-" + rootId ] });
+            triggerEvent(root, "impress:init", { api: roots[ "impress-root-" + rootId ], steps: steps });
         };
         
         // `getStep` is a helper function that returns a step element defined by parameter.
