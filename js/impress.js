@@ -426,6 +426,11 @@
                 // presentation not initialized or given element is not a step
                 return false;
             }
+
+            // trigger leave of currently active element (if it's not the same step again)
+            if (activeStep && activeStep !== el) {
+                onStepLeave(activeStep);
+            }
             
             // Sometimes it's possible to trigger focus on first link with some keyboard action.
             // Browser in such a case tries to scroll the page to make this element visible
@@ -480,11 +485,6 @@
             }
             
             var targetScale = target.scale * windowScale;
-            
-            // trigger leave of currently active element (if it's not the same step again)
-            if (activeStep && activeStep !== el) {
-                onStepLeave(activeStep);
-            }
             
             // Now we alter transforms of `root` and `canvas` to trigger transitions.
             //
