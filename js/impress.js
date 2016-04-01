@@ -397,6 +397,33 @@
                 scale:     1
             };
             
+            // Hide the mouse cursor in fullscreenmode after the configured
+            // amount of milliseconds without movement
+            if(rootData.hideMouseAfter) {
+                var mouseMoveTimer = null,
+                isCursorVisible = true;
+                
+                var hideCursor = function() {
+                    //isFullscreen
+                    if(!window.screenTop && !window.screenY){
+                        mouseMoveTimer = null;
+                        document.body.style.cursor = "none";
+                        isCursorVisible = false;
+                    }
+                };
+                
+                document.onmousemove = function() {
+                    if (mouseMoveTimer) {
+                        window.clearTimeout(mouseMoveTimer);
+                    }
+                    if (!isCursorVisible) {
+                        document.body.style.cursor = "default";
+                        isCursorVisible = true;
+                    }
+                    mouseMoveTimer = window.setTimeout(hideCursor, rootData.hideMouseAfter);
+                };
+            }
+            
             initialized = true;
             
             triggerEvent(root, "impress:init", { api: roots[ "impress-root-" + rootId ] });
