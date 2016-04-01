@@ -12,7 +12,7 @@ impress.js may not help you if you have nothing interesting to say ;)
 HOW TO USE IT
 ---------------
 
-[Use the source](http://github.com/bartaz/impress.js/blob/master/index.html), Luke ;)
+[Use the source](http://github.com/impress/impress.js/blob/master/index.html), Luke ;)
 
 If you have no idea what I mean by that, or you just clicked that link above and got
 very confused by all these strange characters that got displayed on your screen,
@@ -34,13 +34,13 @@ EXAMPLES AND OTHER LEARNING RESOURCES
 
 ### Examples and demos
 
-More examples and demos can be found on [Examples and demos wiki page](http://github.com/bartaz/impress.js/wiki/Examples-and-demos).
+More examples and demos can be found on [Examples and demos wiki page](http://github.com/impress/impress.js/wiki/Examples-and-demos).
 
 Feel free to add your own example presentations (or websites) there.
 
 ### Other tutorials and learning resources
 
-If you want to learn even more there is a [list of tutorials and other learning resources](https://github.com/bartaz/impress.js/wiki/impress.js-tutorials-and-other-learning-resources)
+If you want to learn even more there is a [list of tutorials and other learning resources](https://github.com/impress/impress.js/wiki/impress.js-tutorials-and-other-learning-resources)
 on the wiki, too.
 
 There is also a book available about [Building impressive presentations with impress.js](http://www.packtpub.com/building-impressive-presentations-with-impressjs/book) by Rakhitha Nimesh Ratnayake.
