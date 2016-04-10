@@ -1,0 +1,23 @@
+{
+  "name": "impress.js",
+  "version": "0.5.3",
+  "description": "\"Fork of impress.js to add testing\"",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mr-rampage/impress.js.git"
+  },
+  "keywords": [
+    "impress.js",
+    "fork"
+  ],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mr-rampage/impress.js/issues"
+  },
+  "homepage": "https://github.com/mr-rampage/impress.js#readme"
+}
