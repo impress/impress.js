@@ -6,9 +6,11 @@
   "scripts": {
     "test": "jasmine-node src/",
     "clean": "rm -rf dist && mkdir -p dist/js",
-    "browserify": "browserify ./src/js/core.js > ./dist/js/impress.js",
+    "browserify": "browserify ./src/js/core.js -t babelify > ./dist/js/impress.js",
     "build:js": "npm run browserify",
-    "build": "npm run clean && npm run build:js",
+    "build:css": "cp -R ./src/css ./dist/",
+    "build:html": "cp ./src/*.html ./dist/",
+    "build": "npm run clean && npm run build:html && npm run build:css && npm run build:js",
     "prebuild": "npm run test"
   },
   "repository": {
@@ -26,7 +28,8 @@
   },
   "homepage": "https://github.com/mr-rampage/impress.js#readme",
   "devDependencies": {
-    "jasmine-node": "^1.14.5",
-    "browserify": "latest"
+    "babelify": "^7.2.0",
+    "browserify": "latest",
+    "jasmine-node": "latest"
   }
 }
