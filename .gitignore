@@ -1,0 +1,6 @@
+bower_components/
+node_modules/
+dist/
+**/*.swp
+.tmp/
+*.log

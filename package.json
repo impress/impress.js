@@ -4,7 +4,12 @@
   "description": "\"Fork of impress.js to add testing\"",
   "main": "index.html",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jasmine-node src/",
+    "clean": "rm -rf dist && mkdir -p dist/js",
+    "browserify": "browserify ./src/js/core.js > ./dist/js/impress.js",
+    "build:js": "npm run browserify",
+    "build": "npm run clean && npm run build:js",
+    "prebuild": "npm run test"
   },
   "repository": {
     "type": "git",
@@ -19,5 +24,9 @@
   "bugs": {
     "url": "https://github.com/mr-rampage/impress.js/issues"
   },
-  "homepage": "https://github.com/mr-rampage/impress.js#readme"
+  "homepage": "https://github.com/mr-rampage/impress.js#readme",
+  "devDependencies": {
+    "jasmine-node": "^1.14.5",
+    "browserify": "latest"
+  }
 }

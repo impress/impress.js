@@ -1,3 +1,4 @@
+require('./navigation.js');
 /**
  * impress.js
  *
