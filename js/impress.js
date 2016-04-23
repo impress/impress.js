@@ -584,6 +584,16 @@
             return goto( next );
         };
 
+        // `current` API function returns the current step step
+        var current = function() { 
+            return steps.indexOf(activeStep);
+        };
+
+        // `total` API function returns the number of steps present
+        var total = function() {
+            return steps.length;
+        };
+
         // Adding some useful classes to step elements.
         //
         // All the steps that have not been shown yet are given `future` class.
@@ -657,7 +667,9 @@
             init: init,
             goto: goto,
             next: next,
-            prev: prev
+            prev: prev,
+            current: current,
+            total: total
         } );
 
     };
@@ -753,6 +765,26 @@
                 event.preventDefault();
             }
         }, false );
+
+        // Mouse wheel support.
+        // It is very sensitive so the slide chqnge will hqppen every 3 mouse wheel steps.
+
+        // Used to cound the numbers of mouse wheel steps
+        var mouseSteps=0;
+        
+        // Mouse wheel support. It's really sensitive so it changes of slide on every 3
+        // steps...
+        document.addEventListener("mousewheel", function(event) {
+            mouseSteps++;
+            if(mouseSteps>=3){ // Here you should change the steps number
+            if (event.wheelDelta > 0 && api.current() > 0) {
+                api.prev(1);
+            } else if (event.wheelDelta < 0 && api.current() < api.total()-1) {
+                api.next(1);
+            }
+                mouseSteps=0;
+            }
+        }, false);
 
         // Delegated handler for clicking on the links to presentation steps
         document.addEventListener( "click", function( event ) {
