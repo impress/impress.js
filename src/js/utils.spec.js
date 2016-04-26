@@ -13,5 +13,6 @@ describe('Utils', function() {
     expect(toNumber('5')).toEqual(5);
     expect(toNumber(null)).toEqual(0);
     expect(toNumber()).toEqual(0);
+    expect(toNumber('abc', 123)).toEqual(123);
   });
 });
