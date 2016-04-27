@@ -1,8 +1,8 @@
 {
   "name": "impress.js",
   "version": "0.5.3",
-  "description": "\"Fork of impress.js to add testing\"",
-  "main": "index.html",
+  "description": "It's a presentation framework based on the power of CSS3 transforms and transitions in modern browsers and inspired by the idea behind prezi.com.",
+  "main": "js/impress.js",
   "scripts": {
     "test": "karma start",
     "clean": "rm -rf dist && mkdir -p dist/js",
@@ -11,17 +11,23 @@
     "build:css": "cp -R ./src/css ./dist/",
     "build:html": "cp ./src/*.html ./dist/",
     "build": "npm run clean && npm run build:html && npm run build:css && npm run build:js",
-    "prebuild": "npm run test"
+    "prebuild": "npm run test",
+    "lint": "jshint src/js/*.js && jscs src/js/*.js --preset=jquery"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/mr-rampage/impress.js.git"
   },
   "keywords": [
-    "impress.js",
-    "fork"
+    "presentation",
+    "slides",
+    "slideshow",
+    "css3",
+    "transitions",
+    "transforms",
+    "browser"
   ],
-  "author": "",
+  "author": "Bartek Szopka",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/mr-rampage/impress.js/issues"
@@ -33,7 +39,9 @@
     "browserify": "latest",
     "karma-jasmine": "latest",
     "karma-browserify": "latest",
-    "karma-phantomjs-launcher": "latest"
+    "karma-phantomjs-launcher": "latest",
+    "jscs": "2.11.0",
+    "jshint": "2.9.1"
   },
   "browserify": {
     "transform": [

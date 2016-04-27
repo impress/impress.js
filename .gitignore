@@ -4,3 +4,4 @@ dist/
 **/*.swp
 .tmp/
 *.log
+/npm-debug.log
