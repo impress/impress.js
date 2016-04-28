@@ -1,3 +1,12 @@
+import {
+  toNumber,
+  arrayify,
+  translate,
+  rotate,
+  scale,
+  perspective
+} from './transformer'
+
 /**
  * impress.js
  *
@@ -56,11 +65,6 @@
 
     } )();
 
-    // `arraify` takes an array-like object and turns it into real Array
-    // to make all the Array.prototype goodness available.
-    var arrayify = function( a ) {
-        return [].slice.call( a );
-    };
 
     // `css` function applies the styles given in `props` object to the element
     // given as `el`. It runs all property names through `pfx` function to make
@@ -76,13 +80,6 @@
             }
         }
         return el;
-    };
-
-    // `toNumber` takes a value given as `numeric` parameter and tries to turn
-    // it into a number. If it is not possible it returns 0 (or other value
-    // given as `fallback`).
-    var toNumber = function( numeric, fallback ) {
-        return isNaN( numeric ) ? ( fallback || 0 ) : Number( numeric );
     };
 
     // `byId` returns element with given `id` - you probably have guessed that ;)
@@ -112,31 +109,6 @@
         el.dispatchEvent( event );
     };
 
-    // `translate` builds a translate transform string for given data.
-    var translate = function( t ) {
-        return " translate3d(" + t.x + "px," + t.y + "px," + t.z + "px) ";
-    };
-
-    // `rotate` builds a rotate transform string for given data.
-    // By default the rotations are in X Y Z order that can be reverted by passing `true`
-    // as second parameter.
-    var rotate = function( r, revert ) {
-        var rX = " rotateX(" + r.x + "deg) ",
-            rY = " rotateY(" + r.y + "deg) ",
-            rZ = " rotateZ(" + r.z + "deg) ";
-
-        return revert ? rZ + rY + rX : rX + rY + rZ;
-    };
-
-    // `scale` builds a scale transform string for given data.
-    var scale = function( s ) {
-        return " scale(" + s + ") ";
-    };
-
-    // `perspective` builds a perspective transform string for given data.
-    var perspective = function( p ) {
-        return " perspective(" + p + "px) ";
-    };
 
     // `getElementFromHash` returns an element located by id from hash part of
     // window location.
