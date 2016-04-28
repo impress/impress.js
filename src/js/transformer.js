@@ -10,9 +10,6 @@ export function translate(t) {
   return " translate3d(" + t.x + "px," + t.y + "px," + t.z + "px) ";
 };
 
-// `rotate` builds a rotate transform string for given data.
-// By default the rotations are in X Y Z order that can be reverted by passing `true`
-// as second parameter.
 export function rotate(r, revert) {
   let rX = " rotateX(" + r.x + "deg) ",
     rY = " rotateY(" + r.y + "deg) ",

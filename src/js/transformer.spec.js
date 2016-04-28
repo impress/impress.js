@@ -33,11 +33,15 @@ describe('Transformers', () => {
 
   describe('translation strings', () => {
     it('should create a translate transform string from a coordinate', () => {
-      expect(translate({
-        x: 1,
-        y: 2,
-        z: 3
-      })).toEqual(" translate3d(1px,2px,3px) ");
+      expect(translate({ x: 1, y: 2, z: 3 })).toEqual(" translate3d(1px,2px,3px) ");
+    });
+
+    it('should create a rotation transform string from a coordinate', () => {
+      expect(rotate( { x: 1, y: 2, z: 3 })).toEqual(" rotateX(1deg)  rotateY(2deg)  rotateZ(3deg) ")
+    });
+
+    it('should revert a rotation transform string from a coordinate', () => {
+      expect(rotate( { x: 1, y: 2, z: 3 }, true )).toEqual(" rotateZ(3deg)  rotateY(2deg)  rotateX(1deg) ")
     });
 
     it('should create a scale transform string from a value', () => {
