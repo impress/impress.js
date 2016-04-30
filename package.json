@@ -22,9 +22,11 @@
     "url": "https://github.com/bartaz/impress.js/issues"
   },
   "scripts": {
-    "lint": "jshint js/impress.js && jscs js/impress.js --preset=jquery"
+    "lint": "jshint js/impress.js && jscs js/impress.js --preset=jquery",
+    "test": "chrome test/core_tests.html"
   },
   "devDependencies": {
+    "chrome": "0.1.0",
     "jscs": "2.11.0",
     "jshint": "2.9.1",
     "qunitjs": "2.0.0-rc1"
