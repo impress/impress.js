@@ -8,6 +8,13 @@ transitions in modern browsers and inspired by the idea behind prezi.com.
 
 impress.js may not help you if you have nothing interesting to say ;)
 
+NEW FEATURES
+---------------
+
+1. Lots of animations
+2. Using jQuery
+3. New javascript APIs
+4. New `data-` attributes
 
 HOW TO USE IT
 ---------------
