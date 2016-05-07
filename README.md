@@ -49,7 +49,7 @@ There is also a book available about [Building impressive presentations with imp
 WANT TO CONTRIBUTE?
 ---------------------
 
-Please, read the [contributing guidelines](CONTRIBUTING.md) on how to create [Issues](CONTRIBUTING.md#issues) and [Pull Requests](CONTRIBUTING.md#pull-requests).
+Please, read the [contributing guidelines](.github/CONTRIBUTING.md) on how to create [Issues](.github/CONTRIBUTING.md#issues) and [Pull Requests](.github/CONTRIBUTING.md#pull-requests).
 
 **Note:** The team has changed, so there will be many changes in the upcoming versions.
 If you need informations about versions, check the [changelog](CHANGELOG.md).
