@@ -18,5 +18,4 @@ Guidelines:
 
 * If proposing a feature, make sure to discuss that as an issue first.
 * Create a new [topic branch](https://github.com/dchelimsky/rspec/wiki/Topic-Branches) for every separate change you make.
-* Make sure impress.js runs successfully on as many browsers as you can test.
-* Run `npm lint` to make sure the code is consistent with the project standards.
+* Execute `npm run lint && npm test` to make sure the tests pass and the code is consistent with the project standards.
