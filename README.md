@@ -14,14 +14,9 @@ HOW TO USE IT
 
 [Use the source](http://github.com/impress/impress.js/blob/master/index.html), Luke ;)
 
-If you have no idea what I mean by that, or you just clicked that link above and got
-very confused by all these strange characters that got displayed on your screen,
-it's a sign, that impress.js is not for you.
+impress.js was created with developers in mind and some basic knowledge of html, css and javascript is a prerequisite to install and utilize it's features.
 
-Sorry.
-
-Fortunately there are some guys on GitHub that got quite excited with the idea of building
-editing tool for impress.js. Let's hope they will manage to do it.
+If you are a designer or novice developer and intent on using impress, there is a project on GitHub that aims to provide an editing tool for impress.js. It is still in development but we hope they will manage to make impress.js more accessible to all.
 
 
 
@@ -88,7 +83,7 @@ For browsers not supporting CSS3 3D transforms impress.js adds `impress-not-supp
 class on `#impress` element, so fallback styles can be applied to make all the content accessible.
 
 
-### Even more explanation and technical stuff
+### Even more explanation and technical stuff (and some opinions)
 
 Let's put this straight -- wide browser support was (and is) not on top of my priority list for
 impress.js. It's built on top of fresh technologies that just start to appear in the browsers
