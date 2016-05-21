@@ -62,6 +62,82 @@ impress.js name in [courtesy of @skuzniak](http://twitter.com/skuzniak/status/14
 
 It's an (un)fortunate coincidence that a Open/LibreOffice presentation tool is called Impress ;)
 
+API
+-----------------
+
+### JavaScript
+
+#### impress().init()
+
+Initializes impress.js globally in the page. Only one instance of impress.js is supported per document.
+
+**Example:**
+
+```JavaScript
+impress().init();
+```
+
+#### impress().next()
+
+Navigates to the next step of the presentation.
+
+**Example:**
+
+```JavaScript
+var api = impress();
+api.init();
+api.next();
+```
+
+#### impress().prev()
+
+Navigates to the previous step of the presentation.
+
+**Example:**
+
+```JavaScript
+var api = impress();
+api.init();
+api.prev();
+```
+
+#### impress().goto(stepIndex|stepElementId|stepElement, [duration])
+
+Accepts a [`Number`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number) that represents the step index.
+Navigates to the step given the provided step index.
+
+**Example:**
+
+```JavaScript
+var api = impress();
+api.init();
+api.goto(7);
+```
+
+Accepts a [`String`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String) that represents the step element id.
+Navigates to the step given the provided step element id.
+
+**Example:**
+
+```JavaScript
+var api = impress();
+api.init();
+api.goto( "overview" );
+```
+
+Accepts an [`HTMLElement`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement) that represents the step element.
+Navigates to the step given the provided step element.
+
+**Example:**
+
+```JavaScript
+var overview = document.getElementById( "overview" )
+var api = impress();
+api.init();
+api.goto( overview );
+```
+
+Accepts an optional [Number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number) in the last argument that represents the duration of the transition in milliseconds. If not provided, the default transition duration for the presentation will be used.
 
 BROWSER SUPPORT
 -----------------
