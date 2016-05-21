@@ -14,14 +14,12 @@ HOW TO USE IT
 
 [Use the source](http://github.com/impress/impress.js/blob/master/index.html), Luke ;)
 
-If you have no idea what I mean by that, or you just clicked that link above and got
-very confused by all these strange characters that got displayed on your screen,
-it's a sign, that impress.js is not for you.
+Please note that impress.js was created for developers. Some basic knowledge of html, css and
+javascript is a prerequisite to install and use its features.
 
-Sorry.
-
-Fortunately there are some guys on GitHub that got quite excited with the idea of building
-editing tool for impress.js. Let's hope they will manage to do it.
+If you are a designer or novice developer that want to use impress.js,
+[there are some projects](https://github.com/impress/impress.js/wiki/Examples-and-demos/5d887507caa5cf534eab6713d9adb3a5e7662459#authoring-tools) that aim to provide an editing tool for impress.js. They might be still in
+development, but we hope they will manage to make impress.js more accessible to everyone.
 
 
 
