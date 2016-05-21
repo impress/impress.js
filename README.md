@@ -62,8 +62,92 @@ impress.js name in [courtesy of @skuzniak](http://twitter.com/skuzniak/status/14
 
 It's an (un)fortunate coincidence that a Open/LibreOffice presentation tool is called Impress ;)
 
-API
+Reference API
 -----------------
+
+### HTML
+
+#### Root Element
+
+impress.js requires a Root Element with id "impress". All the content of the presentation will be created inside that element. It is not recommended to manipulate any of the styles, attributes or classes that are created by impress.js inside the Root Element after initialization.
+
+**Example:**
+
+```html
+<div id="impress"></div>
+```
+
+#### Step Element
+
+A Step Element is an element that contains metadata that defines how it is going to be presented
+in the screen.
+A Step Element should contain a `.step` class and a unique `id` attribute.
+The content represents an html fragment that will be initially positioned at the center of the camera point of view.
+In the Step Element, you can define a specific set of default attributes and positioning, that are documented below.
+
+**Example:**
+
+```html
+<div id="bored" class="step" data-x="-1000">
+    <q>Aren’t you just <b>bored</b> with all those slides-based presentations?</q>
+</div>
+```
+
+##### 2D Coordinates Positioning (data-x, data-y)
+
+Define the pixel based position in which the **center** of the Step Element will be positioned relative to the infinite canvas in the first and second dimensions.
+
+**Example:**
+
+```html
+<div id="bored" class="step" data-x="-1000" data-y="-1500">
+    <q>Aren’t you just <b>bored</b> with all those slides-based presentations?</q>
+</div>
+```
+
+##### 2D Scaling (data-scale)
+
+Defines the scaling multiplier of the Step Element relative to the other Step Elements. For example,
+`data-scale="4"` means that the element will appear to be 4 times larger than the others. From presentation and transitions point of view, it means that it will have to be scaled down (4 times) to make it back to its correct size.
+
+**Example:**
+
+```html
+<div id="title" class="step" data-x="0" data-y="0" data-scale="4">
+    <span class="try">then you should try</span>
+    <h1>impress.js<sup>*</sup></h1>
+    <span class="footnote"><sup>*</sup> no rhyme intended</span>
+</div>
+```
+
+##### 2D Rotation (data-rotate)
+
+Represents the amount of clockwise rotation of the element relative to 360 degrees.
+
+**Example:**
+
+```html
+<div id="its" class="step" data-x="850" data-y="3000" data-rotate="90" data-scale="5">
+    <p>
+      It’s a <strong>presentation tool</strong> <br>
+      inspired by the idea behind <a href="http://prezi.com">prezi.com</a> <br>
+      and based on the <strong>power of CSS3 transforms and transitions</strong> in modern browsers.
+    </p>
+</div>
+```
+
+
+##### 3D Coordinates Positioning (data-z)
+
+Define the pixel based position in which the **center** of the Step Element will be positioned relative to the infinite canvas in the third dimension (Z axis). For example, if we use `data-z="-3000"`, it means that the Step Element will be positioned far away from the camera (by 3000px).
+
+**Example:**
+
+```html
+<div id="tiny" class="step" data-x="2825" data-y="2325" data-z="-3000" data-rotate="300" data-scale="1">
+    <p>and <b>tiny</b> ideas</p>
+</div>
+```
 
 ### JavaScript
 
@@ -114,8 +198,8 @@ api.init();
 api.goto(7);
 ```
 
-Accepts a [`String`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String) that represents the step element id.
-Navigates to the step given the provided step element id.
+Accepts a [`String`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String) that represents the Step Element id.
+Navigates to the step given the provided Step Element id.
 
 **Example:**
 
@@ -125,8 +209,8 @@ api.init();
 api.goto( "overview" );
 ```
 
-Accepts an [`HTMLElement`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement) that represents the step element.
-Navigates to the step given the provided step element.
+Accepts an [`HTMLElement`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement) that represents the Step Element.
+Navigates to the step given the provided Step Element.
 
 **Example:**
 
