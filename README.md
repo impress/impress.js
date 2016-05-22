@@ -200,7 +200,7 @@ The `.present` class is added to the Step Element that is currently in the cente
 }
 ```
 
-#### .past
+#### .past class
 
 The `.past` class is added to all Step Elements that have been visited at least once.
 
