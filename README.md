@@ -175,7 +175,7 @@ You can of course rotate it around Z axis with `data-rotate-z` - it has exactly 
 
 ### CSS
 
-#### .future class
+#### 4D States (.past, .present and .future classes)
 
 The `.future` class is added to all Step Elements that haven't been visited yet.
 
@@ -186,8 +186,6 @@ The `.future` class is added to all Step Elements that haven't been visited yet.
   display: none;
 }
 ```
-
-#### .present class
 
 The `.present` class is added to the Step Element that is currently in the center of the camera perspective. This is useful to create animations inside the step once the camera navigates to it.
 
@@ -200,8 +198,6 @@ The `.present` class is added to the Step Element that is currently in the cente
 }
 ```
 
-#### .past class
-
 The `.past` class is added to all Step Elements that have been visited at least once.
 
 **Example:**
@@ -212,7 +208,7 @@ The `.past` class is added to all Step Elements that have been visited at least 
 }
 ```
 
-#### .impress-not-supported class
+#### Progressive Enhancement (.impress-not-supported class)
 
 This class is added to the `body` element if the browser doesn't support features required by impress.js, it is useful to apply some fallback styles in the CSS.
 
