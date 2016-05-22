@@ -208,6 +208,39 @@ The `.past` class is added to all Step Elements that have been visited at least 
 }
 ```
 
+#### Current Active Step (.active class)
+
+The `.active` class is added to the Step Element that is currently visible in the center of the camera perspective.
+
+**Example:**
+
+```CSS
+.step {
+  opacity: 0.3;
+  transition: opacity 1s;
+}
+.step.active {
+  opacity: 1
+}
+```
+
+At the same time, the `impress-on-*` class is added to the body element representing the active Step Element id. This allows for custom global styling, since you can't match a CSS class backwards from the active Step Element to the `body`.
+
+**Example:**
+
+```CSS
+.impress-on-overview .step {
+    opacity: 1;
+    cursor: pointer;
+}
+.impress-on-step-1,
+.impress-on-step-2,
+.impress-on-step-3 {
+  background: LightBlue;
+}
+```
+
+
 #### Progressive Enhancement (.impress-not-supported class)
 
 This class is added to the `body` element if the browser doesn't support features required by impress.js, it is useful to apply some fallback styles in the CSS.
