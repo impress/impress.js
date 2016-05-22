@@ -212,6 +212,22 @@ The `.past` class is added to all Step Elements that have been visited at least 
 }
 ```
 
+#### .impress-not-supported class
+
+This class is added to the `body` element if the browser doesn't support features required by impress.js, it is useful to apply some fallback styles in the CSS.
+
+It's not necessary to add it manually on the `body` element. If the script detects that browser is not good enough it will add this class.
+
+It is recommended to add the class manually to the `body` element though, because that means that users without JavaScript will also get fallback styles. When impress.js script detects that browser supports all required features, the `.impress-not-support` class will be removed from the `body` element.
+
+**Example:**
+
+```CSS
+.impress-not-supported .step {
+  display: inline-block;
+}
+```
+
 ### JavaScript
 
 #### impress().init()
