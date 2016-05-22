@@ -149,6 +149,45 @@ Define the pixel based position in which the **center** of the Step Element will
 </div>
 ```
 
+### CSS
+
+#### .future class
+
+The `.future` class is added to all Step Elements that haven't been visited yet.
+
+**Example:**
+
+```CSS
+.future {
+  display: none;
+}
+```
+
+#### .present class
+
+The `.present` class is added to the Step Element that is currently in the center of the camera perspective. This is useful to create animations inside the step once the camera navigates to it.
+
+**Example:**
+
+```CSS
+.present .rotating {
+  transform: rotate(-10deg);
+  transition-delay: 0.25s;
+}
+```
+
+#### .past
+
+The `.past` class is added to all Step Elements that have been visited at least once.
+
+**Example:**
+
+```CSS
+.past {
+  display: none;
+}
+```
+
 ### JavaScript
 
 #### impress().init()
