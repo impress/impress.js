@@ -149,6 +149,30 @@ Define the pixel based position in which the **center** of the Step Element will
 </div>
 ```
 
+##### 3D Rotation (data-rotate-x, data-rotate-y, data-rotate-z)
+
+You can not only position element in 3D, but also rotate it around any axis.
+
+**Example:**
+
+The example below will get rotated by -40 degrees (40 degrees anticlockwise) around X axis and 10 degrees (clockwise) around Y axis.
+
+You can of course rotate it around Z axis with `data-rotate-z` - it has exactly the same effect as `data-rotate` (these two are basically aliases).
+
+```HTML
+<div id="its-in-3d" class="step" data-x="6200" data-y="4300" data-z="-100" data-rotate-x="-40" data-rotate-y="10" data-scale="2">
+    <p>
+      <span class="have">have</span>
+      <span class="you">you</span>
+      <span class="noticed">noticed</span>
+      <span class="its">it’s</span>
+      <span class="in">in</span>
+      <b>3D<sup>*</sup></b>?
+    </p>
+    <span class="footnote">* beat that, prezi ;)</span>
+</div>
+```
+
 ### CSS
 
 #### .future class
