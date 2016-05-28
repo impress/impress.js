@@ -204,6 +204,18 @@ Initializes impress.js globally in the page. Only one instance of impress.js is 
 impress().init();
 ```
 
+Triggers the `impress:init` event in the Root Element after the presentation is initialized.
+
+**Example:**
+
+```JavaScript
+var rootElement = document.getElementById( "impress" );
+rootElement.addEventListener( "impress:init", function() {
+  console.log( "Impress init" );
+});
+impress().init();
+```
+
 ### impress().next()
 
 Navigates to the next step of the presentation using the `goto()` function.
@@ -266,7 +278,7 @@ api.goto( overview );
 
 Accepts an optional [Number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number) in the last argument that represents the duration of the transition in milliseconds. If not provided, the default transition duration for the presentation will be used.
 
-Triggers the `impress:stepenter` in the Root Element when the presentation navigates to the target Step Element.
+Triggers the `impress:stepenter` event in the Root Element when the presentation navigates to the target Step Element.
 
 **Example:**
 
@@ -278,7 +290,7 @@ rootElement.addEventListener( "impress:stepenter", function() {
 });
 ```
 
-Triggers the `impress:stepleave` in the Root Element when the presentation navigates away from the current Step Element.
+Triggers the `impress:stepleave` event in the Root Element when the presentation navigates away from the current Step Element.
 
 **Example:**
 ```JavaScript
