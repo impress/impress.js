@@ -30,7 +30,7 @@ In the Step Element, you can define a specific set of default attributes and pos
 
 #### 2D Coordinates Positioning (data-x, data-y)
 
-Define the pixel based position in which the **center** of the Step Element will be positioned relative to the infinite canvas in the first and second dimensions.
+Define the pixel based position in which the **center** of the [Step Element](#step-element) will be positioned relative to the infinite canvas in the first and second dimensions.
 
 **Example:**
 
@@ -42,7 +42,7 @@ Define the pixel based position in which the **center** of the Step Element will
 
 #### 2D Scaling (data-scale)
 
-Defines the scaling multiplier of the Step Element relative to the other Step Elements. For example,
+Defines the scaling multiplier of the [Step Element](#step-element) relative to the other Step Elements. For example,
 `data-scale="4"` means that the element will appear to be 4 times larger than the others. From presentation and transitions point of view, it means that it will have to be scaled down (4 times) to make it back to its correct size.
 
 **Example:**
@@ -74,7 +74,7 @@ Represents the amount of clockwise rotation of the element relative to 360 degre
 
 #### 3D Coordinates Positioning (data-z)
 
-Define the pixel based position in which the **center** of the Step Element will be positioned relative to the infinite canvas in the third dimension (Z axis). For example, if we use `data-z="-3000"`, it means that the Step Element will be positioned far away from the camera (by 3000px).
+Define the pixel based position in which the **center** of the [Step Element](#step-element) will be positioned relative to the infinite canvas in the third dimension (Z axis). For example, if we use `data-z="-3000"`, it means that the [Step Element](#step-element) will be positioned far away from the camera (by 3000px).
 
 **Example:**
 
@@ -112,7 +112,7 @@ You can of course rotate it around Z axis with `data-rotate-z` - it has exactly 
 
 ### 4D States (.past, .present and .future classes)
 
-The `.future` class is added to all Step Elements that haven't been visited yet.
+The `.future` class is added to all [Step Elements](#step-element) that haven't been visited yet.
 
 **Example:**
 
@@ -122,7 +122,7 @@ The `.future` class is added to all Step Elements that haven't been visited yet.
 }
 ```
 
-The `.present` class is added to the Step Element that is currently in the center of the camera perspective. This is useful to create animations inside the step once the camera navigates to it.
+The `.present` class is added to the [Step Element](#step-element) that is currently in the center of the camera perspective. This is useful to create animations inside the step once the camera navigates to it.
 
 **Example:**
 
@@ -133,7 +133,7 @@ The `.present` class is added to the Step Element that is currently in the cente
 }
 ```
 
-The `.past` class is added to all Step Elements that have been visited at least once.
+The `.past` class is added to all [Step Elements](#step-element) that have been visited at least once.
 
 **Example:**
 
@@ -145,7 +145,7 @@ The `.past` class is added to all Step Elements that have been visited at least 
 
 ### Current Active Step (.active class)
 
-The `.active` class is added to the Step Element that is currently visible in the center of the camera perspective.
+The `.active` class is added to the [Step Element](#step-element) that is currently visible in the center of the camera perspective.
 
 **Example:**
 
@@ -159,7 +159,7 @@ The `.active` class is added to the Step Element that is currently visible in th
 }
 ```
 
-At the same time, the `impress-on-*` class is added to the body element representing the active Step Element id. This allows for custom global styling, since you can't match a CSS class backwards from the active Step Element to the `body`.
+At the same time, the `impress-on-*` class is added to the body element representing the active [Step Element](#step-element) id. This allows for custom global styling, since you can't match a CSS class backwards from the active [Step Element](#step-element) to the `body`.
 
 **Example:**
 
@@ -204,7 +204,7 @@ Initializes impress.js globally in the page. Only one instance of impress.js is 
 impress().init();
 ```
 
-Triggers the `impress:init` event in the Root Element after the presentation is initialized.
+Triggers the `impress:init` event in the [Root Element](#root-element) after the presentation is initialized.
 
 **Example:**
 
@@ -218,7 +218,7 @@ impress().init();
 
 ### impress().next()
 
-Navigates to the next step of the presentation using the `goto()` function.
+Navigates to the next step of the presentation using the [`goto()` function](#impressgotostepindexstepelementidstepelement-duration).
 
 **Example:**
 
@@ -230,7 +230,7 @@ api.next();
 
 ### impress().prev()
 
-Navigates to the previous step of the presentation using the `goto()` function.
+Navigates to the previous step of the presentation using the [`goto()` function](#impressgotostepindexstepelementidstepelement-duration).
 
 **Example:**
 
@@ -253,8 +253,8 @@ api.init();
 api.goto(7);
 ```
 
-Accepts a [`String`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String) that represents the Step Element id.
-Navigates to the step given the provided Step Element id.
+Accepts a [`String`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String) that represents the [Step Element](#step-element) id.
+Navigates to the step given the provided [Step Element](#step-element) id.
 
 **Example:**
 
@@ -264,13 +264,13 @@ api.init();
 api.goto( "overview" );
 ```
 
-Accepts an [`HTMLElement`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement) that represents the Step Element.
-Navigates to the step given the provided Step Element.
+Accepts an [`HTMLElement`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement) that represents the [Step Element](#step-element).
+Navigates to the step given the provided [Step Element](#step-element).
 
 **Example:**
 
 ```JavaScript
-var overview = document.getElementById( "overview" )
+var overview = document.getElementById( "overview" );
 var api = impress();
 api.init();
 api.goto( overview );
@@ -278,7 +278,7 @@ api.goto( overview );
 
 Accepts an optional [Number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number) in the last argument that represents the duration of the transition in milliseconds. If not provided, the default transition duration for the presentation will be used.
 
-Triggers the `impress:stepenter` event in the Root Element when the presentation navigates to the target Step Element.
+Triggers the `impress:stepenter` event in the [Root Element](#root-element) when the presentation navigates to the target [Step Element](#step-element).
 
 **Example:**
 
@@ -290,7 +290,7 @@ rootElement.addEventListener( "impress:stepenter", function() {
 });
 ```
 
-Triggers the `impress:stepleave` event in the Root Element when the presentation navigates away from the current Step Element.
+Triggers the `impress:stepleave` event in the [Root Element](#root-element) when the presentation navigates away from the current [Step Element](#step-element).
 
 **Example:**
 ```JavaScript
