@@ -302,4 +302,4 @@ rootElement.addEventListener( "impress:stepleave", function() {
 
 # Improve The Docs
 
-Did you found something that can be improved? Then [create an issue](issues/new) so that we can discuss it!
+Did you found something that can be improved? Then [create an issue](https://github.com/impress/impress.js/issues/new) so that we can discuss it!
