@@ -206,7 +206,7 @@ impress().init();
 
 ### impress().next()
 
-Navigates to the next step of the presentation.
+Navigates to the next step of the presentation using the `goto()` function.
 
 **Example:**
 
@@ -218,7 +218,7 @@ api.next();
 
 ### impress().prev()
 
-Navigates to the previous step of the presentation.
+Navigates to the previous step of the presentation using the `goto()` function.
 
 **Example:**
 
@@ -265,3 +265,25 @@ api.goto( overview );
 ```
 
 Accepts an optional [Number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number) in the last argument that represents the duration of the transition in milliseconds. If not provided, the default transition duration for the presentation will be used.
+
+Triggers the `impress:stepenter` in the Root Element when the presentation navigates to the target Step Element.
+
+**Example:**
+
+```JavaScript
+var rootElement = document.getElementById( "impress" );
+rootElement.addEventListener( "impress:stepenter", function() {
+  var currentStep = document.querySelector( ".present" );
+  console.log( "Entered the Step Element '" + currentStep.id + "'" );
+});
+```
+
+Triggers the `impress:stepleave` in the Root Element when the presentation navigates away from the current Step Element.
+
+**Example:**
+```JavaScript
+var rootElement = document.getElementById( "impress" );
+rootElement.addEventListener( "impress:stepleave", function() {
+  console.log( "Left the current Step Element" );
+});
+```
