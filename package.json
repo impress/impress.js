@@ -22,7 +22,7 @@
     "url": "https://github.com/bartaz/impress.js/issues"
   },
   "scripts": {
-    "lint": "jshint js/impress.js && jscs js/impress.js --preset=jquery",
+    "lint": "jshint js/impress.js *.js test/bootstrap.js && jscs js/impress.js *.js test/bootstrap.js --preset=jquery",
     "test": "karma start --single-run",
     "test:dev": "karma start"
   },

@@ -1,37 +1,38 @@
-module.exports = function(config) {
-  config.set({
+module.exports = function( config ) {
+  config.set( {
 
-    // base path, that will be used to resolve files and exclude
-    basePath: '',
+    // Base path, that will be used to resolve files and exclude
+    basePath: "",
 
-    // frameworks to use
-    frameworks: ['qunit'],
+    // Frameworks to use
+    frameworks: [ "qunit" ],
 
-    // list of files / patterns to load in the browser
+    // List of files / patterns to load in the browser
     files: [
-      'test/bootstrap.js',
-      'js/impress.js',
-      'test/core_tests.js'
+      "test/bootstrap.js",
+      "js/impress.js",
+      "test/core_tests.js"
     ],
 
-    // list of files to exclude
+    // List of files to exclude
     exclude: [],
 
-    // test results reporter to use
+    // Test results reporter to use
     // possible values: 'dots', 'progress', 'junit', 'growl', 'coverage'
-    reporters: ['progress'],
+    reporters: [ "progress" ],
 
-    // web server port
+    // Web server port
     port: 9876,
 
-    // enable / disable colors in the output (reporters and logs)
+    // Enable / disable colors in the output (reporters and logs)
     colors: true,
 
-    // level of logging
-    // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
+    // Level of logging
+    // possible values: config.LOG_DISABLE || config.LOG_ERROR ||
+    // config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
     logLevel: config.LOG_DEBUG,
 
-    // enable / disable watching file and executing tests whenever any file changes
+    // Enable / disable watching file and executing tests whenever any file changes
     autoWatch: true,
 
     // Start these browsers, currently available:
@@ -42,7 +43,7 @@ module.exports = function(config) {
     // - Safari (only Mac; has to be installed with `npm install karma-safari-launcher`)
     // - PhantomJS
     // - IE (only Windows; has to be installed with `npm install karma-ie-launcher`)
-    browsers: ['Chrome'],
+    browsers: [ "Chrome" ],
 
     // If browser does not capture in given timeout [ms], kill it
     captureTimeout: 60000,
@@ -50,5 +51,5 @@ module.exports = function(config) {
     // Continuous Integration mode
     // if true, it capture browsers, run tests and exit
     singleRun: false
-  });
+  } );
 };
