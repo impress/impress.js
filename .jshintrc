@@ -1,4 +1,7 @@
 {
+	"globals": {
+		"module": true
+	},
 	"boss": true,
 	"curly": true,
 	"eqeqeq": true,
