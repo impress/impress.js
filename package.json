@@ -1,0 +1,39 @@
+{
+  "name": "impress.js",
+  "version": "0.5.3",
+  "description": "It's a presentation framework based on the power of CSS3 transforms and transitions in modern browsers and inspired by the idea behind prezi.com.",
+  "main": "js/impress.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/impress/impress.js.git"
+  },
+  "keywords": [
+    "presentation",
+    "slides",
+    "slideshow",
+    "css3",
+    "transitions",
+    "transforms",
+    "browser"
+  ],
+  "author": "Bartek Szopka",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bartaz/impress.js/issues"
+  },
+  "scripts": {
+    "lint": "jshint js/impress.js *.js test/bootstrap.js && jscs js/impress.js *.js test/bootstrap.js --preset=jquery",
+    "test": "karma start --single-run",
+    "test:dev": "karma start"
+  },
+  "devDependencies": {
+    "chrome": "0.1.0",
+    "jscs": "2.11.0",
+    "jshint": "2.9.1",
+    "karma": "0.13.22",
+    "karma-chrome-launcher": "1.0.1",
+    "karma-cli": "1.0.0",
+    "karma-qunit": "1.0.0",
+    "qunitjs": "2.0.0-rc1"
+  }
+}
