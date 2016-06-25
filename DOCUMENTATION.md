@@ -193,7 +193,7 @@ It is recommended to add the class manually to the `body` element though, becaus
 
 ### impress( [ id ] )
 
-A factory function that creates the ImpressAPI.
+A factory function that creates the [ImpressAPI](#impressapi).
 
 Accepts a [`String`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String) that represents the id of the root element in the page. If omitted, impress.js will lookup for the element with the id "impress" by default.
 
