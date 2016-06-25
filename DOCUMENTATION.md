@@ -191,7 +191,7 @@ It is recommended to add the class manually to the `body` element though, becaus
 
 ## JavaScript
 
-### impress([id])
+### impress( [ id ] )
 
 A factory function that creates the ImpressAPI.
 
@@ -253,7 +253,7 @@ api.init();
 api.prev();
 ```
 
-#### impress().goto(stepIndex|stepElementId|stepElement, [duration])
+#### impress().goto( stepIndex | stepElementId | stepElement, [ duration ] )
 
 Accepts a [`Number`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number) that represents the step index.
 
