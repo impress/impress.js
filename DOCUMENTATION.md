@@ -297,8 +297,9 @@ Triggers the `impress:stepleave` event in the [Root Element](#root-element) when
 **Example:**
 ```JavaScript
 var rootElement = document.getElementById( "impress" );
-rootElement.addEventListener( "impress:stepleave", function() {
-  console.log( "Left the current Step Element" );
+rootElement.addEventListener( "impress:stepleave", function(event) {
+  var currentStep = event.target
+  console.log( "Left the Step Element '" + currentStep.id + "'" );
 });
 ```
 
