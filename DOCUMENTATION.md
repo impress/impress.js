@@ -4,7 +4,7 @@
 
 ### Root Element
 
-impress.js requires a Root Element with id "impress". All the content of the presentation will be created inside that element. It is not recommended to manipulate any of the styles, attributes or classes that are created by impress.js inside the Root Element after initialization.
+impress.js requires a Root Element. All the content of the presentation will be created inside that element. It is not recommended to manipulate any of the styles, attributes or classes that are created by impress.js inside the Root Element after initialization.
 
 **Example:**
 
@@ -191,9 +191,11 @@ It is recommended to add the class manually to the `body` element though, becaus
 
 ## JavaScript
 
-### impress().init()
+### impress([id]).init()
 
 Initializes impress.js globally in the page. Only one instance of impress.js is supported per document.
+
+Accepts a [`String`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String) that represents the id of the root element in the page. If omitted, impress.js will lookup for the element with the id "impress" by default.
 
 **Example:**
 
