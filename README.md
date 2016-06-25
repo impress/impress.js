@@ -62,6 +62,10 @@ impress.js name in [courtesy of @skuzniak](http://twitter.com/skuzniak/status/14
 
 It's an (un)fortunate coincidence that a Open/LibreOffice presentation tool is called Impress ;)
 
+Reference API
+--------------
+
+See the [Reference API](DOCUMENTATION.md)
 
 BROWSER SUPPORT
 -----------------
