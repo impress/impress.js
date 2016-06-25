@@ -191,11 +191,25 @@ It is recommended to add the class manually to the `body` element though, becaus
 
 ## JavaScript
 
-### impress([id]).init()
+### impress([id])
 
-Initializes impress.js globally in the page. Only one instance of impress.js is supported per document.
+A factory function that creates the ImpressAPI.
 
 Accepts a [`String`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String) that represents the id of the root element in the page. If omitted, impress.js will lookup for the element with the id "impress" by default.
+
+**Example:**
+
+```JavaScript
+var impressAPI = impress( "root" );
+```
+
+### ImpressAPI
+
+The main impress.js API that handles common operations of impress.js, listed below.
+
+#### .init()
+
+Initializes impress.js globally in the page. Only one instance of impress.js is supported per document.
 
 **Example:**
 
@@ -215,7 +229,7 @@ rootElement.addEventListener( "impress:init", function() {
 impress().init();
 ```
 
-### impress().next()
+#### .next()
 
 Navigates to the next step of the presentation using the [`goto()` function](#impressgotostepindexstepelementidstepelement-duration).
 
@@ -227,7 +241,7 @@ api.init();
 api.next();
 ```
 
-### impress().prev()
+#### impress().prev()
 
 Navigates to the previous step of the presentation using the [`goto()` function](#impressgotostepindexstepelementidstepelement-duration).
 
@@ -239,7 +253,7 @@ api.init();
 api.prev();
 ```
 
-### impress().goto(stepIndex|stepElementId|stepElement, [duration])
+#### impress().goto(stepIndex|stepElementId|stepElement, [duration])
 
 Accepts a [`Number`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number) that represents the step index.
 
