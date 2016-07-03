@@ -14,15 +14,14 @@ impress.js may not help you if you have nothing interesting to say ;)
 HOW TO USE IT
 ---------------
 
-[Use the source](http://github.com/impress/impress.js/blob/master/index.html), Luke ;)
+[Use the source](http://github.com/impress/impress.js/blob/master/index.html), Luke!
 
-Please note that impress.js was created for developers. Some basic knowledge of html, css and
-javascript is a prerequisite to install and use its features.
+Please note that impress.js was created for developers. Some basic knowledge of HTML, CSS and
+JavaScript is required to install and use its features.
 
-If you are a designer or novice developer that want to use impress.js,
+If you're a designer or novice developer that wants to use impress.js,
 [there are some projects](https://github.com/impress/impress.js/wiki/Examples-and-demos/5d887507caa5cf534eab6713d9adb3a5e7662459#authoring-tools) that aim to provide an editing tool for impress.js. They might be still in
 development, but we hope they will manage to make impress.js more accessible to everyone.
-
 
 
 EXAMPLES AND OTHER LEARNING RESOURCES
@@ -34,13 +33,11 @@ EXAMPLES AND OTHER LEARNING RESOURCES
 
 ### Examples and demos
 
-More examples and demos can be found on [Examples and demos wiki page](http://github.com/impress/impress.js/wiki/Examples-and-demos).
-
-Feel free to add your own example presentations (or websites) there.
+More examples and demos can be found on the [examples and demos wiki page](http://github.com/impress/impress.js/wiki/Examples-and-demos). Feel free to add your own example presentations (or websites) there.
 
 ### Other tutorials and learning resources
 
-If you want to learn even more there is a [list of tutorials and other learning resources](https://github.com/impress/impress.js/wiki/impress.js-tutorials-and-other-learning-resources)
+If you want to learn even more, there's a [list of tutorials and other learning resources](https://github.com/impress/impress.js/wiki/impress.js-tutorials-and-other-learning-resources)
 on the wiki, too.
 
 There is also a book available about [Building impressive presentations with impress.js](http://www.packtpub.com/building-impressive-presentations-with-impressjs/book) by Rakhitha Nimesh Ratnayake.
@@ -51,16 +48,15 @@ WANT TO CONTRIBUTE?
 
 Please, read the [contributing guidelines](.github/CONTRIBUTING.md) on how to create [Issues](.github/CONTRIBUTING.md#issues) and [Pull Requests](.github/CONTRIBUTING.md#pull-requests).
 
-**Note:** The team has changed, so there will be many changes in the upcoming versions.
-If you need informations about versions, check the [changelog](CHANGELOG.md).
+**Note:** The team has changed, so there will be many changes in the upcoming versions. If you need version information, check the [changelog](CHANGELOG.md).
 
 
 ABOUT THE NAME
 ----------------
 
-impress.js name in [courtesy of @skuzniak](http://twitter.com/skuzniak/status/143627215165333504).
+impress.js name [courtesy of @skuzniak](http://twitter.com/skuzniak/status/143627215165333504).
 
-It's an (un)fortunate coincidence that a Open/LibreOffice presentation tool is called Impress ;)
+It's an (un)fortunate coincidence that a Open/LibreOffice presentation tool is called Impress.
 
 Reference API
 --------------
