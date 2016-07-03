@@ -19,3 +19,11 @@ Guidelines:
 * If proposing a feature, make sure to discuss that as an issue first.
 * Create a new [topic branch](https://github.com/dchelimsky/rspec/wiki/Topic-Branches) for every separate change you make.
 * Execute `npm run lint && npm test` to make sure the tests pass and the code is consistent with the project standards.
+
+Manual release steps
+--------------------
+
+* Bump version in `package.json`
+* Create commit with the message "Release version x.x.x"
+* Create Github tag and release
+* Publish on npm: `git fetch && npm publish ./`
