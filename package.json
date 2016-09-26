@@ -24,7 +24,8 @@
   "scripts": {
     "lint": "jshint js/impress.js *.js test/bootstrap.js && jscs js/impress.js *.js test/bootstrap.js --preset=jquery",
     "test": "karma start --single-run",
-    "test:dev": "karma start"
+    "test:dev": "karma start",
+    "test:sauce": "karma start karma.conf-sauce.js"
   },
   "devDependencies": {
     "chrome": "0.1.0",
