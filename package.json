@@ -34,6 +34,7 @@
     "karma-chrome-launcher": "1.0.1",
     "karma-cli": "1.0.0",
     "karma-qunit": "1.0.0",
+    "karma-sauce-launcher": "1.0.0",
     "qunitjs": "2.0.0-rc1"
   }
 }
