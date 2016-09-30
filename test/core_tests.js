@@ -49,8 +49,13 @@
       expected = "rotateZ(0deg) rotateY(0deg) rotateX(0deg) translate3d(1000px, 0px, 0px)";
       assert.strictEqual( actual, expected, "canvas.style.transform initialized correctly" );
 
+      // Normalize result for IE 11 and Safari.
       actual = canvas.style.transformOrigin;
       expected = "left top 0px";
+
+      if ( actual === "left top" || actual === "0% 0%" ) {
+        actual = expected;
+      }
       assert.strictEqual( actual, expected, "canvas.style.transformOrigin initialized correctly" );
 
       actual = canvas.style.transformStyle;
