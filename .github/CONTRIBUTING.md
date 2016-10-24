@@ -24,6 +24,7 @@ Manual release steps
 --------------------
 
 * Bump version in `package.json`
+* Bump version in `src/impress.js`
 * Create commit with the message "Release version x.x.x"
 * Create Github tag and release
 * Publish on npm: `git fetch && npm publish ./`
