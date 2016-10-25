@@ -2,10 +2,6 @@ machine:
   node:
     version: 6
 
-dependencies:
-  pre:
-    - openssl aes-256-cbc -d -in sauce-encrypted-env-vars -k $SAUCE_DECRYPT_KEY >> ~/.circlerc
-
 test:
   override:
     - npm run lint -s
