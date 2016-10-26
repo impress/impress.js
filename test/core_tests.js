@@ -37,9 +37,10 @@
     });
 
     QUnit.test( "Attributes", function( assert ) {
-      assert.expect( 9 );
+      assert.expect( 10 );
 
       var actual, expected;
+      var root = document.querySelector( "#impress" );
       var canvas = document.querySelector( "div#impress > div" );
 
       var canvasIsNotAStep = !canvas.classList.contains("step") && canvas.id === "";
@@ -77,6 +78,10 @@
       actual = canvas.style.transitionTimingFunction;
       expected = "ease-in-out";
       assert.strictEqual( actual, expected, "canvas.style.transitionTimingFunction initialized correctly" );
+
+      actual = root.style.perspective;
+      expected = "";
+      assert.notStrictEqual( actual, expected, "root.style.perspective should be set explicitly for IE 11" );
 
       actual = document.documentElement.style.height;
       expected = "100%";
