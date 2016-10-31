@@ -56,7 +56,7 @@
 
     } )();
 
-    // `arraify` takes an array-like object and turns it into real Array
+    // `arrayify` takes an array-like object and turns it into real Array
     // to make all the Array.prototype goodness available.
     var arrayify = function( a ) {
         return [].slice.call( a );
