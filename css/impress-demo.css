@@ -1,3 +1,35 @@
+/*-------------------Spanish  Español----------------------------*/
+
+/*
+    Asi que te gusta el estilo de la demostracion de impress.js?
+    O tal vez solo eres curioso de como se hizo?
+
+    No podrias encontrar otro lugar para averiguarlo!
+
+    Bienvenido a la hoja de estilo de la presentacion demo de impress.js
+
+    Por favor recuerda que no es necesario que sea parte de impress.js y tampoco
+    tiene que ser requerida por ella.
+    Yo espero que cualquiera que quiera crear una presentacion usando impress.js
+    cree su propia hoja de estilo.
+
+    Pero sientete libre de leerla toda y aprender como sacar el maximo provecho
+    de impress.js
+
+    Y dejame ser tu guia.
+
+    Comenzamos?
+
+    Comenzamos con un buen reset de todo.
+    Usamos el de Eric Meyer http://meyerweb.com/eric/tools/css/reset/.
+
+    Posiblemente puedes argumentar si es necesario esto, o no
+    pero no tiene que ser molesto, y nos da un buen inicio.
+
+*/
+
+/*-------------------Ingles  English-----------------------------*/
+
 /*
     So you like the style of impress.js demo?
     Or maybe you are just curious how it was done?
@@ -19,7 +51,6 @@
     Shall we begin?
 */
 
-
 /*
     We start with a good ol' reset.
     That's the one by Eric Meyer http://meyerweb.com/eric/tools/css/reset/
@@ -27,6 +58,7 @@
     You can probably argue if it is needed here, or not, but for sure it
     doesn't do any harm and gives us a fresh start.
 */
+
 
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
