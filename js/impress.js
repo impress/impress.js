@@ -699,6 +699,7 @@
         // or anything. `impress:init` event data gives you everything you
         // need to control the presentation that was just initialized.
         var api = event.detail.api;
+        var root = event.target;
 
         // KEYBOARD NAVIGATION HANDLERS
 
@@ -799,7 +800,13 @@
         // Touch handler to detect taps on the left and right side of the screen
         // based on awesome work of @hakimel: https://github.com/hakimel/reveal.js
         document.addEventListener( "touchstart", function( event ) {
-            if ( event.touches.length === 1 ) {
+            var target = event.target;
+
+            while ( target !== root  && target.parentNode ) {
+                target = target.parentNode;
+            }
+
+            if ( target === root && event.touches.length === 1 ) {
                 var x = event.touches[ 0 ].clientX,
                     width = window.innerWidth * 0.3,
                     result = null;
