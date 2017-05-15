@@ -165,6 +165,8 @@
     -->
     <div id="bored" class="step slide" data-x="-1000" data-y="-1500">
         <q>Aren’t you just <b>bored</b> with all those slides-based presentations?</q>
+        <q id="shouldBeBored" style="opacity:0"> You should be! </q>
+        <q id="shouldReallyBeBored" style="opacity:0"> You really should be! </q>
     </div>
 
     <!--
@@ -360,7 +362,38 @@ if ("ontouchstart" in document.documentElement) {
     
 -->
 <script src="js/impress.js"></script>
-<script>impress().init();</script>
+<script>
+    impress().init();
+    
+    //The following commented code shows you how to incorporate substeps into your presentation.
+    /*
+    var app = impress();
+
+    //register a substep function to execute immediately when impress transitions to slide with id #bored
+    app.subSteps.registerEnter(
+        function(){document.getElementById("shouldBeBored").style.opacity = "1"; }
+        ,"bored" 
+        ,{'executeImmediately' : true, 'repeat' : false}  
+        //set repeat to false so that the function executes only once. If the user visits the slide 
+        //more than once in the presentation, the function will not execute on the second visit
+    );
+
+    //register a substep function to execute on click (not immediately)
+    app.subSteps.registerEnter(
+        function(){document.getElementById("shouldReallyBeBored").style.opacity = "1"; }
+        ,"bored" 
+    );
+
+    //register a substep function to execute when impress transitions away from the slide
+    app.subSteps.registerExit(
+        function(){document.getElementById("shouldReallyBeBored").style.opacity = "0"; }
+        ,"bored"
+    );
+
+    app.init();    
+    */
+
+</script>
 
 <!--
     
