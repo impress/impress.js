@@ -267,7 +267,7 @@ a:focus {
     transform:         translateZ(20px);
 }
 
-#title h1 {
+h1 {
     font-size: 190px;
 
     -webkit-transform: translateZ(50px);
@@ -277,7 +277,7 @@ a:focus {
     transform:         translateZ(50px);
 }
 
-#title .footnote {
+.footnote {
     font-size: 32px;
 }
 
