@@ -1,0 +1,95 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Convert impress.js demo page to configuration file</title>
+<script src="../js/json-format.js" type="text/javascript"></script>
+<script type="text/javascript">
+<!--
+function html2json(url) {
+	var getImpress = function (text) {
+		text = text.replace(/(<!--([\s\S]*?)-->)/gm, ""); // http://upshots.org/javascript/javascript-regexp-to-remove-comments
+		var start = text.indexOf("<div id=\"impress\"");
+		if (start < 0) {
+			return "";
+		}
+		text = text.substring(start);
+
+		var count = 0;
+		var end = text.length;
+		text.replace(/<(\/?div)/g, function (s, p1, offset) {
+			if (p1 == "div") {
+				count++;
+			} else {
+				count--;
+			}
+			if (count == 0) {
+				end = offset + 6;
+			}
+		});
+
+		return text.substring(0, end);
+	};
+
+	var xhr = new XMLHttpRequest();
+	xhr.open("GET", url, false);
+	xhr.send();
+	var tempNode = document.createElement("div");
+	tempNode.style.display = "none";
+	tempNode.innerHTML = getImpress(xhr.responseText);
+	document.getElementsByTagName("body")[0].appendChild(tempNode);
+	var impress = document.getElementById("impress");
+	var slides = impress.childNodes;
+
+	var presentations = [];
+	for (var i = 0; i < slides.length; i++) {
+		if (slides[i].nodeName.toLowerCase() == "div") {
+			var presentation = {
+				"attribute": {},
+				"content": ""
+			};
+
+			for (var j = 0; j < slides[i].attributes.length; j++) {
+				var temp = slides[i].attributes[j].nodeValue;
+				presentation["attribute"][slides[i].attributes[j].nodeName] = isNaN(temp)? temp : parseFloat(temp);
+			}
+
+			presentation["content"] = slides[i].innerHTML.split(/\n/);
+			while (presentation["content"].length > 0) {
+				if (presentation["content"][0].match(/^\s*$/)) {
+					presentation["content"].shift();
+				} else {
+					break;
+				}
+			}
+			while (presentation["content"].length > 0) {
+				if (presentation["content"][presentation["content"].length - 1].match(/^\s*$/)) {
+					presentation["content"].pop();
+				} else {
+					break;
+				}
+			}
+			for (var k = 0; k < presentation["content"].length; k++) {
+				presentation["content"][k] = presentation["content"][k].replace(/^\s*|\s*$/g, "");
+			}
+
+			presentations.push(presentation);
+		}
+	}
+	if (presentations.length > 0 && presentations[0]["attribute"]["class"] && presentations[0]["attribute"]["class"].search(/\bfallback\-message\b/) > -1) {
+		presentations.shift();
+	}
+	if (presentations.length > 0 && presentations[presentations.length - 1]["attribute"]["id"] && presentations[presentations.length - 1]["attribute"]["id"] == "overview") {
+		presentations.pop();
+	}
+	document.getElementById("result").value = "presentation = " + JSONFormat(JSON.stringify(presentations)) + "\n";
+}
+//-->
+</script>
+</head>
+<body>
+<h1>Convert <a href="http://bartaz.github.com/impress.js/" target="_blank">impress.js</a> demo page to configuration file</h1>
+<label>URL: </label><input type="text" value="http://bartaz.github.com/impress.js/" id="url" style="width: 500px;" />&nbsp;<input type="button" value="Convert" onclick="javascript: html2json(document.getElementById('url').value);" /><br />
+<textarea id="result" cols="120" rows="25"></textarea>
+</body>
+</html>

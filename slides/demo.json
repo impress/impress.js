@@ -1,0 +1,156 @@
+presentation = [
+	{
+		"attribute": {
+			"class": "step slide",
+			"id": "bored",
+			"data-y": -1500,
+			"data-x": -1000
+		},
+		"content": [
+			"<q>Aren't you just <b>bored</b> with all those slides-based presentations?</q>"
+		]
+	},
+	{
+		"attribute": {
+			"class": "step slide",
+			"data-y": -1500,
+			"data-x": 0
+		},
+		"content": [
+			"<q>Don't you think that presentations given <strong>in modern browsers</strong> shouldn't <strong>copy the limits</strong> of 'classic' slide decks?</q>"
+		]
+	},
+	{
+		"attribute": {
+			"class": "step slide",
+			"data-y": -1500,
+			"data-x": 1000
+		},
+		"content": [
+			"<q>Would you like to <strong>impress your audience</strong> with <strong>stunning visualization</strong> of your talk?</q>"
+		]
+	},
+	{
+		"attribute": {
+			"class": "step",
+			"id": "title",
+			"data-y": 0,
+			"data-x": 0,
+			"data-scale": 4
+		},
+		"content": [
+			"<span class=\"try\">then you should try</span>",
+			"<h1>impress.js<sup>*</sup></h1>",
+			"<span class=\"footnote\"><sup>*</sup> no rhyme intended</span>"
+		]
+	},
+	{
+		"attribute": {
+			"class": "step",
+			"id": "its",
+			"data-y": 3000,
+			"data-x": 850,
+			"data-scale": 5,
+			"data-rotate": 90
+		},
+		"content": [
+			"<p>It's a <strong>presentation tool</strong> <br>",
+			"inspired by the idea behind <a href=\"http://prezi.com\">prezi.com</a> <br>",
+			"and based on the <strong>power of CSS3 transforms and transitions</strong> in modern browsers.</p>"
+		]
+	},
+	{
+		"attribute": {
+			"class": "step",
+			"id": "big",
+			"data-y": 2100,
+			"data-x": 3500,
+			"data-scale": 6,
+			"data-rotate": 180
+		},
+		"content": [
+			"<p>visualize your <b>big</b> <span class=\"thoughts\">thoughts</span></p>"
+		]
+	},
+	{
+		"attribute": {
+			"class": "step",
+			"id": "tiny",
+			"data-y": 2325,
+			"data-x": 2825,
+			"data-scale": 1,
+			"data-rotate": 300,
+			"data-z": -3000
+		},
+		"content": [
+			"<p>and <b>tiny</b> ideas</p>"
+		]
+	},
+	{
+		"attribute": {
+			"class": "step",
+			"id": "ing",
+			"data-y": -850,
+			"data-x": 3500,
+			"data-scale": 6,
+			"data-rotate": 270
+		},
+		"content": [
+			"<p>by <b class=\"positioning\">positioning</b>, <b class=\"rotating\">rotating</b> and <b class=\"scaling\">scaling</b> them on an infinite canvas</p>"
+		]
+	},
+	{
+		"attribute": {
+			"class": "step",
+			"id": "imagination",
+			"data-y": -300,
+			"data-x": 6700,
+			"data-scale": 6
+		},
+		"content": [
+			"<p>the only <b>limit</b> is your <b class=\"imagination\">imagination</b></p>"
+		]
+	},
+	{
+		"attribute": {
+			"class": "step",
+			"id": "source",
+			"data-y": 2000,
+			"data-x": 6300,
+			"data-scale": 4,
+			"data-rotate": 20
+		},
+		"content": [
+			"<p>want to know more?</p>",
+			"<q><a href=\"http://github.com/bartaz/impress.js\">use the source</a>, Luke!</q>"
+		]
+	},
+	{
+		"attribute": {
+			"class": "step",
+			"id": "one-more-thing",
+			"data-y": 4000,
+			"data-x": 6000,
+			"data-scale": 2
+		},
+		"content": [
+			"<p>one more thing...</p>"
+		]
+	},
+	{
+		"attribute": {
+			"class": "step",
+			"id": "its-in-3d",
+			"data-y": 4300,
+			"data-x": 6200,
+			"data-scale": 2,
+			"data-z": -100,
+			"data-rotate-y": 10,
+			"data-rotate-x": -40
+		},
+		"content": [
+			"<p><span class=\"have\">have</span> <span class=\"you\">you</span> <span class=\"noticed\">noticed</span> <span class=\"its\">it's</span> <span class=\"in\">in</span> <b>3D<sup>*</sup></b>?</p>",
+			"<span class=\"footnote\">* beat that, prezi ;)</span>"
+		]
+	}
+]

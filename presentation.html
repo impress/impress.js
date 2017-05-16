@@ -1,0 +1,184 @@
+<!--
+https://github.com/bartaz/impress.js
+-->
+
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>A Presentation Powered by impress.js</title>
+<link href="http://fonts.googleapis.com/css?family=Open+Sans:regular,semibold,italic,italicsemibold|PT+Sans:400,700,400italic,700italic|PT+Serif:400,700,400italic,700italic" rel="stylesheet" />
+<style type="text/css">
+#drop_zone {
+	border: 2px dashed #bbb;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	padding: 25px;
+	text-align: center;
+	font: 20pt bold 'Vollkorn';
+	color: #bbb;
+}
+
+.fallback-message {
+	display: none;
+}
+</style>
+<script type="text/javascript">
+<!--
+var presentation;
+
+function importConfig(file) {
+	var newScript = document.createElement("script");
+	newScript.src = file;
+	document.getElementsByTagName("head")[0].appendChild(newScript);
+
+	var newCss = document.createElement("link");
+	newCss.href = "css/impress-demo.css";
+	newCss.rel = "stylesheet";
+	document.getElementsByTagName("head")[0].appendChild(newCss);
+
+	var wait4load = function () {
+		if (typeof presentation == "undefined") {
+			setTimeout(wait4load, 100);
+		} else {
+			process();
+			impress();
+		}
+	};
+	wait4load();
+}
+
+function process() {
+	presentation = presentation || [];
+
+	var result = [];
+
+	for (var i = 0; i < presentation.length; i++) {
+		var temp = "<div";
+		for (var j in presentation[i]["attribute"]) {
+			if (toString(presentation[i]["attribute"][j]).toString().search(/^\s*$/) > -1) {
+				continue;
+			}
+			temp += " " + j + "='" + toString(presentation[i]["attribute"][j]) + "'";
+		}
+		temp += ">" + md2html(presentation[i]["content"]) + "</div>";
+
+		result.push(temp);
+	}
+
+	var overview = '<div id="overview" class="step" data-x="3000" data-y="1500" data-scale="10"></div>';
+	result.push(overview);
+
+	document.getElementById("impress").innerHTML = result.join("\n");
+}
+
+function md2html(data) {
+	return (new Showdown.converter()).makeHtml(toString(data, "\n"));
+}
+
+function toString(data, sep) {
+	return typeof data == "object"? data.join(sep || " ") : data;
+}
+//-->
+</script>
+
+<script type="text/javascript">
+<!--
+/*
+(Reading local files in JavaScript)[http://www.html5rocks.com/en/tutorials/file/dndfiles/]
+*/
+
+function handleFileSelect(evt) {
+	evt["currentTarget"].parentNode.removeChild(evt["currentTarget"]);
+
+	evt.stopPropagation();
+	evt.preventDefault();
+
+	var files = evt.dataTransfer.files; // FileList object
+	if (!files.length) {
+		alert("Please select a file!");
+		return;
+	}
+
+	var file = files[0];
+	var start = 0;
+	var stop = file.size;
+
+	var reader = new FileReader();
+
+	reader.onloadend = function (evt) {
+		if (evt.target.readyState == FileReader.DONE) {
+			var newCss = document.createElement("link");
+			newCss.href = "css/impress-demo.css";
+			newCss.rel = "stylesheet";
+			document.getElementsByTagName("head")[0].appendChild(newCss);
+
+			document.querySelector(".hint").style.display = "";
+
+			eval("(" + evt.target.result + ")");
+
+			process();
+			impress();
+		}
+	};
+
+	if (file.webkitSlice) {
+		var blob = file.webkitSlice(start, stop);
+	} else if (file.mozSlice) {
+		var blob = file.mozSlice(start, stop);
+	}
+	reader.readAsBinaryString(blob);
+}
+
+function handleDragOver(evt) {
+	evt.stopPropagation();
+	evt.preventDefault();
+	evt.dataTransfer.dropEffect = "copy"; // Explicitly show this is a copy
+}
+
+// Setup the dnd listeners
+window.onload = function () {
+	var dropZone = document.getElementById("drop_zone");
+	dropZone.addEventListener("dragover", handleDragOver, false);
+	dropZone.addEventListener("drop", handleFileSelect, false);
+
+	document.querySelector(".hint").style.display = "none";
+	if ("ontouchstart" in document.documentElement) { 
+		document.querySelector(".hint").innerHTML = "<p>Tap on the left or right to navigate</p>";
+	}
+};
+//-->
+</script>
+</head>
+<body class="impress-not-supported">
+<!--
+	For example this fallback message is only visible when there is `impress-not-supported` class on body.
+-->
+<div class="fallback-message">
+	<p>Your browser <b>doesn't support the features required</b> by impress.js, so you are presented with a simplified version of this presentation.</p>
+	<p>For the best experience please use the latest <b>Chrome</b>, <b>Safari</b> or <b>Firefox</b> browser.</p>
+</div>
+
+<!--
+<div>
+	<input type="file" onchange="javascript: importConfig(this.value); this.parentNode.style.display = 'none';" />
+</div>
+-->
+<div id="drop_zone">Drop presentation configuration file here</div>
+
+<div id="impress"></div>
+
+<div class="hint">
+	<p>Use a spacebar or arrow keys to navigate</p>
+</div>
+
+<!-- Polyfills by Remy Sharp @rem -->
+<script src="lib/classList.js"></script>
+<script src="lib/dataset.js"></script>
+
+<script src="js/showdown.js"></script>
+
+<script src="js/impress.js"></script>
+</body>
+</html>
