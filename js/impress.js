@@ -297,9 +297,9 @@
             var data = el.dataset,
                 step = {
                     translate: {
-                        x: toNumber( data.x ),
-                        y: toNumber( data.y ),
-                        z: toNumber( data.z )
+                        x: toNumber( data.x, data.x ),
+                        y: toNumber( data.y, data.y ),
+                        z: toNumber( data.z, data.z )
                     },
                     rotate: {
                         x: toNumber( data.rotateX ),
