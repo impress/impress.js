@@ -7,11 +7,25 @@ module.exports = function( config ) {
     // Frameworks to use
     frameworks: [ "qunit" ],
 
+    proxies : {
+      '/test/' : '/base/test/',
+      '/js/'   : '/base/js/'
+    },
+    
     // List of files / patterns to load in the browser
     files: [
-      "test/bootstrap.js",
-      "js/impress.js",
-      "test/core_tests.js"
+      // The QUnit tests
+      "test/helpers.js",
+      "test/core_tests.js",
+      "test/navigation_tests.js",
+      // Presentation files, for the iframe
+      //"test/core_tests_presentation.html"
+      //{pattern: "test/core_tests_presentation.html", watched: true, served: true, included: false}
+      {pattern: "test/*.html", watched: true, served: true, included: false},
+      {pattern: "test/plugins/*/*.html", watched: true, served: true, included: false},
+      // JS files for iframe
+      {pattern: "js/impress.js", watched: true, served: true, included: false},
+      {pattern: "test/syn/syn.js", watched: true, served: true, included: false}
     ],
 
     // List of files to exclude
@@ -43,11 +57,22 @@ module.exports = function( config ) {
     // - Safari (only Mac; has to be installed with `npm install karma-safari-launcher`)
     // - PhantomJS
     // - IE (only Windows; has to be installed with `npm install karma-ie-launcher`)
-    browsers: [ "Chrome" ],
+    //browsers: [ "Chrome" ],
+    //browsers: [ "Firefox" ],
+    browsers: [ "Chrome", "Firefox" ],
 
-    // If browser does not capture in given timeout [ms], kill it
-    captureTimeout: 60000,
+    client: {
+      clearContext: false,
+      qunit: {
+        showUI: true,
+        testTimeout: 120*1000
+      }
+    },
 
+    // If browser does not capture, or produce output, in given timeout [ms], kill it
+    captureTimeout: 60*1000,
+    browserNoActivityTimeout: 60*1000,
+    
     // Continuous Integration mode
     // if true, it capture browsers, run tests and exit
     singleRun: false

@@ -22,18 +22,20 @@
     "url": "https://github.com/bartaz/impress.js/issues"
   },
   "scripts": {
-    "lint": "jshint js/impress.js *.js test/bootstrap.js && jscs js/impress.js *.js test/bootstrap.js --preset=jquery",
+    "lint": "jshint js/impress.js test/*.js && jscs js/impress.js test/*.js",
     "test": "karma start --single-run",
     "test:dev": "karma start",
     "test:sauce": "karma start karma.conf-sauce.js"
   },
   "devDependencies": {
     "chrome": "0.1.0",
+    "firefox": "*",
     "jscs": "2.11.0",
     "jshint": "2.9.1",
     "karma": "0.13.22",
     "karma-chrome-launcher": "1.0.1",
     "karma-cli": "1.0.0",
+    "karma-firefox-launcher": "~0.1",
     "karma-qunit": "1.0.0",
     "karma-sauce-launcher": "1.0.0",
     "qunitjs": "2.0.0-rc1"
