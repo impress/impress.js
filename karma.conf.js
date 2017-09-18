@@ -9,7 +9,8 @@ module.exports = function( config ) {
 
     proxies : {
       '/test/' : '/base/test/',
-      '/js/'   : '/base/js/'
+      '/js/'   : '/base/js/',
+      '/node_modules/syn/dist/' : '/base/node_modules/syn/dist/'
     },
     
     // List of files / patterns to load in the browser
@@ -25,7 +26,7 @@ module.exports = function( config ) {
       {pattern: "test/plugins/*/*.html", watched: true, served: true, included: false},
       // JS files for iframe
       {pattern: "js/impress.js", watched: true, served: true, included: false},
-      {pattern: "test/syn/syn.js", watched: true, served: true, included: false}
+      {pattern: "node_modules/syn/dist/global/syn.js", watched: false, served: true, included: false}
     ],
 
     // List of files to exclude
