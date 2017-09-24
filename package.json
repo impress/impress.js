@@ -29,7 +29,7 @@
   },
   "devDependencies": {
     "chrome": "0.1.0",
-    "firefox": "*",
+    "firefox": "0.0.1",
     "jscs": "2.11.0",
     "jshint": "2.9.1",
     "karma": "0.13.22",
@@ -39,6 +39,6 @@
     "karma-qunit": "1.0.0",
     "karma-sauce-launcher": "1.0.0",
     "qunitjs": "2.0.0-rc1",
-    "syn": "*"
+    "syn": "0.10.0"
   }
 }
