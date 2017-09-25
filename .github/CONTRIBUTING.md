@@ -1,3 +1,10 @@
+Roadmap
+-------
+
+impress.js have [an strategic Roadmap](https://github.com/impress/impress.js/wiki/Roadmap) with a high-level overview of what we plan for the future. When proposing changes for improvement, make sure it goes in that direction, even if it's a very small step.
+
+Since this is entirely a community effort, feel free to [create an issue](https://github.com/impress/impress.js/issues) and propose changes on that Roadmap.
+
 Issues
 ------
 
