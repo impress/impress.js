@@ -430,6 +430,9 @@
                 return false;
             }
 
+            //execute functions that the user wants to run immediately when transitioning to a new slide;
+            subSteps.enter(el.id, true);            
+
             // Sometimes it's possible to trigger focus on first link with some keyboard action.
             // Browser in such a case tries to scroll the page to make this element visible
             // (even that body overflow is set to hidden) and it breaks our careful positioning.
@@ -578,6 +581,13 @@
 
         // `next` API function goes to next step (in document order)
         var next = function() {
+
+            if (subSteps.enter(activeStep.id)) {
+                return activeStep;
+            }
+ 
+            subSteps.exit(activeStep.id);
+
             var next = steps.indexOf( activeStep ) + 1;
             next = next < steps.length ? steps[ next ] : steps[ 0 ];
 
@@ -652,12 +662,122 @@
 
         body.classList.add( "impress-disabled" );
 
+        //allow users to register sub-step functions
+        var subSteps = {};
+
+        (function () {
+
+            var fnStore = {};   //object will contain all user-registered functions
+
+            var registerFn = function (fn, id, attributes, enter) {
+
+                //wrap the function so the api doesn't accidentally overwrite existing 
+                //properties that may be attached to the function
+                var wrappedFunction = function () { fn(); };
+                wrappedFunction.id = id;
+                wrappedFunction.enter = enter;
+                wrappedFunction.repeat = true;
+                wrappedFunction.executeImmediately = false;
+
+                if (attributes) {
+                    wrappedFunction.repeat = (attributes.repeat == undefined ? true : attributes.repeat);
+                    wrappedFunction.executeImmediately = (attributes.executeImmediately ? true : false);
+                }
+
+                if (fnStore[id] == undefined) {
+                    fnStore[id] = {};
+                    fnStore[id].enter = [];
+                    fnStore[id].exit = [];
+                    fnStore[id].repeatFunctions = [];
+                }
+
+                if (enter) {
+                    fnStore[id].enter.push(wrappedFunction);
+                }
+                else
+                {
+                    fnStore[id].exit.push(wrappedFunction);
+                }
+            }
+
+            subSteps.registerEnter = function (fn, id, attributes) {
+                registerFn(fn, id, attributes, true);
+            }
+
+            subSteps.registerExit = function (fn, id, attributes) {
+                registerFn(fn, id, attributes, false);
+            }
+
+            subSteps.enter = function (id, executeImmediately) {
+
+                if (fnStore[id] == undefined || fnStore[id].enter.length == 0) 
+                { return false; }
+               
+                if (executeImmediately)
+                {
+                    var immediateFunctions = fnStore[id].enter.filter(function (fn) {
+                            return fn.executeImmediately;
+                        }
+                    );
+
+                    if (immediateFunctions.length == 0) { return false; }
+
+                    immediateFunctions.forEach(function (fn) {
+                        var index = fnStore[id].enter.indexOf(fn);
+                        if (index != -1)
+                        {
+                            fnStore[id].enter.splice(index, 1)[0]();
+                            if (fn.repeat)
+                            { fnStore[id].repeatFunctions.push(fn); }
+
+                        }
+                    });
+
+                    return true;                   
+
+                }
+
+                var fn = fnStore[id].enter.splice(0,1)[0];
+
+                if (fn.repeat)
+                { fnStore[id].repeatFunctions.push(fn); }                
+
+                fn();
+
+                return true;
+
+            };
+
+            subSteps.exit = function (id) {
+
+                if (fnStore[id] == undefined) { return false; }
+
+                if (fnStore[id].repeatFunctions.length > 0) {
+                    fnStore[id].repeatFunctions.forEach(function (fn) {
+                        fnStore[fn.id].enter.push(fn);
+                    });
+                    fnStore[id].repeatFunctions.length = 0;
+                }
+
+                if (fnStore[id].exit.length == 0){return false;}
+
+                fnStore[id].exit = fnStore[id].exit.filter(function (fn) {
+                    fn();
+                    return (fn.repeat)
+                });
+
+                return true;
+
+            };
+        })();
+
         // Store and return API for given impress.js root element
         return ( roots[ "impress-root-" + rootId ] = {
             init: init,
             goto: goto,
             next: next,
-            prev: prev
+            prev: prev,
+            subSteps: subSteps
         } );
 
     };
