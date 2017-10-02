@@ -18,10 +18,8 @@ module.exports = function( config ) {
       // The QUnit tests
       "test/helpers.js",
       "test/core_tests.js",
-      "test/navigation_tests.js",
+      "src/plugins/navigation/navigation_tests.js",
       // Presentation files, for the iframe
-      //"test/core_tests_presentation.html"
-      //{pattern: "test/core_tests_presentation.html", watched: true, served: true, included: false}
       {pattern: "test/*.html", watched: true, served: true, included: false},
       {pattern: "test/plugins/*/*.html", watched: true, served: true, included: false},
       // JS files for iframe

@@ -19,15 +19,17 @@
   "author": "Bartek Szopka",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/bartaz/impress.js/issues"
+    "url": "https://github.com/impress/impress.js/issues"
   },
   "scripts": {
-    "lint": "jshint js/impress.js test/*.js && jscs js/impress.js test/*.js",
+    "build": "node build.js",
+    "lint": "jshint src test/*.js && jscs src test/*.js",
     "test": "karma start --single-run",
     "test:dev": "karma start",
     "test:sauce": "karma start karma.conf-sauce.js"
   },
   "devDependencies": {
+    "buildify": "*",
     "chrome": "0.1.0",
     "firefox": "0.0.1",
     "jscs": "2.11.0",
