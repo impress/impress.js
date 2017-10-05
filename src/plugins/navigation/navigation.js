@@ -25,12 +25,6 @@
 ( function( document ) {
     "use strict";
 
-    var triggerEvent = function( el, eventName, detail ) {
-        var event = document.createEvent( "CustomEvent" );
-        event.initCustomEvent( eventName, true, true, detail );
-        el.dispatchEvent( event );
-    };
-
     // Wait for impress.js to be initialized
     document.addEventListener( "impress:init", function( event ) {
 
@@ -40,6 +34,7 @@
         // need to control the presentation that was just initialized.
         var api = event.detail.api;
         var gc = api.lib.gc;
+        var util = api.lib.util;
 
         // Supported keys are:
         // [space] - quite common in presentation software to move forward
@@ -166,8 +161,9 @@
         }, false );
 
         // Add a line to the help popup
-        triggerEvent( document, "impress:help:add",
-                      { command: "Left &amp; Right", text: "Previous &amp; Next step", row: 1 } );
+        util.triggerEvent( document, "impress:help:add", { command: "Left &amp; Right",
+                                                           text: "Previous &amp; Next step",
+                                                           row: 1 } );
 
     }, false );
 

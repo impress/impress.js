@@ -18,25 +18,12 @@
 ( function( document, window ) {
     "use strict";
 
-    // Throttling function calls, by Remy Sharp
-    // http://remysharp.com/2010/07/21/throttling-function-calls/
-    var throttle = function( fn, delay ) {
-        var timer = null;
-        return function() {
-            var context = this, args = arguments;
-            window.clearTimeout( timer );
-            timer = window.setTimeout( function() {
-                fn.apply( context, args );
-            }, delay );
-        };
-    };
-
     // Wait for impress.js to be initialized
     document.addEventListener( "impress:init", function( event ) {
         var api = event.detail.api;
 
         // Rescale presentation when window is resized
-        api.lib.gc.addEventListener( window, "resize", throttle( function() {
+        api.lib.gc.addEventListener( window, "resize", api.lib.util.throttle( function() {
 
             // Force going to active step again, to trigger rescaling
             api.goto( document.querySelector( ".step.active" ), 500 );
