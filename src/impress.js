@@ -222,7 +222,9 @@
                 init: empty,
                 goto: empty,
                 prev: empty,
-                next: empty
+                next: empty,
+                tear: empty,
+                lib: {}
             };
         }
 
@@ -232,6 +234,12 @@
         if ( roots[ "impress-root-" + rootId ] ) {
             return roots[ "impress-root-" + rootId ];
         }
+
+        // The gc library depends on being initialized before we do any changes to DOM.
+        var lib = initLibraries( rootId );
+
+        body.classList.remove( "impress-not-supported" );
+        body.classList.add( "impress-supported" );
 
         // Data of all presentation steps
         var stepsData = {};
@@ -576,6 +584,15 @@
             return goto( next );
         };
 
+        // Teardown impress
+        // Resets the DOM to the state it was before impress().init() was called.
+        // (If you called impress(rootId).init() for multiple different rootId's, then you must
+        // also call tear() once for each of them.)
+        var tear = function() {
+            lib.gc.teardown();
+            delete roots[ "impress-root-" + rootId ];
+        };
+
         // Adding some useful classes to step elements.
         //
         // All the steps that have not been shown yet are given `future` class.
@@ -589,20 +606,20 @@
         // There classes can be used in CSS to style different types of steps.
         // For example the `present` class can be used to trigger some custom
         // animations when step is shown.
-        root.addEventListener( "impress:init", function() {
+        lib.gc.addEventListener( root, "impress:init", function() {
 
             // STEP CLASSES
             steps.forEach( function( step ) {
                 step.classList.add( "future" );
             } );
 
-            root.addEventListener( "impress:stepenter", function( event ) {
+            lib.gc.addEventListener( root, "impress:stepenter", function( event ) {
                 event.target.classList.remove( "past" );
                 event.target.classList.remove( "future" );
                 event.target.classList.add( "present" );
             }, false );
 
-            root.addEventListener( "impress:stepleave", function( event ) {
+            lib.gc.addEventListener( root, "impress:stepleave", function( event ) {
                 event.target.classList.remove( "present" );
                 event.target.classList.add( "past" );
             }, false );
@@ -610,7 +627,7 @@
         }, false );
 
         // Adding hash change support.
-        root.addEventListener( "impress:init", function() {
+        lib.gc.addEventListener( root, "impress:init", function() {
 
             // Last hash detected
             var lastHash = "";
@@ -621,11 +638,11 @@
             // And it has to be set after animation finishes, because in Chrome it
             // makes transtion laggy.
             // BUG: http://code.google.com/p/chromium/issues/detail?id=62820
-            root.addEventListener( "impress:stepenter", function( event ) {
+            lib.gc.addEventListener( root, "impress:stepenter", function( event ) {
                 window.location.hash = lastHash = "#/" + event.target.id;
             }, false );
 
-            window.addEventListener( "hashchange", function() {
+            lib.gc.addEventListener( window, "hashchange", function() {
 
                 // When the step is entered hash in the location is updated
                 // (just few lines above from here), so the hash change is
@@ -649,13 +666,45 @@
             init: init,
             goto: goto,
             next: next,
-            prev: prev
+            prev: prev,
+            tear: tear,
+            lib: lib
         } );
 
     };
 
     // Flag that can be used in JS to check if browser have passed the support test
     impress.supported = impressSupported;
+
+    // ADD and INIT LIBRARIES
+    // Library factories are defined in src/lib/*.js, and register themselves by calling
+    // impress.addLibraryFactory(libraryFactoryObject). They're stored here, and used to augment
+    // the API with library functions when client calls impress(rootId).
+    // See src/lib/README.md for clearer example.
+    // (Advanced usage: For different values of rootId, a different instance of the libaries are
+    // generated, in case they need to hold different state for different root elements.)
+    var libraryFactories = {};
+    impress.addLibraryFactory = function( obj ) {
+        for ( var libname in obj ) {
+            if ( obj.hasOwnProperty( libname ) ) {
+                libraryFactories[ libname ] = obj[ libname ];
+            }
+        }
+    };
+
+    // Call each library factory, and return the lib object that is added to the api.
+    var initLibraries = function( rootId ) { //jshint ignore:line
+        var lib = {};
+        for ( var libname in libraryFactories ) {
+            if ( libraryFactories.hasOwnProperty( libname ) ) {
+                if ( lib[ libname ] !== undefined ) {
+                    throw "impress.js ERROR: Two libraries both tried to use libname: " +  libname;
+                }
+                lib[ libname ] = libraryFactories[ libname ]( rootId );
+            }
+        }
+        return lib;
+    };
 
 } )( document, window );
 

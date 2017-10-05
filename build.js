@@ -2,6 +2,9 @@ var buildify = require('buildify');
 
 buildify()
   .load('src/impress.js')
+  // Libraries from src/lib
+  .concat(['src/lib/gc.js'])
+  // Plugins from src/plugins
   .concat(['src/plugins/navigation/navigation.js',
            'src/plugins/resize/resize.js'])
   .save('js/impress.js');

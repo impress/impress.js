@@ -36,7 +36,7 @@
         var api = event.detail.api;
 
         // Rescale presentation when window is resized
-        window.addEventListener( "resize", throttle( function() {
+        api.lib.gc.addEventListener( window, "resize", throttle( function() {
 
             // Force going to active step again, to trigger rescaling
             api.goto( document.querySelector( ".step.active" ), 500 );
