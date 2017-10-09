@@ -31,34 +31,43 @@
         recordStartingState( rootId );
 
         // LIBRARY FUNCTIONS
-        // Below are definitions of the library functions we return at the end
+        // Definitions of the library functions we return as an object at the end
+
+        // `pushElement` adds a DOM element to the gc stack
         var pushElement = function( element ) {
             elementList.push( element );
         };
 
-        // Convenience wrapper that combines DOM appendChild with gc.pushElement
+        // `appendChild` is a convenience wrapper that combines DOM appendChild with gc.pushElement
         var appendChild = function( parent, element ) {
             parent.appendChild( element );
             pushElement( element );
         };
 
+        // `pushEventListener` adds an event listener to the gc stack
         var pushEventListener = function( target, type, listenerFunction ) {
             eventListenerList.push( { target:target, type:type, listener:listenerFunction } );
         };
 
-        // Convenience wrapper that combines DOM addEventListener with gc.pushEventListener
+        // `addEventListener` combines DOM addEventListener with gc.pushEventListener
         var addEventListener = function( target, type, listenerFunction ) {
             target.addEventListener( type, listenerFunction );
             pushEventListener( target, type, listenerFunction );
         };
 
-        // If the above utilities are not enough, plugins can add their own callback function
-        // to do arbitrary things.
+        // `addCallback` If the above utilities are not enough, plugins can add their own callback
+        // function to do arbitrary things.
         var addCallback = function( callback ) {
             callbackList.push( callback );
         };
         addCallback( function( rootId ) { resetStartingState( rootId ); } );
 
+        // `teardown` will
+        // - execute all callbacks in LIFO order
+        // - call `removeChild` on all DOM elements in LIFO order
+        // - call `removeEventListener` on all event listeners in LIFO order
+        // The goal of a teardown is to return to the same state that the DOM was before
+        // `impress().init()` was called.
         var teardown = function() {
 
             // Execute the callbacks in LIFO order

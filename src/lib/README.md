@@ -83,11 +83,11 @@ Putting all of the above together, a skeleton library file will look like:
             var instanceVar = {};
 
             // LIBRARY FUNCTIONS
-            var libararyFunction1 = function () {
+            var libraryFunction1 = function () {
                 /* ... */
             };
             
-            var libararyFunction2 = function () {
+            var libraryFunction2 = function () {
                 /* ... */
             };
             
