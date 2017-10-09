@@ -25,12 +25,6 @@
 ( function( document ) {
     "use strict";
 
-    var triggerEvent = function( el, eventName, detail ) {
-        var event = document.createEvent( "CustomEvent" );
-        event.initCustomEvent( eventName, true, true, detail );
-        el.dispatchEvent( event );
-    };
-
     // Wait for impress.js to be initialized
     document.addEventListener( "impress:init", function( event ) {
 
@@ -39,6 +33,8 @@
         // or anything. `impress:init` event data gives you everything you
         // need to control the presentation that was just initialized.
         var api = event.detail.api;
+        var gc = api.lib.gc;
+        var util = api.lib.util;
 
         // Supported keys are:
         // [space] - quite common in presentation software to move forward
@@ -87,14 +83,14 @@
         // KEYBOARD NAVIGATION HANDLERS
 
         // Prevent default keydown action when one of supported key is pressed.
-        document.addEventListener( "keydown", function( event ) {
+        gc.addEventListener( document, "keydown", function( event ) {
             if ( isNavigationEvent( event ) ) {
                 event.preventDefault();
             }
         }, false );
 
         // Trigger impress action (next or prev) on keyup.
-        document.addEventListener( "keyup", function( event ) {
+        gc.addEventListener( document, "keyup", function( event ) {
             if ( isNavigationEvent( event ) ) {
                 if ( event.shiftKey ) {
                     switch ( event.keyCode ) {
@@ -123,7 +119,7 @@
         }, false );
 
         // Delegated handler for clicking on the links to presentation steps
-        document.addEventListener( "click", function( event ) {
+        gc.addEventListener( document, "click", function( event ) {
 
             // Event delegation with "bubbling"
             // check if event target (or any of its parents is a link)
@@ -149,7 +145,7 @@
         }, false );
 
         // Delegated handler for clicking on step elements
-        document.addEventListener( "click", function( event ) {
+        gc.addEventListener( document, "click", function( event ) {
             var target = event.target;
 
             // Find closest step element that is not active
@@ -165,8 +161,9 @@
         }, false );
 
         // Add a line to the help popup
-        triggerEvent( document, "impress:help:add",
-                      { command: "Left &amp; Right", text: "Previous &amp; Next step", row: 1 } );
+        util.triggerEvent( document, "impress:help:add", { command: "Left &amp; Right",
+                                                           text: "Previous &amp; Next step",
+                                                           row: 1 } );
 
     }, false );
 

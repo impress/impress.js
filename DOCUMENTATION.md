@@ -229,6 +229,31 @@ rootElement.addEventListener( "impress:init", function() {
 impress().init();
 ```
 
+#### .tear()
+
+Resets the DOM to its original state, as it was before `init()` was called.
+
+This can be used to "unload" impress.js. A particular use case for this is, if you want to do
+dynamic changes to the presentation, you can do a teardown, apply changes, then call `init()`
+again. (In most cases, this will not cause flickering or other visible effects to the user,
+beyond the intended dynamic changes.)
+
+**Example:**
+
+```JavaScript
+impress().tear();
+```
+
+**Example:**
+
+```JavaScript
+var rootElement = document.getElementById( "impress" );
+rootElement.addEventListener( "impress:init", function() {
+  console.log( "Impress init" );
+});
+impress().init();
+```
+
 #### .next()
 
 Navigates to the next step of the presentation using the [`goto()` function](#impressgotostepindexstepelementidstepelement-duration).

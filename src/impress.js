@@ -20,6 +20,7 @@
 // Let me show you the cogs that make impress.js run...
 ( function( document, window ) {
     "use strict";
+    var lib;
 
     // HELPER FUNCTIONS
 
@@ -53,12 +54,6 @@
 
     } )();
 
-    // `arrayify` takes an array-like object and turns it into real Array
-    // to make all the Array.prototype goodness available.
-    var arrayify = function( a ) {
-        return [].slice.call( a );
-    };
-
     // `css` function applies the styles given in `props` object to the element
     // given as `el`. It runs all property names through `pfx` function to make
     // sure proper prefixed version of the property is used.
@@ -73,40 +68,6 @@
             }
         }
         return el;
-    };
-
-    // `toNumber` takes a value given as `numeric` parameter and tries to turn
-    // it into a number. If it is not possible it returns 0 (or other value
-    // given as `fallback`).
-    var toNumber = function( numeric, fallback ) {
-        return isNaN( numeric ) ? ( fallback || 0 ) : Number( numeric );
-    };
-
-    // `byId` returns element with given `id` - you probably have guessed that ;)
-    var byId = function( id ) {
-        return document.getElementById( id );
-    };
-
-    // `$` returns first element for given CSS `selector` in the `context` of
-    // the given element or whole document.
-    var $ = function( selector, context ) {
-        context = context || document;
-        return context.querySelector( selector );
-    };
-
-    // `$$` return an array of elements for given CSS `selector` in the `context` of
-    // the given element or whole document.
-    var $$ = function( selector, context ) {
-        context = context || document;
-        return arrayify( context.querySelectorAll( selector ) );
-    };
-
-    // `triggerEvent` builds a custom DOM event with given `eventName` and `detail` data
-    // and triggers it on element given as `el`.
-    var triggerEvent = function( el, eventName, detail ) {
-        var event = document.createEvent( "CustomEvent" );
-        event.initCustomEvent( eventName, true, true, detail );
-        el.dispatchEvent( event );
     };
 
     // `translate` builds a translate transform string for given data.
@@ -128,15 +89,6 @@
     // `scale` builds a scale transform string for given data.
     var scale = function( s ) {
         return " scale(" + s + ") ";
-    };
-
-    // `getElementFromHash` returns an element located by id from hash part of
-    // window location.
-    var getElementFromHash = function() {
-
-        // Get id from url # by removing `#` or `#/` from the beginning,
-        // so both "fallback" `#slide-id` and "enhanced" `#/slide-id` will work
-        return byId( window.location.hash.replace( /^#\/?/, "" ) );
     };
 
     // `computeWindowScale` counts the scale factor between window size and size
@@ -222,7 +174,9 @@
                 init: empty,
                 goto: empty,
                 prev: empty,
-                next: empty
+                next: empty,
+                tear: empty,
+                lib: {}
             };
         }
 
@@ -232,6 +186,12 @@
         if ( roots[ "impress-root-" + rootId ] ) {
             return roots[ "impress-root-" + rootId ];
         }
+
+        // The gc library depends on being initialized before we do any changes to DOM.
+        lib = initLibraries( rootId );
+
+        body.classList.remove( "impress-not-supported" );
+        body.classList.add( "impress-supported" );
 
         // Data of all presentation steps
         var stepsData = {};
@@ -252,7 +212,7 @@
         var windowScale = null;
 
         // Root presentation elements
-        var root = byId( rootId );
+        var root = lib.util.byId( rootId );
         var canvas = document.createElement( "div" );
 
         var initialized = false;
@@ -273,7 +233,7 @@
         // last entered step.
         var onStepEnter = function( step ) {
             if ( lastEntered !== step ) {
-                triggerEvent( step, "impress:stepenter" );
+                lib.util.triggerEvent( step, "impress:stepenter" );
                 lastEntered = step;
             }
         };
@@ -283,7 +243,7 @@
         // last entered step.
         var onStepLeave = function( step ) {
             if ( lastEntered === step ) {
-                triggerEvent( step, "impress:stepleave" );
+                lib.util.triggerEvent( step, "impress:stepleave" );
                 lastEntered = null;
             }
         };
@@ -294,16 +254,16 @@
             var data = el.dataset,
                 step = {
                     translate: {
-                        x: toNumber( data.x ),
-                        y: toNumber( data.y ),
-                        z: toNumber( data.z )
+                        x: lib.util.toNumber( data.x ),
+                        y: lib.util.toNumber( data.y ),
+                        z: lib.util.toNumber( data.z )
                     },
                     rotate: {
-                        x: toNumber( data.rotateX ),
-                        y: toNumber( data.rotateY ),
-                        z: toNumber( data.rotateZ || data.rotate )
+                        x: lib.util.toNumber( data.rotateX ),
+                        y: lib.util.toNumber( data.rotateY ),
+                        z: lib.util.toNumber( data.rotateZ || data.rotate )
                     },
-                    scale: toNumber( data.scale, 1 ),
+                    scale: lib.util.toNumber( data.scale, 1 ),
                     el: el
                 };
 
@@ -329,7 +289,7 @@
 
             // First we set up the viewport for mobile devices.
             // For some reason iPad goes nuts when it is not done properly.
-            var meta = $( "meta[name='viewport']" ) || document.createElement( "meta" );
+            var meta = lib.util.$( "meta[name='viewport']" ) || document.createElement( "meta" );
             meta.content = "width=device-width, minimum-scale=1, maximum-scale=1, user-scalable=no";
             if ( meta.parentNode !== document.head ) {
                 meta.name = "viewport";
@@ -339,12 +299,12 @@
             // Initialize configuration object
             var rootData = root.dataset;
             config = {
-                width: toNumber( rootData.width, defaults.width ),
-                height: toNumber( rootData.height, defaults.height ),
-                maxScale: toNumber( rootData.maxScale, defaults.maxScale ),
-                minScale: toNumber( rootData.minScale, defaults.minScale ),
-                perspective: toNumber( rootData.perspective, defaults.perspective ),
-                transitionDuration: toNumber(
+                width: lib.util.toNumber( rootData.width, defaults.width ),
+                height: lib.util.toNumber( rootData.height, defaults.height ),
+                maxScale: lib.util.toNumber( rootData.maxScale, defaults.maxScale ),
+                minScale: lib.util.toNumber( rootData.minScale, defaults.minScale ),
+                perspective: lib.util.toNumber( rootData.perspective, defaults.perspective ),
+                transitionDuration: lib.util.toNumber(
                   rootData.transitionDuration, defaults.transitionDuration
                 )
             };
@@ -352,7 +312,7 @@
             windowScale = computeWindowScale( config );
 
             // Wrap steps with "canvas" element
-            arrayify( root.childNodes ).forEach( function( el ) {
+            lib.util.arrayify( root.childNodes ).forEach( function( el ) {
                 canvas.appendChild( el );
             } );
             root.appendChild( canvas );
@@ -385,7 +345,7 @@
             body.classList.add( "impress-enabled" );
 
             // Get and init steps
-            steps = $$( ".step", root );
+            steps = lib.util.$$( ".step", root );
             steps.forEach( initStep );
 
             // Set a default initial state of the canvas
@@ -397,7 +357,8 @@
 
             initialized = true;
 
-            triggerEvent( root, "impress:init", { api: roots[ "impress-root-" + rootId ] } );
+            lib.util.triggerEvent( root, "impress:init",
+                                   { api: roots[ "impress-root-" + rootId ] } );
         };
 
         // `getStep` is a helper function that returns a step element defined by parameter.
@@ -408,7 +369,7 @@
             if ( typeof step === "number" ) {
                 step = step < 0 ? steps[ steps.length + step ] : steps[ step ];
             } else if ( typeof step === "string" ) {
-                step = byId( step );
+                step = lib.util.byId( step );
             }
             return ( step && step.id && stepsData[ "impress-" + step.id ] ) ? step : null;
         };
@@ -470,7 +431,7 @@
             // with scaling down and move and rotation are delayed.
             var zoomin = target.scale >= currentState.scale;
 
-            duration = toNumber( duration, config.transitionDuration );
+            duration = lib.util.toNumber( duration, config.transitionDuration );
             var delay = ( duration / 2 );
 
             // If the same step is re-selected, force computing window scaling,
@@ -576,6 +537,15 @@
             return goto( next );
         };
 
+        // Teardown impress
+        // Resets the DOM to the state it was before impress().init() was called.
+        // (If you called impress(rootId).init() for multiple different rootId's, then you must
+        // also call tear() once for each of them.)
+        var tear = function() {
+            lib.gc.teardown();
+            delete roots[ "impress-root-" + rootId ];
+        };
+
         // Adding some useful classes to step elements.
         //
         // All the steps that have not been shown yet are given `future` class.
@@ -589,20 +559,20 @@
         // There classes can be used in CSS to style different types of steps.
         // For example the `present` class can be used to trigger some custom
         // animations when step is shown.
-        root.addEventListener( "impress:init", function() {
+        lib.gc.addEventListener( root, "impress:init", function() {
 
             // STEP CLASSES
             steps.forEach( function( step ) {
                 step.classList.add( "future" );
             } );
 
-            root.addEventListener( "impress:stepenter", function( event ) {
+            lib.gc.addEventListener( root, "impress:stepenter", function( event ) {
                 event.target.classList.remove( "past" );
                 event.target.classList.remove( "future" );
                 event.target.classList.add( "present" );
             }, false );
 
-            root.addEventListener( "impress:stepleave", function( event ) {
+            lib.gc.addEventListener( root, "impress:stepleave", function( event ) {
                 event.target.classList.remove( "present" );
                 event.target.classList.add( "past" );
             }, false );
@@ -610,7 +580,7 @@
         }, false );
 
         // Adding hash change support.
-        root.addEventListener( "impress:init", function() {
+        lib.gc.addEventListener( root, "impress:init", function() {
 
             // Last hash detected
             var lastHash = "";
@@ -621,11 +591,11 @@
             // And it has to be set after animation finishes, because in Chrome it
             // makes transtion laggy.
             // BUG: http://code.google.com/p/chromium/issues/detail?id=62820
-            root.addEventListener( "impress:stepenter", function( event ) {
+            lib.gc.addEventListener( root, "impress:stepenter", function( event ) {
                 window.location.hash = lastHash = "#/" + event.target.id;
             }, false );
 
-            window.addEventListener( "hashchange", function() {
+            lib.gc.addEventListener( window, "hashchange", function() {
 
                 // When the step is entered hash in the location is updated
                 // (just few lines above from here), so the hash change is
@@ -633,13 +603,13 @@
                 //
                 // To avoid this we store last entered hash and compare.
                 if ( window.location.hash !== lastHash ) {
-                    goto( getElementFromHash() );
+                    goto( lib.util.getElementFromHash() );
                 }
             }, false );
 
             // START
             // by selecting step defined in url or first step of the presentation
-            goto( getElementFromHash() || steps[ 0 ], 0 );
+            goto( lib.util.getElementFromHash() || steps[ 0 ], 0 );
         }, false );
 
         body.classList.add( "impress-disabled" );
@@ -649,13 +619,45 @@
             init: init,
             goto: goto,
             next: next,
-            prev: prev
+            prev: prev,
+            tear: tear,
+            lib: lib
         } );
 
     };
 
     // Flag that can be used in JS to check if browser have passed the support test
     impress.supported = impressSupported;
+
+    // ADD and INIT LIBRARIES
+    // Library factories are defined in src/lib/*.js, and register themselves by calling
+    // impress.addLibraryFactory(libraryFactoryObject). They're stored here, and used to augment
+    // the API with library functions when client calls impress(rootId).
+    // See src/lib/README.md for clearer example.
+    // (Advanced usage: For different values of rootId, a different instance of the libaries are
+    // generated, in case they need to hold different state for different root elements.)
+    var libraryFactories = {};
+    impress.addLibraryFactory = function( obj ) {
+        for ( var libname in obj ) {
+            if ( obj.hasOwnProperty( libname ) ) {
+                libraryFactories[ libname ] = obj[ libname ];
+            }
+        }
+    };
+
+    // Call each library factory, and return the lib object that is added to the api.
+    var initLibraries = function( rootId ) { //jshint ignore:line
+        var lib = {};
+        for ( var libname in libraryFactories ) {
+            if ( libraryFactories.hasOwnProperty( libname ) ) {
+                if ( lib[ libname ] !== undefined ) {
+                    throw "impress.js ERROR: Two libraries both tried to use libname: " +  libname;
+                }
+                lib[ libname ] = libraryFactories[ libname ]( rootId );
+            }
+        }
+        return lib;
+    };
 
 } )( document, window );
 
