@@ -244,16 +244,6 @@ beyond the intended dynamic changes.)
 impress().tear();
 ```
 
-**Example:**
-
-```JavaScript
-var rootElement = document.getElementById( "impress" );
-rootElement.addEventListener( "impress:init", function() {
-  console.log( "Impress init" );
-});
-impress().init();
-```
-
 #### .next()
 
 Navigates to the next step of the presentation using the [`goto()` function](#impressgotostepindexstepelementidstepelement-duration).
