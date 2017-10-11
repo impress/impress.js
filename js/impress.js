@@ -131,9 +131,6 @@
 
         // We can't be sure that `classList` is supported
         body.className += " impress-not-supported ";
-    } else {
-        body.classList.remove( "impress-not-supported" );
-        body.classList.add( "impress-supported" );
     }
 
     // GLOBALS AND DEFAULTS
@@ -142,6 +139,9 @@
     // Yes, this means you can have more than one instance on a page, but I'm not
     // sure if it makes any sense in practice ;)
     var roots = {};
+
+    var preInitPlugins = [];
+    var preStepLeavePlugins = [];
 
     // Some default config values.
     var defaults = {
@@ -238,12 +238,12 @@
             }
         };
 
-        // `onStepLeave` is called whenever the step element is left
-        // but the event is triggered only if the step is the same as
-        // last entered step.
-        var onStepLeave = function( step ) {
-            if ( lastEntered === step ) {
-                lib.util.triggerEvent( step, "impress:stepleave" );
+        // `onStepLeave` is called whenever the currentStep element is left
+        // but the event is triggered only if the currentStep is the same as
+        // lastEntered step.
+        var onStepLeave = function( currentStep, nextStep ) {
+            if ( lastEntered === currentStep ) {
+                lib.util.triggerEvent( currentStep, "impress:stepleave", { next: nextStep } );
                 lastEntered = null;
             }
         };
@@ -283,9 +283,17 @@
             } );
         };
 
+        // Initialize all steps.
+        // Read the data-* attributes, store in internal stepsData, and render with CSS.
+        var initAllSteps = function() {
+            steps = lib.util.$$( ".step", root );
+            steps.forEach( initStep );
+        };
+
         // `init` API function that initializes (and runs) the presentation.
         var init = function() {
             if ( initialized ) { return; }
+            execPreInitPlugins( root );
 
             // First we set up the viewport for mobile devices.
             // For some reason iPad goes nuts when it is not done properly.
@@ -345,8 +353,7 @@
             body.classList.add( "impress-enabled" );
 
             // Get and init steps
-            steps = lib.util.$$( ".step", root );
-            steps.forEach( initStep );
+            initAllSteps();
 
             // Set a default initial state of the canvas
             currentState = {
@@ -379,11 +386,23 @@
 
         // `goto` API function that moves to step given as `el` parameter (by index, id or element).
         // `duration` optionally given as second parameter, is the transition duration in css.
-        var goto = function( el, duration ) {
+        // `reason` is the string "next", "prev" or "goto" (default) and will be made available to
+        // preStepLeave plugins.
+        // `origEvent` may contain event that caused the calll to goto, such as a key press event
+        var goto = function( el, duration, reason, origEvent ) {
+            reason = reason || "goto";
+            origEvent = origEvent || null;
 
-            if ( !initialized || !( el = getStep( el ) ) ) {
+            if ( !initialized ) {
+                return false;
+            }
 
-                // Presentation not initialized or given element is not a step
+            // Re-execute initAllSteps for each transition. This allows to edit step attributes
+            // dynamically, such as change their coordinates, or even remove or add steps, and have
+            // that change apply when goto() is called.
+            initAllSteps();
+
+            if ( !( el = getStep( el ) ) ) {
                 return false;
             }
 
@@ -399,6 +418,31 @@
             window.scrollTo( 0, 0 );
 
             var step = stepsData[ "impress-" + el.id ];
+
+            // If we are in fact moving to another step, start with executing the registered
+            // preStepLeave plugins.
+            if ( activeStep && activeStep !== el ) {
+                var event = { target: activeStep, detail: {} };
+                event.detail.next = el;
+                event.detail.transitionDuration = duration;
+                event.detail.reason = reason;
+                if ( origEvent ) {
+                    event.origEvent = origEvent;
+                }
+
+                if ( execPreStepLeavePlugins( event ) === false ) {
+
+                    // PreStepLeave plugins are allowed to abort the transition altogether, by
+                    // returning false.
+                    // see stop and substep plugins for an example of doing just that
+                    return false;
+                }
+
+                // Plugins are allowed to change the detail values
+                el = event.detail.next;
+                step = stepsData[ "impress-" + el.id ];
+                duration = event.detail.transitionDuration;
+            }
 
             if ( activeStep ) {
                 activeStep.classList.remove( "active" );
@@ -444,7 +488,7 @@
 
             // Trigger leave of currently active element (if it's not the same step again)
             if ( activeStep && activeStep !== el ) {
-                onStepLeave( activeStep );
+                onStepLeave( activeStep, el );
             }
 
             // Now we alter transforms of `root` and `canvas` to trigger transitions.
@@ -522,19 +566,21 @@
         };
 
         // `prev` API function goes to previous step (in document order)
-        var prev = function() {
+        // `event` is optional, may contain the event that caused the need to call prev()
+        var prev = function( origEvent ) {
             var prev = steps.indexOf( activeStep ) - 1;
             prev = prev >= 0 ? steps[ prev ] : steps[ steps.length - 1 ];
 
-            return goto( prev );
+            return goto( prev, undefined, "prev", origEvent );
         };
 
         // `next` API function goes to next step (in document order)
-        var next = function() {
+        // `event` is optional, may contain the event that caused the need to call next()
+        var next = function( origEvent ) {
             var next = steps.indexOf( activeStep ) + 1;
             next = next < steps.length ? steps[ next ] : steps[ 0 ];
 
-            return goto( next );
+            return goto( next, undefined, "next", origEvent );
         };
 
         // Teardown impress
@@ -659,6 +705,64 @@
         return lib;
     };
 
+    // `addPreInitPlugin` allows plugins to register a function that should
+    // be run (synchronously) at the beginning of init, before
+    // impress().init() itself executes.
+    impress.addPreInitPlugin = function( plugin, weight ) {
+        weight = parseInt( weight ) || 10;
+        if ( weight <= 0 ) {
+            throw "addPreInitPlugin: weight must be a positive integer";
+        }
+
+        if ( preInitPlugins[ weight ] === undefined ) {
+            preInitPlugins[ weight ] = [];
+        }
+        preInitPlugins[ weight ].push( plugin );
+    };
+
+    // Called at beginning of init, to execute all pre-init plugins.
+    var execPreInitPlugins = function( root ) { //jshint ignore:line
+        for ( var i = 0; i < preInitPlugins.length; i++ ) {
+            var thisLevel = preInitPlugins[ i ];
+            if ( thisLevel !== undefined ) {
+                for ( var j = 0; j < thisLevel.length; j++ ) {
+                    thisLevel[ j ]( root );
+                }
+            }
+        }
+    };
+
+    // `addPreStepLeavePlugin` allows plugins to register a function that should
+    // be run (synchronously) at the beginning of goto()
+    impress.addPreStepLeavePlugin = function( plugin, weight ) { //jshint ignore:line
+        weight = parseInt( weight ) || 10;
+        if ( weight <= 0 ) {
+            throw "addPreStepLeavePlugin: weight must be a positive integer";
+        }
+
+        if ( preStepLeavePlugins[ weight ] === undefined ) {
+            preStepLeavePlugins[ weight ] = [];
+        }
+        preStepLeavePlugins[ weight ].push( plugin );
+    };
+
+    // Called at beginning of goto(), to execute all preStepLeave plugins.
+    var execPreStepLeavePlugins = function( event ) { //jshint ignore:line
+        for ( var i = 0; i < preStepLeavePlugins.length; i++ ) {
+            var thisLevel = preStepLeavePlugins[ i ];
+            if ( thisLevel !== undefined ) {
+                for ( var j = 0; j < thisLevel.length; j++ ) {
+                    if ( thisLevel[ j ]( event ) === false ) {
+
+                        // If a plugin returns false, the stepleave event (and related transition)
+                        // is aborted
+                        return false;
+                    }
+                }
+            }
+        }
+    };
+
 } )( document, window );
 
 // THAT'S ALL FOLKS!
@@ -702,34 +806,43 @@
         recordStartingState( rootId );
 
         // LIBRARY FUNCTIONS
-        // Below are definitions of the library functions we return at the end
+        // Definitions of the library functions we return as an object at the end
+
+        // `pushElement` adds a DOM element to the gc stack
         var pushElement = function( element ) {
             elementList.push( element );
         };
 
-        // Convenience wrapper that combines DOM appendChild with gc.pushElement
+        // `appendChild` is a convenience wrapper that combines DOM appendChild with gc.pushElement
         var appendChild = function( parent, element ) {
             parent.appendChild( element );
             pushElement( element );
         };
 
+        // `pushEventListener` adds an event listener to the gc stack
         var pushEventListener = function( target, type, listenerFunction ) {
             eventListenerList.push( { target:target, type:type, listener:listenerFunction } );
         };
 
-        // Convenience wrapper that combines DOM addEventListener with gc.pushEventListener
+        // `addEventListener` combines DOM addEventListener with gc.pushEventListener
         var addEventListener = function( target, type, listenerFunction ) {
             target.addEventListener( type, listenerFunction );
             pushEventListener( target, type, listenerFunction );
         };
 
-        // If the above utilities are not enough, plugins can add their own callback function
-        // to do arbitrary things.
+        // `addCallback` If the above utilities are not enough, plugins can add their own callback
+        // function to do arbitrary things.
         var addCallback = function( callback ) {
             callbackList.push( callback );
         };
         addCallback( function( rootId ) { resetStartingState( rootId ); } );
 
+        // `teardown` will
+        // - execute all callbacks in LIFO order
+        // - call `removeChild` on all DOM elements in LIFO order
+        // - call `removeEventListener` on all event listeners in LIFO order
+        // The goal of a teardown is to return to the same state that the DOM was before
+        // `impress().init()` was called.
         var teardown = function() {
 
             // Execute the callbacks in LIFO order
