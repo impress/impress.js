@@ -20,6 +20,9 @@
  *             data-goto-key-list="ArrowUp ArrowDown ArrowRight ArrowLeft"
  *             data-goto-next-list="step-4 step-3 step-2 step-5">
  *
+ * See https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values for a table
+ * of what strings to use for each key.
+ *
  * Copyright 2016-2017 Henrik Ingo (@henrikingo)
  * Released under the MIT license.
  */
