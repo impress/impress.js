@@ -16,7 +16,10 @@ Example:
         <!-- data-goto-key-list and data-goto-next-list allow you to build advanced non-linear navigation. -->
         <div class="step" data-goto-key-list="ArrowUp ArrowDown ArrowRight ArrowLeft" data-goto-next-list="step-4 step-3 step-2 step-5">
 
-Author
+See https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values for a table
+of what strings to use for each key.
+
+ Author
 ------
 
 Copyright 2016 Henrik Ingo (@henrikingo)
