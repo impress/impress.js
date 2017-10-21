@@ -111,21 +111,14 @@
 
     // CHECK SUPPORT
     var body = document.body;
-
-    var ua = navigator.userAgent.toLowerCase();
     var impressSupported =
 
                           // Browser should support CSS 3D transtorms
                            ( pfx( "perspective" ) !== null ) &&
 
-                          // Browser should support `classList` and `dataset` APIs
+                          // And `classList` and `dataset` APIs
                            ( body.classList ) &&
-                           ( body.dataset ) &&
-
-                          // But some mobile devices need to be blacklisted,
-                          // because their CSS 3D support or hardware is not
-                          // good enough to run impress.js properly, sorry...
-                           ( ua.search( /(iphone)|(ipod)|(android)/ ) === -1 );
+                           ( body.dataset );
 
     if ( !impressSupported ) {
 
@@ -175,6 +168,7 @@
                 goto: empty,
                 prev: empty,
                 next: empty,
+                swipe: empty,
                 tear: empty,
                 lib: {}
             };
@@ -583,6 +577,110 @@
             return goto( next, undefined, "next", origEvent );
         };
 
+        // Swipe for touch devices by @and3rson.
+        // Below we extend the api to control the animation between the currently
+        // active step and a presumed next/prev step. See touch plugin for
+        // an example of using this api.
+
+        // Helper function
+        var interpolate = function( a, b, k ) {
+            return a + ( b - a ) * k;
+        };
+
+        // Animate a swipe.
+        //
+        // Pct is a value between -1.0 and +1.0, designating the current length
+        // of the swipe.
+        //
+        // If pct is negative, swipe towards the next() step, if positive,
+        // towards the prev() step.
+        //
+        // Note that pre-stepleave plugins such as goto can mess with what is a
+        // next() and prev() step, so we need to trigger the pre-stepleave event
+        // here, even if a swipe doesn't guarantee that the transition will
+        // actually happen.
+        //
+        // Calling swipe(), with any value of pct, won't in itself cause a
+        // transition to happen, this is just to animate the swipe. Once the
+        // transition is committed - such as at a touchend event - caller is
+        // responsible for also calling prev()/next() as appropriate.
+        var swipe = function( pct ) {
+            if ( Math.abs( pct ) > 1 ) {
+                return;
+            }
+
+            // Prepare & execute the preStepLeave event
+            var event = { target: activeStep, detail: {} };
+            event.detail.swipe = pct;
+
+            // Will be ignored within swipe animation, but just in case a plugin wants to read this,
+            // humor them
+            event.detail.transitionDuration = config.transitionDuration;
+            var idx; // Needed by jshint
+            if ( pct < 0 ) {
+                idx = steps.indexOf( activeStep ) + 1;
+                event.detail.next = idx < steps.length ? steps[ idx ] : steps[ 0 ];
+                event.detail.reason = "next";
+            } else if ( pct > 0 ) {
+                idx = steps.indexOf( activeStep ) - 1;
+                event.detail.next = idx >= 0 ? steps[ idx ] : steps[ steps.length - 1 ];
+                event.detail.reason = "prev";
+            } else {
+
+                // No move
+                return;
+            }
+            if ( execPreStepLeavePlugins( event ) === false ) {
+
+                // If a preStepLeave plugin wants to abort the transition, don't animate a swipe
+                // For stop, this is probably ok. For substep, the plugin it self might want to do
+                // some animation, but that's not the current implementation.
+                return false;
+            }
+            var nextElement = event.detail.next;
+
+            var nextStep = stepsData[ "impress-" + nextElement.id ];
+
+            // If the same step is re-selected, force computing window scaling,
+            var nextScale = nextStep.scale * windowScale;
+            var k = Math.abs( pct );
+
+            var interpolatedStep = {
+                translate: {
+                    x: interpolate( currentState.translate.x, -nextStep.translate.x, k ),
+                    y: interpolate( currentState.translate.y, -nextStep.translate.y, k ),
+                    z: interpolate( currentState.translate.z, -nextStep.translate.z, k )
+                },
+                rotate: {
+                    x: interpolate( currentState.rotate.x, -nextStep.rotate.x, k ),
+                    y: interpolate( currentState.rotate.y, -nextStep.rotate.y, k ),
+                    z: interpolate( currentState.rotate.z, -nextStep.rotate.z, k ),
+
+                    // Unfortunately there's a discontinuity if rotation order changes. Nothing I
+                    // can do about it?
+                    order: k < 0.7 ? currentState.rotate.order : nextStep.rotate.order
+                },
+                scale: interpolate( currentState.scale, nextScale, k )
+            };
+
+            css( root, {
+
+                // To keep the perspective look similar for different scales
+                // we need to 'scale' the perspective, too
+                perspective: config.perspective / interpolatedStep.scale + "px",
+                transform: scale( interpolatedStep.scale ),
+                transitionDuration: "0ms",
+                transitionDelay: "0ms"
+            } );
+
+            css( canvas, {
+                transform: rotate( interpolatedStep.rotate, true ) +
+                           translate( interpolatedStep.translate ),
+                transitionDuration: "0ms",
+                transitionDelay: "0ms"
+            } );
+        };
+
         // Teardown impress
         // Resets the DOM to the state it was before impress().init() was called.
         // (If you called impress(rootId).init() for multiple different rootId's, then you must
@@ -666,6 +764,7 @@
             goto: goto,
             next: next,
             prev: prev,
+            swipe: swipe,
             tear: tear,
             lib: lib
         } );
@@ -1701,3 +1800,72 @@
 
 } )( document, window );
 
+
+/**
+ * Support for swipe and tap on touch devices
+ *
+ * This plugin implements navigation for plugin devices, via swiping left/right,
+ * or tapping on the left/right edges of the screen.
+ *
+ *
+ *
+ * Copyright 2015: Andrew Dunai (@and3rson)
+ * Modified to a plugin, 2016: Henrik Ingo (@henrikingo)
+ *
+ * MIT License
+ */
+/* global document, window */
+( function( document, window ) {
+    "use strict";
+
+    // Touch handler to detect swiping left and right based on window size.
+    // If the difference in X change is bigger than 1/20 of the screen width,
+    // we simply call an appropriate API function to complete the transition.
+    var startX = 0;
+    var lastX = 0;
+    var lastDX = 0;
+    var threshold = window.innerWidth / 20;
+
+    document.addEventListener( "touchstart", function( event ) {
+        lastX = startX = event.touches[ 0 ].clientX;
+    } );
+
+    document.addEventListener( "touchmove", function( event ) {
+         var x = event.touches[ 0 ].clientX;
+         var diff = x - startX;
+
+         // To be used in touchend
+         lastDX = lastX - x;
+         lastX = x;
+
+         window.impress().swipe( diff / window.innerWidth );
+     } );
+
+     document.addEventListener( "touchend", function() {
+         var totalDiff = lastX - startX;
+         if ( Math.abs( totalDiff ) > window.innerWidth / 5 && ( totalDiff * lastDX ) <= 0 ) {
+             if ( totalDiff > window.innerWidth / 5 && lastDX <= 0 ) {
+                 window.impress().prev();
+             } else if ( totalDiff < -window.innerWidth / 5 && lastDX >= 0 ) {
+                 window.impress().next();
+             }
+         } else if ( Math.abs( lastDX ) > threshold ) {
+             if ( lastDX < -threshold ) {
+                 window.impress().prev();
+             } else if ( lastDX > threshold ) {
+                 window.impress().next();
+             }
+         } else {
+
+             // No movement - move (back) to the current slide
+             window.impress().goto( document.querySelector( "#impress .step.active" ) );
+         }
+     } );
+
+     document.addEventListener( "touchcancel", function() {
+
+             // Move (back) to the current slide
+             window.impress().goto( document.querySelector( "#impress .step.active" ) );
+     } );
+
+} )( document, window );
