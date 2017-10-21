@@ -7,6 +7,7 @@ buildify()
   .concat(['src/lib/util.js'])
   // Plugins from src/plugins
   .concat(['src/plugins/goto/goto.js',
+           'src/plugins/mobile/mobile.js',
            'src/plugins/navigation/navigation.js',
            'src/plugins/rel/rel.js',
            'src/plugins/resize/resize.js',
