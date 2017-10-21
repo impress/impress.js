@@ -54,6 +54,28 @@
 
     } )();
 
+    var validateOrder = function( order, fallback ) {
+        var validChars = "xyz";
+        var returnStr = "";
+        if ( typeof order === "string" ) {
+            for ( var i in order.split( "" ) ) {
+                if ( validChars.indexOf( order[ i ] >= 0 ) ) {
+                    returnStr += order[ i ];
+
+                    // Each of x,y,z can be used only once.
+                    validChars = validChars.split( order[ i ] ).join( "" );
+                }
+            }
+        }
+        if ( returnStr ) {
+            return returnStr;
+        } else if ( fallback !== undefined ) {
+            return fallback;
+        } else {
+            return "xyz";
+        }
+    };
+
     // `css` function applies the styles given in `props` object to the element
     // given as `el`. It runs all property names through `pfx` function to make
     // sure proper prefixed version of the property is used.
@@ -79,11 +101,17 @@
     // By default the rotations are in X Y Z order that can be reverted by passing `true`
     // as second parameter.
     var rotate = function( r, revert ) {
-        var rX = " rotateX(" + r.x + "deg) ",
-            rY = " rotateY(" + r.y + "deg) ",
-            rZ = " rotateZ(" + r.z + "deg) ";
+        var order = r.order ? r.order : "xyz";
+        var css = "";
+        var axes = order.split( "" );
+        if ( revert ) {
+            axes = axes.reverse();
+        }
 
-        return revert ? rZ + rY + rX : rX + rY + rZ;
+        for ( var i = 0; i < axes.length; i++ ) {
+            css += " rotate" + axes[ i ].toUpperCase() + "(" + r[ axes[ i ] ] + "deg)";
+        }
+        return css;
     };
 
     // `scale` builds a scale transform string for given data.
@@ -259,7 +287,8 @@
                     rotate: {
                         x: lib.util.toNumber( data.rotateX ),
                         y: lib.util.toNumber( data.rotateY ),
-                        z: lib.util.toNumber( data.rotateZ || data.rotate )
+                        z: lib.util.toNumber( data.rotateZ || data.rotate ),
+                        order: validateOrder( data.rotateOrder )
                     },
                     scale: lib.util.toNumber( data.scale, 1 ),
                     transitionDuration: lib.util.toNumber(
@@ -359,7 +388,7 @@
             // Set a default initial state of the canvas
             currentState = {
                 translate: { x: 0, y: 0, z: 0 },
-                rotate:    { x: 0, y: 0, z: 0 },
+                rotate:    { x: 0, y: 0, z: 0, order: "xyz" },
                 scale:     1
             };
 
@@ -459,7 +488,8 @@
                 rotate: {
                     x: -step.rotate.x,
                     y: -step.rotate.y,
-                    z: -step.rotate.z
+                    z: -step.rotate.z,
+                    order: step.rotate.order
                 },
                 translate: {
                     x: -step.translate.x,
