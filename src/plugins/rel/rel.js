@@ -47,9 +47,16 @@
 
 ( function( document, window ) {
     "use strict";
-    var lib;
 
     var startingState = {};
+
+    /**
+     * Copied from core impress.js. We currently lack a library mechanism to
+     * to share utility functions like this.
+     */
+    var toNumber = function( numeric, fallback ) {
+        return isNaN( numeric ) ? ( fallback || 0 ) : Number( numeric );
+    };
 
     /**
      * Extends toNumber() to correctly compute also relative-to-screen-size values 5w and 5h.
@@ -58,11 +65,11 @@
      */
     var toNumberAdvanced = function( numeric, fallback ) {
         if ( typeof numeric !== "string" ) {
-            return lib.util.toNumber( numeric, fallback );
+            return toNumber( numeric, fallback );
         }
         var ratio = numeric.match( /^([+-]*[\d\.]+)([wh])$/ );
         if ( ratio == null ) {
-            return lib.util.toNumber( numeric, fallback );
+            return toNumber( numeric, fallback );
         } else {
             var value = parseFloat( ratio[ 1 ] );
             var multiplier = ratio[ 2 ] === "w" ? window.innerWidth : window.innerHeight;
@@ -80,9 +87,9 @@
         }
 
         var step = {
-                x: lib.util.toNumber( data.x, prev.x ),
-                y: lib.util.toNumber( data.y, prev.y ),
-                z: lib.util.toNumber( data.z, prev.z ),
+                x: toNumber( data.x, prev.x ),
+                y: toNumber( data.y, prev.y ),
+                z: toNumber( data.z, prev.z ),
                 relative: {
                     x: toNumberAdvanced( data.relX, prev.relative.x ),
                     y: toNumberAdvanced( data.relY, prev.relative.y ),
@@ -139,8 +146,7 @@
     // Register teardown callback to reset the data.x, .y, .z values.
     document.addEventListener( "impress:init", function( event ) {
         var root = event.target;
-        lib = event.detail.api.lib;
-        lib.gc.addCallback( function() {
+        event.detail.api.lib.gc.addCallback( function() {
             var steps = startingState[ root.id ];
             var step;
             while ( step = steps.pop() ) {
