@@ -225,11 +225,15 @@
         // `onStepEnter` is called whenever the step element is entered
         // but the event is triggered only if the step is different than
         // last entered step.
+        // We sometimes call `goto`, and therefore `onStepEnter`, just to redraw a step, such as
+        // after screen resize. In this case - more precisely, in any case - we trigger a
+        // `impress:steprefresh` event.
         var onStepEnter = function( step ) {
             if ( lastEntered !== step ) {
                 lib.util.triggerEvent( step, "impress:stepenter" );
                 lastEntered = step;
             }
+            lib.util.triggerEvent( step, "impress:steprefresh" );
         };
 
         // `onStepLeave` is called whenever the currentStep element is left
