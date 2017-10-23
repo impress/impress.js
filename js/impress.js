@@ -642,6 +642,10 @@
         // transition to happen, this is just to animate the swipe. Once the
         // transition is committed - such as at a touchend event - caller is
         // responsible for also calling prev()/next() as appropriate.
+        //
+        // Note: For now, this function is made available to be used by the swipe plugin (which
+        // is the UI counterpart to this). It is a semi-internal API and intentionally not
+        // documented in DOCUMENTATION.md.
         var swipe = function( pct ) {
             if ( Math.abs( pct ) > 1 ) {
                 return;
