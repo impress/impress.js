@@ -16,7 +16,7 @@ HOW TO USE IT
 
 [Use the source](index.html), Luke ;)
 
-The [HTML source code](index.html) serves as a good example usage and contains comments explaning various features of impress.js. For more information about styling you can look into [CSS code](css/impress-demo.css) which shows how classes provided by impress.js can be used. Last but not least [JavaScript code of impress.js](js/impress.js) has some useful comments if you are interested in how everything works. Feel free to explore!
+The [HTML source code](index.html) serves as a good example usage and contains comments explaining various features of impress.js. For more information about styling you can look into [CSS code](css/impress-demo.css) which shows how classes provided by impress.js can be used. Last but not least [JavaScript code of impress.js](js/impress.js) has some useful comments if you are interested in how everything works. Feel free to explore!
 
 If you want more straightforward reference documentation of all impress.js features and API you can find it in [DOCUMENTATION.md](DOCUMENTATION.md).
 
@@ -48,13 +48,13 @@ WANT TO CONTRIBUTE?
 Please, read the [contributing guidelines](.github/CONTRIBUTING.md) on how to create [Issues](.github/CONTRIBUTING.md#issues) and [Pull Requests](.github/CONTRIBUTING.md#pull-requests).
 
 **Note:** The team has changed, so there will be many changes in the upcoming versions.
-If you need informations about versions, check the [changelog](CHANGELOG.md).
+If you need information about versions, check the [changelog](CHANGELOG.md).
 
 
 ABOUT THE NAME
 ----------------
 
-impress.js name in [courtesy of @skuzniak](http://twitter.com/skuzniak/status/143627215165333504).
+impress.js name is [courtesy of @skuzniak](http://twitter.com/skuzniak/status/143627215165333504).
 
 It's an (un)fortunate coincidence that a Open/LibreOffice presentation tool is called Impress ;)
 
