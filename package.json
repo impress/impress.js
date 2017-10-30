@@ -40,6 +40,7 @@
     "karma-firefox-launcher": "~0.1",
     "karma-qunit": "1.0.0",
     "karma-sauce-launcher": "1.0.0",
+    "ls": "0.2.1",
     "qunitjs": "2.0.0-rc1",
     "syn": "0.10.0"
   }
