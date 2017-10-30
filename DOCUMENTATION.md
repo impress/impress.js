@@ -82,6 +82,11 @@ Define the pixel based position in which the **center** of the [Step Element](#s
 </div>
 ```
 
+**Note:** The introduction of the [rel](src/plugins/rel/README.md) plugin includes a slight backward incompatible change.
+Previously the default value for `data-x`, `data-y` and `data-z` was zero. The `rel` plugin changes the default to inherit
+the value of the previous slide. This means, you need to explicitly set these values to zero, if they ever were non-zero.
+
+
 #### 3D Rotation (data-rotate-x, data-rotate-y, data-rotate-z)
 
 You can not only position a [Step Element](#step-element) in 3D, but also rotate it around any axis.
