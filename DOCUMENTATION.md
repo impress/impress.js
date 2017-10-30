@@ -106,6 +106,13 @@ You can of course rotate it around Z axis with `data-rotate-z` - it has exactly 
 </div>
 ```
 
+#### 3D Rotation Order (data-rotate-order)
+
+The order in which the CSS `rotateX(), rotateY(), rotateZ()` transforms are applied matters. This is because each rotation is relative to the then current position of the element.
+
+By default the rotation order is `data-rotate-order="xyz"`. For some advanced uses you may need to change it. The demo presentation [3D rotations](examples/3D-rotations/index.html) sets this attribute to rotate some steps into positions that are impossible to reach with the default order.
+
+
 ## CSS
 
 ### 4D States (.past, .present and .future classes)
@@ -188,6 +195,11 @@ It is recommended to add the class manually to the `body` element though, becaus
   display: inline-block;
 }
 ```
+
+## Plugins
+
+Many new features are implemented as plugins. The [Plugins documentation](src/plugins/README.md) is the starting place to learn about those, as well as the README.md of [each plugin](src/plugins/).
+
 
 ## JavaScript
 
