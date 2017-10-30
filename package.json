@@ -28,14 +28,15 @@
     "test:sauce": "karma start karma.conf-sauce.js"
   },
   "devDependencies": {
-    "chrome": "0.1.0",
-    "jscs": "2.11.0",
-    "jshint": "2.9.1",
-    "karma": "0.13.22",
-    "karma-chrome-launcher": "1.0.1",
-    "karma-cli": "1.0.0",
-    "karma-qunit": "1.0.0",
-    "karma-sauce-launcher": "1.0.0",
-    "qunitjs": "2.0.0-rc1"
+    "chrome-headless": "^0.1.5",
+    "jscs": "3.0.7",
+    "jshint": "2.9.5",
+    "karma": "1.7.1",
+    "karma-chrome-launcher": "2.2.0",
+    "karma-cli": "1.0.1",
+    "karma-qunit": "1.2.1",
+    "karma-sauce-launcher": "1.2.0",
+    "puppeteer": "^0.12.0",
+    "qunitjs": "2.4.1"
   }
 }
