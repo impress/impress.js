@@ -1,0 +1,47 @@
+/***** Menu where this style is selected *****/
+.devopsy .css-menu-devopsy {
+    border: solid 1px #aaaaaa;
+}
+
+
+/***** Presentation *****/
+
+body.devopsy {
+    background: #000;
+}
+
+.devopsy .step {
+    color: #ffff00;
+}
+
+/***** Styles *****/
+.devopsy h1, 
+.devopsy h2, 
+.devopsy h3 {
+    color: #ff6600;
+}
+
+.devopsy a {
+    color: #00ffff;
+}
+
+.devopsy blockquote {
+    text-shadow: 3px 3px 3px rgba(255, 100, 0, .7);    
+}
+
+.devopsy em {
+    text-shadow: 3px 3px 3px rgba(255, 100, 0, .7);    
+}
+
+.devopsy strong {
+    text-shadow: 3px 3px 3px rgba(255, 100, 0, .7);    
+}
+
+.devopsy q {
+    text-shadow: 3px 3px 3px rgba(255, 100, 0, .7);    
+}
+
+.devopsy strike {
+    opacity: 0.7;
+}
+
