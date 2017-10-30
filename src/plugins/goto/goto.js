@@ -32,6 +32,10 @@
     "use strict";
     var lib;
 
+    document.addEventListener( "impress:init", function( event ) {
+        lib = event.detail.api.lib;
+    }, false );
+
     var isNumber = function( numeric ) {
         return !isNaN( numeric );
     };
