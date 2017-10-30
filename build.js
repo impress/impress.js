@@ -32,3 +32,25 @@ buildify()
   .uglify()
   .save('js/impress.min.js');
 */
+
+
+/* Auto generate an index.html that lists all the directories under examples/
+ * This is useful for gh-pages, so you can link to http://impress.github.io/impress.js/examples
+ */
+var ls = require('ls');
+var fs = require('fs');
+var path = require('path');
+
+var html_list = '<ul><br />\n'
+ls( 'examples/*', { type: 'dir' }).forEach(function(dir) {
+    html_list += '  <li><a href="' + dir['file'] + '/">' + dir['name'] + '</a></li>\n';
+});
+html_list += '</ul>\n'
+
+var html = '<html>\n<head>\n<title>Example presentations</title>\n</head>\n<body>'
+html += '<h1>Example presentations</h1>\n' + html_list
+html += '</body>\n</html>'
+
+var filename = path.resolve(__dirname, 'examples', 'index.html');
+fs.writeFileSync(filename, html);
+console.log(filename);
