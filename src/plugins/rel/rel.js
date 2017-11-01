@@ -146,7 +146,7 @@
     // Register teardown callback to reset the data.x, .y, .z values.
     document.addEventListener( "impress:init", function( event ) {
         var root = event.target;
-        event.detail.api.lib.gc.addCallback( function() {
+        event.detail.api.lib.gc.pushCallback( function() {
             var steps = startingState[ root.id ];
             var step;
             while ( step = steps.pop() ) {

@@ -51,7 +51,7 @@
 
         // Unset all this on teardown
         var api = event.detail.api;
-        api.lib.gc.addCallback( function() {
+        api.lib.gc.pushCallback( function() {
             document.body.classList.remove( "impress-mobile" );
             var prev = document.getElementsByClassName( "prev" )[ 0 ];
             var next = document.getElementsByClassName( "next" )[ 0 ];

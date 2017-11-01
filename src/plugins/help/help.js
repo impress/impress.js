@@ -105,7 +105,7 @@
 
             // Regster callback to empty the help div on teardown
             var api = e.detail.api;
-            api.lib.gc.addCallback( function() {
+            api.lib.gc.pushCallback( function() {
                 window.clearTimeout( timeoutHandle );
                 helpDiv.style.display = "";
                 helpDiv.innerHTML = "";

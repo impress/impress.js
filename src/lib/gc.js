@@ -55,12 +55,12 @@
             pushEventListener( target, type, listenerFunction );
         };
 
-        // `addCallback` If the above utilities are not enough, plugins can add their own callback
+        // `pushCallback` If the above utilities are not enough, plugins can add their own callback
         // function to do arbitrary things.
-        var addCallback = function( callback ) {
+        var pushCallback = function( callback ) {
             callbackList.push( callback );
         };
-        addCallback( function( rootId ) { resetStartingState( rootId ); } );
+        pushCallback( function( rootId ) { resetStartingState( rootId ); } );
 
         // `teardown` will
         // - execute all callbacks in LIFO order
@@ -93,7 +93,7 @@
             appendChild: appendChild,
             pushEventListener: pushEventListener,
             addEventListener: addEventListener,
-            addCallback: addCallback,
+            pushCallback: pushCallback,
             teardown: teardown
         };
         roots[ rootId ] = lib;

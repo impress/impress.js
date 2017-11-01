@@ -41,7 +41,7 @@
             addToolbarButton( toolbar );
         }
 
-        api.lib.gc.addCallback( function() {
+        api.lib.gc.pushCallback( function() {
             clearTimeout( timeoutHandle );
         } );
 

@@ -147,7 +147,7 @@
 
         document.addEventListener( "impress:init", function( event ) {
             var api = event.detail.api;
-            api.lib.gc.addCallback( function() {
+            api.lib.gc.pushCallback( function() {
                 toolbar.innerHTML = "";
                 groups = [];
             } );

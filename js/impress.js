@@ -971,12 +971,12 @@
             pushEventListener( target, type, listenerFunction );
         };
 
-        // `addCallback` If the above utilities are not enough, plugins can add their own callback
+        // `pushCallback` If the above utilities are not enough, plugins can add their own callback
         // function to do arbitrary things.
-        var addCallback = function( callback ) {
+        var pushCallback = function( callback ) {
             callbackList.push( callback );
         };
-        addCallback( function( rootId ) { resetStartingState( rootId ); } );
+        pushCallback( function( rootId ) { resetStartingState( rootId ); } );
 
         // `teardown` will
         // - execute all callbacks in LIFO order
@@ -1009,7 +1009,7 @@
             appendChild: appendChild,
             pushEventListener: pushEventListener,
             addEventListener: addEventListener,
-            addCallback: addCallback,
+            pushCallback: pushCallback,
             teardown: teardown
         };
         roots[ rootId ] = lib;
@@ -1294,7 +1294,7 @@
             addToolbarButton( toolbar );
         }
 
-        api.lib.gc.addCallback( function() {
+        api.lib.gc.pushCallback( function() {
             clearTimeout( timeoutHandle );
         } );
 
@@ -1911,7 +1911,7 @@
 
             // Regster callback to empty the help div on teardown
             var api = e.detail.api;
-            api.lib.gc.addCallback( function() {
+            api.lib.gc.pushCallback( function() {
                 window.clearTimeout( timeoutHandle );
                 helpDiv.style.display = "";
                 helpDiv.innerHTML = "";
@@ -2728,7 +2728,7 @@
 
         // Unset all this on teardown
         var api = event.detail.api;
-        api.lib.gc.addCallback( function() {
+        api.lib.gc.pushCallback( function() {
             document.body.classList.remove( "impress-mobile" );
             var prev = document.getElementsByClassName( "prev" )[ 0 ];
             var next = document.getElementsByClassName( "next" )[ 0 ];
@@ -2825,7 +2825,7 @@
         show();
 
         // Unset all this on teardown
-        gc.addCallback( function() {
+        gc.pushCallback( function() {
             window.clearTimeout( timeoutHandle );
             document.body.classList.remove( "impress-mouse-timeout" );
         } );
@@ -3150,7 +3150,7 @@
             root = event.target;
         getSteps();
         var gc = event.detail.api.lib.gc;
-        gc.addCallback( function() {
+        gc.pushCallback( function() {
             stepids = [];
             if ( progressbar ) {
                 progressbar.style.width = "";
@@ -3336,7 +3336,7 @@
     // Register teardown callback to reset the data.x, .y, .z values.
     document.addEventListener( "impress:init", function( event ) {
         var root = event.target;
-        event.detail.api.lib.gc.addCallback( function() {
+        event.detail.api.lib.gc.pushCallback( function() {
             var steps = startingState[ root.id ];
             var step;
             while ( step = steps.pop() ) {
@@ -3848,7 +3848,7 @@
 
         document.addEventListener( "impress:init", function( event ) {
             var api = event.detail.api;
-            api.lib.gc.addCallback( function() {
+            api.lib.gc.pushCallback( function() {
                 toolbar.innerHTML = "";
                 groups = [];
             } );
