@@ -19,7 +19,7 @@
             root = event.target;
         getSteps();
         var gc = event.detail.api.lib.gc;
-        gc.addCallback( function() {
+        gc.pushCallback( function() {
             stepids = [];
             if ( progressbar ) {
                 progressbar.style.width = "";

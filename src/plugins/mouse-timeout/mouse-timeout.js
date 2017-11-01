@@ -58,7 +58,7 @@
         show();
 
         // Unset all this on teardown
-        gc.addCallback( function() {
+        gc.pushCallback( function() {
             window.clearTimeout( timeoutHandle );
             document.body.classList.remove( "impress-mouse-timeout" );
         } );
