@@ -274,7 +274,7 @@ standard javascript anonymous function:
     (function ( document, window ) {
 
         // Plugin implementation...
-        
+
     })(document, window);
 
 
@@ -287,6 +287,41 @@ An init plugin is the simplest kind of plugin. It simply listens for the
 `impress().init()` method to send the `impress:init` event, at which point
 the plugin can initialize itself and start doing whatever it does, for example 
 by calling methods in the public api returned by `impress()`.
+
+The `impress:init` event has the `div#impress` element as its `target` attribute,
+whereas `event.detail.api` contains the same object that is returned by calling
+`impress()`. It is customary to store the api object sent by the event rather than
+calling `impress()` from the global namespace.
+
+Example:
+
+    /**
+     * Plugin A - An example plugin
+     *
+     * Description...
+     *
+     * Copyright 2016 Firstname Lastname, email or github handle
+     * Released under the MIT license.
+     */
+    (function ( document, window ) {
+        var root;
+        var api;
+        var lib;
+
+        document.addEventListener( "impress:init", function( event ) {
+            root = event.target;
+            api = event.detail.api;
+            lib = api.lib;
+
+            // Element attributes starting with "data-", become available under
+            // element.dataset. In addition hyphenized words become camelCased.
+            var data = root.dataset;
+            // Get value of `<div id="impress" data-plugina-foo="...">`
+            var foo = data.pluginaFoo;
+            // ...
+        }
+    })(document, window);
+
 
 Both [Navigation](navigation/navigation.js) and [Autoplay](autoplay/autoplay.js)
 are init plugins.
