@@ -276,6 +276,9 @@
         // last entered step.
         var onStepEnter = function( step ) {
             if ( lastEntered !== step ) {
+                step.classList.remove( "past" );
+                step.classList.remove( "future" );
+                step.classList.add( "present" );
                 triggerEvent( step, "impress:stepenter" );
                 lastEntered = step;
             }
@@ -286,6 +289,8 @@
         // last entered step.
         var onStepLeave = function( step ) {
             if ( lastEntered === step ) {
+                step.classList.remove( "present" );
+                step.classList.add( "past" );
                 triggerEvent( step, "impress:stepleave" );
                 lastEntered = null;
             }
@@ -603,18 +608,6 @@
             steps.forEach( function( step ) {
                 step.classList.add( "future" );
             } );
-
-            root.addEventListener( "impress:stepenter", function( event ) {
-                event.target.classList.remove( "past" );
-                event.target.classList.remove( "future" );
-                event.target.classList.add( "present" );
-            }, false );
-
-            root.addEventListener( "impress:stepleave", function( event ) {
-                event.target.classList.remove( "present" );
-                event.target.classList.add( "past" );
-            }, false );
-
         }, false );
 
         // Adding hash change support.
