@@ -332,8 +332,8 @@ Triggers the `impress:stepenter` event in the [Root Element](#root-element) when
 
 ```JavaScript
 var rootElement = document.getElementById( "impress" );
-rootElement.addEventListener( "impress:stepenter", function() {
-  var currentStep = document.querySelector( ".present" );
+rootElement.addEventListener( "impress:stepenter", function(event) {
+  var currentStep = event.target;
   console.log( "Entered the Step Element '" + currentStep.id + "'" );
 });
 ```
@@ -344,8 +344,9 @@ Triggers the `impress:stepleave` event in the [Root Element](#root-element) when
 ```JavaScript
 var rootElement = document.getElementById( "impress" );
 rootElement.addEventListener( "impress:stepleave", function(event) {
-  var currentStep = event.target
-  console.log( "Left the Step Element '" + currentStep.id + "'" );
+  var currentStep = event.target;
+  var nextStep = event.detail.next;
+  console.log( "Left the Step Element '" + currentStep.id + "' and about to enter '" + nextStep.id );
 });
 ```
 
