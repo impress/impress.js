@@ -143,8 +143,12 @@
     But as I said, you won't need it for now, so don't worry - there are some simple but interesting things
     right around the corner of this tag ;)
     
+    ----------
+    Plugins: We set the default time for autoplay plugin to 6 seconds. Autoplay will automatically advance
+    to next slide after a timeout expires.
+    
 -->
-<div id="impress">
+<div id="impress" data-autoplay="7">
 
     <!--
         
@@ -162,8 +166,11 @@
         
         It will not be rotated or scaled.
         
+        --------
+        Plugins: For first slide, set the autoplay time to a custom 10 seconds.
+        
     -->
-    <div id="bored" class="step slide" data-x="-1000" data-y="-1500">
+    <div id="bored" class="step slide" data-x="-1000" data-y="-1500" data-autoplay="10">
         <q>Aren’t you just <b>bored</b> with all those slides-based presentations?</q>
     </div>
 
@@ -256,8 +263,12 @@
         So basically every step element has one of three classes: `future`, `present` and `past`.
         Only one current step has the `present` class.
         
+        Note: data-x/y/z attributes, if not defined, by default will inherit the value of the 
+        previous step. So to get back to 0 on the z-axis, we must set it to 0.
+        See src/plugins/rel/README.md for more information.
+        
     -->
-    <div id="ing" class="step" data-x="3500" data-y="-850" data-rotate="270" data-scale="6">
+    <div id="ing" class="step" data-x="3500" data-y="-850" data-z="0" data-rotate="270" data-scale="6">
         <p>by <b class="positioning">positioning</b>, <b class="rotating">rotating</b> and <b class="scaling">scaling</b> them on an infinite canvas</p>
     </div>
 
@@ -267,7 +278,7 @@
 
     <div id="source" class="step" data-x="6300" data-y="2000" data-rotate="20" data-scale="4">
         <p>want to know more?</p>
-        <q><a href="http://github.com/bartaz/impress.js">use the source</a>, Luke!</q>
+        <q><a href="http://github.com/impress/impress.js">use the source</a>, Luke!</q>
     </div>
 
     <div id="one-more-thing" class="step" data-x="6000" data-y="4000" data-scale="2">
@@ -306,10 +317,17 @@
         CSS transfrom docs: https://developer.mozilla.org/en/CSS/transform
         
     -->
-    <div id="overview" class="step" data-x="3000" data-y="1500" data-scale="10">
+    <div id="overview" class="step" data-x="3000" data-y="1500" data-z="0" data-scale="10">
     </div>
 
 </div>
+
+<!--
+    This is a UI plugin. You can read more about plugins in src/plugins/README.md.
+    For now, I'll just tell you that this adds some graphical controls to navigate the
+    presentation. In the CSS file you can style them as you want. We've put them bottom right.
+-->
+<div id="impress-toolbar"></div>
 
 <!--
     
@@ -336,11 +354,12 @@
     
 -->
 <div class="hint">
-    <p>Use a spacebar or arrow keys to navigate</p>
+    <p>Use a spacebar or arrow keys to navigate. <br/>
+       Press 'P' to launch speaker console.</p>
 </div>
 <script>
 if ("ontouchstart" in document.documentElement) { 
-    document.querySelector(".hint").innerHTML = "<p>Tap on the left or right to navigate</p>";
+    document.querySelector(".hint").innerHTML = "<p>Swipe left or right to navigate</p>";
 }
 </script>
 

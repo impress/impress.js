@@ -1,0 +1,463 @@
+<!doctype html>
+
+<!--
+  This is a simple example / template impress.js slide show. The goal is to be
+  easier to read for a first timer than the official and very feature rich
+  demo by bartaz (http://bartaz.github.io/impress.js/). It's also a very
+  traditional presentation that looks like slides (square screens with bullet
+  points...), again to make a first timer feel more at home. From this simple
+  presentation you can then go on to more powerful impress.js presentations!
+  
+  This example is hopefully helpful for people that want to create both
+  simple and (eventually) awesome presentations in impress.js and comfortable
+  doing that directly in HTML.
+  
+  By: @henrikingo (Still based on the HTML from bartaz' demo.)  
+    
+-->
+
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Classic Slides with impress.js | Simple example impress.js slide show | by Henrik Ingo @henrikingo</title>
+    
+    <meta name="description" content="Simple example impress.js slide show" />
+    <meta name="author" content="Henrik Ingo" />
+    <!--        
+        Impress.js doesn't depend on any external stylesheets. It adds all of the styles it needs for the
+        presentation to work. 
+        
+        However, some of the `extras/` modules do come with their own CSS, and we load
+        them here. You can read about each extras module separately in their directory.
+    -->
+    <link rel="stylesheet" href="../../extras/highlight/styles/github.css">
+    <link rel="stylesheet" href="../../extras/mermaid/mermaid.forest.css">
+
+        
+    <!--
+        This file contains styles specific for this example presentation. 
+    -->
+    <link href="css/classic-slides.css" rel="stylesheet" />
+    
+</head>
+
+<!--
+    
+    Body element is used by impress.js to set some useful class names, that will allow you to detect
+    the support and state of the presentation in CSS or other scripts.
+    
+    First very useful class name is `impress-not-supported`. This class means, that browser doesn't
+    support features required by impress.js, so you should apply some fallback styles in your CSS.
+    It's not necessary to add it manually on this element. If the script detects that browser is not
+    good enough it will add this class, but keeping it in HTML means that users without JavaScript
+    will also get fallback styles.
+    
+    When impress.js script detects that browser supports all required features, this class name will
+    be removed.
+    
+    Another class name on body element also depends on currently active presentation step.    
+-->
+<body class="impress-not-supported">
+<!--
+    This fallback message is only visible when there is `impress-not-supported` class on body.
+-->
+<div class="fallback-message">
+    <p>Your browser <b>doesn't support the features required</b> by impress.js, so you are presented with a simplified version of this presentation.</p>
+    <p>For the best experience please use the latest <b>Chrome</b>, <b>Safari</b> or <b>Firefox</b> browser.</p>
+</div>
+
+<!--
+    This is the core element used by impress.js: the wrapper for your presentation steps. 
+    In this element all the impress.js magic happens.
+    
+    data-transition-duration sets the time in microseconds that is used for the
+    animation when transtitioning between slides.
+    
+    data-autoplay can be used to set the time in seconds, after which presentation
+    automatically moves to next slide. It can also be set individually for each
+    slide, but here we just set a common duration for all slides.
+-->
+<div id="impress" data-transition-duration="1000" data-autoplay="10">
+
+    <!--
+        Each step of the presentation should be an element inside the `#impress` with a class name
+        of `step`. These step elements are positioned, rotated and scaled by impress.js, and
+        the 'camera' shows them on each step of the presentation.
+        
+        The `id` attribute of the step element is used to identify it in the URL, but it's optional.
+        If it is not defined, it will get a default value of `step-N` where N is a number of slide.
+        This step is auto-assigned the id "step-1". You can also use `#step-1` in a link, to 
+        point directly to this particular step.
+        
+        Positioning information is passed through data-* attributes.
+        
+        In the example below we only specify x and y position of the step element with `data-x="-1000"`
+        and `data-y="-1500"` attributes. This means that **the center** of the element (yes, the center)
+        will be positioned in point x = -1000px and y = -1500px of the presentation 'canvas'. It will not 
+        be rotated or scaled.
+        
+        The "step" class is what *must* be used for every "slide". In this example we also use the "slide"
+        class, which adds a rectangle with some background and makes this presentation look like a traditional
+        powerpoint slide show. The "slide" class is entirely optional and indeed you wouldn't use it for
+        your cooler impress.js presentations.
+    -->
+    <div class="step slide title" data-x="-1000" data-y="-1500">
+        <h1>Example Presentation: <br />
+            Classic Slides</h1>
+        <h2>Henrik Ingo</h2>
+        <h3>2015</h3>
+
+        <div class="notes">
+        Any element with the class="notes" will not be displayed. This can
+        be used for speaker notes. In fact, the impressConsole plugin will
+        show it in the speaker console!
+        </div>
+    </div>
+
+    <div class="step slide" data-rel-x="1000" data-rel-y="0">
+        <h1>Table of Contents</h1>
+        <ul>
+            <li><a href="#step-1">A title slide</a></li>
+            <li><a href="#step-2">Table of Contents</a></li>
+            <li><a href="#step-3">Text slide</a></li>
+            <li><a href="#step-4">Bullet points</a></li>
+            <li><a href="#step-5">Blockquote &amp; image</a></li>
+            <li><a href="#step-6">More basic text styles</a></li>
+            <li><a href="#step-7">Motion effects 101</a></li>
+            <li><a href="#addons">Add-ons</a></li>
+            <li><a href="#moreinfo">More info</a></li>
+        </ul>
+
+        <div class="notes">
+           <p>Table of Contents, with links to other slides of this same presentation.</p>
+         
+           <p>Note that instead of absolute positioning we use relative positioning,
+           with the data-rel-x and data-rel-y attributes. This means the step is
+           positioned relative to the foregoing step. In other words, this is 
+           equivalent to data-x="0" data-y="-1500".</p>
+        </div>
+    </div>
+
+    <div class="step slide">
+        <h1>A slide with text</h1>
+        <p>This slide has a few paragraphs <br />(p element) of normal text.</p>
+        <p>Personally I like centered or even justified text, as it looks less boring. This can of course be set in <a href="css/classic-slides.css">the css file</a>.</p>
+        <p>I really like the style on links in these presentations. I modified the border to be beveled, but it's mostly from <a href="http://impress.github.io/impress.js/">@bartaz' original demo</a>. <a href="https://twitter.com/bartaz">@bartaz</a> is the creator of impress.js.</p>
+
+        <div class="notes">
+         In this slide, we don't even specify the relative position, rather
+         that too is inherited. So this slide will again be 1000px to the
+         right of the previous one.
+        </div>
+    </div>
+
+    <div class="step slide">
+        <h1>Bullet points</h1>
+        <ul>
+            <li>A slide with bullet points. This is the first point.</li>
+            <li>Second point</li>
+            <li>Third point. Under this point we also have some sub-bullets:
+                <ul>
+                    <li>Sub-bullet 1</li>
+                    <li>Sub-bullet 2</li>
+                </ul>
+            </li>
+        </ul>
+
+        <div class="notes">
+        </div>
+    </div>
+
+    <!--
+        This element introduces rotation.
+        
+        Notation shouldn't be a surprise. We use `data-rotate="30"` attribute, meaning that this
+        element should be rotated by 30 degrees clockwise.        
+    -->
+    <div class="step slide" data-rel-x="1100" data-rel-y="300" data-rotate="30">
+        <h1>A blockquote &amp; image</h1>
+        <img src="images/3476636111_c551295ca4_b.jpg" 
+             alt="Mother Teresa holding a newborn baby" 
+             class="right"/>
+        <blockquote>
+        Spread love everywhere you go. <br />Let no one ever come to you without leaving happier.
+        <p style="text-align: right">Mother Teresa</p>
+        <p class="left bottom"><small>Image credit: <a href="https://www.flickr.com/photos/peta-de-aztlan/3476636111/">Peta_de_Aztlan</a>@Flickr. CC-BY 2.0</small></p>
+        </blockquote>
+
+        <div class="notes">
+        </div>
+    </div>
+
+    <div class="step slide" data-rel-x="800" data-rel-y="800" data-rotate="60">
+        <h1>More text styles</h1>
+        <p>As usual, use <em>em</em> to emphasize, <br />
+           <strong>strong</strong> for strong, <u>u</u> for underline,<br />
+           <strike>strike</strike> for strikethrough and <q>q for inline quotations</q>.</p>
+           
+        <p>If you're a software engineer like me, you will often use the 
+           <code>&lt;code&gt;</code> tag for monospaced inline text.</p>
+
+        <div class="notes">
+        </div>
+    </div>
+
+    <div class="step slide" data-rel-x="300" data-rel-y="1100" data-rotate="90">
+        <h1>Motion effects 101</h1>
+        <p>Items on the slide can</p>
+        <p class="fly-in fly-out">Fly in</p>
+        <p class="fade-in fade-out" style="transition-delay: 2s">Fade in</p>
+        <p class="zoom-in zoom-out" style="transition-delay: 4s">And zoom in</p>
+        
+        <p class="left bottom"><small>...just like in PowerPoint. Yeah, I know I'm being lame, but it was fun to learn to do this in CSS3.</small></p>
+
+        <div class="notes">
+        <p>This step here doesn't introduce anything new when it comes to data attributes, but you
+        should notice in the demo that some words of this text are being animated.
+        It's a very basic CSS transition that is applied to the elements when this step element is
+        reached.
+        </p><p>
+        At the very beginning of the presentation all step elements are given the class of `future`.
+        It means that they haven't been visited yet.
+        </p><p>        
+        When the presentation moves to given step `future` is changed to `present` class name.
+        That's how animation on this step works - text moves when the step has `present` class.
+        </p><p>
+        Finally when the step is left the `present` class is removed from the element and `past`
+        class is added.
+        </p><p>
+        So basically every step element has one of three classes: `future`, `present` and `past`.
+        Only one current step has the `present` class.
+        </p>
+        </div>
+    </div>
+
+    <div id="addons" class="step slide title" data-rel-x="-300" data-rel-y="1100" data-rotate="120">
+        <h2>Add-ons</h2>
+        <div class="notes">
+        <p>This version of impress.js includes several add-ons, striving to make this a
+           full featured presentation app.</p>
+        </div>
+    </div>
+
+    <div class="step slide" data-rel-x="-800" data-rel-y="800" data-rotate="150" data-autoplay="3">
+        <h1>Impress.js plugins</h1>
+        <ul>
+        <li>A new <a href="https://github.com/impress/impress.js/blob/master/src/plugins/README.md">plugin framework</a> allows for rich extensibility,
+            without bloating the core rendering library.
+            <ul>
+            <li class="substep">Press 'P' to open a presenter console.</li>
+            <li class="substep">When you move the mouse, navigation controls are visible on your bottom left</li>
+            <li class="substep">Autoplay makes the slides advance after a timeout</li>
+            <li class="substep">Relative positioning plugin is often a more convenient way to position your slides when editing. (<a href="https://github.com/impress/impress.js/blob/master/examples/classic-slides/index.html">See html for this presentation.</a>)</li>
+            </ul>
+        </li>
+        </ul>
+        <div class="notes">
+        <p>This presentation also uses speaker notes. They are not visible in the presentation, but shown in the impress console.</p>
+        
+        <p>If you pressed P only now, this is the first time you see these notes. In fact, there has been notes on preceding slides as well.
+           You can use the navigation controls at the bottom of the impress console to browse back to them.</p>
+
+        <p>And did you notice how those bullet points appear one by one as you press space/arrow? That's another plugin, called substeps.</p>
+        </div>
+    </div>
+
+    <div class="step slide" data-rel-x="-1100" data-rel-y="300" data-rotate="180">
+        <h1>Highlight.js</h1>
+        <pre><code>
+        // `init` API function that initializes (and runs) the presentation.
+        var init = function () {
+            if (initialized) { return; }
+            execPreInitPlugins();
+            
+            // First we set up the viewport for mobile devices.
+            // For some reason iPad goes nuts when it is not done properly.
+            var meta = $("meta[name='viewport']") || document.createElement("meta");
+            meta.content = "width=device-width, minimum-scale=1, maximum-scale=1, user-scalable=no";
+            if (meta.parentNode !== document.head) {
+                meta.name = 'viewport';
+                document.head.appendChild(meta);
+            }        
+        </code></pre>
+        <div class="notes">
+        <p>The Highlight.js library provides really nice color coding of source code.
+           It automatically applies to any code inside a &lt;pre&gt;&lt;code&gt; element.</p>
+        <p>Highlight.js is found under the <a href="https://github.com/impress/impress.js/tree/master/extras">extras/</a>
+           directory, since it is an independent third party plugin, not really an impress.js plugin. You have
+           to include it via it's own &lt;link&gt; and &lt;script&gt; tags.</p>
+        </div>
+    </div>
+
+    <div class="step slide" data-rel-x="-1100" data-rel-y="-300" data-rotate="210">
+        <h1>Mermaid.js</h1>
+        <div class="mermaid">
+        %% This is a comment in mermaid markup
+        graph LR
+          A(Support for<br />diagrams)
+          B[Provided by<br />mermaid.js]
+          C{Already<br />know<br />mermaid?}
+          D(<a href=&quot;http://knsv.github.io/mermaid/index.html#usage&quot;>Tutorial</a>)
+          E(Great, hope you enjoy!)
+          A-->B
+          B-->C
+          C--No-->D
+          C--Yes-->E
+          classDef startEnd fill:#fcc,stroke:#353,stroke-width:2px;
+          class A,D,E startEnd;
+        </div>
+
+        <h1><a href="http://docs.mathjax.org/en/latest/start.html">MathJax.js</a></h1>
+        <p>Use \(\LaTeX\), MathML or AsciiMath to properly show mathematical formula.</p>
+        <div class="notes">
+          Mermaid.js, likewise in a href="https://github.com/impress/impress.js/tree/master/extras">extras/</a>
+           directory, draws SVG diagrams from a MarkDown-like syntax. To learn
+          more about it <a href="http://knsv.github.io/mermaid/index.html#usage">read the fine manual</a>.
+        </div>
+    </div>
+
+    <div id="markdown" class="step slide markdown" data-rel-x="-800" data-rel-y="-800" data-rotate="240">
+# Markdown.js
+        
+* [Markdown.js](https://github.com/evilstreak/markdown-js) integration: for authors in a hurry!
+  * ...or lazy ;-)
+* Jot down bullet points in *Markdown*
+  * ...have it automatically converted to HTML
+  * Markdown is converted into a presentation client side, in the browser. This is unlike
+   existing tools like [Hovercraft](https://github.com/regebro/hovercraft) and 
+   [markdown-impress](http://binbinliao.com/markdown-impress/) where you generate a new
+   html file on the command line.
+* [A more advanced Markdown presentation is here.](../markdown/)
+    </div>
+
+    <div id="acme" class="step slide" data-rel-x="-300" data-rel-y="-1100" data-rotate="270">
+        <ul>
+        <li>Remember, in <em>impress.js</em> the full power of HTML5, CSS3 &amp; JavaScript is always at your fingertips!</li>
+        <li>For example, you can use tables, forms, or dynamic charts as you would on any web page:</li>
+        </ul>
+        <h2>Acme Inc Quarterly Profits</h2>
+
+        <!-- Improvised bar graph of divs, to avoid copying something like NVD3 into the repo. -->
+        <div id="acme-graph">
+            <div id="acme-graph-bars">
+                <div id="acme-graph-q1"></div>
+                <div id="acme-graph-q2"></div>
+                <div id="acme-graph-q3"></div>
+                <div id="acme-graph-q4"></div>
+            </div>
+            <div id="acme-graph-bottom"></div>
+        </div>
+
+        <table border="1">
+        <tr><td>Q1</td><td id="acme-q1">234€</td></tr>
+        <tr><td>Q2</td><td id="acme-q2">255€</td></tr>
+        <tr><td>Q3</td><td><input id="acme-q3" size="5" oninput="acmeDrawGraph();" />€ <small>(insert here)</small></td></tr>
+        <tr><td>Q4</td><td><input id="acme-q4" size="5" oninput="acmeDrawGraph();" />€</td></tr>
+        </table>
+        <div class="notes">
+        </div>
+    </div>
+    <script type="text/javascript">
+        var acmeDrawGraph = function() {
+            var profits = {};
+            
+            // Q1-Q2: get innerHTML, remove €
+            var value = document.getElementById('acme-q1').innerHTML;
+            if( value[value.length-1] == "€" ) value = value.substring(0, value.length-1);
+            profits['q1'] = value;
+            var value = document.getElementById('acme-q2').innerHTML;
+            if( value[value.length-1] == "€" ) value = value.substring(0, value.length-1);
+            profits['q2'] = value;
+            
+            // Q3-Q4: get input.value
+            profits['q3'] = document.getElementById('acme-q3').value;
+            profits['q4'] = document.getElementById('acme-q4').value;
+
+            // Convert all to numeric value, and remember max value for scaling purposes.
+            var max = profits['q1'];
+            for ( var q in profits ) {
+                profits[q] = isNaN(profits[q]) ? 0 : Number(profits[q]);
+                if( profits[q] > max ) {
+                    max = profits[q];
+                }
+            }
+            
+            // Draw the bar graph
+            for ( var q in profits ) {
+                var h = 200 * profits[q] / max;
+                var div = document.getElementById('acme-graph-'+q);
+                div.style = 'height: ' + h + 'px';
+            }
+        };
+        // This draws the first 2 bars during page load
+        acmeDrawGraph();
+    </script>
+
+    <!--
+        This step also sets a custom data-transition-duration. All of the above steps used the value set
+        in the root div#impress element, but it is also allowed to set it for each step. Since transitioning
+        to this step will rotate twice around it's axis, we give the transition a bit more time here.
+    -->
+    <div id="moreinfo" class="step slide" data-x="2020" data-y="700" data-rotate="720" data-transition-duration="2000">
+        <h1>More info</h1>
+        <ul>
+        <li><a href="https://github.com/impress/impress.js/blob/master/DOCUMENTATION.md">DOCUMENTATION.md</a> is the API reference.
+        </li>
+        <li><a href="https://github.com/impress/impress.js/blob/master/examples/classic-slides/index.html">Source of this presentation itself</a> is commented</li>
+        <li><a href="http://impress.github.io/impress.js/">Advanced Impress.js demo</a> by <a href="http://twitter.com/bartaz">@bartaz</a>
+            <ul>
+            <li>Again, the <a href="http://github.com/impress/impress.js/blob/master/index.html">html</a> 
+                and <a href="https://github.com/impress/impress.js/blob/master/css/impress-demo.css">css</a> source is well commented.</li>
+            </ul>
+        </li>
+        <li>More examples and demos:
+            <ul>
+            <li><a href="https://github.com/impress/impress.js/tree/master/examples">examples/</a> in this repository</li>
+            <li><a href="https://github.com/impress/impress.js/wiki/Examples-and-demos">on the impress.js wiki</a></li>
+            </ul>
+        </li>
+        <li>Check out <a href="https://github.com/impress/impressionist">Impressionist</a>: a 3D GUI to create impress.js presentations</li>
+        </ul>
+
+        <div class="notes">
+        </div>
+    </div>
+
+    <!-- This last, empty "slide" is set to be very large using the data-scale attribute, 
+         so that it covers all the other slides you just saw. 
+         It's a common way of zooming out at the end, to show the whole presentation.
+         In CSS, we set pointer-events:none to make this slide non-clickable. 
+         It makes a difference at least for SVG content, such as the mermaid diagram. -->
+    <div id="overview" class="step" data-x="3000" data-y="1500" data-scale="10" style="pointer-events: none;">
+    </div>
+</div>
+
+<!--
+    Add navigation-ui controls: back, forward and a select list.
+    Add a progress indicator bar (current step / all steps)
+    Add the help popup plugin
+-->
+<div id="impress-toolbar"></div>
+
+<div class="impress-progressbar"><div></div></div>
+<div class="impress-progress"></div>
+
+<div id="impress-help"></div>
+
+<!-- Extra modules
+     Load highlight.js, mermaid.js, markdown.js and MathJax.js from extras.
+     If you're curious about details, these are initialized in src/plugins/extras/extras.js -->
+<script type="text/javascript" src="../../extras/highlight/highlight.pack.js"></script>
+<script type="text/javascript" src="../../extras/mermaid/mermaid.min.js"></script>
+<script type="text/javascript" src="../../extras/markdown/markdown.js"></script>
+<script type="text/javascript" src="../../extras/mathjax/MathJax.js?config=TeX-AMS_CHTML"></script>
+<!--
+    To make all described above really work, you need to include impress.js in the page.
+    You also need to call a `impress().init()` function to initialize impress.js presentation.
+    And you should do it in the end of your document. 
+-->
+<script type="text/javascript" src="../../js/impress.js"></script>
+<script>impress().init();</script>
+
+</body>
+</html>

@@ -1,0 +1,41 @@
+/***** Menu where this style is selected *****/
+.effects .css-menu-effects {
+    border: solid 1px #aaaaaa;
+}
+
+/***** Presentation *****/
+
+body.effects {
+    font-family: 'PT Sans', sans-serif;
+    min-height: 740px;
+
+    background: #dde5dd;
+}
+
+.effects .step {
+}
+
+
+/* Color effect. */
+.effects .past > *,
+.effects .future > * {
+    color: inherit;
+    transition: 3s;
+}
+.effects .present > * {
+    color: rgb(200, 102, 102);
+    transition: 3s;
+}
+
+/* Fly right */
+
+.effects .past h1,
+.effects .future h1 {
+    transform:        scale(3);
+    transition: 1s;
+}
+.effects .present h1 {
+    transform:        scale(1);
+    transition: 1s;
+}
+

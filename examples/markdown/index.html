@@ -1,0 +1,188 @@
+<!doctype html>
+
+<!--
+  A presentation done entirely in Markdown, as found in extras/markdown/.
+  
+  By: @henrikingo
+-->
+
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Markdown in impress.js | by Henrik Ingo @henrikingo</title>
+    
+    <meta name="description" content="Authoring impress.js presentations in Markdown" />
+    <meta name="author" content="Henrik Ingo" />
+    <link rel="stylesheet" href="../../extras/highlight/styles/github.css">
+
+        
+    <!--
+        Styles specific for this example presentation. 
+    -->
+    <link href="css/markdown-slides.css" rel="stylesheet" />
+    <link href="css/devopsy.css" rel="stylesheet" />
+    <link href="css/effects.css" rel="stylesheet" />
+    
+</head>
+
+<body class="impress-not-supported">
+<div class="fallback-message">
+    <p>Your browser <b>doesn't support the features required</b> by impress.js, so you are presented with a simplified version of this presentation.</p>
+    <p>For the best experience please use the latest <b>Chrome</b>, <b>Safari</b> or <b>Firefox</b> browser.</p>
+</div>
+
+<div id="impress" data-transition-duration="1000">
+
+<div id="markdown" class="step slide markdown" data-rel-x="0" data-rel-y="900">
+# Markdown 
+## to author Impress.js presentations
+
+* This presentation was written entirely in Markdown
+* Added by popular request
+  * Easy way to make quick, simple yet aesthetic, presentations
+  * Authoring without all the clutter of HTML
+
+-----
+# Markdown.js
+
+* Provided by [Markdown.js](https://github.com/evilstreak/markdown-js) in [extras/](https://github.com/impress/impress.js/tree/master/extras)
+* Jot down your bullet points in *Markdown* & have it automatically converted to HTML
+* Note: The Markdown is converted into a presentation client side, in the browser. This is unlike
+  existing tools like [Hovercraft](https://github.com/regebro/hovercraft) and 
+  [markdown-impress](http://binbinliao.com/markdown-impress/) where you generate a new
+  html file on the command line.
+* This combines the ease of typing Markdown with the full power of impress.js HTML5+CSS3+JavaScript!
+
+-----
+# Styles
+
+* You can use *italics* & **bold**
+* ...and `code`
+
+
+-----
+# A blockquote &amp; image
+
+![Mother Teresa holding a newborn baby](images/3476636111_c551295ca4_b.jpg)
+
+> Spread love everywhere you go.
+> Let no one ever come to you without leaving happier.
+
+*-- Mother Teresa*
+
+Image credit: [Peta de Aztlan](https://www.flickr.com/photos/peta-de-aztlan/3476636111/)@Flickr. CC-BY 2.0
+
+-----
+# Code
+
+When also using [Highlight.js](https://highlightjs.org/) integration, code blocks in Markdown
+are converted to HTML first, then colored by Highlight.js:
+
+        // `init` API function that initializes (and runs) the presentation.
+        var init = function () {
+            if (initialized) { return; }
+            execPreInitPlugins();
+            
+            // First we set up the viewport for mobile devices.
+            // For some reason iPad goes nuts when it is not done properly.
+            var meta = $("meta[name='viewport']") || document.createElement("meta");
+            meta.content = "width=device-width, minimum-scale=1, maximum-scale=1, user-scalable=no";
+            if (meta.parentNode !== document.head) {
+                meta.name = 'viewport';
+                document.head.appendChild(meta);
+            }        
+
+-----
+
+# Slide separator
+
+* 5 dashes are used to separate slides:
+
+`-----`
+
+* Attributes from `div.step` element are simply repeated.
+  * Better use relative positioning, lest your slides will all be on top of each other.
+* If you need to set some attributes, just use HTML and create a div element, then write 
+  Markdown inside each div.
+</div>
+
+<div id="title-slide" class="step slide title markdown" data-x="2000" data-y="5000">
+# Title slide
+## This slide has different CSS class than the previous ones
+</div>
+
+
+<div id="tilted-slide" class="step slide markdown" data-rotate="-85" data-x="2000" data-y="2000" data-z="1000" data-scale="4">
+# Simplicity of Markdown & Full power of Impress.js
+  
+* This slide sets its own `rotate`, `x`, `y`, and even `z` coordinates
+* Note that the Mother Teresa slide earlier was pimped with some custom CSS, all the while
+  the content was written in simple Markdown.
+</div>
+
+<script type="text/javascript">
+var enableBwCss = function(){
+    disableDevopsCss();
+    disableEffectsCss();
+};
+
+var enableDevopsCss = function(){
+    document.body.classList.add("devopsy");
+    disableEffectsCss();
+};
+
+var disableDevopsCss = function(){
+    document.body.classList.remove("devopsy");
+};
+
+var enableEffectsCss = function(){
+    document.body.classList.add("effects");
+    disableDevopsCss();
+};
+
+var disableEffectsCss = function(){
+    document.body.classList.remove("effects");
+};
+</script>
+
+
+<div id="js-slide" class="step slide" data-rotate="0" data-x="4000" data-y="5000">
+<h1>CSS &amp; JavaScript magic</h1>
+
+<p>Just to emphasize my point, this last slide allows you to use a JavaScript powered menu to
+toggle the CSS style:</p>
+
+<p><a href="#" onclick="enableBwCss();" class="css-menu-bw">Black &amp; white</a>, 
+<a href="#" onclick="enableDevopsCss();" class="css-menu-devopsy">Devopsy</a>, 
+<a href="#" onclick="enableEffectsCss();" class="css-menu-effects">Effects overload</a></p>
+
+<p>Simplicity of Markdown married with full power of Impress.js!</p>
+
+</div>
+
+
+<div id="overview" class="step" data-x="5000" data-y="4000" data-scale="10" style="pointer-events: none;" data-rotate="5">
+</div>
+
+</div>
+
+<div id="impress-toolbar"></div>
+<div id="impress-help"></div>
+
+
+<!-- Extra modules
+     Load highlight.js, mermaid.js and markdown.js from extras.
+     See also src/plugins/extras/extras.js -->
+<script type="text/javascript" src="../../extras/highlight/highlight.pack.js"></script>
+<script type="text/javascript" src="../../extras/mermaid/mermaid.min.js"></script>
+<script type="text/javascript" src="../../extras/markdown/markdown.js"></script>
+
+<!--
+    To make all described above really work, you need to include impress.js in the page.
+    You also need to call a `impress().init()` function to initialize impress.js presentation.
+    And you should do it in the end of your document. 
+-->
+<script type="text/javascript" src="../../js/impress.js"></script>
+<script>impress().init();</script>
+</body>
+</html>
