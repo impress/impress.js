@@ -1,6 +1,8 @@
 
 /*jslint node: true */
 
+// Path used by Puppeteer that expects to find bundled Chromium here
+// More details here: https://medium.com/@rogeriopvl/automating-karma-and-headless-chrome-with-puppetteer-51ce8f6a78b0
 process.env.CHROME_BIN = require( "puppeteer" ).executablePath();
 
 module.exports = function( config ) {
@@ -55,6 +57,7 @@ module.exports = function( config ) {
 
     // Start these browsers, currently available:
     // - Chrome
+    // - ChromeHeadLess
     // - ChromeCanary
     // - Firefox
     // - Opera (has to be installed with `npm install karma-opera-launcher`)
