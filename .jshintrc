@@ -3,7 +3,9 @@
 		"module": true
 	},
 	"boss": true,
+	"browser": true,
 	"curly": true,
+        "esversion": 6,
 	"eqeqeq": true,
 	"eqnull": true,
 	"expr": true,
