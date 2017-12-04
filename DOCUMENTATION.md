@@ -82,6 +82,11 @@ Define the pixel based position in which the **center** of the [Step Element](#s
 </div>
 ```
 
+**Note:** The introduction of the [rel](src/plugins/rel/README.md) plugin includes a slight backward incompatible change.
+Previously the default value for `data-x`, `data-y` and `data-z` was zero. The `rel` plugin changes the default to inherit
+the value of the previous slide. This means, you need to explicitly set these values to zero, if they ever were non-zero.
+
+
 #### 3D Rotation (data-rotate-x, data-rotate-y, data-rotate-z)
 
 You can not only position a [Step Element](#step-element) in 3D, but also rotate it around any axis.
@@ -105,6 +110,13 @@ You can of course rotate it around Z axis with `data-rotate-z` - it has exactly 
     <span class="footnote">* beat that, prezi ;)</span>
 </div>
 ```
+
+#### 3D Rotation Order (data-rotate-order)
+
+The order in which the CSS `rotateX(), rotateY(), rotateZ()` transforms are applied matters. This is because each rotation is relative to the then current position of the element.
+
+By default the rotation order is `data-rotate-order="xyz"`. For some advanced uses you may need to change it. The demo presentation [3D rotations](examples/3D-rotations/index.html) sets this attribute to rotate some steps into positions that are impossible to reach with the default order.
+
 
 ## CSS
 
@@ -189,6 +201,11 @@ It is recommended to add the class manually to the `body` element though, becaus
 }
 ```
 
+## Plugins
+
+Many new features are implemented as plugins. The [Plugins documentation](src/plugins/README.md) is the starting place to learn about those, as well as the README.md of [each plugin](src/plugins/).
+
+
 ## JavaScript
 
 ### impress( [ id ] )
@@ -227,6 +244,21 @@ rootElement.addEventListener( "impress:init", function() {
   console.log( "Impress init" );
 });
 impress().init();
+```
+
+#### .tear()
+
+Resets the DOM to its original state, as it was before `init()` was called.
+
+This can be used to "unload" impress.js. A particular use case for this is, if you want to do
+dynamic changes to the presentation, you can do a teardown, apply changes, then call `init()`
+again. (In most cases, this will not cause flickering or other visible effects to the user,
+beyond the intended dynamic changes.)
+
+**Example:**
+
+```JavaScript
+impress().tear();
 ```
 
 #### .next()
@@ -300,8 +332,8 @@ Triggers the `impress:stepenter` event in the [Root Element](#root-element) when
 
 ```JavaScript
 var rootElement = document.getElementById( "impress" );
-rootElement.addEventListener( "impress:stepenter", function() {
-  var currentStep = document.querySelector( ".present" );
+rootElement.addEventListener( "impress:stepenter", function(event) {
+  var currentStep = event.target;
   console.log( "Entered the Step Element '" + currentStep.id + "'" );
 });
 ```
@@ -312,8 +344,9 @@ Triggers the `impress:stepleave` event in the [Root Element](#root-element) when
 ```JavaScript
 var rootElement = document.getElementById( "impress" );
 rootElement.addEventListener( "impress:stepleave", function(event) {
-  var currentStep = event.target
-  console.log( "Left the Step Element '" + currentStep.id + "'" );
+  var currentStep = event.target;
+  var nextStep = event.detail.next;
+  console.log( "Left the Step Element '" + currentStep.id + "' and about to enter '" + nextStep.id );
 });
 ```
 

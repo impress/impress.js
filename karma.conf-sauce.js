@@ -8,10 +8,13 @@ var sauceBrowsers = [
   [ "chrome", "52", "Windows 10" ],
   [ "firefox", "48", "Windows 10" ],
   [ "firefox", "47", "Windows 10" ],
-  [ "microsoftedge", "13", "Windows 10" ],
-  [ "internet explorer", "11", "Windows 10" ],
-  [ "safari", "9", "OS X 10.11" ],
-  [ "safari", "8", "OS X 10.10" ]
+  [ "microsoftedge", "13", "Windows 10" ]
+// These browsers have issues with the iframe based test approach. impress.js itself should work
+// fine, it's just that the tests don't. We can figure out later whether there's some option that
+// allows to access the DOM inside the iframe with javascript.
+//  [ "internet explorer", "11", "Windows 10" ],
+//  [ "safari", "9", "OS X 10.11" ],
+//  [ "safari", "8", "OS X 10.10" ]
 ].reduce( function( object, platform ) {
 
   // Convert "internet explorer" -> "ie".
@@ -41,12 +44,26 @@ module.exports = function( config ) {
     frameworks: [ "qunit" ],
     singleRun: true,
 
-    // The list of files / patterns to load in the browser.
+    proxies : {
+      '/test/' : '/base/test/',
+      '/js/'   : '/base/js/',
+      '/node_modules/syn/dist/' : '/base/node_modules/syn/dist/'
+    },
+    
+    // List of files / patterns to load in the browser
     files: [
-      "test/bootstrap.js",
-      "js/impress.js",
-      "test/core_tests.js"
+      // The QUnit tests
+      "test/helpers.js",
+      "test/core_tests.js",
+      "src/plugins/navigation/navigation_tests.js",
+      // Presentation files, for the iframe
+      {pattern: "test/*.html", watched: true, served: true, included: false},
+      {pattern: "test/plugins/*/*.html", watched: true, served: true, included: false},
+      // JS files for iframe
+      {pattern: "js/impress.js", watched: true, served: true, included: false},
+      {pattern: "node_modules/syn/dist/global/syn.js", watched: false, served: true, included: false}
     ],
+
 
     // The number of sauce tests to start in parallel.
     concurrency: 1,
@@ -61,7 +78,18 @@ module.exports = function( config ) {
       startConnect: true,
       tunnelIdentifier: process.env.CIRCLE_BUILD_NUM
     },
-    captureTimeout: 120000,
+
+    client: {
+      clearContext: false,
+      qunit: {
+        showUI: true,
+        testTimeout: 120*1000
+      }
+    },
+
+    // If browser does not capture, or produce output, in given timeout [ms], kill it
+    captureTimeout: 60*1000,
+    browserNoActivityTimeout: 60*1000,
     customLaunchers: sauceBrowsers,
 
     // Browsers to launch.
