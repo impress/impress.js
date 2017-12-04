@@ -21,7 +21,7 @@ Extra addons
 ------------
 
 Yet more features are available in presentations that enable 
-[extra addons](../../extras/). Extra addons are 3rd party plugins integrated
+[extra addons](https://github.com/impress/impress-extras). Extra addons are 3rd party plugins integrated
 into impress.js to provide convenient and standardized access to them. However,
 they are not activated by default, rather must be included with a `<script>`
 tag.
