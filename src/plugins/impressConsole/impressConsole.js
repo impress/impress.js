@@ -389,7 +389,7 @@
                     message.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
                     var onClickStr = 'var x = document.getElementById(\'consoleWindowError\');' +
                                      'x.parentNode.removeChild(x);impressConsole().open();';
-                    message.innerHTML = '<button style="margin: 25vh 25vw;width:50vw;height:50vh;' +
+                    message.innerHTML = '<button style="margin: 25vh 25vw;width:50vw;height:50vh;" ' +
                                                  'onclick="' + onClickStr + '">' +
                                         lang.clickToOpen +
                                         '</button>';
