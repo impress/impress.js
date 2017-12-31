@@ -558,20 +558,12 @@
         var init = function( cssConsole, cssIframe ) {
             if ( ( cssConsole === undefined || cssConsole === cssFileOldDefault ) &&
                  ( cssIframe === undefined  || cssIframe === cssFileIframeOldDefault ) ) {
-                window.console.log( 'impressConsole.init() is deprecated. ' +
+                window.console.log( 'impressConsole().init() is deprecated. ' +
                                    'impressConsole is now initialized automatically when you ' +
                                    'call impress().init().' );
             }
             _init( cssConsole, cssIframe );
         };
-
-        document.addEventListener( 'impress:init', function() {
-            _init();
-
-            // Add 'P' to the help popup
-            triggerEvent( document, 'impress:help:add',
-                         { command: 'P', text: 'Presenter console', row: 10 } );
-        } );
 
         // New API for impress.js plugins is based on using events
         root.addEventListener( 'impress:console:open', function() {
@@ -591,10 +583,21 @@
 
         // Return the object
         allConsoles[ rootId ] = { init: init, open: open, clockTick: clockTick,
-                               registerKeyEvent: registerKeyEvent };
+                               registerKeyEvent: registerKeyEvent, _init: _init };
         return allConsoles[ rootId ];
 
     };
+
+    // This initializes impressConsole automatically when initializing impress itself
+    document.addEventListener( 'impress:init', function( event ) {
+
+        // Note: impressConsole wants the id string, not the DOM element directly
+        impressConsole( event.target.id )._init();
+
+        // Add 'P' to the help popup
+        triggerEvent( document, 'impress:help:add',
+                        { command: 'P', text: 'Presenter console', row: 10 } );
+    } );
 
     // Returns a string to be used inline as a css <style> element in the console window.
     // Apologies for length, but hiding it here at the end to keep it away from rest of the code.
@@ -741,7 +744,5 @@
             }
         </style>`;
     };
-
-    impressConsole();
 
 } )( document, window );

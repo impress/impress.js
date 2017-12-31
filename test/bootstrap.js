@@ -3,7 +3,7 @@
 // TODO: This is the bootstrap file for *karma*. Poorly named (since karma is
 // only one option, in this repo) but keeping the same name now to avoid
 // unnecessary deviation with upstream.
-// If you just want to run the tests locally, you can open test/index.html in Firefox.
+// If you just want to run the tests locally, you can open /qunit_test_runner.html in Firefox.
 
 // That's annoying: karma-qunit doesn't provide the qunit-fixture element
 // https://github.com/karma-runner/karma-qunit/issues/18

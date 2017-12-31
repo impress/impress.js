@@ -1,7 +1,12 @@
 // This file contains so much HTML, that we will just respectfully disagree about js
 /* jshint quotmark:single */
-/* global document, console, setTimeout, navigator */
+/* global document, console, setTimeout, navigator, QUnit */
 /* exported loadIframe, initPresentation, _impressSupported */
+
+// Log all QUnit assertions to console.log(), so that they are visible in karma output
+QUnit.log( function( details ) {
+  console.log( 'QUnit.log: ', details.result, details.message );
+} );
 
 var loadIframe = function( src, assert, callback ) {
   console.log( 'Begin loadIframe' );
@@ -52,7 +57,7 @@ var loadIframe = function( src, assert, callback ) {
   iframe.src = src;
 };
 
-var initPresentation = function( assert, callback ) {
+var initPresentation = function( assert, callback, rootId ) {
   console.log( 'Begin initPresentation' );
   var iframe = document.getElementById( 'presentation-iframe' );
   var iframeDoc = iframe.contentDocument;
@@ -75,7 +80,7 @@ var initPresentation = function( assert, callback ) {
   };
   iframeDoc.addEventListener( 'impress:stepenter', waitForStepEnterWrapper );
 
-  assert.strictEqual( iframeWin.impress().init(), undefined, 'Initializing impress.' );
+  assert.strictEqual( iframeWin.impress( rootId ).init(), undefined, 'Initializing impress.' );
 };
 
 // Helper function to determine whether this browser is supported by
