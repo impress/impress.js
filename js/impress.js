@@ -2309,15 +2309,16 @@
                     // ... so I add a button to klick.
                     // workaround on firefox
                     var message = document.createElement( 'div' );
-                    message.id = 'consoleWindowError';
+                    message.id = 'impress-console-button';
                     message.style.position = 'fixed';
                     message.style.left = 0;
                     message.style.top = 0;
                     message.style.right = 0;
                     message.style.bottom = 0;
                     message.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
-                    var onClickStr = 'var x = document.getElementById(\'consoleWindowError\');' +
-                                     'x.parentNode.removeChild(x);impressConsole().open();';
+                    var onClickStr = 'var x = document.getElementById(\'impress-console-button\');' +
+                                     'x.parentNode.removeChild(x);var root = document.getElementById(\'' + rootId + '\');' +
+                                     'impress(\'' + rootId + '\').lib.util.triggerEvent(root, \'impress:console:open\', {})';
                     message.innerHTML = '<button style="margin: 25vh 25vw;width:50vw;height:50vh;" ' +
                                                  'onclick="' + onClickStr + '">' +
                                         lang.clickToOpen +
@@ -2496,7 +2497,7 @@
 
         // New API for impress.js plugins is based on using events
         root.addEventListener( 'impress:console:open', function() {
-            window.open();
+            open();
         } );
 
         /**
@@ -2518,9 +2519,10 @@
     };
 
     // This initializes impressConsole automatically when initializing impress itself
-    document.addEventListener( 'impress:init', function(event) {
-        // impressConsole wants the id string, not the DOM element directly
-        impressConsole(event.target.id)._init();
+    document.addEventListener( 'impress:init', function( event ) {
+
+        // Note: impressConsole wants the id string, not the DOM element directly
+        impressConsole( event.target.id )._init();
 
         // Add 'P' to the help popup
         triggerEvent( document, 'impress:help:add',
@@ -2959,6 +2961,16 @@
             // Event delegation with "bubbling"
             // check if event target (or any of its parents is a link)
             var target = event.target;
+            try {
+                // For example, when clicking on the button to launch speaker console, the button
+                // is immediately deleted from the DOM. In this case target is a DOM element when
+                // we get it, but turns out to be null if you try to actually do anything with it.
+                foo = target.id;
+            }
+            catch(err) {
+                return;
+            }
+
             while ( ( target.tagName !== "A" ) &&
                     ( target !== document.documentElement ) ) {
                 target = target.parentNode;
@@ -2982,6 +2994,12 @@
         // Delegated handler for clicking on step elements
         gc.addEventListener( document, "click", function( event ) {
             var target = event.target;
+            try {
+                foo = target.id;
+            }
+            catch(err) {
+                return;
+            }
 
             // Find closest step element that is not active
             while ( !( target.classList.contains( "step" ) &&

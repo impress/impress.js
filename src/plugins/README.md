@@ -115,8 +115,12 @@ plugins that you may want to use or adapt.
     .impress-enabled div#impress-toolbar.impress-toolbar-hide {
         display: none;
     }
-    /* If you disable pointer-events (like in the impress.js official demo), you need to re-enable them for the toolbar. */
+
+    /* If you disable pointer-events (like in the impress.js official demo), you need to re-enable them for the toolbar.
+       And the speaker console while at it.*/
     .impress-enabled #impress-toolbar         { pointer-events: auto }
+    .impress-enabled #impress-console-button  { pointer-events: auto }
+
     /* Progress bar */
     .impress-enabled .impress-progressbar {
       position: absolute;

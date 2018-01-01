@@ -380,15 +380,16 @@
                     // ... so I add a button to klick.
                     // workaround on firefox
                     var message = document.createElement( 'div' );
-                    message.id = 'consoleWindowError';
+                    message.id = 'impress-console-button';
                     message.style.position = 'fixed';
                     message.style.left = 0;
                     message.style.top = 0;
                     message.style.right = 0;
                     message.style.bottom = 0;
                     message.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
-                    var onClickStr = 'var x = document.getElementById(\'consoleWindowError\');' +
-                                     'x.parentNode.removeChild(x);impressConsole().open();';
+                    var onClickStr = 'var x = document.getElementById(\'impress-console-button\');' +
+                                     'x.parentNode.removeChild(x);var root = document.getElementById(\'' + rootId + '\');' +
+                                     'impress(\'' + rootId + '\').lib.util.triggerEvent(root, \'impress:console:open\', {})';
                     message.innerHTML = '<button style="margin: 25vh 25vw;width:50vw;height:50vh;" ' +
                                                  'onclick="' + onClickStr + '">' +
                                         lang.clickToOpen +
@@ -567,7 +568,7 @@
 
         // New API for impress.js plugins is based on using events
         root.addEventListener( 'impress:console:open', function() {
-            window.open();
+            open();
         } );
 
         /**
