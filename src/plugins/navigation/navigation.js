@@ -125,12 +125,13 @@
             // check if event target (or any of its parents is a link)
             var target = event.target;
             try {
+
                 // For example, when clicking on the button to launch speaker console, the button
                 // is immediately deleted from the DOM. In this case target is a DOM element when
                 // we get it, but turns out to be null if you try to actually do anything with it.
-                foo = target.id;
+                var foo = target.id; // jshint ignore:line
             }
-            catch(err) {
+            catch ( err ) {
                 return;
             }
 
@@ -158,9 +159,9 @@
         gc.addEventListener( document, "click", function( event ) {
             var target = event.target;
             try {
-                foo = target.id;
+                var foo = target.id; // jshint ignore:line
             }
-            catch(err) {
+            catch ( err ) {
                 return;
             }
 

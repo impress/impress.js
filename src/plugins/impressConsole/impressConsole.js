@@ -387,11 +387,14 @@
                     message.style.right = 0;
                     message.style.bottom = 0;
                     message.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
-                    var onClickStr = 'var x = document.getElementById(\'impress-console-button\');' +
-                                     'x.parentNode.removeChild(x);var root = document.getElementById(\'' + rootId + '\');' +
-                                     'impress(\'' + rootId + '\').lib.util.triggerEvent(root, \'impress:console:open\', {})';
-                    message.innerHTML = '<button style="margin: 25vh 25vw;width:50vw;height:50vh;" ' +
-                                                 'onclick="' + onClickStr + '">' +
+                    var clickStr = 'var x = document.getElementById(\'impress-console-button\');' +
+                                     'x.parentNode.removeChild(x);' +
+                                     'var r = document.getElementById(\'' + rootId + '\');' +
+                                     'impress(\'' + rootId +
+                                     '\').lib.util.triggerEvent(r, \'impress:console:open\', {})';
+                    var styleStr = 'margin: 25vh 25vw;width:50vw;height:50vh;';
+                    message.innerHTML = '<button style="' + styleStr + '" ' +
+                                                 'onclick="' + clickStr + '">' +
                                         lang.clickToOpen +
                                         '</button>';
                     document.body.appendChild( message );
