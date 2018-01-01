@@ -2965,33 +2965,35 @@
             // check if event target (or any of its parents is a link)
             var target = event.target;
             try {
+                while ( ( target.tagName !== "A" ) &&
+                        ( target !== document.documentElement ) ) {
+                    target = target.parentNode;
+                }
+
+                if ( target.tagName === "A" ) {
+                    var href = target.getAttribute( "href" );
+
+                    // If it's a link to presentation step, target this step
+                    if ( href && href[ 0 ] === "#" ) {
+                        target = document.getElementById( href.slice( 1 ) );
+                    }
+                }
+
+                if ( api.goto( target ) ) {
+                    event.stopImmediatePropagation();
+                    event.preventDefault();
+                }
+            }
+            catch ( err ) {
 
                 // For example, when clicking on the button to launch speaker console, the button
                 // is immediately deleted from the DOM. In this case target is a DOM element when
                 // we get it, but turns out to be null if you try to actually do anything with it.
-                var foo = target.id; // jshint ignore:line
-            }
-            catch ( err ) {
-                return;
-            }
-
-            while ( ( target.tagName !== "A" ) &&
-                    ( target !== document.documentElement ) ) {
-                target = target.parentNode;
-            }
-
-            if ( target.tagName === "A" ) {
-                var href = target.getAttribute( "href" );
-
-                // If it's a link to presentation step, target this step
-                if ( href && href[ 0 ] === "#" ) {
-                    target = document.getElementById( href.slice( 1 ) );
+                if ( err instanceof TypeError &&
+                     err.message === "target is null" ) {
+                    return;
                 }
-            }
-
-            if ( api.goto( target ) ) {
-                event.stopImmediatePropagation();
-                event.preventDefault();
+                throw err;
             }
         }, false );
 
@@ -2999,21 +3001,28 @@
         gc.addEventListener( document, "click", function( event ) {
             var target = event.target;
             try {
-                var foo = target.id; // jshint ignore:line
+
+                // Find closest step element that is not active
+                while ( !( target.classList.contains( "step" ) &&
+                        !target.classList.contains( "active" ) ) &&
+                        ( target !== document.documentElement ) ) {
+                    target = target.parentNode;
+                }
+
+                if ( api.goto( target ) ) {
+                    event.preventDefault();
+                }
             }
             catch ( err ) {
-                return;
-            }
 
-            // Find closest step element that is not active
-            while ( !( target.classList.contains( "step" ) &&
-                       !target.classList.contains( "active" ) ) &&
-                    ( target !== document.documentElement ) ) {
-                target = target.parentNode;
-            }
-
-            if ( api.goto( target ) ) {
-                event.preventDefault();
+                // For example, when clicking on the button to launch speaker console, the button
+                // is immediately deleted from the DOM. In this case target is a DOM element when
+                // we get it, but turns out to be null if you try to actually do anything with it.
+                if ( err instanceof TypeError &&
+                     err.message === "target is null" ) {
+                    return;
+                }
+                throw err;
             }
         }, false );
 
