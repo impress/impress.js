@@ -67,13 +67,6 @@
                 return false;
             }
 
-            // For arrows, etc, check that event target is html or body element. This is to allow
-            // presentations to have, for example, forms with input elements where user can type
-            // text, including space, and not move to next step.
-            if ( event.target.nodeName !== "BODY" && event.target.nodeName !== "HTML" ) {
-                return false;
-            }
-
             if ( ( event.keyCode >= 32 && event.keyCode <= 34 ) ||
                  ( event.keyCode >= 37 && event.keyCode <= 40 ) ) {
                 return true;

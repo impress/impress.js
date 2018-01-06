@@ -1497,22 +1497,18 @@
         var gc = api.lib.gc;
 
         gc.addEventListener( document, "keydown", function( event ) {
-            if ( event.ctrlKey && event.keyCode === 66 ) {
+            if ( event.keyCode === 66 ) {
                 event.preventDefault();
                 if ( !blackedOut ) {
                     blackout();
                 } else {
-
-                    // Note: This doesn't work on Firefox. It will set display:block,
-                    // but slides only become visible again upon next transition, which
-                    // forces some kind of redraw. Works as intended on Chrome.
                     removeBlackout();
                 }
             }
         }, false );
 
         gc.addEventListener( document, "keyup", function( event ) {
-            if ( event.ctrlKey && event.keyCode === 66 ) {
+            if ( event.keyCode === 66 ) {
                 event.preventDefault();
             }
         }, false );
@@ -1601,7 +1597,12 @@
  *
  * Functionality to better support use of input, textarea, button... elements in a presentation.
  *
- * Currently this does only one single thing: On impress:stepleave, de-focus any potentially active
+ * This plugin does two things: 
+ *
+ * Set stopPropagagation on any element that might take text input. This allows users to type, for
+ * example, the letter 'P' into a form field, without causing the presenter console to spring up.
+ *
+ * On impress:stepleave, de-focus any potentially active
  * element. This is to prevent the focus from being left in a form element that is no longer visible
  * in the window, and user therefore typing garbage into the form.
  *
@@ -1617,6 +1618,32 @@
 /* global document */
 ( function( document ) {
     "use strict";
+    var root;
+    var api;
+
+    document.addEventListener( "impress:init", function(event) {
+        root = event.target;
+        api = event.detail.api;
+        var gc = api.lib.gc;
+
+        var selectors = ["input[type=text]", "textarea", "select", "[contenteditable=true]"];
+        for ( var selector of selectors ) {
+            var elements = document.querySelectorAll(selector);
+            if ( ! elements ) {
+                continue;
+            }
+
+            for ( var i = 0; i < elements.length; i++) {
+                var e = elements[i];
+                gc.addEventListener( e, "keydown", function( event ) {
+                    event.stopPropagation();
+                } );
+                gc.addEventListener( e, "keyup", function( event ) {
+                    event.stopPropagation();
+                } );
+            }
+        }
+    }, false );
 
     document.addEventListener( "impress:stepleave", function() {
         document.activeElement.blur();
@@ -1864,12 +1891,9 @@
 
     document.addEventListener( "keyup", function( event ) {
 
-        // Check that event target is html or body element.
-        if ( event.target.nodeName === "BODY" || event.target.nodeName === "HTML" ) {
-            if ( event.keyCode === 72 ) { // "h"
-                event.preventDefault();
-                toggleHelp();
-            }
+        if ( event.keyCode === 72 ) { // "h"
+            event.preventDefault();
+            toggleHelp();
         }
     }, false );
 
@@ -2904,13 +2928,6 @@
 
             // With the sole exception of TAB, we also ignore keys pressed if shift is down.
             if ( event.shiftKey ) {
-                return false;
-            }
-
-            // For arrows, etc, check that event target is html or body element. This is to allow
-            // presentations to have, for example, forms with input elements where user can type
-            // text, including space, and not move to next step.
-            if ( event.target.nodeName !== "BODY" && event.target.nodeName !== "HTML" ) {
                 return false;
             }
 

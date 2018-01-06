@@ -84,22 +84,18 @@
         var gc = api.lib.gc;
 
         gc.addEventListener( document, "keydown", function( event ) {
-            if ( event.ctrlKey && event.keyCode === 66 ) {
+            if ( event.keyCode === 66 ) {
                 event.preventDefault();
                 if ( !blackedOut ) {
                     blackout();
                 } else {
-
-                    // Note: This doesn't work on Firefox. It will set display:block,
-                    // but slides only become visible again upon next transition, which
-                    // forces some kind of redraw. Works as intended on Chrome.
                     removeBlackout();
                 }
             }
         }, false );
 
         gc.addEventListener( document, "keyup", function( event ) {
-            if ( event.ctrlKey && event.keyCode === 66 ) {
+            if ( event.keyCode === 66 ) {
                 event.preventDefault();
             }
         }, false );
