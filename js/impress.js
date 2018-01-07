@@ -1597,9 +1597,9 @@
  *
  * Functionality to better support use of input, textarea, button... elements in a presentation.
  *
- * This plugin does two things: 
+ * This plugin does two things:
  *
- * Set stopPropagagation on any element that might take text input. This allows users to type, for
+ * Set stopPropagation on any element that might take text input. This allows users to type, for
  * example, the letter 'P' into a form field, without causing the presenter console to spring up.
  *
  * On impress:stepleave, de-focus any potentially active
@@ -1621,20 +1621,20 @@
     var root;
     var api;
 
-    document.addEventListener( "impress:init", function(event) {
+    document.addEventListener( "impress:init", function( event ) {
         root = event.target;
         api = event.detail.api;
         var gc = api.lib.gc;
 
-        var selectors = ["input[type=text]", "textarea", "select", "[contenteditable=true]"];
+        var selectors = [ "input[type=text]", "textarea", "select", "[contenteditable=true]" ];
         for ( var selector of selectors ) {
-            var elements = document.querySelectorAll(selector);
-            if ( ! elements ) {
+            var elements = document.querySelectorAll( selector );
+            if ( !elements ) {
                 continue;
             }
 
-            for ( var i = 0; i < elements.length; i++) {
-                var e = elements[i];
+            for ( var i = 0; i < elements.length; i++ ) {
+                var e = elements[ i ];
                 gc.addEventListener( e, "keydown", function( event ) {
                     event.stopPropagation();
                 } );

@@ -5,7 +5,7 @@
  *
  * This plugin does two things:
  *
- * Set stopPropagagation on any element that might take text input. This allows users to type, for
+ * Set stopPropagation on any element that might take text input. This allows users to type, for
  * example, the letter 'P' into a form field, without causing the presenter console to spring up.
  *
  * On impress:stepleave, de-focus any potentially active
