@@ -14,6 +14,7 @@ buildify()
            'src/plugins/goto/goto.js',
            'src/plugins/help/help.js',
            'src/plugins/impressConsole/impressConsole.js',
+           'src/plugins/media/media.js',
            'src/plugins/mobile/mobile.js',
            'src/plugins/mouse-timeout/mouse-timeout.js',
            'src/plugins/navigation/navigation.js',
