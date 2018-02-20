@@ -18,6 +18,8 @@
  * 
  *  - Add a special class when playing and pausing media (removing them when ending)
  *
+ *  - Autostart videos when entering a step, if the attribute data-media-playonenter is set and not "false".
+ *
  *  - Pause all video and audio an the active step when leaving it. This can be disabled for 
  *    indivudual media nodes by adding the data-media-pauseonleave="false" attribute. This attribute
  *    is inherited from the shortcut described above.
@@ -40,7 +42,7 @@
  * Copyright 2018 Holger Teichert (@complanar)
  * Released under the MIT license.
  */
-/* global window, document, impress */
+/* global window, document, impress, console */
 
 (function (document, window) {
   "use strict";
@@ -49,6 +51,7 @@
   var parseMediaShortcut, 
       enhanceMediaNode, 
       enhanceMedia, 
+      playOnStepenter,
       pauseOnStepleave, 
       onPlay, 
       onPause, 
@@ -56,14 +59,15 @@
 
   // Parse nodes with media class <div class="media" data-media-source="PATH" data-media-type="MIMETYPE"></div>
   parseMediaShortcut = function (target) {
-    var data, mimeParts, controls, pauseonleave;
+    var data, mimeParts, controls, playonenter, pauseonleave;
     data = target.dataset;
     if (data.mediaType && data.mediaSource) {
       mimeParts = data.mediaType.split('/');
       target.classList.add('media-' + mimeParts[0]);
       controls = data.mediaControls === "false" ? '' : ' controls';
+      playonenter = data.mediaPlayonenter === "true" || data.mediaPlayonenter === "" ? ' data-media-playonenter="true"' : '';
       pauseonleave = data.mediaPauseonleave === "false" ? ' data-media-pauseonleave="false"' : '';
-      target.innerHTML = '<' + mimeParts[0] + controls + pauseonleave + '><source src="' + data.mediaSource + '" type="' + data.mediaType + '"> Your Browser does not support HTML5 ' + mimeParts[0] + '.</' + mimeParts[0] + '>';
+      target.innerHTML = '<' + mimeParts[0] + controls + playonenter + pauseonleave + '><source src="' + data.mediaSource + '" type="' + data.mediaType + '"> Your Browser does not support HTML5 ' + mimeParts[0] + '.</' + mimeParts[0] + '>';
     }
   };
   
@@ -101,13 +105,42 @@
   };
   
   enhanceMedia = function () {
-    var i, media = document.getElementsByClassName('media');
+    var i, steps, media = document.getElementsByClassName('media');
     for (i = 0; i < media.length; i++) {
       parseMediaShortcut(media[i]);
     }
     enhanceMediaNode('audio');
     enhanceMediaNode('video');
+    steps = document.getElementsByClassName('step');
+    for (i = 0; i < steps.length; i++) {
+      console.log("Add event listener.");
+      steps[i].addEventListener('impress:stepenter', playOnStepenter, false);
+    }
   };
+  
+  playOnStepenter = function (event) {
+    console.log("Stepenter triggered.");
+    var videos, audios, media, play, type, i;
+    if ((!event) || (!event.target)) {
+      return;
+    }
+    
+    audios = event.target.getElementsByTagName('audio');
+    videos = event.target.getElementsByTagName('video');
+    media = {
+      video: videos,
+      audio: audios
+    };
+    for (type in media) {
+      for (i = 0; i < media[type].length; i++) {
+        play = media[type][i].dataset.mediaPlayonenter;
+        console.log(play);
+        if (play !== undefined) {
+          media[type][i].play();
+        }
+      }
+    }
+  }
 
   pauseOnStepleave = function (event) {
     var videos, audios, media, type, i;
