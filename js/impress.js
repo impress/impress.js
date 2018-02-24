@@ -2323,8 +2323,6 @@
 
             if ( consoleWindow && !consoleWindow.closed ) {
                 consoleWindow.focus();
-                triggerEvent(root, 'impress:console:open', {});
-                return consoleWindow;
             } else {
                 consoleWindow = window.open( '', 'impressConsole' );
 
@@ -2377,9 +2375,6 @@
                 );
                 consoleWindow.document.title = 'Speaker Console (' + document.title + ')';
                 consoleWindow.impress = window.impress;
-                
-                // Bind the presentation view to the consoleWindow (needed e.g. for consoleMedia plugin)
-                consoleWindow.presentationWindow = window;
 
                 // We set this flag so we can detect it later, to prevent infinite popups.
                 consoleWindow.isconsoleWindow = true;
@@ -2420,8 +2415,7 @@
                 //Catch any window resize to pass size on
                 window.onresize = resize;
                 consoleWindow.onresize = resize;
-                
-                triggerEvent(root, 'impress:console:open', {});
+
                 return consoleWindow;
             }
         };
@@ -2530,7 +2524,6 @@
 
         // New API for impress.js plugins is based on using events
         root.addEventListener( 'impress:console:open', function() {
-            console.log("impress:console:open");
             open();
         } );
 
@@ -2713,174 +2706,168 @@
 
 /**
  * Media Plugin
+ * 
+ * This plugin will do the following things:
+ * 
+ *  - Add a special class when playing and pausing media (removing them when ending).
  *
- * The media plugin is a combination of a preeinit and prestepleave plugin. 
- * It is executed before impress:init and before impress:stepleave.
- * 
- * It will do the following things:
- * 
- *   - Parse special shortcuts to full html5 audio or video nodes:
- *     e.g. <div class="media" data-media-source="…" data-media-type="audio/…"></div>
- *     or   <span class="media" data-media-source="…" data-media-type="video/…"></span>
- *     
- *     All type of html tags are allowed. Currently only a single source is supported.
- *     All nodes will have the control attribute added, except the 'data-media-controls="false"'
- *     attribute is added.
- *     
- *         <div class="media" data-media-source="…" data-media-type="…/…" data-media-controls="false"></div>
- * 
- *  - Add a special class when playing and pausing media (removing them when ending)
- *
- *  - Autostart videos when entering a step, if the attribute data-media-playonenter is set and not "false".
+ *  - Autostart videos when entering a step, if the attribute data-media-autoplay is set and not "false".
  *
  *  - Pause all video and audio an the active step when leaving it. This can be disabled for 
- *    indivudual media nodes by adding the data-media-pauseonleave="false" attribute. This attribute
- *    is inherited from the shortcut described above.
+ *    indivudual media nodes by adding the data-media-autopause="false" attribute. 
  *    
- *    Examples: 
+ *    Example: 
  *
- *      <audio contols data-media-pauseonleave="false">
- *        <source src="…" type="audio/…">
+ *      <audio contols data-media-autopause="false">
+ *        <source src="..." type="audio/...">
  *        Your browser does not support HTML5 audio. Please update you browser to 
  *        a recent version.
  *      </audio>
- *      
- *      <div class="media" 
- *           data-media-source="…" 
- *           data-media-type="video/…" 
- *           data-media-controls="false" 
- *           data-media-pauseonleave="false">
- *      </div>
+ *  - 
  *
  * Copyright 2018 Holger Teichert (@complanar)
  * Released under the MIT license.
  */
-/* global window, document, impress, console */
+/* global window, document */
 
 (function (document, window) {
-  "use strict";
-  
-  // function names
-  var parseMediaShortcut, 
-      enhanceMediaNode, 
-      enhanceMedia, 
-      playOnStepenter,
-      pauseOnStepleave, 
-      onPlay, 
-      onPause, 
-      onEnded;
+    "use strict";
+    var api, gc;
 
-  // Parse nodes with media class <div class="media" data-media-source="PATH" data-media-type="MIMETYPE"></div>
-  parseMediaShortcut = function (target) {
-    var data, mimeParts, controls, playonenter, pauseonleave;
-    data = target.dataset;
-    if (data.mediaType && data.mediaSource) {
-      mimeParts = data.mediaType.split('/');
-      target.classList.add('media-' + mimeParts[0]);
-      controls = data.mediaControls === "false" ? '' : ' controls';
-      playonenter = data.mediaPlayonenter === "true" || data.mediaPlayonenter === "" ? ' data-media-playonenter="true"' : '';
-      pauseonleave = data.mediaPauseonleave === "false" ? ' data-media-pauseonleave="false"' : '';
-      target.innerHTML = '<' + mimeParts[0] + controls + playonenter + pauseonleave + '><source src="' + data.mediaSource + '" type="' + data.mediaType + '"> Your Browser does not support HTML5 ' + mimeParts[0] + '.</' + mimeParts[0] + '>';
+    // function names
+    var enhanceMediaNodes,
+        enhanceMedia,
+        removeMediaClasses,
+        onStepenter,
+        onStepleave,
+        onPlay,
+        onPause,
+        onEnded;
+    
+    document.addEventListener("impress:init", function(event) {
+        //root = event.target;
+        api = event.detail.api;
+        gc = api.lib.gc;
+        
+        enhanceMedia();
+        
+        gc.pushCallback(removeMediaClasses);
+    }, false);
+
+    onPlay = function (event) {
+        var type = event.target.nodeName.toLowerCase();
+        
+        document.body.classList.add('impress-media-' + type + "-playing");
+        document.body.classList.remove('impress-media-' + type + "-paused");
+    };
+
+    onPause = function (event) {
+        var type = event.target.nodeName.toLowerCase();
+        
+        document.body.classList.add('impress-media-' + type + "-paused");
+        document.body.classList.remove('impress-media-' + type + "-playing");
+    };
+
+    onEnded = function (event) {
+        var type = event.target.nodeName.toLowerCase();
+        
+        document.body.classList.remove('impress-media-' + type + "-playing");
+        document.body.classList.remove('impress-media-' + type + "-paused");
+    };
+    
+    removeMediaClasses = function () {
+        var types = ['video', 'audio'];
+        for (var type in types) {
+            document.body.classList.remove('impress-media-' + types[type] + "-playing");
+            document.body.classList.remove('impress-media-' + types[type] + "-paused");
+        }
     }
-  };
-  
-  onPlay = function (event) {
-    var type = event.target.nodeName.toLowerCase();
-    document.body.classList.add(type + "playing");
-    document.body.classList.remove(type + "paused");
-  };
-  
-  onPause = function (event) {
-    var type = event.target.nodeName.toLowerCase();
-    document.body.classList.add(type + "paused");
-    document.body.classList.remove(type + "playing");
-  };
-  
-  onEnded = function (event) {
-    var type = event.target.nodeName.toLowerCase();
-    document.body.classList.remove(type + "playing");
-    document.body.classList.remove(type + "paused");
-  };
-  
-  enhanceMediaNode = function (type) {
-    var i, id, media = document.getElementsByTagName(type);
-    for (i = 0; i < media.length; i++) {
-      // Set an id to identify each media node - used e.g. by the consoleMedia plugin
-      id = media[i].getAttribute('id');
-      if (id === undefined || id === null) {
-        media[i].setAttribute('id', 'media-' + type + '-' + i);
-      }
-      media[i].addEventListener("play", onPlay, false);
-      media[i].addEventListener("playing", onPlay, false);
-      media[i].addEventListener("pause", onPause, false);
-      media[i].addEventListener("ended", onEnded, false);
-    }
-  };
-  
-  enhanceMedia = function () {
-    var i, steps, media = document.getElementsByClassName('media');
-    for (i = 0; i < media.length; i++) {
-      parseMediaShortcut(media[i]);
-    }
-    enhanceMediaNode('audio');
-    enhanceMediaNode('video');
-    steps = document.getElementsByClassName('step');
-    for (i = 0; i < steps.length; i++) {
-      console.log("Add event listener.");
-      steps[i].addEventListener('impress:stepenter', playOnStepenter, false);
-    }
-  };
-  
-  playOnStepenter = function (event) {
-    console.log("Stepenter triggered.");
-    var videos, audios, media, play, type, i;
-    if ((!event) || (!event.target)) {
-      return;
+
+    enhanceMediaNodes = function () {
+        var i, id, media, type;
+        
+        //gc = event.detail.api.lib.gc;
+        media = document.querySelectorAll('audio, video');
+        for (i = 0; i < media.length; i++) {
+            type = media[i].nodeName.toLowerCase();
+            // Set an id to identify each media node - used e.g. by the consoleMedia plugin
+            id = media[i].getAttribute('id');
+            if (id === undefined || id === null) {
+                media[i].setAttribute('id', 'media-' + type + '-' + i);
+            }
+            gc.addEventListener(media[i], "play", onPlay);
+            gc.addEventListener(media[i], "playing", onPlay);
+            gc.addEventListener(media[i], "pause", onPause);
+            gc.addEventListener(media[i], "ended", onEnded);
+        }
+    };
+
+    enhanceMedia = function () {
+        var steps, i;
+        enhanceMediaNodes();
+        steps = document.getElementsByClassName('step');
+        for (i = 0; i < steps.length; i++) {
+            gc.addEventListener(steps[i], 'impress:stepenter', onStepenter);
+            gc.addEventListener(steps[i], 'impress:stepleave', onStepleave);
+        }
+    };
+
+    onStepenter = function (event) {
+        var media, play, i;
+        if ((!event) || (!event.target)) {
+            return;
+        }
+        removeMediaClasses();
+        media = event.target.querySelectorAll('audio, video');
+        for (i = 0; i < media.length; i++) {
+            play = media[i].dataset.mediaAutoplay;
+            if (play !== undefined && play !== "false") {
+                media[i].play();
+            }
+        }
     }
     
-    audios = event.target.getElementsByTagName('audio');
-    videos = event.target.getElementsByTagName('video');
-    media = {
-      video: videos,
-      audio: audios
-    };
-    for (type in media) {
-      for (i = 0; i < media[type].length; i++) {
-        play = media[type][i].dataset.mediaPlayonenter;
-        console.log(play);
-        if (play !== undefined) {
-          media[type][i].play();
+    onStepleave = function (event) {
+        var media, i, dplay, play, dpause, pause, dstop, stop;
+        if ((!event || !event.target)) {
+            return;
         }
-      }
-    }
-  }
-
-  pauseOnStepleave = function (event) {
-    var videos, audios, media, type, i;
-    if ((!event) || (!event.target)) {
-      return;
-    }
-
-    videos = event.target.getElementsByTagName('video');
-    audios = event.target.getElementsByTagName('audio');
-    media = {
-      video: videos,
-      audio: audios
-    };
-    for (type in media) {
-      for (i = 0; i < media[type].length; i++) {
-        if (media[type][i].dataset.mediaPauseonleave !== "false") {
-          media[type][i].pause();
+        
+        media = event.target.querySelectorAll('audio, video');
+        for (i = 0; i < media.length; i++) {
+            dplay = media[i].dataset.mediaAutoplay;
+            dpause = media[i].dataset.mediaAutopause;
+            dstop = media[i].dataset.mediaAutostop;
+            
+            if (dplay !== undefined && dplay !== "false") {
+                play = true;
+            } else {
+                play = false
+            }
+            
+            if (dpause == undefined || dpause !== "false") {
+                pause = true;
+            } else {
+                pause = false;
+            }
+            
+            if (dstop == undefined) {
+                stop = play && !pause;
+            } else if (dstop !== "false") {
+                stop = true;
+            } else {
+                stop = false;
+            }
+            
+            if (pause || stop) {
+                media[i].pause();
+                if (stop) {
+                    media[i].currentTime = 0;
+                }
+            }
         }
-      }
+        removeMediaClasses();
     }
-  };
-
-  // Register the plugin to be called in the pre-init phase
-  window.impress.addPreInitPlugin(enhanceMedia);
-
-  // Register the plugin to be called in pre-stepleave phase
-  impress.addPreStepLeavePlugin(pauseOnStepleave);
 
 })(document, window);
 /**
