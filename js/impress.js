@@ -2870,6 +2870,7 @@
     }
 
 })(document, window);
+
 /**
  * Mobile devices support
  *
