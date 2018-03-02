@@ -64,8 +64,6 @@
         api = event.detail.api;
         gc = api.lib.gc;
         
-        enhanceMedia();
-        
         if (root.dataset.mediaAutoplay === "" || root.dataset.mediaAutoplay === "true") {
             root.mediaAutoplay = true;
         } else {
@@ -81,6 +79,9 @@
         } else {
             root.mediaAutopause = false;
         }
+        
+        // this *must* be called only after setting the autopause, autoplay and autostop values
+        enhanceMedia();
         
         gc.pushCallback(function () {
             delete root.mediaAutoplay;
@@ -128,7 +129,7 @@
         for (i = 0; i < media.length; i++) {
             type = media[i].nodeName.toLowerCase();
             // Set an id to identify each media node - used e.g. by the consoleMedia plugin
-            mediaElement = media[id];
+            mediaElement = media[i];
             id = mediaElement.getAttribute('id');
             if (id === undefined || id === null) {
                 mediaElement.setAttribute('id', 'media-' + type + '-' + i);
@@ -177,7 +178,7 @@
     };
 
     onStepenter = function (event) {
-        var stepElement, media, mediaElement, mediaAutoplay, i;
+        var stepElement, media, mediaElement, i;
         if ((!event) || (!event.target)) {
             return;
         }
@@ -189,20 +190,20 @@
             
             // Inherit autoplay settings from step element if there is no own setting
             if (mediaElement.dataset.mediaAutoplay === undefined || mediaElement.dataset.mediaAutoplay === null) {
-                mediaAutoplay = stepElement.mediaAutoplay;
+                mediaElement.mediaAutoplay = stepElement.mediaAutoplay;
             } else {
-                mediaAutoplay = mediaElement.dataset.mediaAutoplay === "" || mediaElement.dataset.mediaAutoplay === "true";
+                mediaElement.mediaAutoplay = mediaElement.dataset.mediaAutoplay === "" || mediaElement.dataset.mediaAutoplay === "true";
             }
             
             // Autoplay when true
-            if (mediaAutoplay) {
-                media[i].play();
+            if (mediaElement.mediaAutoplay) {
+                mediaElement.play();
             }
         }
     };
     
     onStepleave = function (event) {
-        var stepElement, media, i, mediaElement, mediaAutostop, mediaAutopause;
+        var stepElement, media, i, mediaElement;
         if ((!event || !event.target)) {
             return;
         }
@@ -214,29 +215,29 @@
             
             // Inherit autostop and autopause settings from step element if there is no own setting
             if (mediaElement.dataset.mediaAutopause === undefined || mediaElement.dataset.mediaAutopause === null) {
-                mediaAutostop = stepElement.mediaAutopause;
+                mediaElement.mediaAutopause = stepElement.mediaAutopause;
             } else {
-                mediaAutopause = mediaElement.dataset.mediaAutopause === "" || mediaElement.dataset.mediaAutopause === "true";
+                mediaElement.mediaAutopause = mediaElement.dataset.mediaAutopause === "" || mediaElement.dataset.mediaAutopause === "true";
             }
-            
+                        
             if (mediaElement.dataset.mediaAutostop === undefined || mediaElement.dataset.mediaAutostop === null) {
                 // Try to derive autostop from parent step or root element – set to autostart value if no 
                 // explicit values are set there and autopause is not true
                 if (stepElement.dataset.mediaAutostop !== undefined && mediaElement.dataset.mediaAutostop !== null) {
-                    mediaAutostop = stepElement.mediaAutostop;
+                    mediaElement.mediaAutostop = stepElement.mediaAutostop;
                 } else if (root.dataset.mediaAutostop !== undefined && root.dataset.mediaAutostop !== null) {
-                    mediaAutostop = root.mediaAutostop;
+                    mediaElement.mediaAutostop = root.mediaAutostop;
                 } else {
-                    mediaAutostop = mediaElement.mediaAutoplay && !mediaAutopause;
+                    mediaElement.mediaAutostop = mediaElement.mediaAutoplay && !mediaElement.mediaAutopause;
                 }
             } else {
-                mediaAutostop = mediaElement.dataset.mediaAutostop === "" || mediaElement.dataset.mediaAutostop === "true";
+                mediaElement.mediaAutostop = mediaElement.dataset.mediaAutostop === "" || mediaElement.dataset.mediaAutostop === "true";
             }
             
-            if (mediaAutopause || mediaAutostop) {
-                media[i].pause();
-                if (mediaAutostop) {
-                    media[i].currentTime = 0;
+            if (mediaElement.mediaAutopause || mediaElement.mediaAutostop) {
+                mediaElement.pause();
+                if (mediaElement.mediaAutostop) {
+                    mediaElement.currentTime = 0;
                 }
             }
         }
