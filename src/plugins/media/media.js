@@ -78,16 +78,18 @@
     }
 
     enhanceMediaNodes = function () {
-        var i, id, media, type;
+        var i, id, media, mediaElement, type;
         
         //gc = event.detail.api.lib.gc;
         media = document.querySelectorAll('audio, video');
         for (i = 0; i < media.length; i++) {
             type = media[i].nodeName.toLowerCase();
             // Set an id to identify each media node - used e.g. by the consoleMedia plugin
-            id = media[i].getAttribute('id');
+            mediaElement = media[id];
+            id = mediaElement.getAttribute('id');
             if (id === undefined || id === null) {
-                media[i].setAttribute('id', 'media-' + type + '-' + i);
+                mediaElement.setAttribute('id', 'media-' + type + '-' + i);
+                gc.pushCallback(function() { mediaElement.removeAttribute('id'); });
             }
             gc.addEventListener(media[i], "play", onPlay);
             gc.addEventListener(media[i], "playing", onPlay);
