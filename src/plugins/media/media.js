@@ -3,21 +3,42 @@
  * 
  * This plugin will do the following things:
  * 
- *  - Add a special class when playing and pausing media (removing them when ending).
+ *  - Add a special class when playing (body.impress-media-video-playing 
+ *    and body.impress-media-video-playing) and pausing media (body.impress-media-video-paused
+ *    and body.impress-media-audio-paused) (removing them when ending).
+ *    This can be useful for example for darkening the background or fading out other elements
+ *    while a video is playing.
+ *    Only media at the current step are taken into account. All classes are removed when leaving a step.
+ *  
+ *  - Introduce the following new data attributes:
  *
- *  - Autostart videos when entering a step, if the attribute data-media-autoplay is set and not "false".
- *
- *  - Pause all video and audio an the active step when leaving it. This can be disabled for 
- *    indivudual media nodes by adding the data-media-autopause="false" attribute. 
+ *    - data-media-autoplay="true": Autostart media when entering its step.
+ *    - data-media-autostop="true": Stop media (= pause and reset to start), when leaving its step.
+ *    - data-media-autopause="true": Pause media but keep current time when leaving its step.
  *    
- *    Example: 
+ *    When these attributes are added to a step they are inherited by all media on this step. Of course 
+ *    this setting can be overwritten by adding different attributes to inidvidual media.
+ *    
+ *    The same rule applies when this attributes is added to the root element. Settings can be overwritten
+ *    for individual steps and media.
  *
- *      <audio contols data-media-autopause="false">
- *        <source src="..." type="audio/...">
- *        Your browser does not support HTML5 audio. Please update you browser to 
- *        a recent version.
- *      </audio>
- *  - 
+ *    Examples:
+ *    - data-media-autostart="true" data-media-autostop="true": start media on enter, stop on leave, 
+ *      restart from beginning when re-entering the step.
+ *
+ *    - data-media-autostart="true" data-media-autopause="true": start media on enter, pause on leave, 
+ *      resume on re-enter
+ *
+ *    - data-media-autostart="true" data-media-autostop="true" data-media-autopause="true": start 
+ *      media on enter, stop on leave (stop overwrites pause).
+ *
+ *    - <div id="impress" data-media-autostart="true"> ... <div class="step" data-media-autostart="false">
+ *      All media is startet automatically on all steps except the one that has the data-media-autostart="false"
+ *      attribute.
+ *
+ *  - Pro tip: Use <audio onended="impress().next()"> or <video onended="impress().next()"> to proceed to the 
+ *    next step automatically, when the end of the media is reached.
+ *    
  *
  * Copyright 2018 Holger Teichert (@complanar)
  * Released under the MIT license.
@@ -26,7 +47,7 @@
 
 (function (document, window) {
     "use strict";
-    var api, gc;
+    var root, api, gc;
 
     // function names
     var enhanceMediaNodes,
@@ -38,14 +59,35 @@
         onPause,
         onEnded;
     
-    document.addEventListener("impress:init", function(event) {
-        //root = event.target;
+    document.addEventListener("impress:init", function (event) {
+        root = event.target;
         api = event.detail.api;
         gc = api.lib.gc;
         
         enhanceMedia();
         
-        gc.pushCallback(removeMediaClasses);
+        if (root.dataset.mediaAutoplay === "" || root.dataset.mediaAutoplay === "true") {
+            root.mediaAutoplay = true;
+        } else {
+            root.mediaAutoplay = false;
+        }
+        if (root.dataset.mediaAutostop === "" || root.dataset.mediaAutostop === "true") {
+            root.mediaAutostop = true;
+        } else {
+            root.mediaAutostop = false;
+        }
+        if (root.dataset.mediaAutopause === "" || root.dataset.mediaAutopause === "true") {
+            root.mediaAutopause = true;
+        } else {
+            root.mediaAutopause = false;
+        }
+        
+        gc.pushCallback(function () {
+            delete root.mediaAutoplay;
+            delete root.mediaAutostop;
+            delete root.mediaAutopause;
+            removeMediaClasses();
+        });
     }, false);
 
     onPlay = function (event) {
@@ -70,12 +112,13 @@
     };
     
     removeMediaClasses = function () {
-        var types = ['video', 'audio'];
-        for (var type in types) {
+        var type, types;
+        types = ['video', 'audio'];
+        for (type in types) {
             document.body.classList.remove('impress-media-' + types[type] + "-playing");
             document.body.classList.remove('impress-media-' + types[type] + "-paused");
         }
-    }
+    };
 
     enhanceMediaNodes = function () {
         var i, id, media, mediaElement, type;
@@ -89,7 +132,7 @@
             id = mediaElement.getAttribute('id');
             if (id === undefined || id === null) {
                 mediaElement.setAttribute('id', 'media-' + type + '-' + i);
-                gc.pushCallback(function() { mediaElement.removeAttribute('id'); });
+                gc.pushCallback(function () { mediaElement.removeAttribute('id'); });
             }
             gc.addEventListener(media[i], "play", onPlay);
             gc.addEventListener(media[i], "playing", onPlay);
@@ -99,70 +142,105 @@
     };
 
     enhanceMedia = function () {
-        var steps, i;
+        var steps, stepElement, i;
         enhanceMediaNodes();
         steps = document.getElementsByClassName('step');
         for (i = 0; i < steps.length; i++) {
-            gc.addEventListener(steps[i], 'impress:stepenter', onStepenter);
-            gc.addEventListener(steps[i], 'impress:stepleave', onStepleave);
+            stepElement = steps[i];
+            
+            // Inherit autoplay, autostop and autopause settings from root element if there is no own setting
+            if (stepElement.dataset.mediaAutoplay === undefined || stepElement.dataset.mediaAutoplay === null) {
+                stepElement.mediaAutoplay = root.mediaAutoplay;
+            } else {
+                stepElement.mediaAutoplay = stepElement.dataset.mediaAutoplay === "" || stepElement.dataset.mediaAutoplay === "true";
+            }
+            if (stepElement.dataset.mediaAutoplay === undefined || stepElement.dataset.mediaAutoplay === null) {
+                stepElement.mediaAutostop = root.mediaAutostop;
+            } else {
+                stepElement.mediaAutostop = stepElement.dataset.mediaAutostop === "" || stepElement.dataset.mediaAutostop === "true";
+            }
+            if (stepElement.dataset.mediaAutoplay === undefined || stepElement.dataset.mediaAutoplay === null) {
+                stepElement.mediaAutopause = root.mediaAutopause;
+            } else {
+                stepElement.mediaAutopause = stepElement.dataset.mediaAutopause === "" || stepElement.dataset.mediaAutopause === "true";
+            }
+                
+            gc.pushCallback(function () {
+                delete stepElement.mediaAutoplay;
+                delete stepElement.mediaAutostop;
+                delete stepElement.mediaAutopause;
+            });
+            
+            gc.addEventListener(stepElement, 'impress:stepenter', onStepenter);
+            gc.addEventListener(stepElement, 'impress:stepleave', onStepleave);
         }
     };
 
     onStepenter = function (event) {
-        var media, play, i;
+        var stepElement, media, mediaElement, mediaAutoplay, i;
         if ((!event) || (!event.target)) {
             return;
         }
         removeMediaClasses();
+        stepElement = event.target;
         media = event.target.querySelectorAll('audio, video');
         for (i = 0; i < media.length; i++) {
-            play = media[i].dataset.mediaAutoplay;
-            if (play !== undefined && play !== "false") {
+            mediaElement = media[i];
+            
+            // Inherit autoplay settings from step element if there is no own setting
+            if (mediaElement.dataset.mediaAutoplay === undefined || mediaElement.dataset.mediaAutoplay === null) {
+                mediaAutoplay = stepElement.mediaAutoplay;
+            } else {
+                mediaAutoplay = mediaElement.dataset.mediaAutoplay === "" || mediaElement.dataset.mediaAutoplay === "true";
+            }
+            
+            // Autoplay when true
+            if (mediaAutoplay) {
                 media[i].play();
             }
         }
-    }
+    };
     
     onStepleave = function (event) {
-        var media, i, dplay, play, dpause, pause, dstop, stop;
+        var stepElement, media, i, mediaElement, mediaAutostop, mediaAutopause;
         if ((!event || !event.target)) {
             return;
         }
         
+        stepElement = event.target;
         media = event.target.querySelectorAll('audio, video');
         for (i = 0; i < media.length; i++) {
-            dplay = media[i].dataset.mediaAutoplay;
-            dpause = media[i].dataset.mediaAutopause;
-            dstop = media[i].dataset.mediaAutostop;
+            mediaElement = media[i];
             
-            if (dplay !== undefined && dplay !== "false") {
-                play = true;
+            // Inherit autostop and autopause settings from step element if there is no own setting
+            if (mediaElement.dataset.mediaAutopause === undefined || mediaElement.dataset.mediaAutopause === null) {
+                mediaAutostop = stepElement.mediaAutopause;
             } else {
-                play = false
+                mediaAutopause = mediaElement.dataset.mediaAutopause === "" || mediaElement.dataset.mediaAutopause === "true";
             }
             
-            if (dpause == undefined || dpause !== "false") {
-                pause = true;
+            if (mediaElement.dataset.mediaAutostop === undefined || mediaElement.dataset.mediaAutostop === null) {
+                // Try to derive autostop from parent step or root element – set to autostart value if no 
+                // explicit values are set there and autopause is not true
+                if (stepElement.dataset.mediaAutostop !== undefined && mediaElement.dataset.mediaAutostop !== null) {
+                    mediaAutostop = stepElement.mediaAutostop;
+                } else if (root.dataset.mediaAutostop !== undefined && root.dataset.mediaAutostop !== null) {
+                    mediaAutostop = root.mediaAutostop;
+                } else {
+                    mediaAutostop = mediaElement.mediaAutoplay && !mediaAutopause;
+                }
             } else {
-                pause = false;
+                mediaAutostop = mediaElement.dataset.mediaAutostop === "" || mediaElement.dataset.mediaAutostop === "true";
             }
             
-            if (dstop == undefined) {
-                stop = play && !pause;
-            } else if (dstop !== "false") {
-                stop = true;
-            } else {
-                stop = false;
-            }
-            
-            if (pause || stop) {
+            if (mediaAutopause || mediaAutostop) {
                 media[i].pause();
-                if (stop) {
+                if (mediaAutostop) {
                     media[i].currentTime = 0;
                 }
             }
         }
         removeMediaClasses();
-    }
+    };
 
 })(document, window);
