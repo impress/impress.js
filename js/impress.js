@@ -2893,7 +2893,7 @@
     };
 
     onStepenter = function (event) {
-        var stepElement, media, mediaElement, i;
+        var stepElement, media, mediaElement, i, onConsolePreview, onConsoleSlideView;
         if ((!event) || (!event.target)) {
             return;
         }
@@ -2910,8 +2910,13 @@
                 mediaElement.mediaAutoplay = mediaElement.dataset.mediaAutoplay === "" || mediaElement.dataset.mediaAutoplay === "true";
             }
             
-            // Autoplay when true
-            if (mediaElement.mediaAutoplay) {
+            // Autoplay when true, but only if not on preview of the next step in impressConsole
+            onConsolePreview = (window.frameElement !== null && window.frameElement.id === "preView");
+            if (mediaElement.mediaAutoplay && !onConsolePreview) {
+                onConsoleSlideView = (window.frameElement !== null && window.frameElement.id === "slideView");
+                if (onConsoleSlideView) {
+                    mediaElement.muted = true;
+                }
                 mediaElement.play();
             }
         }
