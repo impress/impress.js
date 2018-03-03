@@ -47,8 +47,10 @@
 
 (function (document, window) {
     "use strict";
-    var root, api, gc;
-
+    var root, api, gc, gcAttributes;
+    
+    gcAttributes = [];
+    
     // function names
     var enhanceMediaNodes,
         enhanceMedia,
@@ -57,7 +59,8 @@
         onStepleave,
         onPlay,
         onPause,
-        onEnded;
+        onEnded,
+        garbage;
     
     document.addEventListener("impress:init", function (event) {
         root = event.target;
@@ -83,41 +86,53 @@
         // this *must* be called only after setting the autopause, autoplay and autostop values
         enhanceMedia();
         
-        gc.pushCallback(function () {
-            delete root.mediaAutoplay;
-            delete root.mediaAutostop;
-            delete root.mediaAutopause;
-            removeMediaClasses();
-        });
+        gc.pushCallback(garbage());
     }, false);
-
+    
+    garbage = function () {
+        var elements, el, i;
+        removeMediaClasses();
+        delete root.mediaAutoplay;
+        delete root.mediaAutopause;
+        delete root.mediaAutopstop;
+        elements = document.querySelectorAll("#root, .step, audio, video");
+        for (i = 0; i < elements.length; i += 1) {
+            el = elements[i];
+            delete el.mediaAutoplay;
+            delete el.mediaAutopause;
+            delete el.mediaAutostop;
+        }
+        for (i = 0; i < gcAttributes.length; i += 1) {
+            el = gcAttributes[i];
+            el.node.removeAttribute(el.attr);
+        }
+        gcAttributes = [];
+    };
+    
     onPlay = function (event) {
         var type = event.target.nodeName.toLowerCase();
-        
-        document.body.classList.add('impress-media-' + type + "-playing");
-        document.body.classList.remove('impress-media-' + type + "-paused");
+        document.body.classList.add("impress-media-" + type + "-playing");
+        document.body.classList.remove("impress-media-" + type + "-paused");
     };
 
     onPause = function (event) {
         var type = event.target.nodeName.toLowerCase();
-        
-        document.body.classList.add('impress-media-' + type + "-paused");
-        document.body.classList.remove('impress-media-' + type + "-playing");
+        document.body.classList.add("impress-media-" + type + "-paused");
+        document.body.classList.remove("impress-media-" + type + "-playing");
     };
 
     onEnded = function (event) {
         var type = event.target.nodeName.toLowerCase();
-        
-        document.body.classList.remove('impress-media-' + type + "-playing");
-        document.body.classList.remove('impress-media-' + type + "-paused");
+        document.body.classList.remove("impress-media-" + type + "-playing");
+        document.body.classList.remove("impress-media-" + type + "-paused");
     };
     
     removeMediaClasses = function () {
         var type, types;
-        types = ['video', 'audio'];
+        types = ["video", "audio"];
         for (type in types) {
-            document.body.classList.remove('impress-media-' + types[type] + "-playing");
-            document.body.classList.remove('impress-media-' + types[type] + "-paused");
+            document.body.classList.remove("impress-media-" + types[type] + "-playing");
+            document.body.classList.remove("impress-media-" + types[type] + "-paused");
         }
     };
 
@@ -125,15 +140,15 @@
         var i, id, media, mediaElement, type;
         
         //gc = event.detail.api.lib.gc;
-        media = document.querySelectorAll('audio, video');
-        for (i = 0; i < media.length; i++) {
+        media = document.querySelectorAll("audio, video");
+        for (i = 0; i < media.length; i += 1) {
             type = media[i].nodeName.toLowerCase();
             // Set an id to identify each media node - used e.g. by the consoleMedia plugin
             mediaElement = media[i];
-            id = mediaElement.getAttribute('id');
+            id = mediaElement.getAttribute("id");
             if (id === undefined || id === null) {
-                mediaElement.setAttribute('id', 'media-' + type + '-' + i);
-                gc.pushCallback(function () { mediaElement.removeAttribute('id'); });
+                mediaElement.setAttribute("id", "media-" + type + "-" + i);
+                gcAttributes.push({"node": mediaElement, "attr": "id"});
             }
             gc.addEventListener(media[i], "play", onPlay);
             gc.addEventListener(media[i], "playing", onPlay);
@@ -145,8 +160,8 @@
     enhanceMedia = function () {
         var steps, stepElement, i;
         enhanceMediaNodes();
-        steps = document.getElementsByClassName('step');
-        for (i = 0; i < steps.length; i++) {
+        steps = document.getElementsByClassName("step");
+        for (i = 0; i < steps.length; i += 1) {
             stepElement = steps[i];
             
             // Inherit autoplay, autostop and autopause settings from root element if there is no own setting
@@ -165,15 +180,9 @@
             } else {
                 stepElement.mediaAutopause = stepElement.dataset.mediaAutopause === "" || stepElement.dataset.mediaAutopause === "true";
             }
-                
-            gc.pushCallback(function () {
-                delete stepElement.mediaAutoplay;
-                delete stepElement.mediaAutostop;
-                delete stepElement.mediaAutopause;
-            });
             
-            gc.addEventListener(stepElement, 'impress:stepenter', onStepenter);
-            gc.addEventListener(stepElement, 'impress:stepleave', onStepleave);
+            gc.addEventListener(stepElement, "impress:stepenter", onStepenter);
+            gc.addEventListener(stepElement, "impress:stepleave", onStepleave);
         }
     };
 
@@ -184,8 +193,8 @@
         }
         removeMediaClasses();
         stepElement = event.target;
-        media = event.target.querySelectorAll('audio, video');
-        for (i = 0; i < media.length; i++) {
+        media = event.target.querySelectorAll("audio, video");
+        for (i = 0; i < media.length; i += 1) {
             mediaElement = media[i];
             
             // Inherit autoplay settings from step element if there is no own setting
@@ -209,8 +218,8 @@
         }
         
         stepElement = event.target;
-        media = event.target.querySelectorAll('audio, video');
-        for (i = 0; i < media.length; i++) {
+        media = event.target.querySelectorAll("audio, video");
+        for (i = 0; i < media.length; i += 1) {
             mediaElement = media[i];
             
             // Inherit autostop and autopause settings from step element if there is no own setting
