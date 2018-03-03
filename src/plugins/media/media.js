@@ -86,7 +86,7 @@
         // this *must* be called only after setting the autopause, autoplay and autostop values
         enhanceMedia();
         
-        gc.pushCallback(garbage());
+        gc.pushCallback(garbage);
     }, false);
     
     garbage = function () {
