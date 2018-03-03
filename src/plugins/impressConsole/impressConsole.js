@@ -57,7 +57,7 @@
 
     // Settings to set iframe in speaker console
     const preViewDefaultFactor = 0.7;
-    const preViewMinimumFactor = 0.5;
+    const preViewMinimumFactor = 0.3;
     const preViewGap    = 4;
 
     // This is the default template for the speaker console window
@@ -88,11 +88,11 @@
         '</body></html>';
 
     // Default css location
-    var cssFileOldDefault = 'css/impressConsole.css';
-    var cssFile = undefined; // jshint ignore:line
+    var cssFileOldDefault = './css/impressConsoleBlack.css';
+    var cssFile = cssFileOldDefault;
 
     // Css for styling iframs on the console
-    var cssFileIframeOldDefault = 'css/iframe.css';
+    var cssFileIframeOldDefault = './css/iframe.css';
     var cssFileIframe = undefined; // jshint ignore:line
 
     // All console windows, so that you can call impressConsole() repeatedly.
@@ -606,7 +606,9 @@
     // Returns a string to be used inline as a css <style> element in the console window.
     // Apologies for length, but hiding it here at the end to keep it away from rest of the code.
     var cssStyleStr = function() {
-        return `<style>
+    	return "";
+    /*    LWH: commented as otherwise error in IE10
+    		return `<style>
             #impressconsole body {
                 background-color: rgb(255, 255, 255);
                 padding: 0;
@@ -746,7 +748,7 @@
             #impressconsole span.ready {
                 color: rgb(0, 128, 0);
             }
-        </style>`;
+        </style>`;*/
     };
 
 } )( document, window );

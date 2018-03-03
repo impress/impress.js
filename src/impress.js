@@ -121,8 +121,10 @@
 
     // `computeWindowScale` counts the scale factor between window size and size
     // defined for the presentation in the config.
-    var computeWindowScale = function( config ) {
-        var hScale = window.innerHeight / config.height,
+    //	LWH: added margins for custom background
+    var computeWindowScale = function ( config ) {
+    	var tbmarg = 40 + 40;	// body margins at top and bottom
+        var hScale = (window.innerHeight - tbmarg) / config.height,
             wScale = window.innerWidth / config.width,
             scale = hScale > wScale ? wScale : hScale;
 
@@ -391,6 +393,13 @@
                 rotate:    { x: 0, y: 0, z: 0, order: "xyz" },
                 scale:     1
             };
+
+            //	LWH: workaround for the iframe problem in chrome
+            //	works in mozilla and chrome.
+            if (window != window.top)	{
+            	//	i'm in an iframe, so probably in the console
+	            body.classList.add('impress-console');
+            }	
 
             initialized = true;
 
