@@ -3,10 +3,8 @@ Polar Coordinate Positioning Plugin
 
 Preface
 -------
-This plugin replaces the "rel" relative positioning plugin. 
-It includes and enhances its functionality.
-Using both will confuse the positioning, as the first one called replaces 
-relative positions by absolute ones, thus disabling the second one.
+This plugin includes and enhances functionality from the rel plugin.
+Please only use one of them.
 
 Relative Positioning (Cartesian)
 --------------------------------
