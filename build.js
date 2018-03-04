@@ -3,6 +3,9 @@ var buildify = require('buildify');
 
 buildify()
   .load('src/impress.js')
+  .perform(function(content){ 
+      return "// This file was automatically generated from files in src/ directory.\n\n" + content;
+  })
   // Libraries from src/lib
   .concat(['src/lib/gc.js'])
   .concat(['src/lib/util.js'])
