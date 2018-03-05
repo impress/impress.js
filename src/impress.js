@@ -59,7 +59,7 @@
         var returnStr = "";
         if ( typeof order === "string" ) {
             for ( var i in order.split( "" ) ) {
-                if ( validChars.indexOf( order[ i ] >= 0 ) ) {
+                if ( validChars.indexOf( order[ i ] ) >= 0 ) {
                     returnStr += order[ i ];
 
                     // Each of x,y,z can be used only once.
