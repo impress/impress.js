@@ -41,12 +41,10 @@
 (function ( document, window ) {
     'use strict';
 
-    const   absolute_flag   = "data-pos-abs";
     var     startingState   = {};
 
     /**
-     * Copied from core impress.js. We currently lack a library mechanism
-     * to share utility functions like this.
+     * Changed from lib function to also cover a numeric of <code>null</code>.
      */
     var toNumber = function( numeric, fallback ) {
         if ( ( numeric === null ) || isNaN( numeric ) ) {
@@ -94,59 +92,46 @@
     };
 
     /**
-     * Sets the (absolute) cartesian coordinate attributes from the x/y/z components of a data set.
-     * @param   astep   the step element to add the attributes to
-     * @param   apos    the data set to take the x, y and z values from
-     * @return          the modified step element
-     */
-    var setCartesians = function ( astep, apos )    {
-        console.info("    coordinates set to " + apos.x + " / " + apos.y + " / " + apos.z);
-        astep.setAttribute( "data-x", Math.round( apos.x ) );
-        astep.setAttribute( "data-y", Math.round( apos.y ) );
-        astep.setAttribute( "data-z", Math.round( apos.z ) );
-        return astep;
-    };
-    
-    /**
      * Calculates the absolute cartesian coordinates in pixels from existing attributes.
      * Accounted attributes are:
      *  data-x
      *  data-y
      *  data-z
      * Replaces units of w = width, h = height and d = diagonal with the proper scale.
-     * If the 'absolute' attribute is set, the step element is returned unchanged.
+     * Only those coordinates are set which were explicitly defined and are not zero.
      * @param   astep   the step element to position
      * @return          the updated step
      */
     var computeAbsCartesianPosition = function ( astep )    {
-        //  don't change anything, if absolute position already defined.
-        if ( astep.hasAttribute(absolute_flag) )    {
-            console.info("    absolute cartesians skipped.")
-            return astep;
-        }
         console.info("    calculating absolute cartesians.")
         
         var data = {
-                x:      astep.getAttribute("data-x"),
-                y:      astep.getAttribute("data-y"),
-                z:      astep.getAttribute("data-z"),
+                x: astep.getAttribute( "data-x" ),
+                y: astep.getAttribute( "data-y" ),
+                z: astep.getAttribute( "data-z" ),
         }
-        //  if any absolute coordinate is defined, set the 'absolute' attribute
-        if ( ( data.x ) || ( data.y ) || ( data.z ) )   {
-            astep.setAttribute(absolute_flag, "");
-        };
         var pos = {
-                x:      toNumberAdvanced( data.x, 0 ),
-                y:      toNumberAdvanced( data.y, 0 ),
-                z:      toNumberAdvanced( data.z, 0 )
+                x: toNumberAdvanced( data.x, 0 ),
+                y: toNumberAdvanced( data.y, 0 ),
+                z: toNumberAdvanced( data.z, 0 )
         };
-        return setCartesians( astep, pos );        
+        console.info("    coordinates set to " + pos.x + " / " + pos.y + " / " + pos.z);
+        if ( ( data.x ) || ( pos.x != 0 ) ) {
+            astep.setAttribute( "data-x", Math.round( pos.x ) );
+        }
+        if ( ( data.y ) || ( pos.y != 0 ) ) {
+            astep.setAttribute( "data-y", Math.round( pos.y ) );
+        }
+        if ( ( data.z ) || ( pos.z != 0 ) ) {
+            astep.setAttribute( "data-z", Math.round( pos.z ) );
+        }
+        return astep;
     };
     
     /**
      * Calculates the absolute cartesian coordinates in pixels from existing attributes.
      * Accounted attributes are (angles in degrees):
-     *  data-polar-rho      for the radius
+     *  data-polar-rho      for the radius (required)
      *  data-polar-phi      for the rotation angle around the z-axis
      *  data-polar-theta    for the elevation angle relative to the x-y-plane
      *  data-polar-z        for the elevation, alternative to theta
@@ -156,43 +141,45 @@
      * @return          the updated step
      */
     var computeAbsPolarPosition    = function ( astep )    {
-        //  don't change anything, if absolute position already defined.
-        if ( astep.hasAttribute(absolute_flag) )    {
-            console.info("    absolute polars skipped.")
-            return astep;
-        }
-        console.info("    calculating absolute polars.")
         
         var data = {
-                rho:    astep.getAttribute("data-polar-rho"),
-                phi:    astep.getAttribute("data-polar-phi"),
-                theta:  astep.getAttribute("data-polar-theta"),
-                z:      astep.getAttribute("data-polar-z")
+                rho:    astep.getAttribute( "data-polar-rho" ),
+                phi:    astep.getAttribute( "data-polar-phi" ),
+                theta:  astep.getAttribute( "data-polar-theta" ),
+                z:      astep.getAttribute( "data-polar-z" )
         }
-        //  if absolute polar coordinates are defined (without rho angles make no sense), 
-        //  set the 'absolute' attribute
-        if ( data.rho )   {
-            astep.setAttribute(absolute_flag, "");
-        };
-        
-        var pos = {
-                rho:    toNumberAdvanced(  data.rho, 0 ),
-                phi:    toNumber( data.phi, 0 ),
-                theta:  toNumber( data.theta, 0 ),
-                z:      toNumberAdvanced( data.z, 0 )
-        };
-        console.log("    polars of " + pos.rho + " / " + pos.phi + "° / " + pos.theta + "°");
-        
-        var phiarc      = pos.phi   * Math.PI/180;
-        var thetaarc    = pos.theta * Math.PI/180;
-        
-        pos.x = + pos.rho * Math.cos(phiarc) * Math.cos(thetaarc);
-        pos.y = - pos.rho * Math.sin(phiarc) * Math.cos(thetaarc);
-        pos.z = pos.z + pos.rho * Math.sin(thetaarc);
+        //  if no rho defined, all other values would be zero, so rho is required
+        if ( data.rho ) {
+            console.info("    calculating absolute polars.")
+            var pos = {
+                    rho:    toNumberAdvanced( data.rho, 0 ),
+                    phi:    toNumber( data.phi, 0 ),
+                    theta:  toNumber( data.theta, 0 ),
+                    z:      toNumberAdvanced( data.z, 0 )
+            };
+            console.log("    polars of " + pos.rho + " / " + pos.phi + "° / " + pos.theta + "°");
 
-        return setCartesians( astep, pos );        
+            var phiarc      = pos.phi   * Math.PI/180;
+            var thetaarc    = pos.theta * Math.PI/180;
+
+            pos.x = +pos.rho * Math.cos( phiarc ) * Math.cos( thetaarc );
+            pos.y = -pos.rho * Math.sin( phiarc ) * Math.cos( thetaarc );
+            pos.z = pos.z + pos.rho * Math.sin( thetaarc );
+
+            console.info("    coordinates set to " + pos.x + " / " + pos.y + " / " + pos.z);
+            if ( pos.x != 0 ) {
+                astep.setAttribute( "data-x", Math.round( pos.x ) );
+            }
+            if ( pos.y != 0 ) {
+                astep.setAttribute( "data-y", Math.round( pos.y ) );
+            }
+            if ( ( ( data.theta ) || ( data.z ) ) || ( pos.z != 0 ) ) {
+                astep.setAttribute( "data-z", Math.round( pos.z ) );
+            }
+        }
+        return astep;
     };
-    
+
     /**
      * Calculates the absolute cartesian coordinates from those given in the reference
      * and relative positions given either in the current step or inherited from the reference.
@@ -201,47 +188,45 @@
      *  data-rel-y
      *  data-rel-z
      * Replaces units of w (= width), h (= height) and d (= diagonal) with the proper scale.
+     * Does not overwrite any coordinates already defined.
      * Keeps relative positioning attributes for possible inheritance by the next step.
-     * If the 'absolute' attribute is set, the step element is returned unchanged.
      * @param   astep           the step element to position
      * @param   areferencestep  the referenced step to position relative to
      * @return                  the updated step
      */
     var computeRelCartesianPosition    = function ( astep, areferencestep )    {
-        //  don't change anything, if absolute position already defined.
-        if ( astep.hasAttribute(absolute_flag) )    {
-            console.info("    relative cartesians skipped.")
-            return astep;
-        }
-        
         //  get the reference position attributes or provide a default
         if ( !areferencestep )   {
             var refdata = { x: "0", y: "0", z: "0", relative: { x: "0", y: "0", z: "0" } };
         }   else    {
             var refdata = {
-                    x:  areferencestep.getAttribute("data-x"),
-                    y:  areferencestep.getAttribute("data-y"),
-                    z:  areferencestep.getAttribute("data-z"),
+                    x: areferencestep.getAttribute( "data-x" ),
+                    y: areferencestep.getAttribute( "data-y" ),
+                    z: areferencestep.getAttribute( "data-z" ),
                     relative: {
-                        x: areferencestep.getAttribute("data-rel-x"),
-                        y: areferencestep.getAttribute("data-rel-y"),
-                        z: areferencestep.getAttribute("data-rel-z")
+                        x: areferencestep.getAttribute( "data-rel-x" ),
+                        y: areferencestep.getAttribute( "data-rel-y" ),
+                        z: areferencestep.getAttribute( "data-rel-z" )
                     }
+            }
+            //  if the referenced object has a reference itself, do not inherit
+            if ( areferencestep.hasAttribute( "data-rel-ref" ) ) {
+                refdata.relative    = { x: null, y: null, z: null };
             }
         }
         //  extract the reference position in pixel (should be transformed already),
         //  and the relative positions for inheritance.
-        var refpos  = {
-                x: toNumber(refdata.x, 0),
-                y: toNumber(refdata.y, 0),
-                z: toNumber(refdata.z, 0),
+        var refpos = {
+                x: toNumber( refdata.x, 0 ),
+                y: toNumber( refdata.y, 0 ),
+                z: toNumber( refdata.z, 0 ),
                 relative: {
-                    x:  toNumberAdvanced(refdata.relative.x, 0),
-                    y:  toNumberAdvanced(refdata.relative.y, 0),
-                    z:  toNumberAdvanced(refdata.relative.z, 0)
+                    x: toNumberAdvanced( refdata.relative.x, 0 ),
+                    y: toNumberAdvanced( refdata.relative.y, 0 ),
+                    z: toNumberAdvanced( refdata.relative.z, 0 )
                 }
         }
-        
+
         if ( !areferencestep )   { 
             console.warn("    no reference given");
         }   else    {
@@ -250,18 +235,20 @@
                     + ", inherited " + refpos.relative.x + " / " + refpos.relative.y + " / " + refpos.relative.z);
         }
 
-        var data    = {
-                //  absolute coordinates not required, as taken from reference
-                relative:   {
-                    x: astep.getAttribute("data-rel-x"),
-                    y: astep.getAttribute("data-rel-y"),
-                    z: astep.getAttribute("data-rel-z")
+        var data = {
+                // absolute data needed to keep already defined values
+                x: astep.getAttribute( "data-x" ),
+                y: astep.getAttribute( "data-y" ),
+                z: astep.getAttribute( "data-z" ),
+                relative: {
+                    x: astep.getAttribute( "data-rel-x" ),
+                    y: astep.getAttribute( "data-rel-y" ),
+                    z: astep.getAttribute( "data-rel-z" )
                 }
         }
-        
-        if ( ( ! data.relative.x ) && ( ! data.relative.y ) && ( ! data.relative.z ) 
-                &&  ( ! refdata.relative.x ) && ( ! refdata.relative.y ) && ( ! refdata.relative.z ) )  {
-            console.info("    no relative cartesians given or inherited.")
+        if ( ( !data.relative.x ) && ( !data.relative.y ) && ( !data.relative.z ) 
+          && ( !refdata.relative.x ) && ( !refdata.relative.y ) && ( !refdata.relative.z ) ) {
+            console.info( "    no relative cartesians given or inherited." )
             return astep;
         }
         console.info("    calculating relative cartesians.")
@@ -279,14 +266,35 @@
         pos.y   = refpos.y + pos.relative.y;
         pos.z   = refpos.z + pos.relative.z;
 
-        return setCartesians( astep, pos );        
+        console.info("    coordinates set to " + pos.x + " / " + pos.y + " / " + pos.z);
+        //  add resulting absolute position, if not already defined
+        if ( !data.x ) {
+            astep.setAttribute( "data-x", Math.round( pos.x ) );
+        }
+        if ( !data.y ) {
+            astep.setAttribute( "data-y", Math.round( pos.y ) );
+        }
+        if ( !data.z ) {
+            astep.setAttribute( "data-z", Math.round( pos.z ) );
+        }
+        //  add inherited attributes for further inheritance
+        if ( ( !data.x ) && ( !data.relative.x ) && ( refdata.relative.x ) ) {
+            astep.setAttribute( "data-rel-x", Math.round( refpos.relative.x ) );
+        }
+        if ( ( !data.y ) && ( !data.relative.y ) && ( refdata.relative.y ) ) {
+            astep.setAttribute( "data-rel-y", Math.round( refpos.relative.y ) );
+        }
+        if ( ( !data.z ) && ( !data.relative.z ) && ( refdata.relative.z ) ) {
+            astep.setAttribute( "data-rel-z", Math.round( refpos.relative.z ) );
+        }
+        return astep;
     };
     
     /**
      * Calculates the absolute cartesian coordinates from those given in the reference
      * and relative polar positions given either in the current step or inherited from the reference.
      * Accounted attributes are (angles in degrees):
-     *  data-polar-rel-rho      for the radius from the reference
+     *  data-polar-rel-rho      for the radius from the reference (required)
      *  data-polar-rel-phi      for the rotation angle around the z-axis
      *  data-polar-rel-theta    for the elevation angle relative to the x-y-plane
      *  data-polar-rel-z        for the elevation, alternative to theta
@@ -298,12 +306,6 @@
      * @return                  the updated step
      */
     var computeRelPolarPosition    = function ( astep, areferencestep )    {
-        //  don't change anything, if absolute position already defined.
-        if ( astep.hasAttribute(absolute_flag) )    {
-            console.info("    relative polars skipped.")
-            return astep;
-        }
-        
         //  get the reference position attributes or provide a default
         if ( !areferencestep )   {
             var refdata = { x: "0", y: "0", z: "0", relative: { rho: "0", phi: "0", theta: "0" } };
@@ -318,19 +320,23 @@
                         theta:  areferencestep.getAttribute("data-polar-rel-theta"),
                         z:      areferencestep.getAttribute("data-polar-rel-z")
                     }
+           }
+            //  if the referenced object has a reference itself, do not inherit
+            if ( areferencestep.hasAttribute( "data-polar-rel-ref" ) ) {
+                refdata.relative    = { rho: null, phi: null, theta: null, z: null };
             }
         }
         //  extract the reference position in pixel (should be transformed already),
         //  and the relative positions for inheritance.
-        var refpos  = {
-                x: toNumber(refdata.x, 0),
-                y: toNumber(refdata.y, 0),
-                z: toNumber(refdata.z, 0),
+        var refpos = {
+                x: toNumber( refdata.x, 0 ),
+                y: toNumber( refdata.y, 0 ),
+                z: toNumber( refdata.z, 0 ),
                 relative: {
-                    rho:    toNumberAdvanced(refdata.relative.rho, 0),
-                    phi:    toNumber(refdata.relative.phi, 0),
-                    theta:  toNumber(refdata.relative.theta, 0),
-                    z:      toNumberAdvanced(refdata.relative.z, 0)
+                    rho:    toNumberAdvanced( refdata.relative.rho, 0 ),
+                    phi:    toNumber( refdata.relative.phi, 0 ),
+                    theta:  toNumber( refdata.relative.theta, 0 ),
+                    z:      toNumberAdvanced( refdata.relative.z, 0 )
                 }
         }
 
@@ -343,7 +349,9 @@
         }
 
         var data    = {
-                //  absolute coordinates not required, as taken from reference
+                x:      astep.getAttribute("data-x"),
+                y:      astep.getAttribute("data-y"),
+                z:      astep.getAttribute("data-z"),
                 relative:   {
                     rho:    astep.getAttribute("data-polar-rel-rho"),
                     phi:    astep.getAttribute("data-polar-rel-phi"),
@@ -375,7 +383,35 @@
         pos.y = refpos.y - pos.relative.rho * Math.sin(phiarc) * Math.cos(thetaarc);
         pos.z = refpos.z + pos.relative.z + pos.relative.rho * Math.sin(thetaarc);
 
-        return setCartesians( astep, pos );        
+        console.info("    coordinates set to " + pos.x + " / " + pos.y + " / " + pos.z);
+        //  add resulting absolute position, if not already defined
+        if ( !data.x ) {
+            astep.setAttribute( "data-x", Math.round( pos.x ) );
+        }
+        if ( !data.y ) {
+            astep.setAttribute( "data-y", Math.round( pos.y ) );
+        }
+        if ( !data.z ) {
+            astep.setAttribute( "data-z", Math.round( pos.z ) );
+        }
+        //  add inherited attributes for further inheritance
+        if ( ( !data.x ) && ( !data.y ) )   {
+            if ((!data.relative.rho) && ( refdata.relative.rho ) ) {
+                astep.setAttribute( "data-polar-rel-rho",  refpos.relative.rho );
+            }
+            if ((!data.relative.phi) && ( refdata.relative.phi ) ) {
+                astep.setAttribute( "data-polar-rel-phi",  refpos.relative.phi );
+            }
+        }
+        if ( !data.z )  {
+            if ( ( !data.relative.theta ) && ( refdata.relative.theta ) ) {
+                astep.setAttribute( "data-polar-rel-theta", refpos.relative.theta );
+            }
+            if ( ( !data.relative.z ) && ( refdata.relative.z ) ) {
+                astep.setAttribute( "data-polar-rel-z", refpos.relative.z );
+            }
+        }
+        return astep;
     };
     
             
