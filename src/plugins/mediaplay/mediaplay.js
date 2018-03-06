@@ -30,7 +30,11 @@
     const	prop_transition = "transition";
     const	prop_volume 	= "data-volume";
 
-	var 	lib	= window.impress().lib;
+	var 	lib;
+	
+    document.addEventListener( "impress:init", function( event ) {
+        lib = event.detail.api.lib;
+    }, false );
 
 	/**
 	 *	Looks for the volume property and returns its value.
