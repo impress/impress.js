@@ -2806,10 +2806,11 @@
         // Look for attributes in all nodes
         for (i = 0; i < nodeList.length; i += 1) {
             node = nodeList[i];
-            // Attribute found return their parsed value, empty string counts as true
             // First test, if the attribute exists, because some browsers may return 
             // an empty string for non-existing attributes - specs are not clear at that point
             if (node.hasAttribute(attrName)) {
+                // Attribute found, return their parsed boolean value, empty strings count as true
+                // to enable empty value booleans (common in html5 vs. not allowed in well formed xml).
                 attrValue = node.getAttribute(attrName);
                 if (attrValue === "" || attrValue === "true") {
                     return true;
@@ -2858,7 +2859,8 @@
         media = root.querySelectorAll("audio, video");
         for (i = 0; i < media.length; i += 1) {
             type = media[i].nodeName.toLowerCase();
-            // Set an id to identify each media node - used e.g. by the consoleMedia plugin
+            // Set an id to identify each media node - used e.g. for cross references by 
+            // the consoleMedia plugin
             mediaElement = media[i];
             id = mediaElement.getAttribute("id");
             if (id === undefined || id === null) {
