@@ -194,7 +194,7 @@
             // Autoplay when (maybe inherited) autoplay setting is true, 
             // but only if not on preview of the next step in impressConsole
             onConsolePreview = (window.frameElement !== null && window.frameElement.id === "preView");
-            if (getMediaAttribute('autoplay', [mediaElement, stepElement, root]) && !onConsolePreview) {
+            if (getMediaAttribute("autoplay", [mediaElement, stepElement, root]) && !onConsolePreview) {
                 onConsoleSlideView = (window.frameElement !== null && window.frameElement.id === "slideView");
                 if (onConsoleSlideView) {
                     mediaElement.muted = true;
@@ -215,9 +215,9 @@
         for (i = 0; i < media.length; i += 1) {
             mediaElement = media[i];
             
-            autoplay = getMediaAttribute('autoplay', [mediaElement, stepElement, root]);
-            autopause = getMediaAttribute('autopause', [mediaElement, stepElement, root]);
-            autostop = getMediaAttribute('autostop', [mediaElement, stepElement, root]);
+            autoplay = getMediaAttribute("autoplay", [mediaElement, stepElement, root]);
+            autopause = getMediaAttribute("autopause", [mediaElement, stepElement, root]);
+            autostop = getMediaAttribute("autostop", [mediaElement, stepElement, root]);
             
             // If both autostop and autopause are undefined, set it to the value of autoplay
             // Previously only if autopause was false, but in that case someone would expect
