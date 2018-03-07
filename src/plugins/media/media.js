@@ -47,9 +47,9 @@
 
 (function (document, window) {
     "use strict";
-    var root, api, gc, gcAttributes;
+    var root, api, gc, attributeTracker;
     
-    gcAttributes = [];
+    attributeTracker = [];
     
     // function names
     var enhanceMediaNodes,
@@ -60,36 +60,20 @@
         onPlay,
         onPause,
         onEnded,
-        garbage;
+        getMediaAttribute,
+        teardown;
     
     document.addEventListener("impress:init", function (event) {
         root = event.target;
         api = event.detail.api;
         gc = api.lib.gc;
-        
-        if (root.dataset.mediaAutoplay === "" || root.dataset.mediaAutoplay === "true") {
-            root.mediaAutoplay = true;
-        } else {
-            root.mediaAutoplay = false;
-        }
-        if (root.dataset.mediaAutostop === "" || root.dataset.mediaAutostop === "true") {
-            root.mediaAutostop = true;
-        } else {
-            root.mediaAutostop = false;
-        }
-        if (root.dataset.mediaAutopause === "" || root.dataset.mediaAutopause === "true") {
-            root.mediaAutopause = true;
-        } else {
-            root.mediaAutopause = false;
-        }
-        
-        // this *must* be called only after setting the autopause, autoplay and autostop values
+
         enhanceMedia();
         
-        gc.pushCallback(garbage);
+        gc.pushCallback(teardown);
     }, false);
     
-    garbage = function () {
+    teardown = function () {
         var elements, el, i;
         removeMediaClasses();
         delete root.mediaAutoplay;
@@ -102,11 +86,36 @@
             delete el.mediaAutopause;
             delete el.mediaAutostop;
         }
-        for (i = 0; i < gcAttributes.length; i += 1) {
-            el = gcAttributes[i];
+        for (i = 0; i < attributeTracker.length; i += 1) {
+            el = attributeTracker[i];
             el.node.removeAttribute(el.attr);
         }
-        gcAttributes = [];
+        attributeTracker = [];
+    };
+    
+    getMediaAttribute = function (attributeName, nodeList) {
+        var attrName, attrValue, i, node;
+        attrName = "data-media-" + attributeName;
+        
+        // Look for attributes in all nodes
+        for (i = 0; i < nodeList.length; i += 1) {
+            node = nodeList[i];
+            // Attribute found return their parsed value, empty string counts as true
+            // First test, if the attribute exists, because some browsers may return 
+            // an empty string for non-existing attributes - specs are not clear at that point
+            if (node.hasAttribute(attrName)) {
+                attrValue = node.getAttribute(attrName);
+                if (attrValue === "" || attrValue === "true") {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+            // No attribute found at current node, proceed with next round
+        }
+        
+        // Last resort: no attribute found - return undefined to distiguish from false
+        return undefined;
     };
     
     onPlay = function (event) {
@@ -140,7 +149,7 @@
         var i, id, media, mediaElement, type;
         
         //gc = event.detail.api.lib.gc;
-        media = document.querySelectorAll("audio, video");
+        media = root.querySelectorAll("audio, video");
         for (i = 0; i < media.length; i += 1) {
             type = media[i].nodeName.toLowerCase();
             // Set an id to identify each media node - used e.g. by the consoleMedia plugin
@@ -148,7 +157,7 @@
             id = mediaElement.getAttribute("id");
             if (id === undefined || id === null) {
                 mediaElement.setAttribute("id", "media-" + type + "-" + i);
-                gcAttributes.push({"node": mediaElement, "attr": "id"});
+                attributeTracker.push({"node": mediaElement, "attr": "id"});
             }
             gc.addEventListener(media[i], "play", onPlay);
             gc.addEventListener(media[i], "playing", onPlay);
@@ -164,23 +173,6 @@
         for (i = 0; i < steps.length; i += 1) {
             stepElement = steps[i];
             
-            // Inherit autoplay, autostop and autopause settings from root element if there is no own setting
-            if (stepElement.dataset.mediaAutoplay === undefined || stepElement.dataset.mediaAutoplay === null) {
-                stepElement.mediaAutoplay = root.mediaAutoplay;
-            } else {
-                stepElement.mediaAutoplay = stepElement.dataset.mediaAutoplay === "" || stepElement.dataset.mediaAutoplay === "true";
-            }
-            if (stepElement.dataset.mediaAutoplay === undefined || stepElement.dataset.mediaAutoplay === null) {
-                stepElement.mediaAutostop = root.mediaAutostop;
-            } else {
-                stepElement.mediaAutostop = stepElement.dataset.mediaAutostop === "" || stepElement.dataset.mediaAutostop === "true";
-            }
-            if (stepElement.dataset.mediaAutoplay === undefined || stepElement.dataset.mediaAutoplay === null) {
-                stepElement.mediaAutopause = root.mediaAutopause;
-            } else {
-                stepElement.mediaAutopause = stepElement.dataset.mediaAutopause === "" || stepElement.dataset.mediaAutopause === "true";
-            }
-            
             gc.addEventListener(stepElement, "impress:stepenter", onStepenter);
             gc.addEventListener(stepElement, "impress:stepleave", onStepleave);
         }
@@ -191,22 +183,18 @@
         if ((!event) || (!event.target)) {
             return;
         }
-        removeMediaClasses();
         stepElement = event.target;
-        media = event.target.querySelectorAll("audio, video");
+        
+        removeMediaClasses();
+        
+        media = stepElement.querySelectorAll("audio, video");
         for (i = 0; i < media.length; i += 1) {
             mediaElement = media[i];
             
-            // Inherit autoplay settings from step element if there is no own setting
-            if (mediaElement.dataset.mediaAutoplay === undefined || mediaElement.dataset.mediaAutoplay === null) {
-                mediaElement.mediaAutoplay = stepElement.mediaAutoplay;
-            } else {
-                mediaElement.mediaAutoplay = mediaElement.dataset.mediaAutoplay === "" || mediaElement.dataset.mediaAutoplay === "true";
-            }
-            
-            // Autoplay when true, but only if not on preview of the next step in impressConsole
+            // Autoplay when (maybe inherited) autoplay setting is true, 
+            // but only if not on preview of the next step in impressConsole
             onConsolePreview = (window.frameElement !== null && window.frameElement.id === "preView");
-            if (mediaElement.mediaAutoplay && !onConsolePreview) {
+            if (getMediaAttribute('autoplay', [mediaElement, stepElement, root]) && !onConsolePreview) {
                 onConsoleSlideView = (window.frameElement !== null && window.frameElement.id === "slideView");
                 if (onConsoleSlideView) {
                     mediaElement.muted = true;
@@ -217,7 +205,7 @@
     };
     
     onStepleave = function (event) {
-        var stepElement, media, i, mediaElement;
+        var stepElement, media, i, mediaElement, autoplay, autopause, autostop;
         if ((!event || !event.target)) {
             return;
         }
@@ -227,30 +215,21 @@
         for (i = 0; i < media.length; i += 1) {
             mediaElement = media[i];
             
-            // Inherit autostop and autopause settings from step element if there is no own setting
-            if (mediaElement.dataset.mediaAutopause === undefined || mediaElement.dataset.mediaAutopause === null) {
-                mediaElement.mediaAutopause = stepElement.mediaAutopause;
-            } else {
-                mediaElement.mediaAutopause = mediaElement.dataset.mediaAutopause === "" || mediaElement.dataset.mediaAutopause === "true";
-            }
-                        
-            if (mediaElement.dataset.mediaAutostop === undefined || mediaElement.dataset.mediaAutostop === null) {
-                // Try to derive autostop from parent step or root element – set to autostart value if no 
-                // explicit values are set there and autopause is not true
-                if (stepElement.dataset.mediaAutostop !== undefined && mediaElement.dataset.mediaAutostop !== null) {
-                    mediaElement.mediaAutostop = stepElement.mediaAutostop;
-                } else if (root.dataset.mediaAutostop !== undefined && root.dataset.mediaAutostop !== null) {
-                    mediaElement.mediaAutostop = root.mediaAutostop;
-                } else {
-                    mediaElement.mediaAutostop = mediaElement.mediaAutoplay && !mediaElement.mediaAutopause;
-                }
-            } else {
-                mediaElement.mediaAutostop = mediaElement.dataset.mediaAutostop === "" || mediaElement.dataset.mediaAutostop === "true";
+            autoplay = getMediaAttribute('autoplay', [mediaElement, stepElement, root]);
+            autopause = getMediaAttribute('autopause', [mediaElement, stepElement, root]);
+            autostop = getMediaAttribute('autostop', [mediaElement, stepElement, root]);
+            
+            // If both autostop and autopause are undefined, set it to the value of autoplay
+            // Previously only if autopause was false, but in that case someone would expect
+            // the media to play along, when leaving the step but it would be even stopped when
+            // autoplay was set to true.
+            if (autostop === undefined && autopause === undefined) {
+                autostop = autoplay;
             }
             
-            if (mediaElement.mediaAutopause || mediaElement.mediaAutostop) {
+            if (autopause || autostop) {
                 mediaElement.pause();
-                if (mediaElement.mediaAutostop) {
+                if (autostop) {
                     mediaElement.currentTime = 0;
                 }
             }
