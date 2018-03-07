@@ -17,7 +17,6 @@ var loadIframe = function( src, assert, callback ) {
   fix.innerHTML = [
     '\n',
     '    <iframe id="presentation-iframe"\n',
-    '            src="SET THIS IN YOUR QUNIT TESTS"\n',
     '            width="595" height="485"\n',
     '            frameborder="0" marginwidth="0" marginheight="0" scrolling="no"\n',
     '            style="border:1px solid #CCC; max-width: 100%;">\n',
@@ -44,17 +43,10 @@ var loadIframe = function( src, assert, callback ) {
     callback();
   };
 
-  // FIXME: Seems to be some race in loading js files inside the iframe (in CircleCI).
-  // The error that happens is that window.impress isn't set yet, even if onLoad event triggered.
-  // Needs more investigation.
-  var onLoadWrapper = function( event ) {
-    setTimeout( function() { onLoad( event ); }, 1000 );
-  };
-  iframe.addEventListener( 'load', onLoadWrapper );
+  iframe.addEventListener( 'load', onLoad );
 
-  assert.ok( true,
+  assert.ok( iframe.src = src,
              'Setting iframe.src = ' + src );
-  iframe.src = src;
 };
 
 var initPresentation = function( assert, callback, rootId ) {
