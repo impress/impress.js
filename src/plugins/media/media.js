@@ -55,6 +55,7 @@
     var enhanceMediaNodes,
         enhanceMedia,
         removeMediaClasses,
+        onStepenterDetectImpressConsole,
         onStepenter,
         onStepleave,
         onPlay,
@@ -74,18 +75,8 @@
     }, false);
     
     teardown = function () {
-        var elements, el, i;
+        var el, i;
         removeMediaClasses();
-        delete root.mediaAutoplay;
-        delete root.mediaAutopause;
-        delete root.mediaAutopstop;
-        elements = document.querySelectorAll("#root, .step, audio, video");
-        for (i = 0; i < elements.length; i += 1) {
-            el = elements[i];
-            delete el.mediaAutoplay;
-            delete el.mediaAutopause;
-            delete el.mediaAutostop;
-        }
         for (i = 0; i < attributeTracker.length; i += 1) {
             el = attributeTracker[i];
             el.node.removeAttribute(el.attr);
@@ -93,13 +84,13 @@
         attributeTracker = [];
     };
     
-    getMediaAttribute = function (attributeName, nodeList) {
+    getMediaAttribute = function (attributeName, nodes) {
         var attrName, attrValue, i, node;
         attrName = "data-media-" + attributeName;
         
         // Look for attributes in all nodes
-        for (i = 0; i < nodeList.length; i += 1) {
-            node = nodeList[i];
+        for (i = 0; i < nodes.length; i += 1) {
+            node = nodes[i];
             // First test, if the attribute exists, because some browsers may return 
             // an empty string for non-existing attributes - specs are not clear at that point
             if (node.hasAttribute(attrName)) {
@@ -179,14 +170,21 @@
             gc.addEventListener(stepElement, "impress:stepleave", onStepleave);
         }
     };
+    
+    onStepenterDetectImpressConsole = function () {
+        return {
+            'preview': (window.frameElement !== null && window.frameElement.id === "preView"),
+            'slideView': (window.frameElement !== null && window.frameElement.id === "slideView")
+        };
+    };
 
     onStepenter = function (event) {
-        var stepElement, media, mediaElement, i, onConsolePreview, onConsoleSlideView;
+        var stepElement, media, mediaElement, i, onConsole;
         if ((!event) || (!event.target)) {
             return;
         }
-        stepElement = event.target;
         
+        stepElement = event.target;
         removeMediaClasses();
         
         media = stepElement.querySelectorAll("audio, video");
@@ -195,10 +193,9 @@
             
             // Autoplay when (maybe inherited) autoplay setting is true, 
             // but only if not on preview of the next step in impressConsole
-            onConsolePreview = (window.frameElement !== null && window.frameElement.id === "preView");
-            if (getMediaAttribute("autoplay", [mediaElement, stepElement, root]) && !onConsolePreview) {
-                onConsoleSlideView = (window.frameElement !== null && window.frameElement.id === "slideView");
-                if (onConsoleSlideView) {
+            onConsole = onStepenterDetectImpressConsole();
+            if (getMediaAttribute("autoplay", [mediaElement, stepElement, root]) && !onConsole.preview) {
+                if (onConsole.slideView) {
                     mediaElement.muted = true;
                 }
                 mediaElement.play();
@@ -222,9 +219,6 @@
             autostop = getMediaAttribute("autostop", [mediaElement, stepElement, root]);
             
             // If both autostop and autopause are undefined, set it to the value of autoplay
-            // Previously only if autopause was false, but in that case someone would expect
-            // the media to play along, when leaving the step but it would be even stopped when
-            // autoplay was set to true.
             if (autostop === undefined && autopause === undefined) {
                 autostop = autoplay;
             }
