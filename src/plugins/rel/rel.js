@@ -77,7 +77,7 @@
         }
     };
 
-    var computeRelativePositions = function( el, prev ) {
+    var computeRelativePositions = function( el, prev, root ) {
         var data = el.dataset;
 
         if ( !prev ) {
@@ -88,9 +88,7 @@
 
         if ( data.relTo ) {
 
-            // I think this should be limited to the impress.js root element, but this would require
-            // impress.js to be already inited, wouldn't it?
-            var ref = document.getElementById( data.relTo );
+            var ref = root.getElementById( data.relTo );
             if ( ref ) {
 
                 // Test, if it is a previous step that already has some assigned position data
@@ -162,7 +160,7 @@
                 y: el.getAttribute( "data-y" ),
                 z: el.getAttribute( "data-z" )
             } );
-            var step = computeRelativePositions( el, prev );
+            var step = computeRelativePositions( el, prev, root );
 
             // Apply relative position (if non-zero)
             el.setAttribute( "data-x", step.x );
