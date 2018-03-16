@@ -2325,8 +2325,6 @@
 
             if ( consoleWindow && !consoleWindow.closed ) {
                 consoleWindow.focus();
-                triggerEvent(root, 'impress:console:open', {});
-                return consoleWindow;
             } else {
                 consoleWindow = window.open( '', 'impressConsole' );
 
@@ -2379,9 +2377,6 @@
                 );
                 consoleWindow.document.title = 'Speaker Console (' + document.title + ')';
                 consoleWindow.impress = window.impress;
-                
-                // Bind the presentation view to the consoleWindow (needed e.g. for consoleMedia plugin)
-                consoleWindow.presentationWindow = window;
 
                 // We set this flag so we can detect it later, to prevent infinite popups.
                 consoleWindow.isconsoleWindow = true;
@@ -2422,8 +2417,7 @@
                 //Catch any window resize to pass size on
                 window.onresize = resize;
                 consoleWindow.onresize = resize;
-                
-                triggerEvent(root, 'impress:console:open', {});
+
                 return consoleWindow;
             }
         };
@@ -2532,7 +2526,6 @@
 
         // New API for impress.js plugins is based on using events
         root.addEventListener( 'impress:console:open', function() {
-            console.log("impress:console:open");
             open();
         } );
 
@@ -2713,178 +2706,6 @@
 
 } )( document, window );
 
-/**
- * Media Plugin
- *
- * The media plugin is a combination of a preeinit and prestepleave plugin. 
- * It is executed before impress:init and before impress:stepleave.
- * 
- * It will do the following things:
- * 
- *   - Parse special shortcuts to full html5 audio or video nodes:
- *     e.g. <div class="media" data-media-source="…" data-media-type="audio/…"></div>
- *     or   <span class="media" data-media-source="…" data-media-type="video/…"></span>
- *     
- *     All type of html tags are allowed. Currently only a single source is supported.
- *     All nodes will have the control attribute added, except the 'data-media-controls="false"'
- *     attribute is added.
- *     
- *         <div class="media" data-media-source="…" data-media-type="…/…" data-media-controls="false"></div>
- * 
- *  - Add a special class when playing and pausing media (removing them when ending)
- *
- *  - Autostart videos when entering a step, if the attribute data-media-playonenter is set and not "false".
- *
- *  - Pause all video and audio an the active step when leaving it. This can be disabled for 
- *    indivudual media nodes by adding the data-media-pauseonleave="false" attribute. This attribute
- *    is inherited from the shortcut described above.
- *    
- *    Examples: 
- *
- *      <audio contols data-media-pauseonleave="false">
- *        <source src="…" type="audio/…">
- *        Your browser does not support HTML5 audio. Please update you browser to 
- *        a recent version.
- *      </audio>
- *      
- *      <div class="media" 
- *           data-media-source="…" 
- *           data-media-type="video/…" 
- *           data-media-controls="false" 
- *           data-media-pauseonleave="false">
- *      </div>
- *
- * Copyright 2018 Holger Teichert (@complanar)
- * Released under the MIT license.
- */
-/* global window, document, impress, console */
-
-(function (document, window) {
-  "use strict";
-  
-  // function names
-  var parseMediaShortcut, 
-      enhanceMediaNode, 
-      enhanceMedia, 
-      playOnStepenter,
-      pauseOnStepleave, 
-      onPlay, 
-      onPause, 
-      onEnded;
-
-  // Parse nodes with media class <div class="media" data-media-source="PATH" data-media-type="MIMETYPE"></div>
-  parseMediaShortcut = function (target) {
-    var data, mimeParts, controls, playonenter, pauseonleave;
-    data = target.dataset;
-    if (data.mediaType && data.mediaSource) {
-      mimeParts = data.mediaType.split('/');
-      target.classList.add('media-' + mimeParts[0]);
-      controls = data.mediaControls === "false" ? '' : ' controls';
-      playonenter = data.mediaPlayonenter === "true" || data.mediaPlayonenter === "" ? ' data-media-playonenter="true"' : '';
-      pauseonleave = data.mediaPauseonleave === "false" ? ' data-media-pauseonleave="false"' : '';
-      target.innerHTML = '<' + mimeParts[0] + controls + playonenter + pauseonleave + '><source src="' + data.mediaSource + '" type="' + data.mediaType + '"> Your Browser does not support HTML5 ' + mimeParts[0] + '.</' + mimeParts[0] + '>';
-    }
-  };
-  
-  onPlay = function (event) {
-    var type = event.target.nodeName.toLowerCase();
-    document.body.classList.add(type + "playing");
-    document.body.classList.remove(type + "paused");
-  };
-  
-  onPause = function (event) {
-    var type = event.target.nodeName.toLowerCase();
-    document.body.classList.add(type + "paused");
-    document.body.classList.remove(type + "playing");
-  };
-  
-  onEnded = function (event) {
-    var type = event.target.nodeName.toLowerCase();
-    document.body.classList.remove(type + "playing");
-    document.body.classList.remove(type + "paused");
-  };
-  
-  enhanceMediaNode = function (type) {
-    var i, id, media = document.getElementsByTagName(type);
-    for (i = 0; i < media.length; i++) {
-      // Set an id to identify each media node - used e.g. by the consoleMedia plugin
-      id = media[i].getAttribute('id');
-      if (id === undefined || id === null) {
-        media[i].setAttribute('id', 'media-' + type + '-' + i);
-      }
-      media[i].addEventListener("play", onPlay, false);
-      media[i].addEventListener("playing", onPlay, false);
-      media[i].addEventListener("pause", onPause, false);
-      media[i].addEventListener("ended", onEnded, false);
-    }
-  };
-  
-  enhanceMedia = function () {
-    var i, steps, media = document.getElementsByClassName('media');
-    for (i = 0; i < media.length; i++) {
-      parseMediaShortcut(media[i]);
-    }
-    enhanceMediaNode('audio');
-    enhanceMediaNode('video');
-    steps = document.getElementsByClassName('step');
-    for (i = 0; i < steps.length; i++) {
-      console.log("Add event listener.");
-      steps[i].addEventListener('impress:stepenter', playOnStepenter, false);
-    }
-  };
-  
-  playOnStepenter = function (event) {
-    console.log("Stepenter triggered.");
-    var videos, audios, media, play, type, i;
-    if ((!event) || (!event.target)) {
-      return;
-    }
-    
-    audios = event.target.getElementsByTagName('audio');
-    videos = event.target.getElementsByTagName('video');
-    media = {
-      video: videos,
-      audio: audios
-    };
-    for (type in media) {
-      for (i = 0; i < media[type].length; i++) {
-        play = media[type][i].dataset.mediaPlayonenter;
-        console.log(play);
-        if (play !== undefined) {
-          media[type][i].play();
-        }
-      }
-    }
-  }
-
-  pauseOnStepleave = function (event) {
-    var videos, audios, media, type, i;
-    if ((!event) || (!event.target)) {
-      return;
-    }
-
-    videos = event.target.getElementsByTagName('video');
-    audios = event.target.getElementsByTagName('audio');
-    media = {
-      video: videos,
-      audio: audios
-    };
-    for (type in media) {
-      for (i = 0; i < media[type].length; i++) {
-        if (media[type][i].dataset.mediaPauseonleave !== "false") {
-          media[type][i].pause();
-        }
-      }
-    }
-  };
-
-  // Register the plugin to be called in the pre-init phase
-  window.impress.addPreInitPlugin(enhanceMedia);
-
-  // Register the plugin to be called in pre-stepleave phase
-  impress.addPreStepLeavePlugin(pauseOnStepleave);
-
-})(document, window);
 /**
  * Mobile devices support
  *
@@ -3708,6 +3529,155 @@
     // itself recursively.
     window.impress.addPreStepLeavePlugin( skip, 1 );
 
+} )( document, window );
+
+
+/**
+ * Spherical Positioning Plugin
+ * ============================
+ *
+ * This plugin provides support for positioning steps with polar or shperical coordinates.
+ * This is often more convenient when arranging slides along a circle or similar. It also
+ * supports relative positioning.
+ *
+ * Example:
+ * 
+ *  <!-- Position step 1000 px distance to origin at an angle of 50 degree. -->
+ *  <div class="step" data-spherical-dist="1000" data-spherical-rho="50">
+ *    
+ *  <!-- Position step 500 px distance to origin at a primary angle of 270 degree and a 
+ *       secondary angle of -30 degree (= 330 degree) -->
+ *  <div class="step" data-spherical-dist="500" data-spherical-rho="270" data-spherical-theta="-30">
+ *
+ * 
+ * Following html attributes are supported for step elements:
+ *
+ *     data-spherical-distance
+ *     data-spherical-rho
+ *     data-spherical-theta
+ *    
+ *     data-spherical-rel-distance
+ *     data-sphercial-rel-rho
+ *     data-spherical-rel-theta
+ *
+ * Non-zero relative values are inherited from the previous step. This makes it easy to 
+ * create a presentation where subsequent slides are arranged along a circle.
+ *
+ * The above spherical values are ignored, or set to zero, if the corresponding 
+ * absolute values (`data-x` etc...) is set.
+ *
+ * The plugin translates all spherical coordinates to cartesian coordinates, which then could 
+ * for example be used by the `rel` plugin. In fact, to get the relative positioning working, 
+ * the `rel` plugin is needed, actually. If it is not present, relative values are silently ignored.
+ *
+ * Copyright 2018 Holger Teichert (@complanar)
+ * Released under the MIT license.
+ */
+
+/* global document, window */
+
+( function( document, window ) {
+    "use strict";
+
+    var attributeTracker = [];
+
+    /**
+     * Copied from core impress.js. We currently lack a library mechanism to
+     * to share utility functions like this.
+     */
+    var toNumber = function( numeric, fallback ) {
+        return isNaN( numeric ) ? ( fallback || 0 ) : Number( numeric );
+    };
+
+    var sphericalToCartesian = function( r, phi, theta ) {
+        var x = r * Math.sin( theta ) * Math.cos( phi );
+        var y = r * Math.sin( theta ) * Math.sin( phi );
+        var z = r * Math.cos( theta );
+        return { x: x, y: y, z: z };
+    };
+
+    var computeCartesianPositions = function( el ) {
+        var cartesian, data;
+
+        data = el.dataset;
+
+        if ( data.sphericalDistance && data.sphericalPhi ) {
+            if ( !data.sphericalTheta ) {
+                attributeTracker.push( { "node": el, "attr": "data-spherical-theta" } );
+                el.setAttribute( "data-spherical-theta", 90 );
+            }
+
+            cartesian = sphericalToCartesian(
+                toNumber( data.sphericalDistance, 0 ),
+                toNumber( data.sphericalPhi * Math.PI / 180, 0 ),
+                toNumber( data.sphericalTheta * Math.PI / 180, 90 )
+            );
+
+            if ( data.x == undefined ) {
+                attributeTracker.push( { "node": el, "attr": "data-x" } );
+                el.setAttribute( "data-x", cartesian.x );
+            }
+            if ( data.y == undefined ) {
+                attributeTracker.push( { "node": el, "attr": "data-y" } );
+                el.setAttribute( "data-y", cartesian.y );
+            }
+            if ( data.z == undefined ) {
+                attributeTracker.push( { "node": el, "attr": "data-z" } );
+                el.setAttribute( "data-z", cartesian.z );
+            }
+        } else if ( data.sphericalRelDistance && data.sphericalRelPhi ) {
+
+            if ( !data.sphericalRelTheta ) {
+                attributeTracker.push( { "node": el, "attr": "data-spherical-rel-theta" } );
+                el.setAttribute( "data-spherical-rel-theta", 90);
+            }
+
+            cartesian = sphericalToCartesian(
+                toNumber( data.sphericalRelDistance, 0 ),
+                toNumber( data.sphericalRelPhi * Math.PI / 180, 0 ),
+                toNumber( data.sphericalRelTheta * Math.PI / 180, 90 )
+            );
+
+            if ( data.relX == undefined ) {
+                attributeTracker.push( { "node": el, "attr": "data-rel-x" } );
+                el.setAttribute( "data-rel-x", cartesian.x );
+            }
+            if ( data.relY == undefined ) {
+                attributeTracker.push( { "node": el, "attr": "data-rel-y" } );
+                el.setAttribute( "data-rel-y", cartesian.y );
+            }
+            if ( data.relZ == undefined ) {
+                attributeTracker.push( { "node": el, "attr": "data-rel-z" } );
+                el.setAttribute( "data-rel-z", cartesian.z );
+            }
+        }
+    };
+
+    var spherical = function( root ) {
+        var steps, i;
+        steps = root.querySelectorAll( ".step" );
+        for ( i = 0; i < steps.length; i++ ) {
+            computeCartesianPositions( steps[ i ] );
+        }
+    };
+    
+    var teardown = function() {
+        var el, i;
+        for ( i = 0; i < attributeTracker.length; i++ ) {
+            el = attributeTracker[ i ];
+            el.node.removeAttribute( el.attr );
+        }
+        attributeTracker = [];
+    }
+
+    // Register the plugin to be called in pre-init phase
+    window.impress.addPreInitPlugin( spherical, 5 );
+
+    // Register teardown callback to reset the data.x, .y, .z values.
+    document.addEventListener( "impress:init", function( event ) {
+        var root = event.target;
+        event.detail.api.lib.gc.pushCallback( teardown );
+    }, false );
 } )( document, window );
 
 

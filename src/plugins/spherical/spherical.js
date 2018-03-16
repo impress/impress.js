@@ -56,12 +56,10 @@
     };
 
     var sphericalToCartesian = function( r, phi, theta ) {
-
-        return {
-            x: r * Math.sin( theta ) * Math.cos( phi ),
-            y: r * Math.sin( theta ) * Math.sin( phi ),
-            z: r * Math.cos( theta )
-        };
+        var x = r * Math.sin( theta ) * Math.cos( phi );
+        var y = r * Math.sin( theta ) * Math.sin( phi );
+        var z = r * Math.cos( theta );
+        return { x: x, y: y, z: z };
     };
 
     var computeCartesianPositions = function( el ) {
@@ -72,13 +70,13 @@
         if ( data.sphericalDistance && data.sphericalPhi ) {
             if ( !data.sphericalTheta ) {
                 attributeTracker.push( { "node": el, "attr": "data-spherical-theta" } );
-                el.setAttribute( "data-spherical-theta", 0 );
+                el.setAttribute( "data-spherical-theta", 90 );
             }
 
             cartesian = sphericalToCartesian(
                 toNumber( data.sphericalDistance, 0 ),
                 toNumber( data.sphericalPhi * Math.PI / 180, 0 ),
-                toNumber( data.sphericalTheta * Math.PI / 180, 0 )
+                toNumber( data.sphericalTheta * Math.PI / 180, 90 )
             );
 
             if ( data.x == undefined ) {
@@ -97,13 +95,13 @@
 
             if ( !data.sphericalRelTheta ) {
                 attributeTracker.push( { "node": el, "attr": "data-spherical-rel-theta" } );
-                el.setAttribute( "data-spherical-rel-theta", 0);
+                el.setAttribute( "data-spherical-rel-theta", 90);
             }
 
             cartesian = sphericalToCartesian(
                 toNumber( data.sphericalRelDistance, 0 ),
                 toNumber( data.sphericalRelPhi * Math.PI / 180, 0 ),
-                toNumber( data.sphericalRelTheta * Math.PI / 180, 0 )
+                toNumber( data.sphericalRelTheta * Math.PI / 180, 90 )
             );
 
             if ( data.relX == undefined ) {
@@ -139,7 +137,7 @@
     }
 
     // Register the plugin to be called in pre-init phase
-    window.impress.addPreInitPlugin( spherical );
+    window.impress.addPreInitPlugin( spherical, 5 );
 
     // Register teardown callback to reset the data.x, .y, .z values.
     document.addEventListener( "impress:init", function( event ) {
