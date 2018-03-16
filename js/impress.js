@@ -2325,8 +2325,6 @@
 
             if ( consoleWindow && !consoleWindow.closed ) {
                 consoleWindow.focus();
-                triggerEvent(root, 'impress:console:open', {});
-                return consoleWindow;
             } else {
                 consoleWindow = window.open( '', 'impressConsole' );
 
@@ -2379,9 +2377,6 @@
                 );
                 consoleWindow.document.title = 'Speaker Console (' + document.title + ')';
                 consoleWindow.impress = window.impress;
-                
-                // Bind the presentation view to the consoleWindow (needed e.g. for consoleMedia plugin)
-                consoleWindow.presentationWindow = window;
 
                 // We set this flag so we can detect it later, to prevent infinite popups.
                 consoleWindow.isconsoleWindow = true;
@@ -2422,8 +2417,7 @@
                 //Catch any window resize to pass size on
                 window.onresize = resize;
                 consoleWindow.onresize = resize;
-                
-                triggerEvent(root, 'impress:console:open', {});
+
                 return consoleWindow;
             }
         };
@@ -2532,7 +2526,6 @@
 
         // New API for impress.js plugins is based on using events
         root.addEventListener( 'impress:console:open', function() {
-            console.log("impress:console:open");
             open();
         } );
 
@@ -2713,178 +2706,6 @@
 
 } )( document, window );
 
-/**
- * Media Plugin
- *
- * The media plugin is a combination of a preeinit and prestepleave plugin. 
- * It is executed before impress:init and before impress:stepleave.
- * 
- * It will do the following things:
- * 
- *   - Parse special shortcuts to full html5 audio or video nodes:
- *     e.g. <div class="media" data-media-source="…" data-media-type="audio/…"></div>
- *     or   <span class="media" data-media-source="…" data-media-type="video/…"></span>
- *     
- *     All type of html tags are allowed. Currently only a single source is supported.
- *     All nodes will have the control attribute added, except the 'data-media-controls="false"'
- *     attribute is added.
- *     
- *         <div class="media" data-media-source="…" data-media-type="…/…" data-media-controls="false"></div>
- * 
- *  - Add a special class when playing and pausing media (removing them when ending)
- *
- *  - Autostart videos when entering a step, if the attribute data-media-playonenter is set and not "false".
- *
- *  - Pause all video and audio an the active step when leaving it. This can be disabled for 
- *    indivudual media nodes by adding the data-media-pauseonleave="false" attribute. This attribute
- *    is inherited from the shortcut described above.
- *    
- *    Examples: 
- *
- *      <audio contols data-media-pauseonleave="false">
- *        <source src="…" type="audio/…">
- *        Your browser does not support HTML5 audio. Please update you browser to 
- *        a recent version.
- *      </audio>
- *      
- *      <div class="media" 
- *           data-media-source="…" 
- *           data-media-type="video/…" 
- *           data-media-controls="false" 
- *           data-media-pauseonleave="false">
- *      </div>
- *
- * Copyright 2018 Holger Teichert (@complanar)
- * Released under the MIT license.
- */
-/* global window, document, impress, console */
-
-(function (document, window) {
-  "use strict";
-  
-  // function names
-  var parseMediaShortcut, 
-      enhanceMediaNode, 
-      enhanceMedia, 
-      playOnStepenter,
-      pauseOnStepleave, 
-      onPlay, 
-      onPause, 
-      onEnded;
-
-  // Parse nodes with media class <div class="media" data-media-source="PATH" data-media-type="MIMETYPE"></div>
-  parseMediaShortcut = function (target) {
-    var data, mimeParts, controls, playonenter, pauseonleave;
-    data = target.dataset;
-    if (data.mediaType && data.mediaSource) {
-      mimeParts = data.mediaType.split('/');
-      target.classList.add('media-' + mimeParts[0]);
-      controls = data.mediaControls === "false" ? '' : ' controls';
-      playonenter = data.mediaPlayonenter === "true" || data.mediaPlayonenter === "" ? ' data-media-playonenter="true"' : '';
-      pauseonleave = data.mediaPauseonleave === "false" ? ' data-media-pauseonleave="false"' : '';
-      target.innerHTML = '<' + mimeParts[0] + controls + playonenter + pauseonleave + '><source src="' + data.mediaSource + '" type="' + data.mediaType + '"> Your Browser does not support HTML5 ' + mimeParts[0] + '.</' + mimeParts[0] + '>';
-    }
-  };
-  
-  onPlay = function (event) {
-    var type = event.target.nodeName.toLowerCase();
-    document.body.classList.add(type + "playing");
-    document.body.classList.remove(type + "paused");
-  };
-  
-  onPause = function (event) {
-    var type = event.target.nodeName.toLowerCase();
-    document.body.classList.add(type + "paused");
-    document.body.classList.remove(type + "playing");
-  };
-  
-  onEnded = function (event) {
-    var type = event.target.nodeName.toLowerCase();
-    document.body.classList.remove(type + "playing");
-    document.body.classList.remove(type + "paused");
-  };
-  
-  enhanceMediaNode = function (type) {
-    var i, id, media = document.getElementsByTagName(type);
-    for (i = 0; i < media.length; i++) {
-      // Set an id to identify each media node - used e.g. by the consoleMedia plugin
-      id = media[i].getAttribute('id');
-      if (id === undefined || id === null) {
-        media[i].setAttribute('id', 'media-' + type + '-' + i);
-      }
-      media[i].addEventListener("play", onPlay, false);
-      media[i].addEventListener("playing", onPlay, false);
-      media[i].addEventListener("pause", onPause, false);
-      media[i].addEventListener("ended", onEnded, false);
-    }
-  };
-  
-  enhanceMedia = function () {
-    var i, steps, media = document.getElementsByClassName('media');
-    for (i = 0; i < media.length; i++) {
-      parseMediaShortcut(media[i]);
-    }
-    enhanceMediaNode('audio');
-    enhanceMediaNode('video');
-    steps = document.getElementsByClassName('step');
-    for (i = 0; i < steps.length; i++) {
-      console.log("Add event listener.");
-      steps[i].addEventListener('impress:stepenter', playOnStepenter, false);
-    }
-  };
-  
-  playOnStepenter = function (event) {
-    console.log("Stepenter triggered.");
-    var videos, audios, media, play, type, i;
-    if ((!event) || (!event.target)) {
-      return;
-    }
-    
-    audios = event.target.getElementsByTagName('audio');
-    videos = event.target.getElementsByTagName('video');
-    media = {
-      video: videos,
-      audio: audios
-    };
-    for (type in media) {
-      for (i = 0; i < media[type].length; i++) {
-        play = media[type][i].dataset.mediaPlayonenter;
-        console.log(play);
-        if (play !== undefined) {
-          media[type][i].play();
-        }
-      }
-    }
-  }
-
-  pauseOnStepleave = function (event) {
-    var videos, audios, media, type, i;
-    if ((!event) || (!event.target)) {
-      return;
-    }
-
-    videos = event.target.getElementsByTagName('video');
-    audios = event.target.getElementsByTagName('audio');
-    media = {
-      video: videos,
-      audio: audios
-    };
-    for (type in media) {
-      for (i = 0; i < media[type].length; i++) {
-        if (media[type][i].dataset.mediaPauseonleave !== "false") {
-          media[type][i].pause();
-        }
-      }
-    }
-  };
-
-  // Register the plugin to be called in the pre-init phase
-  window.impress.addPreInitPlugin(enhanceMedia);
-
-  // Register the plugin to be called in pre-stepleave phase
-  impress.addPreStepLeavePlugin(pauseOnStepleave);
-
-})(document, window);
 /**
  * Mobile devices support
  *
@@ -3503,6 +3324,38 @@
 
             // For the first step, inherit these defaults
             prev = { x:0, y:0, z:0, relative: { x:0, y:0, z:0 } };
+        }
+
+        if ( data.relTo ) {
+
+            // I think this should be limited to the impress.js root element, but this would require
+            // impress.js to be already inited, wouldn't it?
+            var ref = document.getElementById( data.relTo );
+            if ( ref ) {
+
+                // Test, if it is a previous step that already has some assigned position data
+                if ( el.compareDocumentPosition( ref ) & Node.DOCUMENT_POSITION_PRECEDING ) {
+                    prev.x = ref.getAttribute( "data-x" );
+                    prev.y = ref.getAttribute( "data-y" );
+                    prev.z = ref.getAttribute( "data-z" );
+                } else {
+                    window.console.warn(
+                        "impress.js rel plugin: Step \"" + data.relTo + "\" is not defined " +
+                        "*before* the current step. Referencing is limited to previously defined " +
+                        "steps. Please check your markup. Ignoring data-rel-to attribute of " +
+                        "this step. Have a look at the documentation for how to create relative " +
+                        "positioning to later shown steps with the help of the goto plugin."
+                    );
+                }
+            } else {
+
+                // Step not found
+                window.console.warn(
+                    "impress.js rel plugin: \"" + data.relTo + "\" is no valid step in this " +
+                    "impress.js presentation. Please check your markup. Ignoring data-rel-to " +
+                    "attribute of this step."
+                );
+            }
         }
 
         var step = {
