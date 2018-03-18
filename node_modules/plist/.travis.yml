@@ -1,0 +1,34 @@
+language: node_js
+node_js:
+- '0.10'
+- '0.11'
+- '4.0'
+- '4.1'
+env:
+  global:
+  - secure: xlLmWO7akYQjmDgrv6/b/ZMGILF8FReD+k6A/u8pYRD2JW29hhwvRwIQGcKp9+zmJdn4i5M4D1/qJkCeI3pdhAYBDHvzHOHSEwLJz1ESB2Crv6fa69CtpIufQkWvIxmZoU49tCaLpMBaIroGihJ4DAXdIVOIz6Ur9vXLDhGsE4c=
+  - secure: aQ46RdxL10xR5ZJJTMUKdH5k4tdrzgZ87nlwHC+pTr6bfRw3UKYC+6Rm7yQpg9wq0Io9O9dYCP007gQGSWstbjr1+jXNu/ubtNG+q5cpWBQZZZ013VHh9QJTf1MnetsZxbv8Yhrjg590s6vruT0oqesOnB2CizO/BsKxnY37Nos=
+matrix:
+  include:
+  - node_js: '0.10'
+    env: BROWSER_NAME=chrome BROWSER_VERSION=latest
+  - node_js: '0.10'
+    env: BROWSER_NAME=chrome BROWSER_VERSION=29
+  - node_js: '0.10'
+    env: BROWSER_NAME=firefox BROWSER_VERSION=latest
+  - node_js: '0.10'
+    env: BROWSER_NAME=opera BROWSER_VERSION=latest
+  - node_js: '0.10'
+    env: BROWSER_NAME=safari BROWSER_VERSION=latest
+  - node_js: '0.10'
+    env: BROWSER_NAME=safari BROWSER_VERSION=7
+  - node_js: '0.10'
+    env: BROWSER_NAME=safari BROWSER_VERSION=6
+  - node_js: '0.10'
+    env: BROWSER_NAME=safari BROWSER_VERSION=5
+  - node_js: '0.10'
+    env: BROWSER_NAME=ie BROWSER_VERSION=11
+  - node_js: '0.10'
+    env: BROWSER_NAME=ie BROWSER_VERSION=10
+  - node_js: '0.10'
+    env: BROWSER_NAME=ie BROWSER_VERSION=9

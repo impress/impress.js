@@ -7,15 +7,15 @@
  * in modern browsers and inspired by the idea behind prezi.com.
  *
  *
- * Copyright 2011-2012 Bartek Szopka (@bartaz)
+ * Copyright 2011-2012 Bartek Szopka (@bartaz), 2016-2018 Henrik Ingo (@henrikingo)
  *
  * Released under the MIT and GPL Licenses.
  *
  * ------------------------------------------------
- *  author:  Bartek Szopka
- *  version: 1.0.0-beta1
- *  url:     http://bartaz.github.com/impress.js/
- *  source:  http://github.com/bartaz/impress.js/
+ *  author:  Bartek Szopka, Henrik Ingo
+ *  version: 1.0.0
+ *  url:     http://impress.js.org
+ *  source:  http://github.com/impress/impress.js/
  */
 
 // You are one of those who like to know how things work inside?

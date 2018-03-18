@@ -1,0 +1,11 @@
+{
+  "node":      true,
+  "strict":    true,
+  "maxlen":    100,
+  "undef":     true,
+  "unused":    true,
+  "onecase":   true,
+  "lastsemic": true,
+  "latedef"  : true,
+  "indent":    2
+}

@@ -1,0 +1,32 @@
+{
+  "bitwise": true,
+  "curly": true,
+  "eqeqeq": true,
+  "forin": true,
+  "immed": true,
+  "latedef": true,
+  "newcap": true,
+  "noarg": true,
+  "nonew": true,
+  "plusplus": true,
+  "regexp": true,
+  "noempty": true,
+  "sub": true,
+  "undef": true,
+  "unused": true,
+  "trailing": true,
+  "eqnull": true,
+  "browser": true,
+  "node": true,
+  "indent": 2,
+  "quotmark": "double",
+  "onevar": true,
+  "white": true,
+  "strict": false,
+  "globals": {
+    "describe": true,
+    "after": true,
+    "before": true,
+    "it": true
+  }
+}
