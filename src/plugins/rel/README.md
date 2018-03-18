@@ -11,12 +11,16 @@ Example:
 
         <!-- Position step 1000 px to the right and 500 px up from the previous step. -->
         <div class="step" data-rel-x="1000" data-rel-y="500">
+        
+        <!-- Position step 1000 px to the left and 750 px up from the step with id "title". -->
+        <div class="step" data-rel-x="-1000" data-rel-y="750" data-rel-to="title">
 
 Following html attributes are supported for step elements:
 
     data-rel-x
     data-rel-y
     data-rel-z
+    data-rel-to
 
 Non-zero values are also inherited from the previous step. This makes it easy to 
 create a boring presentation where each slide shifts for example 1000px down 
