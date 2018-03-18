@@ -1,0 +1,3 @@
+test/specs/**/*.js
+-R progress
+-u bdd

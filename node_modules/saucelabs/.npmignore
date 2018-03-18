@@ -1,0 +1,7 @@
+/node_modules/
+/lib-cov/
+/coverage.html
+*.iml
+*.log
+.idea
+

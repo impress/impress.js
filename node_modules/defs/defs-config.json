@@ -1,0 +1,8 @@
+{
+    "environments": ["node"],
+    "disallowDuplicated": true,
+    "disallowUnknownReferences": true,
+    "loopClosures": "iife",
+    "ast": false,
+    "stats": false
+}

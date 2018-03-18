@@ -1,0 +1,51 @@
+<table class="wikitable">
+  <tbody>
+    <tr>
+      <td width="50%" style="border: 1px solid #ccc; padding: 5px;">
+        <strong>category / JsonWireProtocol method</strong>
+      </td>
+      <td width="50%" style="border: 1px solid #ccc; padding: 5px;">
+        <strong>wd methods</strong>
+      </td>
+    </tr>
+    {{#mapping}}
+      <tr>
+        <td style="border: 1px solid #ccc; padding: 5px;">
+          {{#jsonWire}}
+            {{method}} <a href="{{url}}">{{path}}</a><br>
+            {{desc}}
+          {{/jsonWire}}
+          {{#asserter}}
+            asserter
+          {{/asserter}}
+          {{#wd}}
+            wd
+          {{/wd}}
+          {{#extra}}
+            extra
+          {{/extra}}
+          {{#missing}}
+            MISSING: {{key}}
+          {{/missing}}
+        </td>
+        <td style="border: 1px solid #ccc; padding: 5px;">
+          {{#wd_doc0}}
+            NA
+          {{/wd_doc0}}
+          {{#wd_doc1}}
+            {{#desc}}
+              {{line}}<br>
+            {{/desc}}
+          {{/wd_doc1}}
+          {{#wd_docN}}
+            <p>
+              {{#desc}}
+                {{line}}<br>
+              {{/desc}}
+            </p>
+          {{/wd_docN}}
+        </td>
+      </tr>
+    {{/mapping}}
+  </tbody>
+</table>

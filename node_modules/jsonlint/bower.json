@@ -1,0 +1,16 @@
+{
+  "name": "jsonlint",
+  "version": "1.6.0",
+  "main": "lib/jsonlint.js",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "scripts",
+    "src",
+    "test",
+    "web",
+    "package.json",
+    "Makefile",
+    "README.md"
+  ]
+}

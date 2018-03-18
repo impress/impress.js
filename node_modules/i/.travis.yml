@@ -1,0 +1,14 @@
+sudo: false
+language: node_js
+node_js:
+  - '5'
+  - '4'
+  - '3'
+  - '2'
+  - '1'
+  - '0.12'
+  - '0.10'
+  - '0.8'
+notifications:
+  email:
+    on_success: never
