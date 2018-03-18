@@ -1,0 +1,7 @@
+/js/impress.min.js
+/node_modules
+/npm-debug.log
+/*.tgz
+
+# Files for editors and other tools
+/.brackets.json
