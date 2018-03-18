@@ -2325,8 +2325,6 @@
 
             if ( consoleWindow && !consoleWindow.closed ) {
                 consoleWindow.focus();
-                triggerEvent(root, 'impress:console:open', {});
-                return consoleWindow;
             } else {
                 consoleWindow = window.open( '', 'impressConsole' );
 
@@ -2379,9 +2377,6 @@
                 );
                 consoleWindow.document.title = 'Speaker Console (' + document.title + ')';
                 consoleWindow.impress = window.impress;
-                
-                // Bind the presentation view to the consoleWindow (needed e.g. for consoleMedia plugin)
-                consoleWindow.presentationWindow = window;
 
                 // We set this flag so we can detect it later, to prevent infinite popups.
                 consoleWindow.isconsoleWindow = true;
@@ -2422,8 +2417,7 @@
                 //Catch any window resize to pass size on
                 window.onresize = resize;
                 consoleWindow.onresize = resize;
-                
-                triggerEvent(root, 'impress:console:open', {});
+
                 return consoleWindow;
             }
         };
@@ -2516,7 +2510,7 @@
             //Btw, you can also launch console automatically:
             //<div id="impress" data-console-autolaunch="true">
             if ( root.dataset.consoleAutolaunch === 'true' ) {
-                window.open();
+                open();
             }
         };
 
@@ -2532,7 +2526,6 @@
 
         // New API for impress.js plugins is based on using events
         root.addEventListener( 'impress:console:open', function() {
-            console.log("impress:console:open");
             open();
         } );
 
@@ -2716,175 +2709,252 @@
 /**
  * Media Plugin
  *
- * The media plugin is a combination of a preeinit and prestepleave plugin. 
- * It is executed before impress:init and before impress:stepleave.
- * 
- * It will do the following things:
- * 
- *   - Parse special shortcuts to full html5 audio or video nodes:
- *     e.g. <div class="media" data-media-source="…" data-media-type="audio/…"></div>
- *     or   <span class="media" data-media-source="…" data-media-type="video/…"></span>
- *     
- *     All type of html tags are allowed. Currently only a single source is supported.
- *     All nodes will have the control attribute added, except the 'data-media-controls="false"'
- *     attribute is added.
- *     
- *         <div class="media" data-media-source="…" data-media-type="…/…" data-media-controls="false"></div>
- * 
- *  - Add a special class when playing and pausing media (removing them when ending)
+ * This plugin will do the following things:
  *
- *  - Autostart videos when entering a step, if the attribute data-media-playonenter is set and not "false".
+ *  - Add a special class when playing (body.impress-media-video-playing
+ *    and body.impress-media-video-playing) and pausing media (body.impress-media-video-paused
+ *    and body.impress-media-audio-paused) (removing them when ending).
+ *    This can be useful for example for darkening the background or fading out other elements
+ *    while a video is playing.
+ *    Only media at the current step are taken into account. All classes are removed when leaving
+ *    a step.
  *
- *  - Pause all video and audio an the active step when leaving it. This can be disabled for 
- *    indivudual media nodes by adding the data-media-pauseonleave="false" attribute. This attribute
- *    is inherited from the shortcut described above.
- *    
- *    Examples: 
+ *  - Introduce the following new data attributes:
  *
- *      <audio contols data-media-pauseonleave="false">
- *        <source src="…" type="audio/…">
- *        Your browser does not support HTML5 audio. Please update you browser to 
- *        a recent version.
- *      </audio>
- *      
- *      <div class="media" 
- *           data-media-source="…" 
- *           data-media-type="video/…" 
- *           data-media-controls="false" 
- *           data-media-pauseonleave="false">
- *      </div>
+ *    - data-media-autoplay="true": Autostart media when entering its step.
+ *    - data-media-autostop="true": Stop media (= pause and reset to start), when leaving its
+ *      step.
+ *    - data-media-autopause="true": Pause media but keep current time when leaving its step.
+ *
+ *    When these attributes are added to a step they are inherited by all media on this step.
+ *    Of course this setting can be overwritten by adding different attributes to inidvidual
+ *    media.
+ *
+ *    The same rule applies when this attributes is added to the root element. Settings can be
+ *    overwritten for individual steps and media.
+ *
+ *    Examples:
+ *    - data-media-autostart="true" data-media-autostop="true": start media on enter, stop on
+ *      leave, restart from beginning when re-entering the step.
+ *
+ *    - data-media-autostart="true" data-media-autopause="true": start media on enter, pause on
+ *      leave, resume on re-enter
+ *
+ *    - data-media-autostart="true" data-media-autostop="true" data-media-autopause="true": start
+ *      media on enter, stop on leave (stop overwrites pause).
+ *
+ *    - data-media-autostart="true" data-media-autopause="false": let media start automatically
+ *      when entering a step and let it play when leaving the step.
+ *
+ *    - <div id="impress" data-media-autostart="true"> ... <div class="step"
+ *      data-media-autostart="false">
+ *      All media is startet automatically on all steps except the one that has the
+ *      data-media-autostart="false" attribute.
+ *
+ *  - Pro tip: Use <audio onended="impress().next()"> or <video onended="impress().next()"> to
+ *    proceed to the next step automatically, when the end of the media is reached.
+ *
  *
  * Copyright 2018 Holger Teichert (@complanar)
  * Released under the MIT license.
  */
-/* global window, document, impress, console */
+/* global window, document */
 
-(function (document, window) {
-  "use strict";
-  
-  // function names
-  var parseMediaShortcut, 
-      enhanceMediaNode, 
-      enhanceMedia, 
-      playOnStepenter,
-      pauseOnStepleave, 
-      onPlay, 
-      onPause, 
-      onEnded;
+( function( document, window ) {
+    "use strict";
+    var root, api, gc, attributeTracker;
 
-  // Parse nodes with media class <div class="media" data-media-source="PATH" data-media-type="MIMETYPE"></div>
-  parseMediaShortcut = function (target) {
-    var data, mimeParts, controls, playonenter, pauseonleave;
-    data = target.dataset;
-    if (data.mediaType && data.mediaSource) {
-      mimeParts = data.mediaType.split('/');
-      target.classList.add('media-' + mimeParts[0]);
-      controls = data.mediaControls === "false" ? '' : ' controls';
-      playonenter = data.mediaPlayonenter === "true" || data.mediaPlayonenter === "" ? ' data-media-playonenter="true"' : '';
-      pauseonleave = data.mediaPauseonleave === "false" ? ' data-media-pauseonleave="false"' : '';
-      target.innerHTML = '<' + mimeParts[0] + controls + playonenter + pauseonleave + '><source src="' + data.mediaSource + '" type="' + data.mediaType + '"> Your Browser does not support HTML5 ' + mimeParts[0] + '.</' + mimeParts[0] + '>';
-    }
-  };
-  
-  onPlay = function (event) {
-    var type = event.target.nodeName.toLowerCase();
-    document.body.classList.add(type + "playing");
-    document.body.classList.remove(type + "paused");
-  };
-  
-  onPause = function (event) {
-    var type = event.target.nodeName.toLowerCase();
-    document.body.classList.add(type + "paused");
-    document.body.classList.remove(type + "playing");
-  };
-  
-  onEnded = function (event) {
-    var type = event.target.nodeName.toLowerCase();
-    document.body.classList.remove(type + "playing");
-    document.body.classList.remove(type + "paused");
-  };
-  
-  enhanceMediaNode = function (type) {
-    var i, id, media = document.getElementsByTagName(type);
-    for (i = 0; i < media.length; i++) {
-      // Set an id to identify each media node - used e.g. by the consoleMedia plugin
-      id = media[i].getAttribute('id');
-      if (id === undefined || id === null) {
-        media[i].setAttribute('id', 'media-' + type + '-' + i);
-      }
-      media[i].addEventListener("play", onPlay, false);
-      media[i].addEventListener("playing", onPlay, false);
-      media[i].addEventListener("pause", onPause, false);
-      media[i].addEventListener("ended", onEnded, false);
-    }
-  };
-  
-  enhanceMedia = function () {
-    var i, steps, media = document.getElementsByClassName('media');
-    for (i = 0; i < media.length; i++) {
-      parseMediaShortcut(media[i]);
-    }
-    enhanceMediaNode('audio');
-    enhanceMediaNode('video');
-    steps = document.getElementsByClassName('step');
-    for (i = 0; i < steps.length; i++) {
-      console.log("Add event listener.");
-      steps[i].addEventListener('impress:stepenter', playOnStepenter, false);
-    }
-  };
-  
-  playOnStepenter = function (event) {
-    console.log("Stepenter triggered.");
-    var videos, audios, media, play, type, i;
-    if ((!event) || (!event.target)) {
-      return;
-    }
-    
-    audios = event.target.getElementsByTagName('audio');
-    videos = event.target.getElementsByTagName('video');
-    media = {
-      video: videos,
-      audio: audios
-    };
-    for (type in media) {
-      for (i = 0; i < media[type].length; i++) {
-        play = media[type][i].dataset.mediaPlayonenter;
-        console.log(play);
-        if (play !== undefined) {
-          media[type][i].play();
+    attributeTracker = [];
+
+    // Function names
+    var enhanceMediaNodes,
+        enhanceMedia,
+        removeMediaClasses,
+        onStepenterDetectImpressConsole,
+        onStepenter,
+        onStepleave,
+        onPlay,
+        onPause,
+        onEnded,
+        getMediaAttribute,
+        teardown;
+
+    document.addEventListener( "impress:init", function( event ) {
+        root = event.target;
+        api = event.detail.api;
+        gc = api.lib.gc;
+
+        enhanceMedia();
+
+        gc.pushCallback( teardown );
+    }, false );
+
+    teardown = function() {
+        var el, i;
+        removeMediaClasses();
+        for ( i = 0; i < attributeTracker.length; i += 1 ) {
+            el = attributeTracker[ i ];
+            el.node.removeAttribute( el.attr );
         }
-      }
-    }
-  }
-
-  pauseOnStepleave = function (event) {
-    var videos, audios, media, type, i;
-    if ((!event) || (!event.target)) {
-      return;
-    }
-
-    videos = event.target.getElementsByTagName('video');
-    audios = event.target.getElementsByTagName('audio');
-    media = {
-      video: videos,
-      audio: audios
+        attributeTracker = [];
     };
-    for (type in media) {
-      for (i = 0; i < media[type].length; i++) {
-        if (media[type][i].dataset.mediaPauseonleave !== "false") {
-          media[type][i].pause();
+
+    getMediaAttribute = function( attributeName, nodes ) {
+        var attrName, attrValue, i, node;
+        attrName = "data-media-" + attributeName;
+
+        // Look for attributes in all nodes
+        for ( i = 0; i < nodes.length; i += 1 ) {
+            node = nodes[ i ];
+
+            // First test, if the attribute exists, because some browsers may return
+            // an empty string for non-existing attributes - specs are not clear at that point
+            if ( node.hasAttribute( attrName ) ) {
+
+                // Attribute found, return their parsed boolean value, empty strings count as true
+                // to enable empty value booleans (common in html5 but not allowed in well formed
+                // xml).
+                attrValue = node.getAttribute( attrName );
+                if ( attrValue === "" || attrValue === "true" ) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+
+            // No attribute found at current node, proceed with next round
         }
-      }
-    }
-  };
 
-  // Register the plugin to be called in the pre-init phase
-  window.impress.addPreInitPlugin(enhanceMedia);
+        // Last resort: no attribute found - return undefined to distiguish from false
+        return undefined;
+    };
 
-  // Register the plugin to be called in pre-stepleave phase
-  impress.addPreStepLeavePlugin(pauseOnStepleave);
+    onPlay = function( event ) {
+        var type = event.target.nodeName.toLowerCase();
+        document.body.classList.add( "impress-media-" + type + "-playing" );
+        document.body.classList.remove( "impress-media-" + type + "-paused" );
+    };
 
-})(document, window);
+    onPause = function( event ) {
+        var type = event.target.nodeName.toLowerCase();
+        document.body.classList.add( "impress-media-" + type + "-paused" );
+        document.body.classList.remove( "impress-media-" + type + "-playing" );
+    };
+
+    onEnded = function( event ) {
+        var type = event.target.nodeName.toLowerCase();
+        document.body.classList.remove( "impress-media-" + type + "-playing" );
+        document.body.classList.remove( "impress-media-" + type + "-paused" );
+    };
+
+    removeMediaClasses = function() {
+        var type, types;
+        types = [ "video", "audio" ];
+        for ( type in types ) {
+            document.body.classList.remove( "impress-media-" + types[ type ] + "-playing" );
+            document.body.classList.remove( "impress-media-" + types[ type ] + "-paused" );
+        }
+    };
+
+    enhanceMediaNodes = function() {
+        var i, id, media, mediaElement, type;
+
+        media = root.querySelectorAll( "audio, video" );
+        for ( i = 0; i < media.length; i += 1 ) {
+            type = media[ i ].nodeName.toLowerCase();
+
+            // Set an id to identify each media node - used e.g. for cross references by
+            // the consoleMedia plugin
+            mediaElement = media[ i ];
+            id = mediaElement.getAttribute( "id" );
+            if ( id === undefined || id === null ) {
+                mediaElement.setAttribute( "id", "media-" + type + "-" + i );
+                attributeTracker.push( { "node": mediaElement, "attr": "id" } );
+            }
+            gc.addEventListener( mediaElement, "play", onPlay );
+            gc.addEventListener( mediaElement, "playing", onPlay );
+            gc.addEventListener( mediaElement, "pause", onPause );
+            gc.addEventListener( mediaElement, "ended", onEnded );
+        }
+    };
+
+    enhanceMedia = function() {
+        var steps, stepElement, i;
+        enhanceMediaNodes();
+        steps = document.getElementsByClassName( "step" );
+        for ( i = 0; i < steps.length; i += 1 ) {
+            stepElement = steps[ i ];
+
+            gc.addEventListener( stepElement, "impress:stepenter", onStepenter );
+            gc.addEventListener( stepElement, "impress:stepleave", onStepleave );
+        }
+    };
+
+    onStepenterDetectImpressConsole = function() {
+        return {
+            "preview": ( window.frameElement !== null && window.frameElement.id === "preView" ),
+            "slideView": ( window.frameElement !== null && window.frameElement.id === "slideView" )
+        };
+    };
+
+    onStepenter = function( event ) {
+        var stepElement, media, mediaElement, i, onConsole, autoplay;
+        if ( ( !event ) || ( !event.target ) ) {
+            return;
+        }
+
+        stepElement = event.target;
+        removeMediaClasses();
+
+        media = stepElement.querySelectorAll( "audio, video" );
+        for ( i = 0; i < media.length; i += 1 ) {
+            mediaElement = media[ i ];
+
+            // Autoplay when (maybe inherited) autoplay setting is true,
+            // but only if not on preview of the next step in impressConsole
+            onConsole = onStepenterDetectImpressConsole();
+            autoplay = getMediaAttribute( "autoplay", [ mediaElement, stepElement, root ] );
+            if ( autoplay && !onConsole.preview ) {
+                if ( onConsole.slideView ) {
+                    mediaElement.muted = true;
+                }
+                mediaElement.play();
+            }
+        }
+    };
+
+    onStepleave = function( event ) {
+        var stepElement, media, i, mediaElement, autoplay, autopause, autostop;
+        if ( ( !event || !event.target ) ) {
+            return;
+        }
+
+        stepElement = event.target;
+        media = event.target.querySelectorAll( "audio, video" );
+        for ( i = 0; i < media.length; i += 1 ) {
+            mediaElement = media[ i ];
+
+            autoplay = getMediaAttribute( "autoplay", [ mediaElement, stepElement, root ] );
+            autopause = getMediaAttribute( "autopause", [ mediaElement, stepElement, root ] );
+            autostop = getMediaAttribute( "autostop",  [ mediaElement, stepElement, root ] );
+
+            // If both autostop and autopause are undefined, set it to the value of autoplay
+            if ( autostop === undefined && autopause === undefined ) {
+                autostop = autoplay;
+            }
+
+            if ( autopause || autostop ) {
+                mediaElement.pause();
+                if ( autostop ) {
+                    mediaElement.currentTime = 0;
+                }
+            }
+        }
+        removeMediaClasses();
+    };
+
+} )( document, window );
+
 /**
  * Mobile devices support
  *
