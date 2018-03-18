@@ -1,0 +1,15 @@
+<div class="indexLinks">
+	{+new Link().toFile("index.html").withText("Classes")+}
+	{+new Link().toFile("files.html").withText("Files")+}
+</div>
+
+<h2 class="heading1">Classes</h2>
+
+<ul class="classList">
+	<for each="thisClass" in="data">
+		<li>{!
+			var classLink = new Link().toClass(thisClass.alias) + "";
+			output += wordwrapNamespace(classLink);
+		!}</li>
+	</for>
+</ul>

@@ -1,6 +1,6 @@
 /.*/
 /.*
-/test/
 /bower.json
+/examples
+/extras/*
 /circle.yml
-/karma.conf.js

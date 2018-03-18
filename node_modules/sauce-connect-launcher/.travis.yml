@@ -1,0 +1,19 @@
+---
+language: node_js
+node_js:
+- 0.10
+- 0.12
+- iojs
+before_script:
+- export DISPLAY=:99.0
+- sh -e /etc/init.d/xvfb start
+env:
+  global:
+  - secure: |-
+      c5M3jVIf84Y/0auAPsEicabcwiEHLaT1fL4LKdw4AgD1fiCGI8b7YdPEYJ0X
+      fntiHAxUjvANgUEeDHgZhLszNCXLThcNryMwm6vTrt96jKH5ATaqPiaqSdGQ
+      CzZd0VoGjiad02dnJBcQT6NGMu4dZA0fOww1Hw1XR3S0sT8UtWc=
+  - secure: |-
+      cO5SEsl+NGMy3s4CtaHLU+euacA0lbku5SuIAdZag1OHVCdPzadxgzJgNhS6
+      l4/FkctEHG4wzTv467CH9Czot0i5ZoC1OCbyAxgOlstzp1CDxVgubGRKz1Bo
+      0hTuefAUTSXn6U/ULLGYmr1adB+l8xqOI9Q+PHzXCj8RfPhl4/k=

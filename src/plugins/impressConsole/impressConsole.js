@@ -555,7 +555,7 @@
             //Btw, you can also launch console automatically:
             //<div id="impress" data-console-autolaunch="true">
             if ( root.dataset.consoleAutolaunch === 'true' ) {
-                window.open();
+                open();
             }
         };
 

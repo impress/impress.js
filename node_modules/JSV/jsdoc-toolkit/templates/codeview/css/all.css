@@ -1,0 +1,340 @@
+﻿/*
+ * TABLE OF CONTENTS:
+ * - Browser reset
+ * - HTML elements
+ * - JsDoc styling
+ */
+
+
+
+
+
+
+/*
+ * BEGIN BROWSER RESET
+ */
+
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,p,pre,form,fieldset,input,textarea,p,blockquote,th,td {
+	margin:0;
+	padding:0
+}
+html {
+	height:100%;
+	overflow:-moz-scrollbars-vertical;
+	overflow-x:auto
+}
+table {
+	border:0;
+	border-collapse:collapse;
+	border-spacing:0
+}
+fieldset,img {
+	border:0
+}
+address,caption,cite,code,dfn,em,strong,th,var {
+	font-style:normal;
+	font-weight:normal
+}
+em,cite {
+	font-style:italic
+}
+strong {
+	font-weight:bold
+}
+ol,ul {
+	list-style:none
+}
+caption,th {
+	text-align:left
+}
+h1,h2,h3,h4,h5,h6 {
+	font-size:100%;
+	font-weight:normal;
+	margin:0;
+	padding:0
+}
+q:before,q:after {
+	content:''
+}
+abbr,acronym {
+	border:0
+}
+
+/*
+ * END BROWSER RESET
+ */
+
+
+
+
+
+
+/*
+ * HTML ELEMENTS
+ */
+
+@font-face {
+	font-family: 'M1m';
+	src: url('fonts/mplus-1m-regular-webfont.eot');
+	src: local('☺'), url('fonts/mplus-1m-regular-webfont.woff') format('woff'), url('fonts/mplus-1m-regular-webfont.ttf') format('truetype'), url('fonts/mplus-1m-regular-webfont.svg#webfontVd14f4NN') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'M1m';
+	src: url('fonts/mplus-1m-bold-webfont.eot');
+	src: local('☺'), url('fonts/mplus-1m-bold-webfont.woff') format('woff'), url('fonts/mplus-1m-bold-webfont.ttf') format('truetype'), url('fonts/mplus-1m-bold-webfont.svg#webfontIjI5mZqE') format('svg');
+	font-weight: bold;
+	font-style: normal;
+}
+
+
+
+* {
+	line-height: 1.4em;
+}
+
+html {
+	font-size: 100%;
+}
+
+body {
+	font-size: 0.75em;
+	padding: 15px 0;
+	background: #eee;
+	background-image: -moz-linear-gradient(left, #dddddd, #f9f9f9) fixed;
+	background-image: -webkit-gradient(linear,left bottom,right bottom,color-stop(0, #dddddd),color-stop(1, #f9f9f9)) fixed;
+  }
+
+body,
+input,
+select,
+textarea {
+	color: #000;
+	font-family: Arial, Geneva, sans-serif;
+}
+
+a:link,
+a:hover,
+a:active,
+a:visited {
+	color: #19199e;
+}
+a:hover,
+a:focus {
+	color: #00f;
+	text-decoration: none;
+}
+
+p {
+	margin: 0 0 1.5em 0;
+}
+
+/*
+ * END HTML ELEMENTS
+ */
+
+
+ 
+/*
+ * BEGIN HACK
+ */
+
+div.containerMain:after,
+div.safeBox:after {
+	content:"";
+	display:block;
+	height:0;
+	clear:both;
+}
+
+/*
+ * END HACK
+ */
+
+
+
+/*
+ * BEGIN JSDOC
+ */
+
+/* Start menu */
+div.index *.heading1 {
+	margin-bottom: 0.5em;
+	border-bottom: 1px solid #999999;
+	font-family: M1m, Arial, sans-serif;
+	font-size: 1.6em;
+	letter-spacing: 1px;
+	line-height: 1.3em;
+}
+ 
+div.index div.menu {
+	background-color: #FFFFFF;
+}
+*+html div.index div.menu {
+	background-color: #FFFFFF;
+}
+* html div.index div.menu {
+	background-color: #FFFFFF;
+}
+
+div.index div.menu div {
+	text-align: left;
+}
+
+div.index div.menu a {
+	text-decoration: none;
+}
+div.index div.menu a:hover {
+	text-decoration: underline;
+}
+
+div.index ul.classList a {
+	display: block;
+	padding: 4px 0 2px 20px;
+	text-indent: -20px;
+}
+
+div.index div.fineprint {
+	color: #777;
+	font-size: 0.9em;
+}
+div.index div.fineprint a {
+	color: #777;
+}
+/* End menu */
+
+
+
+/* Start content */
+div.content *.classTitle {
+	font-family: M1m, sans-serif;
+	font-size: 2.5em;
+	letter-spacing: 2px;
+	text-shadow: 1px 1px 1px #999999;
+}
+
+div.content *.classTitle span {
+	font-weight: bold;
+}
+
+div.content p.summary {
+	font-size: 1.25em;
+}
+
+div.content ul *.classname a,
+div.content ul *.filename a {
+	font-family: Consolas, "Courier New", Courier, monospace;
+	text-decoration: none;
+	font-weight: bold;
+}
+div.content ul *.classname a:hover,
+div.content ul *.filename a:hover {
+	text-decoration: underline;
+}
+
+div.content div.props {
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	background: #fff;
+	background: -moz-linear-gradient(top, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.2)); /* FF3.6 */
+	background: -webkit-gradient(linear,left top,left bottom,color-stop(0, rgba(255, 255, 255, 0.7)),color-stop(1, rgba(255, 255, 255, 0.2)));
+	-moz-box-shadow: 0px 0px 10px #ccc;
+	-webkit-box-shadow: 0px 0px 5px #bbb;
+	box-shadow: 0px 0px 5px #bbb;
+}
+
+div.content div.props div.sectionTitle {
+	font-family: M1m, sans-serif;
+	font-size: 1.6em;
+	letter-spacing: 1px;
+}
+
+
+
+table.summaryTable caption {
+	font-family: M1m, sans-serif;
+	font-size: 1.6em;
+	letter-spacing: 1px;
+}
+
+table.summaryTable td,
+table.summaryTable th {
+	vertical-align: top;
+}
+table.summaryTable tr:last-child td {
+	padding-bottom: 0;
+}
+
+table.summaryTable th {
+	font-weight: bold;
+}
+
+table.summaryTable td.attributes {
+	font-family: Consolas, "Courier New", Courier, monospace;
+	color: #666;
+}
+
+table.summaryTable td.nameDescription div.fixedFont {
+	font-weight: bold;
+}
+
+table.summaryTable div.description {
+	color: #333;
+}
+
+
+
+dl.detailList dt {
+	font-weight: bold;
+}
+
+
+
+.fixedFont {
+	font-family: Consolas, "Courier New", Courier, monospace;
+}
+
+.fixedFont.heading {
+	font-size: 1.25em;
+	line-height: 1.1em
+}
+
+.fixedFont.heading + .description {
+	font-size: 1.2em;
+}
+
+.fixedFont.heading .light,
+.fixedFont.heading .lighter {
+	font-weight: bold;
+}
+
+pre.code {
+	overflow: auto;
+	font-family: Consolas, "Courier New", Courier, monospace;
+	background: #eee;
+}
+/* Start content */
+
+
+
+/* Start general styles */
+.light {
+	color: #666;
+}
+
+.lighter {
+	color: #999;
+}
+
+span.break {
+	font-size: 1px;
+	line-height:  1px;
+}
+/* End general styles */
+
+/*
+ * END JSDOC
+ */
