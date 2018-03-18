@@ -1,5 +1,0 @@
-{
-    // the following string contains an escaped `\r\n`
-    a: 'line 1 \
-line 2'
-}

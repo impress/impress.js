@@ -1,3 +1,0 @@
-{
-    multi-word: "multi-word"
-}

@@ -1,6 +1,0 @@
-#! /usr/bin/env node
-'use strict';
-
-var Parser = require('../lib/index.js').Parser;
-var parser = new Parser();
-console.log('%j', parser.parse(process.argv[2]));

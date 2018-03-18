@@ -1,5 +1,0 @@
-(This is not code)
-function foo(){{{{
-(
-!
-@

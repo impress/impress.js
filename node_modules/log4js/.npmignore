@@ -1,7 +1,0 @@
-*.log*
-build
-node_modules
-.bob/
-test/streams/test-*
-.idea
-.DS_Store

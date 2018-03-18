@@ -1,3 +1,0 @@
-{
-    10twenty: "ten twenty"
-}
