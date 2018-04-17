@@ -48,6 +48,10 @@ time, mark, audio, video {
     font: inherit;
     vertical-align: baseline;
 }
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code{
+    color: #00ff99;
+}
 
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure,
@@ -86,12 +90,13 @@ body {
     min-height: 740px;
 
     background: rgb(215, 215, 215);
+
     background: -webkit-gradient(radial, 50% 50%, 0, 50% 50%, 500, from(rgb(240, 240, 240)), to(rgb(190, 190, 190)));
-    background: -webkit-radial-gradient(rgb(240, 240, 240), rgb(190, 190, 190));
-    background:    -moz-radial-gradient(rgb(240, 240, 240), rgb(190, 190, 190));
-    background:     -ms-radial-gradient(rgb(240, 240, 240), rgb(190, 190, 190));
-    background:      -o-radial-gradient(rgb(240, 240, 240), rgb(190, 190, 190));
-    background:         radial-gradient(rgb(240, 240, 240), rgb(190, 190, 190));
+    background: -webkit-radial-gradient(rgb(0, 78, 158), rgb(0, 0, 0));
+    background:    -moz-radial-gradient(rgb(0, 78, 158), rgb(0, 0, 0));
+    background:     -ms-radial-gradient(rgb(0, 78, 158), rgb(0, 0, 0));
+    background:      -o-radial-gradient(rgb(0, 78, 158), rgb(0, 0, 0));
+    background:         radial-gradient(rgb(0, 78, 158), rgb(0, 0, 0));
 }
 
 /*
@@ -213,7 +218,7 @@ a:focus {
     height: 700px;
     padding: 40px 60px;
 
-    background-color: white;
+    background-color: #00c4ff42;
     border: 1px solid rgba(0, 0, 0, .3);
     border-radius: 10px;
     box-shadow: 0 2px 6px rgba(0, 0, 0, .1);
@@ -231,7 +236,7 @@ a:focus {
     display: block;
     font-size: 50px;
     line-height: 72px;
-
+    color: #000000;
     margin-top: 100px;
 }
 
