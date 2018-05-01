@@ -77,13 +77,44 @@
         }
     };
 
-    var computeRelativePositions = function( el, prev ) {
+    var computeRelativePositions = function( el, prev, root ) {
         var data = el.dataset;
 
         if ( !prev ) {
 
             // For the first step, inherit these defaults
             prev = { x:0, y:0, z:0, relative: { x:0, y:0, z:0 } };
+        }
+
+        if ( data.relTo ) {
+
+            var ref = root.getElementById( data.relTo );
+            if ( ref ) {
+
+                // Test, if it is a previous step that already has some assigned position data
+                if ( el.compareDocumentPosition( ref ) & Node.DOCUMENT_POSITION_PRECEDING ) {
+                    prev.x = ref.getAttribute( "data-x" );
+                    prev.y = ref.getAttribute( "data-y" );
+                    prev.z = ref.getAttribute( "data-z" );
+                    prev.relative = {};
+                } else {
+                    window.console.error(
+                        "impress.js rel plugin: Step \"" + data.relTo + "\" is not defined " +
+                        "*before* the current step. Referencing is limited to previously defined " +
+                        "steps. Please check your markup. Ignoring data-rel-to attribute of " +
+                        "this step. Have a look at the documentation for how to create relative " +
+                        "positioning to later shown steps with the help of the goto plugin."
+                    );
+                }
+            } else {
+
+                // Step not found
+                window.console.warn(
+                    "impress.js rel plugin: \"" + data.relTo + "\" is not a valid step in this " +
+                    "impress.js presentation. Please check your markup. Ignoring data-rel-to " +
+                    "attribute of this step."
+                );
+            }
         }
 
         var step = {
@@ -130,7 +161,7 @@
                 y: el.getAttribute( "data-y" ),
                 z: el.getAttribute( "data-z" )
             } );
-            var step = computeRelativePositions( el, prev );
+            var step = computeRelativePositions( el, prev, root );
 
             // Apply relative position (if non-zero)
             el.setAttribute( "data-x", step.x );
