@@ -3585,6 +3585,7 @@
                     prev.x = ref.getAttribute( "data-x" );
                     prev.y = ref.getAttribute( "data-y" );
                     prev.z = ref.getAttribute( "data-z" );
+                    prev.relative = {};
                 } else {
                     window.console.error(
                         "impress.js rel plugin: Step \"" + data.relTo + "\" is not defined " +
