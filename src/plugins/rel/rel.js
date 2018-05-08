@@ -77,7 +77,7 @@
         }
     };
 
-    var computeRelativePositions = function( el, prev, root ) {
+    var computeRelativePositions = function( el, prev ) {
         var data = el.dataset;
 
         if ( !prev ) {
@@ -88,14 +88,14 @@
 
         if ( data.relTo ) {
 
-            var ref = root.getElementById( data.relTo );
+            var ref = document.getElementById( data.relTo );
             if ( ref ) {
 
                 // Test, if it is a previous step that already has some assigned position data
                 if ( el.compareDocumentPosition( ref ) & Node.DOCUMENT_POSITION_PRECEDING ) {
-                    prev.x = ref.getAttribute( "data-x" );
-                    prev.y = ref.getAttribute( "data-y" );
-                    prev.z = ref.getAttribute( "data-z" );
+                    prev.x = toNumber( ref.getAttribute( "data-x" ) );
+                    prev.y = toNumber( ref.getAttribute( "data-y" ) );
+                    prev.z = toNumber( ref.getAttribute( "data-z" ) );
                     prev.relative = {};
                 } else {
                     window.console.error(
@@ -161,7 +161,7 @@
                 y: el.getAttribute( "data-y" ),
                 z: el.getAttribute( "data-z" )
             } );
-            var step = computeRelativePositions( el, prev, root );
+            var step = computeRelativePositions( el, prev );
 
             // Apply relative position (if non-zero)
             el.setAttribute( "data-x", step.x );

@@ -101,7 +101,7 @@
         powerpoint slide show. The "slide" class is entirely optional and indeed you wouldn't use it for
         your cooler impress.js presentations.
     -->
-    <div class="step slide title" data-x="-1000" data-y="-1500">
+    <div id="title" class="step slide title" data-x="-1000" data-y="-1500">
         <h1>Example Presentation: <br />
             Classic Slides</h1>
         <h2>Henrik Ingo</h2>
@@ -114,7 +114,7 @@
         </div>
     </div>
 
-    <div class="step slide" data-rel-x="1000" data-rel-y="0">
+    <div id="toc" class="step slide" data-rel-x="1000" data-rel-y="0">
         <h1>Table of Contents</h1>
         <ul>
             <li><a href="#step-1">A title slide</a></li>
@@ -151,7 +151,7 @@
         </div>
     </div>
 
-    <div class="step slide">
+    <div class="step slide" data-rel-to="title" data-y="2000">
         <h1>Bullet points</h1>
         <ul>
             <li>A slide with bullet points. This is the first point.</li>
