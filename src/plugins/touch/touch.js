@@ -25,6 +25,7 @@
 
     document.addEventListener( "touchstart", function( event ) {
         lastX = startX = event.touches[ 0 ].clientX;
+        event.preventDefault();
     } );
 
     document.addEventListener( "touchmove", function( event ) {
@@ -36,6 +37,7 @@
          lastX = x;
 
          window.impress().swipe( diff / window.innerWidth );
+         event.preventDefault();
      } );
 
      document.addEventListener( "touchend", function() {
