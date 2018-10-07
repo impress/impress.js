@@ -3203,6 +3203,7 @@
                 if ( event.shiftKey ) {
                     switch ( event.keyCode ) {
                         case 9: // Shift+tab
+                        case 32: // Shift+space
                             api.prev();
                             break;
                     }
