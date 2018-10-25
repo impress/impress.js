@@ -10,21 +10,34 @@
  * Example:
  *
  *         <!-- Position step 1000 px to the right and 500 px up from the previous step. -->
- *         <div class="step" data-rel-x="1000" data-rel-y="500">
+ *         <div class="step" data-rel-x="1000" data-rel-y="500" data-rel-rotate="90" >
+ *
+ *         <!-- Position step 1000 px to the left and 750 px up from the step with id "title". -->
+ *         <div class="step" data-rel-x="-1000" data-rel-y="750" data-rel-to="title">
  *
  * Following html attributes are supported for step elements:
+ *
+ *     data-rel-to
  *
  *     data-rel-x
  *     data-rel-y
  *     data-rel-z
  *
- * These values are also inherited from the previous step. This makes it easy to
- * create a boring presentation where each slide shifts for example 1000px down
- * from the previous.
+ *     data-rel-rotate-x
+ *     data-rel-rotate-y
+ *     data-rel-rotate-z
+ *     // or equivalently
+ *     data-rel-rotate
  *
- * In addition to plain numbers, which are pixel values, it is also possible to
- * define relative positions as a multiple of screen height and width, using
- * a unit of "h" and "w", respectively, appended to the number.
+ * These values are not inherited from the previous step.
+ *
+ * The above relative values are ignored, or set to zero, if the corresponding
+ * absolute value (`data-x` etc...) is set.
+ *
+ * In addition to plain numbers, which are pixel values, for `data-rel-{x,y,z}`
+ * it is also possible to define relative positions as a multiple of screen
+ * height and width, using a unit of "h" and "w", respectively, appended to the
+ * number.
  *
  * Example:
  *
@@ -81,9 +94,8 @@
         var data = el.dataset;
 
         if ( !prev ) {
-
             // For the first step, inherit these defaults
-            prev = { x:0, y:0, z:0, relative: { x:0, y:0, z:0 } };
+            prev = { x:0, y:0, z:0, rotateX:0, rotateY:0, rotateZ:0 };
         }
 
         if ( data.relTo ) {
@@ -96,7 +108,9 @@
                     prev.x = toNumber( ref.getAttribute( "data-x" ) );
                     prev.y = toNumber( ref.getAttribute( "data-y" ) );
                     prev.z = toNumber( ref.getAttribute( "data-z" ) );
-                    prev.relative = {};
+                    prev.rotateX = toNumber( ref.getAttribute( "data-rotate-x" ) );
+                    prev.rotateY = toNumber( ref.getAttribute( "data-rotate-y" ) );
+                    prev.rotateZ = toNumber( ref.getAttribute( "data-rotate" ) || ref.getAttribute( "data-rotate-z" ) );
                 } else {
                     window.console.error(
                         "impress.js rel plugin: Step \"" + data.relTo + "\" is not defined " +
@@ -117,36 +131,22 @@
             }
         }
 
-        var step = {
-                x: toNumber( data.x, prev.x ),
-                y: toNumber( data.y, prev.y ),
-                z: toNumber( data.z, prev.z ),
-                relative: {
-                    x: toNumberAdvanced( data.relX, prev.relative.x ),
-                    y: toNumberAdvanced( data.relY, prev.relative.y ),
-                    z: toNumberAdvanced( data.relZ, prev.relative.z )
-                }
-            };
-
-        // Relative position is ignored/zero if absolute is given.
-        // Note that this also has the effect of resetting any inherited relative values.
-        if ( data.x !== undefined ) {
-            step.relative.x = 0;
-        }
-        if ( data.y !== undefined ) {
-            step.relative.y = 0;
-        }
-        if ( data.z !== undefined ) {
-            step.relative.z = 0;
-        }
-
-        // Apply relative position to absolute position, if non-zero
-        // Note that at this point, the relative values contain a number value of pixels.
-        step.x = step.x + step.relative.x;
-        step.y = step.y + step.relative.y;
-        step.z = step.z + step.relative.z;
-
-        return step;
+        return {
+          // if data-? is set, discard any data-rel-? values otherwise use data-rel-?
+          // if neither data-? nor data-rel-? are set - use 0 as a default value
+          x: data.x !== undefined ? toNumber( data.x ) :
+              (data.relX === undefined ? 0 : prev.x + toNumberAdvanced( data.relX )),
+          y: data.y !== undefined ? toNumber( data.y ) :
+              (data.relY === undefined ? 0 : prev.y + toNumberAdvanced( data.relY )),
+          z: data.z !== undefined ? toNumber( data.z ) :
+              (data.relZ === undefined ? 0 : prev.z + toNumberAdvanced( data.relZ )),
+          rotateX: data.rotateX !== undefined ? toNumber( data.rotateX ) :
+                     (data.relRotateX === undefined ? 0 : prev.rotateX + toNumber( data.relRotateX )),
+          rotateY: data.rotateY !== undefined ? toNumber( data.rotateY ) :
+                     (data.relRotateY === undefined ? 0 : prev.rotateY + toNumber( data.relRotateY )),
+          rotateZ: data.rotateZ !== undefined || data.rotate  !== undefined ? toNumber( data.rotate || data.rotateZ ) :
+                     (data.relRotate === undefined && data.relRotateZ === undefined ? 0 : prev.rotateZ + toNumber( data.relRotate || data.relRotateZ ))
+        };
     };
 
     var rel = function( root ) {
@@ -159,7 +159,10 @@
                 el: el,
                 x: el.getAttribute( "data-x" ),
                 y: el.getAttribute( "data-y" ),
-                z: el.getAttribute( "data-z" )
+                z: el.getAttribute( "data-z" ),
+                rotateX: el.getAttribute( "data-rotate-x" ),
+                rotateY: el.getAttribute( "data-rotate-y" ),
+                rotateZ: el.getAttribute( "data-rotate-z" )
             } );
             var step = computeRelativePositions( el, prev );
 
@@ -167,6 +170,15 @@
             el.setAttribute( "data-x", step.x );
             el.setAttribute( "data-y", step.y );
             el.setAttribute( "data-z", step.z );
+            el.setAttribute( "data-rotate-x", step.rotateX );
+            el.setAttribute( "data-rotate-y", step.rotateY );
+            el.setAttribute( "data-rotate-z", step.rotateZ );
+            el.removeAttribute( "data-rel-x" );
+            el.removeAttribute( "data-rel-y" );
+            el.removeAttribute( "data-rel-z" );
+            el.removeAttribute( "data-rel-rotate-x" );
+            el.removeAttribute( "data-rel-rotate-y" );
+            el.removeAttribute( "data-rel-rotate-z" );
             prev = step;
         }
     };
@@ -195,6 +207,23 @@
                     step.el.removeAttribute( "data-z" );
                 } else {
                     step.el.setAttribute( "data-z", step.z );
+                }
+                if ( step.rotateX === null ) {
+                    step.el.removeAttribute( "data-rotate-x" );
+                } else {
+                    step.el.setAttribute( "data-rotate-x", step.rotateX );
+                }
+                if ( step.rotateY === null ) {
+                    step.el.removeAttribute( "data-rotate-y" );
+                } else {
+                    step.el.setAttribute( "data-rotate-y", step.rotateY );
+                }
+                if ( step.rotateZ === null ) {
+                    step.el.removeAttribute( "data-rotate-z" );
+                    step.el.removeAttribute( "data-rotate" );
+                } else {
+                    step.el.setAttribute( "data-rotate-z", step.rotateZ );
+                    step.el.setAttribute( "data-rotate", step.rotateZ );
                 }
             }
             delete startingState[ root.id ];

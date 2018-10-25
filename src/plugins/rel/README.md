@@ -10,29 +10,34 @@ core.
 Example:
 
     <!-- Position step 1000 px to the right and 500 px up from the previous step. -->
-    <div class="step" data-rel-x="1000" data-rel-y="500">
-        
+    <div class="step" data-rel-x="1000" data-rel-y="500" data-rel-rotate="90">
+
     <!-- Position step 1000 px to the left and 750 px up from the step with id "title". -->
     <div class="step" data-rel-x="-1000" data-rel-y="750" data-rel-to="title">
 
 Following html attributes are supported for step elements:
 
+    data-rel-to
+
     data-rel-x
     data-rel-y
     data-rel-z
-    data-rel-to
 
-Non-zero values are also inherited from the previous step. This makes it easy to 
-create a boring presentation where each slide shifts for example 1000px down 
-from the previous.
+    data-rel-rotate-x
+    data-rel-rotate-y
+    data-rel-rotate-z
+    // or equivalently
+    data-rel-rotate
 
-The above relative values are ignored, or set to zero, if the corresponding 
-absolute value (`data-x` etc...) is set. Note that this also has the effect of
-resetting the inheritance functionality.
+Non-zero values are not inherited from the previous step.
 
-In addition to plain numbers, which are pixel values, it is also possible to
-define relative positions as a multiple of screen height and width, using
-a unit of "h" and "w", respectively, appended to the number.
+The above relative values are ignored, or set to zero, if the corresponding
+absolute value (`data-x` etc...) is set.
+
+In addition to plain numbers, which are pixel/degree values, for
+`data-rel-{x,y,z}` it is also possible to define relative positions as a
+multiple of screen height and width, using a unit of "h" and "w", respectively,
+appended to the number.
 
 Example:
 
