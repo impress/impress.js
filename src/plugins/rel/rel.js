@@ -94,6 +94,7 @@
         var data = el.dataset;
 
         if ( !prev ) {
+
             // For the first step, inherit these defaults
             prev = { x:0, y:0, z:0, rotateX:0, rotateY:0, rotateZ:0 };
         }
@@ -110,7 +111,8 @@
                     prev.z = toNumber( ref.getAttribute( "data-z" ) );
                     prev.rotateX = toNumber( ref.getAttribute( "data-rotate-x" ) );
                     prev.rotateY = toNumber( ref.getAttribute( "data-rotate-y" ) );
-                    prev.rotateZ = toNumber( ref.getAttribute( "data-rotate" ) || ref.getAttribute( "data-rotate-z" ) );
+                    prev.rotateZ = toNumber( ref.getAttribute( "data-rotate" ) ||
+                      ref.getAttribute( "data-rotate-z" ) );
                 } else {
                     window.console.error(
                         "impress.js rel plugin: Step \"" + data.relTo + "\" is not defined " +
@@ -132,20 +134,23 @@
         }
 
         return {
-          // if data-? is set, discard any data-rel-? values otherwise use data-rel-?
-          // if neither data-? nor data-rel-? are set - use 0 as a default value
+
+          // If data-? is set, discard any data-rel-? values otherwise use data-rel-?
+          // If neither data-? nor data-rel-? are set - use 0 as a default value
           x: data.x !== undefined ? toNumber( data.x ) :
-              (data.relX === undefined ? 0 : prev.x + toNumberAdvanced( data.relX )),
+              ( data.relX === undefined ? 0 : prev.x + toNumberAdvanced( data.relX ) ),
           y: data.y !== undefined ? toNumber( data.y ) :
-              (data.relY === undefined ? 0 : prev.y + toNumberAdvanced( data.relY )),
+              ( data.relY === undefined ? 0 : prev.y + toNumberAdvanced( data.relY ) ),
           z: data.z !== undefined ? toNumber( data.z ) :
-              (data.relZ === undefined ? 0 : prev.z + toNumberAdvanced( data.relZ )),
+              ( data.relZ === undefined ? 0 : prev.z + toNumberAdvanced( data.relZ ) ),
           rotateX: data.rotateX !== undefined ? toNumber( data.rotateX ) :
-                     (data.relRotateX === undefined ? 0 : prev.rotateX + toNumber( data.relRotateX )),
+              ( data.relRotateX === undefined ? 0 : prev.rotateX + toNumber( data.relRotateX ) ),
           rotateY: data.rotateY !== undefined ? toNumber( data.rotateY ) :
-                     (data.relRotateY === undefined ? 0 : prev.rotateY + toNumber( data.relRotateY )),
-          rotateZ: data.rotateZ !== undefined || data.rotate  !== undefined ? toNumber( data.rotate || data.rotateZ ) :
-                     (data.relRotate === undefined && data.relRotateZ === undefined ? 0 : prev.rotateZ + toNumber( data.relRotate || data.relRotateZ ))
+              ( data.relRotateY === undefined ? 0 : prev.rotateY + toNumber( data.relRotateY ) ),
+          rotateZ: data.rotateZ !== undefined || data.rotate  !== undefined ?
+              toNumber( data.rotate || data.rotateZ ) :
+              ( data.relRotate === undefined && data.relRotateZ === undefined ? 0 :
+                  prev.rotateZ + toNumber( data.relRotate || data.relRotateZ ) )
         };
     };
 
