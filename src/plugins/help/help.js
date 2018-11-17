@@ -58,7 +58,7 @@
 
     document.addEventListener( "keyup", function( event ) {
 
-        if ( event.keyCode === 72 ) { // "h"
+        if ( event.keyCode === 72 || event.keyCode === 191 ) { // "h" || "?"
             event.preventDefault();
             toggleHelp();
         }

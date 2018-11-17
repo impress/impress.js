@@ -3203,6 +3203,7 @@
                 if ( event.shiftKey ) {
                     switch ( event.keyCode ) {
                         case 9: // Shift+tab
+                        case 32: // Shift+space
                             api.prev();
                             break;
                     }
@@ -3573,6 +3574,37 @@
 
             // For the first step, inherit these defaults
             prev = { x:0, y:0, z:0, relative: { x:0, y:0, z:0 } };
+        }
+
+        if ( data.relTo ) {
+
+            var ref = document.getElementById( data.relTo );
+            if ( ref ) {
+
+                // Test, if it is a previous step that already has some assigned position data
+                if ( el.compareDocumentPosition( ref ) & Node.DOCUMENT_POSITION_PRECEDING ) {
+                    prev.x = toNumber( ref.getAttribute( "data-x" ) );
+                    prev.y = toNumber( ref.getAttribute( "data-y" ) );
+                    prev.z = toNumber( ref.getAttribute( "data-z" ) );
+                    prev.relative = {};
+                } else {
+                    window.console.error(
+                        "impress.js rel plugin: Step \"" + data.relTo + "\" is not defined " +
+                        "*before* the current step. Referencing is limited to previously defined " +
+                        "steps. Please check your markup. Ignoring data-rel-to attribute of " +
+                        "this step. Have a look at the documentation for how to create relative " +
+                        "positioning to later shown steps with the help of the goto plugin."
+                    );
+                }
+            } else {
+
+                // Step not found
+                window.console.warn(
+                    "impress.js rel plugin: \"" + data.relTo + "\" is not a valid step in this " +
+                    "impress.js presentation. Please check your markup. Ignoring data-rel-to " +
+                    "attribute of this step."
+                );
+            }
         }
 
         var step = {
