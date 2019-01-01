@@ -1,3 +1,5 @@
+// This file was automatically generated from files in src/ directory.
+
 /**
  * impress.js
  *
@@ -5,15 +7,15 @@
  * in modern browsers and inspired by the idea behind prezi.com.
  *
  *
- * Copyright 2011-2012 Bartek Szopka (@bartaz)
+ * Copyright 2011-2012 Bartek Szopka (@bartaz), 2016-2018 Henrik Ingo (@henrikingo)
  *
  * Released under the MIT and GPL Licenses.
  *
  * ------------------------------------------------
- *  author:  Bartek Szopka
- *  version: 1.0.0-beta1
- *  url:     http://bartaz.github.com/impress.js/
- *  source:  http://github.com/bartaz/impress.js/
+ *  author:  Bartek Szopka, Henrik Ingo
+ *  version: 1.0.0
+ *  url:     http://impress.js.org
+ *  source:  http://github.com/impress/impress.js/
  */
 
 // You are one of those who like to know how things work inside?
@@ -59,7 +61,7 @@
         var returnStr = "";
         if ( typeof order === "string" ) {
             for ( var i in order.split( "" ) ) {
-                if ( validChars.indexOf( order[ i ] >= 0 ) ) {
+                if ( validChars.indexOf( order[ i ] ) >= 0 ) {
                     returnStr += order[ i ];
 
                     // Each of x,y,z can be used only once.
@@ -1497,22 +1499,18 @@
         var gc = api.lib.gc;
 
         gc.addEventListener( document, "keydown", function( event ) {
-            if ( event.ctrlKey && event.keyCode === 66 ) {
+            if ( event.keyCode === 66 ) {
                 event.preventDefault();
                 if ( !blackedOut ) {
                     blackout();
                 } else {
-
-                    // Note: This doesn't work on Firefox. It will set display:block,
-                    // but slides only become visible again upon next transition, which
-                    // forces some kind of redraw. Works as intended on Chrome.
                     removeBlackout();
                 }
             }
         }, false );
 
         gc.addEventListener( document, "keyup", function( event ) {
-            if ( event.ctrlKey && event.keyCode === 66 ) {
+            if ( event.keyCode === 66 ) {
                 event.preventDefault();
             }
         }, false );
@@ -1601,7 +1599,12 @@
  *
  * Functionality to better support use of input, textarea, button... elements in a presentation.
  *
- * Currently this does only one single thing: On impress:stepleave, de-focus any potentially active
+ * This plugin does two things:
+ *
+ * Set stopPropagation on any element that might take text input. This allows users to type, for
+ * example, the letter 'P' into a form field, without causing the presenter console to spring up.
+ *
+ * On impress:stepleave, de-focus any potentially active
  * element. This is to prevent the focus from being left in a form element that is no longer visible
  * in the window, and user therefore typing garbage into the form.
  *
@@ -1617,6 +1620,32 @@
 /* global document */
 ( function( document ) {
     "use strict";
+    var root;
+    var api;
+
+    document.addEventListener( "impress:init", function( event ) {
+        root = event.target;
+        api = event.detail.api;
+        var gc = api.lib.gc;
+
+        var selectors = [ "input[type=text]", "textarea", "select", "[contenteditable=true]" ];
+        for ( var selector of selectors ) {
+            var elements = document.querySelectorAll( selector );
+            if ( !elements ) {
+                continue;
+            }
+
+            for ( var i = 0; i < elements.length; i++ ) {
+                var e = elements[ i ];
+                gc.addEventListener( e, "keydown", function( event ) {
+                    event.stopPropagation();
+                } );
+                gc.addEventListener( e, "keyup", function( event ) {
+                    event.stopPropagation();
+                } );
+            }
+        }
+    }, false );
 
     document.addEventListener( "impress:stepleave", function() {
         document.activeElement.blur();
@@ -1864,12 +1893,9 @@
 
     document.addEventListener( "keyup", function( event ) {
 
-        // Check that event target is html or body element.
-        if ( event.target.nodeName === "BODY" || event.target.nodeName === "HTML" ) {
-            if ( event.keyCode === 72 ) { // "h"
-                event.preventDefault();
-                toggleHelp();
-            }
+        if ( event.keyCode === 72 ) { // "h"
+            event.preventDefault();
+            toggleHelp();
         }
     }, false );
 
@@ -2309,17 +2335,21 @@
                     // ... so I add a button to klick.
                     // workaround on firefox
                     var message = document.createElement( 'div' );
-                    message.id = 'consoleWindowError';
+                    message.id = 'impress-console-button';
                     message.style.position = 'fixed';
                     message.style.left = 0;
                     message.style.top = 0;
                     message.style.right = 0;
                     message.style.bottom = 0;
                     message.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
-                    var onClickStr = 'var x = document.getElementById(\'consoleWindowError\');' +
-                                     'x.parentNode.removeChild(x);impressConsole().open();';
-                    message.innerHTML = '<button style="margin: 25vh 25vw;width:50vw;height:50vh;' +
-                                                 'onclick="' + onClickStr + '">' +
+                    var clickStr = 'var x = document.getElementById(\'impress-console-button\');' +
+                                     'x.parentNode.removeChild(x);' +
+                                     'var r = document.getElementById(\'' + rootId + '\');' +
+                                     'impress(\'' + rootId +
+                                     '\').lib.util.triggerEvent(r, \'impress:console:open\', {})';
+                    var styleStr = 'margin: 25vh 25vw;width:50vw;height:50vh;';
+                    message.innerHTML = '<button style="' + styleStr + '" ' +
+                                                 'onclick="' + clickStr + '">' +
                                         lang.clickToOpen +
                                         '</button>';
                     document.body.appendChild( message );
@@ -2480,31 +2510,23 @@
             //Btw, you can also launch console automatically:
             //<div id="impress" data-console-autolaunch="true">
             if ( root.dataset.consoleAutolaunch === 'true' ) {
-                window.open();
+                open();
             }
         };
 
         var init = function( cssConsole, cssIframe ) {
             if ( ( cssConsole === undefined || cssConsole === cssFileOldDefault ) &&
                  ( cssIframe === undefined  || cssIframe === cssFileIframeOldDefault ) ) {
-                window.console.log( 'impressConsole.init() is deprecated. ' +
+                window.console.log( 'impressConsole().init() is deprecated. ' +
                                    'impressConsole is now initialized automatically when you ' +
                                    'call impress().init().' );
             }
             _init( cssConsole, cssIframe );
         };
 
-        document.addEventListener( 'impress:init', function() {
-            _init();
-
-            // Add 'P' to the help popup
-            triggerEvent( document, 'impress:help:add',
-                         { command: 'P', text: 'Presenter console', row: 10 } );
-        } );
-
         // New API for impress.js plugins is based on using events
         root.addEventListener( 'impress:console:open', function() {
-            window.open();
+            open();
         } );
 
         /**
@@ -2520,10 +2542,21 @@
 
         // Return the object
         allConsoles[ rootId ] = { init: init, open: open, clockTick: clockTick,
-                               registerKeyEvent: registerKeyEvent };
+                               registerKeyEvent: registerKeyEvent, _init: _init };
         return allConsoles[ rootId ];
 
     };
+
+    // This initializes impressConsole automatically when initializing impress itself
+    document.addEventListener( 'impress:init', function( event ) {
+
+        // Note: impressConsole wants the id string, not the DOM element directly
+        impressConsole( event.target.id )._init();
+
+        // Add 'P' to the help popup
+        triggerEvent( document, 'impress:help:add',
+                        { command: 'P', text: 'Presenter console', row: 10 } );
+    } );
 
     // Returns a string to be used inline as a css <style> element in the console window.
     // Apologies for length, but hiding it here at the end to keep it away from rest of the code.
@@ -2671,7 +2704,254 @@
         </style>`;
     };
 
-    impressConsole();
+} )( document, window );
+
+/**
+ * Media Plugin
+ *
+ * This plugin will do the following things:
+ *
+ *  - Add a special class when playing (body.impress-media-video-playing
+ *    and body.impress-media-video-playing) and pausing media (body.impress-media-video-paused
+ *    and body.impress-media-audio-paused) (removing them when ending).
+ *    This can be useful for example for darkening the background or fading out other elements
+ *    while a video is playing.
+ *    Only media at the current step are taken into account. All classes are removed when leaving
+ *    a step.
+ *
+ *  - Introduce the following new data attributes:
+ *
+ *    - data-media-autoplay="true": Autostart media when entering its step.
+ *    - data-media-autostop="true": Stop media (= pause and reset to start), when leaving its
+ *      step.
+ *    - data-media-autopause="true": Pause media but keep current time when leaving its step.
+ *
+ *    When these attributes are added to a step they are inherited by all media on this step.
+ *    Of course this setting can be overwritten by adding different attributes to inidvidual
+ *    media.
+ *
+ *    The same rule applies when this attributes is added to the root element. Settings can be
+ *    overwritten for individual steps and media.
+ *
+ *    Examples:
+ *    - data-media-autostart="true" data-media-autostop="true": start media on enter, stop on
+ *      leave, restart from beginning when re-entering the step.
+ *
+ *    - data-media-autostart="true" data-media-autopause="true": start media on enter, pause on
+ *      leave, resume on re-enter
+ *
+ *    - data-media-autostart="true" data-media-autostop="true" data-media-autopause="true": start
+ *      media on enter, stop on leave (stop overwrites pause).
+ *
+ *    - data-media-autostart="true" data-media-autopause="false": let media start automatically
+ *      when entering a step and let it play when leaving the step.
+ *
+ *    - <div id="impress" data-media-autostart="true"> ... <div class="step"
+ *      data-media-autostart="false">
+ *      All media is startet automatically on all steps except the one that has the
+ *      data-media-autostart="false" attribute.
+ *
+ *  - Pro tip: Use <audio onended="impress().next()"> or <video onended="impress().next()"> to
+ *    proceed to the next step automatically, when the end of the media is reached.
+ *
+ *
+ * Copyright 2018 Holger Teichert (@complanar)
+ * Released under the MIT license.
+ */
+/* global window, document */
+
+( function( document, window ) {
+    "use strict";
+    var root, api, gc, attributeTracker;
+
+    attributeTracker = [];
+
+    // Function names
+    var enhanceMediaNodes,
+        enhanceMedia,
+        removeMediaClasses,
+        onStepenterDetectImpressConsole,
+        onStepenter,
+        onStepleave,
+        onPlay,
+        onPause,
+        onEnded,
+        getMediaAttribute,
+        teardown;
+
+    document.addEventListener( "impress:init", function( event ) {
+        root = event.target;
+        api = event.detail.api;
+        gc = api.lib.gc;
+
+        enhanceMedia();
+
+        gc.pushCallback( teardown );
+    }, false );
+
+    teardown = function() {
+        var el, i;
+        removeMediaClasses();
+        for ( i = 0; i < attributeTracker.length; i += 1 ) {
+            el = attributeTracker[ i ];
+            el.node.removeAttribute( el.attr );
+        }
+        attributeTracker = [];
+    };
+
+    getMediaAttribute = function( attributeName, nodes ) {
+        var attrName, attrValue, i, node;
+        attrName = "data-media-" + attributeName;
+
+        // Look for attributes in all nodes
+        for ( i = 0; i < nodes.length; i += 1 ) {
+            node = nodes[ i ];
+
+            // First test, if the attribute exists, because some browsers may return
+            // an empty string for non-existing attributes - specs are not clear at that point
+            if ( node.hasAttribute( attrName ) ) {
+
+                // Attribute found, return their parsed boolean value, empty strings count as true
+                // to enable empty value booleans (common in html5 but not allowed in well formed
+                // xml).
+                attrValue = node.getAttribute( attrName );
+                if ( attrValue === "" || attrValue === "true" ) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+
+            // No attribute found at current node, proceed with next round
+        }
+
+        // Last resort: no attribute found - return undefined to distiguish from false
+        return undefined;
+    };
+
+    onPlay = function( event ) {
+        var type = event.target.nodeName.toLowerCase();
+        document.body.classList.add( "impress-media-" + type + "-playing" );
+        document.body.classList.remove( "impress-media-" + type + "-paused" );
+    };
+
+    onPause = function( event ) {
+        var type = event.target.nodeName.toLowerCase();
+        document.body.classList.add( "impress-media-" + type + "-paused" );
+        document.body.classList.remove( "impress-media-" + type + "-playing" );
+    };
+
+    onEnded = function( event ) {
+        var type = event.target.nodeName.toLowerCase();
+        document.body.classList.remove( "impress-media-" + type + "-playing" );
+        document.body.classList.remove( "impress-media-" + type + "-paused" );
+    };
+
+    removeMediaClasses = function() {
+        var type, types;
+        types = [ "video", "audio" ];
+        for ( type in types ) {
+            document.body.classList.remove( "impress-media-" + types[ type ] + "-playing" );
+            document.body.classList.remove( "impress-media-" + types[ type ] + "-paused" );
+        }
+    };
+
+    enhanceMediaNodes = function() {
+        var i, id, media, mediaElement, type;
+
+        media = root.querySelectorAll( "audio, video" );
+        for ( i = 0; i < media.length; i += 1 ) {
+            type = media[ i ].nodeName.toLowerCase();
+
+            // Set an id to identify each media node - used e.g. for cross references by
+            // the consoleMedia plugin
+            mediaElement = media[ i ];
+            id = mediaElement.getAttribute( "id" );
+            if ( id === undefined || id === null ) {
+                mediaElement.setAttribute( "id", "media-" + type + "-" + i );
+                attributeTracker.push( { "node": mediaElement, "attr": "id" } );
+            }
+            gc.addEventListener( mediaElement, "play", onPlay );
+            gc.addEventListener( mediaElement, "playing", onPlay );
+            gc.addEventListener( mediaElement, "pause", onPause );
+            gc.addEventListener( mediaElement, "ended", onEnded );
+        }
+    };
+
+    enhanceMedia = function() {
+        var steps, stepElement, i;
+        enhanceMediaNodes();
+        steps = document.getElementsByClassName( "step" );
+        for ( i = 0; i < steps.length; i += 1 ) {
+            stepElement = steps[ i ];
+
+            gc.addEventListener( stepElement, "impress:stepenter", onStepenter );
+            gc.addEventListener( stepElement, "impress:stepleave", onStepleave );
+        }
+    };
+
+    onStepenterDetectImpressConsole = function() {
+        return {
+            "preview": ( window.frameElement !== null && window.frameElement.id === "preView" ),
+            "slideView": ( window.frameElement !== null && window.frameElement.id === "slideView" )
+        };
+    };
+
+    onStepenter = function( event ) {
+        var stepElement, media, mediaElement, i, onConsole, autoplay;
+        if ( ( !event ) || ( !event.target ) ) {
+            return;
+        }
+
+        stepElement = event.target;
+        removeMediaClasses();
+
+        media = stepElement.querySelectorAll( "audio, video" );
+        for ( i = 0; i < media.length; i += 1 ) {
+            mediaElement = media[ i ];
+
+            // Autoplay when (maybe inherited) autoplay setting is true,
+            // but only if not on preview of the next step in impressConsole
+            onConsole = onStepenterDetectImpressConsole();
+            autoplay = getMediaAttribute( "autoplay", [ mediaElement, stepElement, root ] );
+            if ( autoplay && !onConsole.preview ) {
+                if ( onConsole.slideView ) {
+                    mediaElement.muted = true;
+                }
+                mediaElement.play();
+            }
+        }
+    };
+
+    onStepleave = function( event ) {
+        var stepElement, media, i, mediaElement, autoplay, autopause, autostop;
+        if ( ( !event || !event.target ) ) {
+            return;
+        }
+
+        stepElement = event.target;
+        media = event.target.querySelectorAll( "audio, video" );
+        for ( i = 0; i < media.length; i += 1 ) {
+            mediaElement = media[ i ];
+
+            autoplay = getMediaAttribute( "autoplay", [ mediaElement, stepElement, root ] );
+            autopause = getMediaAttribute( "autopause", [ mediaElement, stepElement, root ] );
+            autostop = getMediaAttribute( "autostop",  [ mediaElement, stepElement, root ] );
+
+            // If both autostop and autopause are undefined, set it to the value of autoplay
+            if ( autostop === undefined && autopause === undefined ) {
+                autostop = autoplay;
+            }
+
+            if ( autopause || autostop ) {
+                mediaElement.pause();
+                if ( autostop ) {
+                    mediaElement.currentTime = 0;
+                }
+            }
+        }
+        removeMediaClasses();
+    };
 
 } )( document, window );
 
@@ -2902,13 +3182,6 @@
                 return false;
             }
 
-            // For arrows, etc, check that event target is html or body element. This is to allow
-            // presentations to have, for example, forms with input elements where user can type
-            // text, including space, and not move to next step.
-            if ( event.target.nodeName !== "BODY" && event.target.nodeName !== "HTML" ) {
-                return false;
-            }
-
             if ( ( event.keyCode >= 32 && event.keyCode <= 34 ) ||
                  ( event.keyCode >= 37 && event.keyCode <= 40 ) ) {
                 return true;
@@ -2930,6 +3203,7 @@
                 if ( event.shiftKey ) {
                     switch ( event.keyCode ) {
                         case 9: // Shift+tab
+                        case 32: // Shift+space
                             api.prev();
                             break;
                     }
@@ -2959,39 +3233,65 @@
             // Event delegation with "bubbling"
             // check if event target (or any of its parents is a link)
             var target = event.target;
-            while ( ( target.tagName !== "A" ) &&
-                    ( target !== document.documentElement ) ) {
-                target = target.parentNode;
-            }
+            try {
+                while ( ( target.tagName !== "A" ) &&
+                        ( target !== document.documentElement ) ) {
+                    target = target.parentNode;
+                }
 
-            if ( target.tagName === "A" ) {
-                var href = target.getAttribute( "href" );
+                if ( target.tagName === "A" ) {
+                    var href = target.getAttribute( "href" );
 
-                // If it's a link to presentation step, target this step
-                if ( href && href[ 0 ] === "#" ) {
-                    target = document.getElementById( href.slice( 1 ) );
+                    // If it's a link to presentation step, target this step
+                    if ( href && href[ 0 ] === "#" ) {
+                        target = document.getElementById( href.slice( 1 ) );
+                    }
+                }
+
+                if ( api.goto( target ) ) {
+                    event.stopImmediatePropagation();
+                    event.preventDefault();
                 }
             }
+            catch ( err ) {
 
-            if ( api.goto( target ) ) {
-                event.stopImmediatePropagation();
-                event.preventDefault();
+                // For example, when clicking on the button to launch speaker console, the button
+                // is immediately deleted from the DOM. In this case target is a DOM element when
+                // we get it, but turns out to be null if you try to actually do anything with it.
+                if ( err instanceof TypeError &&
+                     err.message === "target is null" ) {
+                    return;
+                }
+                throw err;
             }
         }, false );
 
         // Delegated handler for clicking on step elements
         gc.addEventListener( document, "click", function( event ) {
             var target = event.target;
+            try {
 
-            // Find closest step element that is not active
-            while ( !( target.classList.contains( "step" ) &&
-                       !target.classList.contains( "active" ) ) &&
-                    ( target !== document.documentElement ) ) {
-                target = target.parentNode;
+                // Find closest step element that is not active
+                while ( !( target.classList.contains( "step" ) &&
+                        !target.classList.contains( "active" ) ) &&
+                        ( target !== document.documentElement ) ) {
+                    target = target.parentNode;
+                }
+
+                if ( api.goto( target ) ) {
+                    event.preventDefault();
+                }
             }
+            catch ( err ) {
 
-            if ( api.goto( target ) ) {
-                event.preventDefault();
+                // For example, when clicking on the button to launch speaker console, the button
+                // is immediately deleted from the DOM. In this case target is a DOM element when
+                // we get it, but turns out to be null if you try to actually do anything with it.
+                if ( err instanceof TypeError &&
+                     err.message === "target is null" ) {
+                    return;
+                }
+                throw err;
             }
         }, false );
 
@@ -3274,6 +3574,37 @@
 
             // For the first step, inherit these defaults
             prev = { x:0, y:0, z:0, relative: { x:0, y:0, z:0 } };
+        }
+
+        if ( data.relTo ) {
+
+            var ref = document.getElementById( data.relTo );
+            if ( ref ) {
+
+                // Test, if it is a previous step that already has some assigned position data
+                if ( el.compareDocumentPosition( ref ) & Node.DOCUMENT_POSITION_PRECEDING ) {
+                    prev.x = toNumber( ref.getAttribute( "data-x" ) );
+                    prev.y = toNumber( ref.getAttribute( "data-y" ) );
+                    prev.z = toNumber( ref.getAttribute( "data-z" ) );
+                    prev.relative = {};
+                } else {
+                    window.console.error(
+                        "impress.js rel plugin: Step \"" + data.relTo + "\" is not defined " +
+                        "*before* the current step. Referencing is limited to previously defined " +
+                        "steps. Please check your markup. Ignoring data-rel-to attribute of " +
+                        "this step. Have a look at the documentation for how to create relative " +
+                        "positioning to later shown steps with the help of the goto plugin."
+                    );
+                }
+            } else {
+
+                // Step not found
+                window.console.warn(
+                    "impress.js rel plugin: \"" + data.relTo + "\" is not a valid step in this " +
+                    "impress.js presentation. Please check your markup. Ignoring data-rel-to " +
+                    "attribute of this step."
+                );
+            }
         }
 
         var step = {

@@ -155,8 +155,8 @@ QUnit.test( "Navigation Plugin - No-op tests", function( assert ) {
       root.addEventListener( "impress:stepleave", assertStepLeaveWrapper );
 
       // These are no-op actions, we're already in step-1 -----------------------//
-      assert.ok( iframeWin.syn.click( "step-1", {} ),
-                 "Click on step that is currently active, should do nothing." );
+      //assert.ok( iframeWin.syn.click( "step-1", {} ),
+      //           "Click on step that is currently active, should do nothing." );
       assert.ok( iframeWin.syn.click( "linktofirst", {} ),
                  "Click on link pointing to step that is currently active, should do nothing." );
 

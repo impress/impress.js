@@ -58,12 +58,9 @@
 
     document.addEventListener( "keyup", function( event ) {
 
-        // Check that event target is html or body element.
-        if ( event.target.nodeName === "BODY" || event.target.nodeName === "HTML" ) {
-            if ( event.keyCode === 72 ) { // "h"
-                event.preventDefault();
-                toggleHelp();
-            }
+        if ( event.keyCode === 72 || event.keyCode === 191 ) { // "h" || "?"
+            event.preventDefault();
+            toggleHelp();
         }
     }, false );
 

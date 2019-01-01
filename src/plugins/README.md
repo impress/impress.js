@@ -21,10 +21,11 @@ Extra addons
 ------------
 
 Yet more features are available in presentations that enable 
-[extra addons](../../extras/). Extra addons are 3rd party plugins integrated
-into impress.js to provide convenient and standardized access to them. However,
-they are not activated by default, rather must be included with a `<script>`
-tag.
+[extra addons](https://github.com/impress/impress-extras). Extra addons are 3rd party plugins 
+that are not part of impress.js, but that we have nevertheless collected together into the 
+impress-extras repo to provide convenient and standardized access to them. To include 
+the extra addons when checking out impress.js, use git clone --recursive. Even then, they 
+are not activated by default in a presentation, rather each must be included with their own `<script>` tag.
 
 Note: The enabled extra addons are automatically initialized by the *extras*
 plugin.
@@ -114,8 +115,12 @@ plugins that you may want to use or adapt.
     .impress-enabled div#impress-toolbar.impress-toolbar-hide {
         display: none;
     }
-    /* If you disable pointer-events (like in the impress.js official demo), you need to re-enable them for the toolbar. */
+
+    /* If you disable pointer-events (like in the impress.js official demo), you need to re-enable them for the toolbar.
+       And the speaker console while at it.*/
     .impress-enabled #impress-toolbar         { pointer-events: auto }
+    .impress-enabled #impress-console-button  { pointer-events: auto }
+
     /* Progress bar */
     .impress-enabled .impress-progressbar {
       position: absolute;

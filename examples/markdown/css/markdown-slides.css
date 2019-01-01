@@ -231,3 +231,4 @@ body.impress-mouse-timeout {
 .impress-enabled                          { pointer-events: none }
 .impress-enabled #impress                 { pointer-events: auto }
 .impress-enabled #impress-toolbar         { pointer-events: auto }
+.impress-enabled #impress-console-button  { pointer-events: auto }

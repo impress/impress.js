@@ -3,6 +3,9 @@ var buildify = require('buildify');
 
 buildify()
   .load('src/impress.js')
+  .perform(function(content){ 
+      return "// This file was automatically generated from files in src/ directory.\n\n" + content;
+  })
   // Libraries from src/lib
   .concat(['src/lib/gc.js'])
   .concat(['src/lib/util.js'])
@@ -14,6 +17,7 @@ buildify()
            'src/plugins/goto/goto.js',
            'src/plugins/help/help.js',
            'src/plugins/impressConsole/impressConsole.js',
+           'src/plugins/media/media.js',
            'src/plugins/mobile/mobile.js',
            'src/plugins/mouse-timeout/mouse-timeout.js',
            'src/plugins/navigation/navigation.js',

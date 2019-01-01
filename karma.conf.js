@@ -25,6 +25,7 @@ module.exports = function( config ) {
       // The QUnit tests
       "test/helpers.js",
       "test/core_tests.js",
+      "test/non_default.js",
       "src/plugins/navigation/navigation_tests.js",
       // Presentation files, for the iframe
       {pattern: "test/*.html", watched: true, served: true, included: false},
