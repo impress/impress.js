@@ -14,6 +14,7 @@ buildify()
            'src/plugins/blackout/blackout.js',
            'src/plugins/extras/extras.js',
            'src/plugins/form/form.js',
+           'src/plugins/fullscreen/fullscreen.js',
            'src/plugins/goto/goto.js',
            'src/plugins/help/help.js',
            'src/plugins/impressConsole/impressConsole.js',
