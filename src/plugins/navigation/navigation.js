@@ -25,8 +25,18 @@
 ( function( document ) {
     "use strict";
 
+    var overviewId = "impress-overview";
+
     // Wait for impress.js to be initialized
     document.addEventListener( "impress:init", function( event ) {
+
+        var root = event.target;
+
+        var hasOverview = root.querySelector( "#" + overviewId );
+
+        // Check if actual slide is overview
+        var inOverview = hasOverview && root.querySelector( ".active" ).id === overviewId;
+        var lastStep = 0;
 
         // Getting API from event data.
         // So you don't event need to know what is the id of the root element
@@ -35,6 +45,11 @@
         var api = event.detail.api;
         var gc = api.lib.gc;
         var util = api.lib.util;
+
+        // Pause autoplay if starts in overview
+        if ( inOverview ) {
+            util.triggerEvent( root, "impress:autoplay:pause" );
+        }
 
         // Supported keys are:
         // [space] - quite common in presentation software to move forward
@@ -65,6 +80,11 @@
             // With the sole exception of TAB, we also ignore keys pressed if shift is down.
             if ( event.shiftKey ) {
                 return false;
+            }
+
+            // Overview key is O
+            if ( hasOverview && event.keyCode === 79 ) {
+                return true;
             }
 
             if ( ( event.keyCode >= 32 && event.keyCode <= 34 ) ||
@@ -105,6 +125,20 @@
                         case 40: // Down
                                  api.next( event );
                                  break;
+                        case 79: // O (letter o)
+                                if ( !hasOverview ) {
+                                    break;
+                                }
+                                if ( inOverview ) {
+                                    util.triggerEvent( event.target, "impress:autoplay:resume" );
+                                    api.goto( lastStep );
+                                } else {
+                                    lastStep = root.querySelector( ".active" );
+                                    api.goto( overviewId );
+                                    util.triggerEvent( event.target, "impress:autoplay:pause" );
+                                }
+                                inOverview = !inOverview;
+                                break;
                     }
                 }
                 event.preventDefault();
