@@ -437,7 +437,7 @@ Example:
     }, false);
     
     // pluginB
-    document.addEventListener("impress:init", function (event) {
+    document.addEventListener("impress:plugina:init", function (event) {
         // plugin B implementation
     }, false);
 

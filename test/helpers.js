@@ -12,7 +12,7 @@ var loadIframe = function( src, assert, callback ) {
   console.log( 'Begin loadIframe' );
 
   // When running in Karma, the #qunit-fixture appears from somewhere and we can't set its
-  // contents in advance.
+  // contents in advance, so we set it now.
   var fix = document.getElementById( 'qunit-fixture' );
   fix.innerHTML = [
     '\n',
