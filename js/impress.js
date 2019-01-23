@@ -1628,7 +1628,7 @@
         api = event.detail.api;
         var gc = api.lib.gc;
 
-        var selectors = [ "input[type=text]", "textarea", "select", "[contenteditable=true]" ];
+        var selectors = [ "input", "textarea", "select", "[contenteditable=true]" ];
         for ( var selector of selectors ) {
             var elements = document.querySelectorAll( selector );
             if ( !elements ) {
@@ -1893,7 +1893,7 @@
 
     document.addEventListener( "keyup", function( event ) {
 
-        if ( event.keyCode === 72 ) { // "h"
+        if ( event.keyCode === 72 || event.keyCode === 191 ) { // "h" || "?"
             event.preventDefault();
             toggleHelp();
         }
@@ -3203,7 +3203,6 @@
                 if ( event.shiftKey ) {
                     switch ( event.keyCode ) {
                         case 9: // Shift+tab
-                        case 32: // Shift+space
                             api.prev();
                             break;
                     }
