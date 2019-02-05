@@ -1695,9 +1695,6 @@
                 enterFullscreen();
                 util.triggerEvent( root.querySelector( ".active" ), "impress:steprefresh" );
             }
-        }, false );
-
-        gc.addEventListener( document, "keydown", function( event ) {
 
             // 27 (Escape) is sent by presentation remote controllers
             if ( event.key === "Escape" || event.key === "F5" ) {
