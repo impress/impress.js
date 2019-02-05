@@ -1309,7 +1309,7 @@
         reloadTimeout( event );
     }, false );
 
-    document.addEventListener( "impress:autoplay:resume", function( event ) {
+    document.addEventListener( "impress:autoplay:play", function( event ) {
         status = "playing";
         reloadTimeout( event );
     }, false );
