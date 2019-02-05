@@ -65,7 +65,7 @@
                 display: "block"
             } );
             blackedOut = false;
-            util.triggerEvent( root, "impress:autoplay:resume", {} );
+            util.triggerEvent( root, "impress:autoplay:play", {} );
         }
     };
 
