@@ -1,5 +1,0 @@
-{
-	"preset": "jquery",
-        // Since we check quotemarks already in jshint, this can be turned off
-        "validateQuoteMarks": false
-}

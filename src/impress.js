@@ -419,6 +419,7 @@
         // `reason` is the string "next", "prev" or "goto" (default) and will be made available to
         // preStepLeave plugins.
         // `origEvent` may contain event that caused the call to goto, such as a key press event
+        /*jshint unused:false*/
         var goto = function( el, duration, reason, origEvent ) {
             reason = reason || "goto";
             origEvent = origEvent || null;

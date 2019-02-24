@@ -1,16 +1,10 @@
-var buildify = require('buildify');
+const fs = require('fs');
 
-
-buildify()
-  .load('src/impress.js')
-  .perform(function(content){ 
-      return "// This file was automatically generated from files in src/ directory.\n\n" + content;
-  })
-  // Libraries from src/lib
-  .concat(['src/lib/gc.js'])
-  .concat(['src/lib/util.js'])
-  // Plugins from src/plugins
-  .concat(['src/plugins/autoplay/autoplay.js',
+var files = ['src/impress.js'];
+// Libraries from src/lib
+files.push('src/lib/gc.js', 'src/lib/util.js')
+// Plugins from src/plugins
+files.push('src/plugins/autoplay/autoplay.js',
            'src/plugins/blackout/blackout.js',
            'src/plugins/extras/extras.js',
            'src/plugins/form/form.js',
@@ -30,20 +24,23 @@ buildify()
            'src/plugins/stop/stop.js',
            'src/plugins/substep/substep.js',
            'src/plugins/touch/touch.js',
-           'src/plugins/toolbar/toolbar.js'])
-  .save('js/impress.js');
+           'src/plugins/toolbar/toolbar.js')
+var output = files.map((f)=>{
+  return fs.readFileSync(f).toString();
+}).join('\n')
+
+fs.writeFileSync('js/impress.js', '// This file was automatically generated from files in src/ directory.\n\n' + output)
+
 /*
  * Disabled until uglify supports ES6: https://github.com/mishoo/UglifyJS2/issues/448
   .uglify()
   .save('js/impress.min.js');
 */
 
-
 /* Auto generate an index.html that lists all the directories under examples/
  * This is useful for gh-pages, so you can link to http://impress.github.io/impress.js/examples
  */
 var ls = require('ls');
-var fs = require('fs');
 var path = require('path');
 
 var html_list = '<ul><br />\n'

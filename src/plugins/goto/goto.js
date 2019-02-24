@@ -40,6 +40,7 @@
         return !isNaN( numeric );
     };
 
+    /*jshint unused:false*/
     var goto = function( event ) {
         if ( ( !event ) || ( !event.target ) ) {
             return;
