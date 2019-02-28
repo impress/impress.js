@@ -28,7 +28,7 @@ module.exports = function(config) {
 
     proxies: {
     "/test/": "/base/test/",
-    "/dist/": "/base/dist/",
+    "/js/": "/base/js/",
     "/node_modules/": "/base/node_modules/"
   },
     
