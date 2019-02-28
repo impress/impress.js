@@ -171,17 +171,17 @@ The vision for impress.js is to provide a compact core library doing the
 actual presentations, with a collection of plugins that provide additional
 functionality. A default set of plugins are distributed together with the core 
 impress.js, and are located in this directory. They are called *default plugins*
-because they are distributed and active when users use the [dist/js/impress.js](../../dist/js/impress.js)
+because they are distributed and active when users use the [js/impress.js](../../js/impress.js)
 in their presentations.
 
-Building dist/js/impress.js
+Building js/impress.js
 -----------------------
 
 The common way to use impress.js is to link to the file 
-[dist/js/impress.js](../../dist/js/impress.js). This is a simple concatenation of the 
+[js/impress.js](../../js/impress.js). This is a simple concatenation of the 
 core impress.js and all plugins in this directory. If you edit or add code 
 under [src/](../), you can run `node build.js` to recreate the distributable
-`dist/js/impress.js` file. The build script also creates a minified file, but this
+`js/impress.js` file. The build script also creates a minified file, but this
 is not included in the git repository.
 
 ### Tip: Build errors
@@ -189,7 +189,7 @@ is not included in the git repository.
 If your code has parse errors, the `build.js` will print a rather unhelpful
 exception like
 
-    /home/hingo/hacking/impress.js/dist/js/impress.js
+    /home/hingo/hacking/impress.js/js/impress.js
 
     /home/hingo/hacking/impress.js/node_modules/uglify-js/lib/parse-js.js:271
         throw new JS_Parse_Error(message, line, col, pos);
@@ -207,7 +207,7 @@ exception like
         at block_ (/home/hingo/hacking/impress.js/node_modules/uglify-js/lib/parse-js.js:1003:20)
 
 You will be pleased to know, that the concatenation of the unminified file
-[dist/js/impress.js](../../dist/js/impress.js) has already succeeded at this point. Just
+[js/impress.js](../../js/impress.js) has already succeeded at this point. Just
 open a test in your browser, and the browser will show you the line and error.
 
 
@@ -256,7 +256,7 @@ should start by loading the test `.html` file into the
 example.
 
 You are allowed to test your plugin whatever way you like, but the general
-approach is for the test to load the [dist/js/impress.js](../../dist/js/impress.js) file
+approach is for the test to load the [js/impress.js](../../js/impress.js) file
 produced by build.js. This way you are testing what users will actually be
 using, rather than the uncompiled source code.
 

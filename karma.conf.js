@@ -22,7 +22,7 @@ module.exports = function(config) {
       'src/plugins/navigation/navigation_tests.js',
       'test/core_tests_presentation.html',
       'test/non_default.html',
-      'dist/js/impress.js',
+      'js/impress.js',
       'node_modules/syn/dist/global/syn.js'
     ],
 

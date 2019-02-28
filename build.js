@@ -31,7 +31,7 @@ var output = files.map((f)=>{
   return fs.readFileSync(f).toString();
 }).join('\n')
 
-fs.writeFileSync('dist/js/impress.js', '// This file was automatically generated from files in src/ directory.\n\n' + output)
+fs.writeFileSync('js/impress.js', '// This file was automatically generated from files in src/ directory.\n\n' + output)
 
 /* Auto generate an index.html that lists all the directories under examples/
  * This is useful for gh-pages, so you can link to http://impress.github.io/impress.js/examples

@@ -2,7 +2,7 @@
   "name": "impress.js",
   "version": "1.0.0",
   "description": "It's a presentation framework based on the power of CSS3 transforms and transitions in modern browsers and inspired by the idea behind prezi.com.",
-  "main": "dist/js/impress.js",
+  "main": "js/impress.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/impress/impress.js.git"
@@ -22,7 +22,7 @@
     "url": "https://github.com/impress/impress.js/issues"
   },
   "scripts": {
-    "js": "node build.js && terser --compress --mangle --comments '/^!/' --source-map --output dist/js/impress.min.js dist/js/impress.js",
+    "js": "node build.js && terser --compress --mangle --comments '/^!/' --source-map --output dist/js/impress.min.js js/impress.js",
     "js-lint": "eslint src test",
     "test": "karma start --log-level debug --single-run=true"
   },

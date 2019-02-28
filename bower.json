@@ -4,7 +4,7 @@
   "homepage": "https://github.com/bartaz/impress.js",
   "license" : ["http://bartaz.mit-license.org/", "http://www.gnu.org/licenses/"],
   "main": [
-    "./dist/js/impress.js"
+    "./js/impress.js"
   ],
   "keywords": [
     "slideshow",
