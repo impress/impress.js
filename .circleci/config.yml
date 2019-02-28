@@ -3,7 +3,7 @@ jobs:
   build:
     working_directory: ~/impress.js
     docker:
-      - image: circleci/node:4.8.2
+      - image: circleci/node:current
     steps:
       - checkout
       - run:
