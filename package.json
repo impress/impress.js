@@ -2,7 +2,7 @@
   "name": "impress.js",
   "version": "1.0.0",
   "description": "It's a presentation framework based on the power of CSS3 transforms and transitions in modern browsers and inspired by the idea behind prezi.com.",
-  "main": "js/impress.js",
+  "main": "dist/js/impress.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/impress/impress.js.git"
@@ -22,26 +22,20 @@
     "url": "https://github.com/impress/impress.js/issues"
   },
   "scripts": {
-    "build": "node build.js",
-    "lint": "jshint src test/*.js && jscs src test/*.js",
-    "test": "karma start --single-run",
-    "test:dev": "karma start",
-    "test:sauce": "karma start karma.conf-sauce.js"
+    "js": "node build.js && terser --compress --mangle --comments '/^!/' --source-map --output dist/js/impress.min.js dist/js/impress.js",
+    "js-lint": "eslint src test",
+    "test": "karma start --log-level debug --single-run=true"
   },
   "devDependencies": {
-    "buildify": "*",
-    "chrome": "0.1.0",
-    "firefox": "0.0.1",
-    "jscs": "2.11.0",
-    "jshint": "2.9.1",
-    "karma": "0.13.22",
-    "karma-chrome-launcher": "2.2.0",
-    "karma-cli": "1.0.0",
-    "karma-firefox-launcher": "~0.1",
-    "karma-qunit": "1.0.0",
-    "karma-sauce-launcher": "1.0.0",
-    "ls": "0.2.1",
-    "qunitjs": "2.0.0-rc1",
-    "syn": "0.10.0"
-  }
+    "eslint": "^5.14.1",
+    "karma": "^4.0.0",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-firefox-launcher": "^1.1.0",
+    "karma-qunit": "^2.1.0",
+    "ls": "^0.2.1",
+    "qunit": "^2.9.2",
+    "syn": "^0.13.0",
+    "terser": "^3.16.1"
+  },
+  "dependencies": {}
 }

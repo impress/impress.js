@@ -15,6 +15,7 @@
  *  url:     http://impress.js.org
  *  source:  http://github.com/impress/impress.js/
  */
+/*! Licensed under MIT and GPL - http://github.com/impress/impress.js */
 
 // You are one of those who like to know how things work inside?
 // Let me show you the cogs that make impress.js run...
@@ -588,7 +589,7 @@
             //
             // If you want learn something interesting and see how it was done with `transitionend`
             // go back to version 0.5.2 of impress.js:
-            // http://github.com/bartaz/impress.js/blob/0.5.2/js/impress.js
+            // http://github.com/bartaz/impress.js/blob/0.5.2/dist/js/impress.js
             window.clearTimeout( stepEnterTimeout );
             stepEnterTimeout = window.setTimeout( function() {
                 onStepEnter( activeStep );

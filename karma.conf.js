@@ -1,80 +1,89 @@
-module.exports = function( config ) {
-  config.set( {
+// Karma configuration
+// Generated on Thu Feb 28 2019 16:31:36 GMT+0100 (Central European Standard Time)
 
-    // Base path, that will be used to resolve files and exclude
-    basePath: "",
+module.exports = function(config) {
+  config.set({
 
-    // Frameworks to use
-    frameworks: [ "qunit" ],
+    // base path that will be used to resolve all patterns (eg. files, exclude)
+    basePath: '',
 
-    proxies : {
-      '/test/' : '/base/test/',
-      '/js/'   : '/base/js/',
-      '/node_modules/syn/dist/' : '/base/node_modules/syn/dist/'
-    },
-    
-    // List of files / patterns to load in the browser
+
+    // frameworks to use
+    // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
+    frameworks: ['qunit'],
+
+    plugins: ['karma-firefox-launcher', 'karma-chrome-launcher', 'karma-qunit'],
+
+    // list of files / patterns to load in the browser
     files: [
-      // The QUnit tests
-      "test/helpers.js",
-      "test/core_tests.js",
-      "test/non_default.js",
-      "src/plugins/navigation/navigation_tests.js",
-      // Presentation files, for the iframe
-      {pattern: "test/*.html", watched: true, served: true, included: false},
-      {pattern: "test/plugins/*/*.html", watched: true, served: true, included: false},
-      // JS files for iframe
-      {pattern: "js/impress.js", watched: true, served: true, included: false},
-      {pattern: "node_modules/syn/dist/global/syn.js", watched: false, served: true, included: false}
+      'test/helpers.js',
+      'test/core_tests.js',
+      'test/non_default.js',
+      'src/plugins/navigation/navigation_tests.js',
+      'test/core_tests_presentation.html',
+      'test/non_default.html',
+      'dist/js/impress.js',
+      'node_modules/syn/dist/global/syn.js'
     ],
 
-    // List of files to exclude
-    exclude: [],
-
-    // Test results reporter to use
-    // possible values: 'dots', 'progress', 'junit', 'growl', 'coverage'
-    reporters: [ "progress" ],
-
-    // Web server port
-    port: 9876,
-
-    // Enable / disable colors in the output (reporters and logs)
-    colors: true,
-
-    // Level of logging
-    // possible values: config.LOG_DISABLE || config.LOG_ERROR ||
-    // config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
-    logLevel: config.LOG_DEBUG,
-
-    // Enable / disable watching file and executing tests whenever any file changes
-    autoWatch: true,
-
-    // Start these browsers, currently available:
-    // - Chrome
-    // - ChromeCanary
-    // - Firefox
-    // - Opera (has to be installed with `npm install karma-opera-launcher`)
-    // - Safari (only Mac; has to be installed with `npm install karma-safari-launcher`)
-    // - PhantomJS
-    // - IE (only Windows; has to be installed with `npm install karma-ie-launcher`)
-    //browsers: [ "Chrome" ],
-    //browsers: [ "Firefox" ],
-    browsers: [ "Chrome", "Firefox" ],
-
+    proxies: {
+    "/test/": "/base/test/",
+    "/dist/": "/base/dist/",
+    "/node_modules/": "/base/node_modules/"
+  },
+    
     client: {
       clearContext: false,
       qunit: {
-        showUI: true,
-        testTimeout: 120*1000
+        showUI: true
       }
     },
 
-    // If browser does not capture, or produce output, in given timeout [ms], kill it
-    captureTimeout: 60*1000,
-    browserNoActivityTimeout: 60*1000,
-    
+    // list of files / patterns to exclude
+    exclude: [
+    ],
+
+
+    // preprocess matching files before serving them to the browser
+    // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
+    preprocessors: {
+    },
+
+
+    // test results reporter to use
+    // possible values: 'dots', 'progress'
+    // available reporters: https://npmjs.org/browse/keyword/karma-reporter
+    reporters: ['progress'],
+
+
+    // web server port
+    port: 9876,
+
+
+    // enable / disable colors in the output (reporters and logs)
+    colors: true,
+
+
+    // level of logging
+    // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
+    logLevel: config.LOG_INFO,
+
+
+    // enable / disable watching file and executing tests whenever any file changes
+    autoWatch: true,
+
+
+    // start these browsers
+    // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
+    browsers: ['Firefox', 'Chrome'],
+
+
     // Continuous Integration mode
-    // if true, it capture browsers, run tests and exit
-    singleRun: false
-  } );
-};
+    // if true, Karma captures browsers, runs the tests and exits
+    singleRun: false,
+
+    // Concurrency level
+    // how many browser should be started simultaneous
+    concurrency: Infinity
+  })
+}

@@ -77,7 +77,7 @@ cannot or don't want to add the explicit 0 values where needed, your last resort
 remove the `rel.js` plugin completely. You can either:
 
 * Remove `rel.js` from [/build.js](../../../build.js) and recompile `impress.js` with: `npm build`
-* Just open [/js/impress.js] in an editor and delete the `rel.js` code.
+* Just open [/dist/js/impress.js] in an editor and delete the `rel.js` code.
 * Or, just uncomment the following single line, which is the last line of the plugin:
 
         impress.addPreInitPlugin( rel );
