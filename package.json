@@ -22,8 +22,9 @@
     "url": "https://github.com/impress/impress.js/issues"
   },
   "scripts": {
-    "js": "node build.js && terser --compress --mangle --comments '/^!/' --source-map --output js/impress.min.js js/impress.js",
-    "js-lint": "eslint src test",
+    "build": "node build.js && terser --compress --mangle --comments '/^!/' --source-map --output 
+js/impress.min.js js/impress.js",
+    "lint": "eslint src test",
     "test": "karma start --log-level debug --single-run=true"
   },
   "devDependencies": {
@@ -35,9 +36,8 @@
     "ls": "^0.2.1",
     "qunit": "^2.9.2",
     "syn": "^0.13.0",
-    "terser": "^3.16.1"
-  },
-  "dependencies": {
+    "terser": "^3.16.1",
     "puppeteer": "^1.12.2"
-  }
+  },
+  "dependencies": {}
 }
