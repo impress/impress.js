@@ -1,5 +1,6 @@
 // Karma configuration
 // Generated on Thu Feb 28 2019 16:31:36 GMT+0100 (Central European Standard Time)
+process.env.CHROME_BIN = require('puppeteer').executablePath()
 
 module.exports = function(config) {
   config.set({
@@ -75,7 +76,14 @@ module.exports = function(config) {
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['Firefox', 'Chrome'],
+    browsers: ['FirefoxHeadless', 'Chrome_without_security'],
+
+    customLaunchers: {
+      Chrome_without_security: {
+        base: 'ChromeHeadless',
+        flags: ['--no-sandbox']
+      }
+    },
 
 
     // Continuous Integration mode
