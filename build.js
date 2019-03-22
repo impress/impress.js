@@ -1,6 +1,7 @@
 const fs = require('fs');
 var ls = require('ls');
 var path = require('path');
+var Terser = require("terser");
 
 var files = ['src/impress.js'];
 // Libraries from src/lib
@@ -48,4 +49,18 @@ html += '</body>\n</html>'
 
 var filename = path.resolve(__dirname, 'examples', 'index.html');
 fs.writeFileSync(filename, html);
-console.log(filename);
+
+//terser --compress --mangle --comments '/^!/' --source-map --output js/impress.min.js js/impress.js
+var code = fs.readFileSync('js/impress.js').toString();
+var options = {
+  sourceMap: {
+   filename: 'js/impress.js',
+   url: 'js/impress.min.js.map'
+  },
+  output: {
+    comments: /^!/
+  }
+};
+var result = Terser.minify({'js/impress.js': code}, options);
+fs.writeFileSync('js/impress.min.js', result.code);
+fs.writeFileSync('js/impress.min.js.map', result.map);

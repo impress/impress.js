@@ -22,7 +22,7 @@
     "url": "https://github.com/impress/impress.js/issues"
   },
   "scripts": {
-    "build": "node build.js && terser --compress --mangle --comments '/^!/' --source-map --output js/impress.min.js js/impress.js",
+    "build": "node build.js",
     "lint": "eslint src test",
     "test": "karma start --log-level debug --single-run=true"
   },
