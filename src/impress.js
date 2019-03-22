@@ -1,3 +1,4 @@
+/*! Licensed under MIT License - http://github.com/impress/impress.js */
 /**
  * impress.js
  *
@@ -7,7 +8,7 @@
  *
  * Copyright 2011-2012 Bartek Szopka (@bartaz), 2016-2018 Henrik Ingo (@henrikingo)
  *
- * Released under the MIT and GPL Licenses.
+ * Released under the MIT License.
  *
  * ------------------------------------------------
  *  author:  Bartek Szopka, Henrik Ingo
@@ -15,7 +16,6 @@
  *  url:     http://impress.js.org
  *  source:  http://github.com/impress/impress.js/
  */
-/*! Licensed under MIT and GPL - http://github.com/impress/impress.js */
 
 // You are one of those who like to know how things work inside?
 // Let me show you the cogs that make impress.js run...
