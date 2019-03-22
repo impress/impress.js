@@ -26,6 +26,19 @@ Note: For a minimal checkout, omit the `--recursive` option. This will leave out
 New features and fixes are continuously merged into the master branch, which is what the above command will check out. For the latest stable release, see the [Github Releases page](https://github.com/impress/impress.js/releases).
 
 
+## Development
+
+### Requirements
+
+* &gt;= node 7.6
+* npm
+
+### Setup
+
+```bash
+npm install
+```
+
 ### Documentation
 
 
