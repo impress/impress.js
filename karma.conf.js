@@ -15,16 +15,19 @@ module.exports = function(config) {
 
     plugins: ['karma-firefox-launcher', 'karma-chrome-launcher', 'karma-qunit'],
 
-    // list of files / patterns to load in the browser
+    // List of files / patterns to load in the browser
     files: [
-      'test/helpers.js',
-      'test/core_tests.js',
-      'test/non_default.js',
-      'src/plugins/navigation/navigation_tests.js',
-      'test/core_tests_presentation.html',
-      'test/non_default.html',
-      'js/impress.js',
-      'node_modules/syn/dist/global/syn.js'
+      // The QUnit tests
+      "test/helpers.js",
+      "test/core_tests.js",
+      "test/non_default.js",
+      "src/plugins/navigation/navigation_tests.js",
+      // Presentation files, for the iframe
+      {pattern: "test/*.html", watched: true, served: true, included: false},
+      {pattern: "test/plugins/*/*.html", watched: true, served: true, included: false},
+      // JS files for iframe
+      {pattern: "js/impress.js", watched: true, served: true, included: false},
+      {pattern: "node_modules/syn/dist/global/syn.js", watched: false, served: true, included: false}
     ],
 
     proxies: {
