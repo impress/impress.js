@@ -27,16 +27,16 @@
     "test": "karma start --log-level debug --single-run=true"
   },
   "devDependencies": {
-    "eslint": "^5.14.1",
+    "eslint": "^5.15.3",
     "karma": "^4.0.0",
     "karma-chrome-launcher": "^2.2.0",
     "karma-firefox-launcher": "^1.1.0",
     "karma-qunit": "^2.1.0",
     "ls": "^0.2.1",
+    "puppeteer": "^1.13.0",
     "qunit": "^2.9.2",
     "syn": "^0.13.0",
-    "terser": "^3.16.1",
-    "puppeteer": "^1.12.2"
+    "terser": "^3.17.0"
   },
   "dependencies": {}
 }
