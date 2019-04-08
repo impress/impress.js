@@ -34,6 +34,21 @@ var output = files.map((f)=>{
 
 fs.writeFileSync('js/impress.js', '// This file was automatically generated from files in src/ directory.\n\n' + output)
 
+// terser --compress --mangle --comments '/^!/' --source-map --output js/impress.min.js js/impress.js
+var code = fs.readFileSync('js/impress.js').toString();
+var options = {
+  sourceMap: {
+   filename: 'js/impress.js',
+   url: 'js/impress.min.js.map'
+  },
+  output: {
+    comments: /^!/
+  }
+};
+var result = Terser.minify({'js/impress.js': code}, options);
+fs.writeFileSync('js/impress.min.js', result.code);
+fs.writeFileSync('js/impress.min.js.map', result.map);
+
 /* Auto generate an index.html that lists all the directories under examples/
  * This is useful for gh-pages, so you can link to http://impress.github.io/impress.js/examples
  */
@@ -49,18 +64,3 @@ html += '</body>\n</html>'
 
 var filename = path.resolve(__dirname, 'examples', 'index.html');
 fs.writeFileSync(filename, html);
-
-//terser --compress --mangle --comments '/^!/' --source-map --output js/impress.min.js js/impress.js
-var code = fs.readFileSync('js/impress.js').toString();
-var options = {
-  sourceMap: {
-   filename: 'js/impress.js',
-   url: 'js/impress.min.js.map'
-  },
-  output: {
-    comments: /^!/
-  }
-};
-var result = Terser.minify({'js/impress.js': code}, options);
-fs.writeFileSync('js/impress.min.js', result.code);
-fs.writeFileSync('js/impress.min.js.map', result.map);
