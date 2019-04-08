@@ -65,7 +65,7 @@ REPOSITORY STRUCTURE
 * [index.html](index.html): This is the official impress.js demo, showcasing all of the features of the original impress.js, as well as some new plugins as we add them.
   * As already mentioned, this file is well commented and acts as the official tutorial.
 * [examples/](examples/): Contains several demos showcasing additional features available.
-  * [Classic Slides](examples/classic-slides/index.html) is a simple demo that that you can use as template if you want to create very simple, rectangular, PowerPoint-like presentations.
+  * [Classic Slides](examples/classic-slides/index.html) is a simple demo that you can use as template if you want to create very simple, rectangular, PowerPoint-like presentations.
 * [src/](src/): The main file is [src/impress.js](src/impress.js). Additional functionality is implemented as plugins in [src/plugins/](src/plugins/).
   * See [src/plugins/README.md](src/plugins/README.md) for information about the plugin API and how to write plugins.
 * [test/](test/): Contains QUnit and Syn libraries that we use for writing tests, as well as some test coverage for core functionality. (Yes, more tests are much welcome.) Tests for plugins are in the directory of each plugin.
