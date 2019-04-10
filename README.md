@@ -79,6 +79,17 @@ REPOSITORY STRUCTURE
 WANT TO CONTRIBUTE?
 ---------------------
 
+### Requirements
+
+* &gt;= node 7.6
+* npm
+
+### Setup
+
+```bash
+npm install
+```
+
 For developers, once you've made changes to the code, you should run these commands for testing:
 
     npm run build

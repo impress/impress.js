@@ -24,24 +24,22 @@
   "scripts": {
     "build": "node build.js",
     "lint": "jshint src test/*.js && jscs src test/*.js",
-    "test": "karma start --single-run",
-    "test:dev": "karma start",
-    "test:sauce": "karma start karma.conf-sauce.js"
+    "new-lint": "eslint src test",
+    "test": "karma start --log-level debug --single-run=true"
   },
   "devDependencies": {
-    "buildify": "*",
-    "chrome": "0.1.0",
-    "firefox": "0.0.1",
-    "jscs": "2.11.0",
-    "jshint": "2.9.1",
-    "karma": "0.13.22",
-    "karma-chrome-launcher": "2.2.0",
-    "karma-cli": "1.0.0",
-    "karma-firefox-launcher": "~0.1",
-    "karma-qunit": "1.0.0",
-    "karma-sauce-launcher": "1.0.0",
-    "ls": "0.2.1",
-    "qunitjs": "2.0.0-rc1",
-    "syn": "0.10.0"
-  }
+    "eslint": "^5.15.3",
+    "jscs": "^3.0.7",
+    "jshint": "^2.10.2",
+    "karma": "^4.0.0",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-firefox-launcher": "^1.1.0",
+    "karma-qunit": "^2.1.0",
+    "ls": "^0.2.1",
+    "puppeteer": "^1.13.0",
+    "qunit": "^2.9.2",
+    "syn": "^0.13.0",
+    "terser": "^3.17.0"
+  },
+  "dependencies": {}
 }

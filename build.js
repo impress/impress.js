@@ -1,16 +1,13 @@
-var buildify = require('buildify');
+const fs = require('fs');
+var ls = require('ls');
+var path = require('path');
+var Terser = require("terser");
 
-
-buildify()
-  .load('src/impress.js')
-  .perform(function(content){ 
-      return "// This file was automatically generated from files in src/ directory.\n\n" + content;
-  })
-  // Libraries from src/lib
-  .concat(['src/lib/gc.js'])
-  .concat(['src/lib/util.js'])
-  // Plugins from src/plugins
-  .concat(['src/plugins/autoplay/autoplay.js',
+var files = ['src/impress.js'];
+// Libraries from src/lib
+files.push('src/lib/gc.js', 'src/lib/util.js')
+// Plugins from src/plugins
+files.push('src/plugins/autoplay/autoplay.js',
            'src/plugins/blackout/blackout.js',
            'src/plugins/extras/extras.js',
            'src/plugins/form/form.js',
@@ -30,22 +27,31 @@ buildify()
            'src/plugins/stop/stop.js',
            'src/plugins/substep/substep.js',
            'src/plugins/touch/touch.js',
-           'src/plugins/toolbar/toolbar.js'])
-  .save('js/impress.js');
-/*
- * Disabled until uglify supports ES6: https://github.com/mishoo/UglifyJS2/issues/448
-  .uglify()
-  .save('js/impress.min.js');
-*/
+           'src/plugins/toolbar/toolbar.js')
+var output = files.map((f)=>{
+  return fs.readFileSync(f).toString();
+}).join('\n')
 
+fs.writeFileSync('js/impress.js', '// This file was automatically generated from files in src/ directory.\n\n' + output)
+
+// terser --compress --mangle --comments '/^!/' --source-map --output js/impress.min.js js/impress.js
+var code = fs.readFileSync('js/impress.js').toString();
+var options = {
+  sourceMap: {
+   filename: 'js/impress.js',
+   url: 'js/impress.min.js.map'
+  },
+  output: {
+    comments: /^!/
+  }
+};
+var result = Terser.minify({'js/impress.js': code}, options);
+fs.writeFileSync('js/impress.min.js', result.code);
+fs.writeFileSync('js/impress.min.js.map', result.map);
 
 /* Auto generate an index.html that lists all the directories under examples/
  * This is useful for gh-pages, so you can link to http://impress.github.io/impress.js/examples
  */
-var ls = require('ls');
-var fs = require('fs');
-var path = require('path');
-
 var html_list = '<ul><br />\n'
 ls( 'examples/*', { type: 'dir' }).forEach(function(dir) {
     html_list += '  <li><a href="' + dir['file'] + '/">' + dir['name'] + '</a></li>\n';
@@ -58,4 +64,3 @@ html += '</body>\n</html>'
 
 var filename = path.resolve(__dirname, 'examples', 'index.html');
 fs.writeFileSync(filename, html);
-console.log(filename);
