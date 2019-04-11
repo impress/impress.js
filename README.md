@@ -79,19 +79,9 @@ REPOSITORY STRUCTURE
 WANT TO CONTRIBUTE?
 ---------------------
 
-### Requirements
-
-* &gt;= node 7.6
-* npm
-
-### Setup
-
-```bash
-npm install
-```
-
 For developers, once you've made changes to the code, you should run these commands for testing:
 
+    npm install
     npm run build
     npm run test
     npm run lint
@@ -99,6 +89,11 @@ For developers, once you've made changes to the code, you should run these comma
 Note that running `firefox qunit_test_runner.html` is usually more informative than running `karma` with `npm run test`. They both run the same tests.
 
 More info about the [src/](src/) directory can be found in [src/plugins/README.md](src/plugins/README.md).
+
+### Requirements
+
+* &gt;= node 7.6
+* npm
 
 
 ABOUT THE NAME
