@@ -75,7 +75,7 @@
         reloadTimeout( event );
     }, false );
 
-    document.addEventListener( "impress:substep:stepleaveaborted", function( event ) {
+    document.addEventListener( "impress:substep:enter", function( event ) {
         reloadTimeout( event );
     }, false );
 

@@ -1330,7 +1330,7 @@
         reloadTimeout( event );
     }, false );
 
-    document.addEventListener( "impress:substep:stepleaveaborted", function( event ) {
+    document.addEventListener( "impress:substep:enter", function( event ) {
         reloadTimeout( event );
     }, false );
 
@@ -3956,8 +3956,11 @@
             if ( el ) {
 
                 // Send a message to others, that we aborted a stepleave event.
-                // Autoplay will reload itself from this, as there won't be a stepenter event now.
                 triggerEvent( step, "impress:substep:stepleaveaborted",
+                              { reason: "next", substep: el } );
+
+                // Autoplay uses this for reloading itself
+                triggerEvent( step, "impress:substep:enter",
                               { reason: "next", substep: el } );
 
                 // Returning false aborts the stepleave event
@@ -3969,6 +3972,10 @@
             if ( el ) {
                 triggerEvent( step, "impress:substep:stepleaveaborted",
                               { reason: "prev", substep: el } );
+
+                triggerEvent( step, "impress:substep:leave",
+                              { reason: "prev", substep: el } );
+
                 return false;
             }
         }
@@ -4030,7 +4037,6 @@
     }, false );
 
 } )( document, window );
-
 
 /**
  * Support for swipe and tap on touch devices
