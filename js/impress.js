@@ -705,7 +705,7 @@
                     // can do about it?
                     order: k < 0.7 ? currentState.rotate.order : nextStep.rotate.order
                 },
-                scale: interpolate( currentState.scale, nextScale, k )
+                scale: interpolate( currentState.scale * windowScale, nextScale, k )
             };
 
             css( root, {
