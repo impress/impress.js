@@ -32,7 +32,9 @@ var output = files.map((f)=>{
   return fs.readFileSync(f).toString();
 }).join('\n')
 
-fs.writeFileSync('js/impress.js', '// This file was automatically generated from files in src/ directory.\n\n' + output)
+var filename = 'js/impress.js';
+fs.writeFileSync(filename, '// This file was automatically generated from files in src/ directory.\n\n' + output)
+console.log(filename);
 
 // terser --compress --mangle --comments '/^!/' --source-map --output js/impress.min.js js/impress.js
 var code = fs.readFileSync('js/impress.js').toString();
@@ -46,8 +48,13 @@ var options = {
   }
 };
 var result = Terser.minify({'js/impress.js': code}, options);
-fs.writeFileSync('js/impress.min.js', result.code);
-fs.writeFileSync('js/impress.min.js.map', result.map);
+
+filename = 'js/impress.min.js';
+fs.writeFileSync(filename, result.code);
+console.log(filename);
+filename = 'js/impress.min.js.map';
+fs.writeFileSync(filename, result.map);
+console.log(filename);
 
 /* Auto generate an index.html that lists all the directories under examples/
  * This is useful for gh-pages, so you can link to http://impress.github.io/impress.js/examples
@@ -62,5 +69,6 @@ var html = '<html>\n<head>\n<title>Example presentations</title>\n</head>\n<body
 html += '<h1>Example presentations</h1>\n' + html_list
 html += '</body>\n</html>'
 
-var filename = path.resolve(__dirname, 'examples', 'index.html');
+filename = path.resolve(__dirname, 'examples', 'index.html');
 fs.writeFileSync(filename, html);
+console.log(filename);

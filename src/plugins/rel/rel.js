@@ -159,7 +159,10 @@
                 el: el,
                 x: el.getAttribute( "data-x" ),
                 y: el.getAttribute( "data-y" ),
-                z: el.getAttribute( "data-z" )
+                z: el.getAttribute( "data-z" ),
+                relX: el.getAttribute( "data-rel-x" ),
+                relY: el.getAttribute( "data-rel-y" ),
+                relZ: el.getAttribute( "data-rel-z" )
             } );
             var step = computeRelativePositions( el, prev );
 
@@ -181,20 +184,27 @@
             var steps = startingState[ root.id ];
             var step;
             while ( step = steps.pop() ) {
-                if ( step.x === null ) {
-                    step.el.removeAttribute( "data-x" );
-                } else {
-                    step.el.setAttribute( "data-x", step.x );
+                // Reset x/y/z in cases where this plugin has changed it.
+                if ( step.relX !== null ) {
+                    if ( step.x === null ) {
+                        step.el.removeAttribute( "data-x" );
+                    } else {
+                        step.el.setAttribute( "data-x", step.x );
+                    }
                 }
-                if ( step.y === null ) {
-                    step.el.removeAttribute( "data-y" );
-                } else {
-                    step.el.setAttribute( "data-y", step.y );
+                if ( step.relY !== null ) {
+                    if ( step.y === null ) {
+                        step.el.removeAttribute( "data-y" );
+                    } else {
+                        step.el.setAttribute( "data-y", step.y );
+                    }
                 }
-                if ( step.z === null ) {
-                    step.el.removeAttribute( "data-z" );
-                } else {
-                    step.el.setAttribute( "data-z", step.z );
+                if ( step.relZ !== null ) {
+                    if ( step.z === null ) {
+                        step.el.removeAttribute( "data-z" );
+                    } else {
+                        step.el.setAttribute( "data-z", step.z );
+                    }
                 }
             }
             delete startingState[ root.id ];
