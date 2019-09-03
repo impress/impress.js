@@ -3746,6 +3746,7 @@
             var steps = startingState[ root.id ];
             var step;
             while ( step = steps.pop() ) {
+
                 // Reset x/y/z in cases where this plugin has changed it.
                 if ( step.relX !== null ) {
                     if ( step.x === null ) {
@@ -4002,8 +4003,12 @@
 
     var showSubstep = function( substeps, visible ) {
         if ( visible.length < substeps.length ) {
+            for ( var i = 0; i < substeps.length; i++ ) {
+                substeps[ i ].classList.remove( "substep-active" );
+            }
             var el = substeps[ visible.length ];
             el.classList.add( "substep-visible" );
+            el.classList.add( "substep-active" );
             return el;
         }
     };
@@ -4018,6 +4023,16 @@
 
     var hideSubstep = function( visible ) {
         if ( visible.length > 0 ) {
+            var current = -1;
+            for ( var i = 0; i < visible.length; i++ ) {
+                if ( visible[ i ].classList.contains( "substep-active" ) ) {
+                    current = i;
+                }
+                visible[ i ].classList.remove( "substep-active" );
+            }
+            if ( current > 0 ) {
+                visible[ current - 1 ].classList.add( "substep-active" );
+            }
             var el = visible[ visible.length - 1 ];
             el.classList.remove( "substep-visible" );
             return el;
