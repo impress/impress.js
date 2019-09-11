@@ -29,6 +29,12 @@ Example:
             <p class="substep">Apple</p>
         </div>
 
+Classes:
+
+`substep-active` - The most recent substep in the current step
+
+`substep-visible` - The most recent and all previous substeps in the current step
+
 Author
 ------
 
