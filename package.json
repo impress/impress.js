@@ -31,16 +31,16 @@
     "registry": "https://npm.pkg.github.com"
   },
   "devDependencies": {
-    "eslint": "^5.15.3",
+    "eslint": "^5.16.0",
     "jscs": "^3.0.7",
     "jshint": "^2.10.2",
-    "karma": "^4.0.0",
+    "karma": "^4.3.0",
     "karma-chrome-launcher": "^2.2.0",
-    "karma-firefox-launcher": "^1.1.0",
+    "karma-firefox-launcher": "^1.2.0",
     "karma-qunit": "^2.1.0",
     "ls": "^0.2.1",
-    "puppeteer": "^1.13.0",
-    "qunit": "^2.9.2",
+    "puppeteer": "^1.20.0",
+    "qunit": "^2.9.3",
     "syn": "^0.13.0",
     "terser": "^3.17.0"
   },
