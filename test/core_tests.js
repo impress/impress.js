@@ -87,8 +87,8 @@ QUnit.test( "Initialize Impress.js", function( assert ) {
       assert.equal( canvas.style.transform,
                     "rotateZ(0deg) rotateY(0deg) rotateX(0deg) translate3d(1000px, 0px, 0px)",
                     "canvas.style.transform initialized correctly" );
-      assert.equal( canvas.style.transformOrigin,
-                    "left top 0px",
+      assert.ok( canvas.style.transformOrigin === "left top 0px" ||
+                 canvas.style.transformOrigin ===  "left top",
                     "canvas.style.transformOrigin initialized correctly" );
       assert.equal( canvas.style.transformStyle,
                     "preserve-3d",

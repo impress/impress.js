@@ -67,13 +67,6 @@
                 return false;
             }
 
-            // For arrows, etc, check that event target is html or body element. This is to allow
-            // presentations to have, for example, forms with input elements where user can type
-            // text, including space, and not move to next step.
-            if ( event.target.nodeName !== "BODY" && event.target.nodeName !== "HTML" ) {
-                return false;
-            }
-
             if ( ( event.keyCode >= 32 && event.keyCode <= 34 ) ||
                  ( event.keyCode >= 37 && event.keyCode <= 40 ) ) {
                 return true;
@@ -124,39 +117,65 @@
             // Event delegation with "bubbling"
             // check if event target (or any of its parents is a link)
             var target = event.target;
-            while ( ( target.tagName !== "A" ) &&
-                    ( target !== document.documentElement ) ) {
-                target = target.parentNode;
-            }
+            try {
+                while ( ( target.tagName !== "A" ) &&
+                        ( target !== document.documentElement ) ) {
+                    target = target.parentNode;
+                }
 
-            if ( target.tagName === "A" ) {
-                var href = target.getAttribute( "href" );
+                if ( target.tagName === "A" ) {
+                    var href = target.getAttribute( "href" );
 
-                // If it's a link to presentation step, target this step
-                if ( href && href[ 0 ] === "#" ) {
-                    target = document.getElementById( href.slice( 1 ) );
+                    // If it's a link to presentation step, target this step
+                    if ( href && href[ 0 ] === "#" ) {
+                        target = document.getElementById( href.slice( 1 ) );
+                    }
+                }
+
+                if ( api.goto( target ) ) {
+                    event.stopImmediatePropagation();
+                    event.preventDefault();
                 }
             }
+            catch ( err ) {
 
-            if ( api.goto( target ) ) {
-                event.stopImmediatePropagation();
-                event.preventDefault();
+                // For example, when clicking on the button to launch speaker console, the button
+                // is immediately deleted from the DOM. In this case target is a DOM element when
+                // we get it, but turns out to be null if you try to actually do anything with it.
+                if ( err instanceof TypeError &&
+                     err.message === "target is null" ) {
+                    return;
+                }
+                throw err;
             }
         }, false );
 
         // Delegated handler for clicking on step elements
         gc.addEventListener( document, "click", function( event ) {
             var target = event.target;
+            try {
 
-            // Find closest step element that is not active
-            while ( !( target.classList.contains( "step" ) &&
-                       !target.classList.contains( "active" ) ) &&
-                    ( target !== document.documentElement ) ) {
-                target = target.parentNode;
+                // Find closest step element that is not active
+                while ( !( target.classList.contains( "step" ) &&
+                        !target.classList.contains( "active" ) ) &&
+                        ( target !== document.documentElement ) ) {
+                    target = target.parentNode;
+                }
+
+                if ( api.goto( target ) ) {
+                    event.preventDefault();
+                }
             }
+            catch ( err ) {
 
-            if ( api.goto( target ) ) {
-                event.preventDefault();
+                // For example, when clicking on the button to launch speaker console, the button
+                // is immediately deleted from the DOM. In this case target is a DOM element when
+                // we get it, but turns out to be null if you try to actually do anything with it.
+                if ( err instanceof TypeError &&
+                     err.message === "target is null" ) {
+                    return;
+                }
+                throw err;
             }
         }, false );
 

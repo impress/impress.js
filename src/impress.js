@@ -1,3 +1,4 @@
+/*! Licensed under MIT License - http://github.com/impress/impress.js */
 /**
  * impress.js
  *
@@ -5,15 +6,15 @@
  * in modern browsers and inspired by the idea behind prezi.com.
  *
  *
- * Copyright 2011-2012 Bartek Szopka (@bartaz)
+ * Copyright 2011-2012 Bartek Szopka (@bartaz), 2016-2018 Henrik Ingo (@henrikingo)
  *
- * Released under the MIT and GPL Licenses.
+ * Released under the MIT License.
  *
  * ------------------------------------------------
- *  author:  Bartek Szopka
- *  version: 1.0.0-beta1
- *  url:     http://bartaz.github.com/impress.js/
- *  source:  http://github.com/bartaz/impress.js/
+ *  author:  Bartek Szopka, Henrik Ingo
+ *  version: 1.0.0
+ *  url:     http://impress.js.org
+ *  source:  http://github.com/impress/impress.js/
  */
 
 // You are one of those who like to know how things work inside?
@@ -59,7 +60,7 @@
         var returnStr = "";
         if ( typeof order === "string" ) {
             for ( var i in order.split( "" ) ) {
-                if ( validChars.indexOf( order[ i ] >= 0 ) ) {
+                if ( validChars.indexOf( order[ i ] ) >= 0 ) {
                     returnStr += order[ i ];
 
                     // Each of x,y,z can be used only once.
@@ -702,7 +703,7 @@
                     // can do about it?
                     order: k < 0.7 ? currentState.rotate.order : nextStep.rotate.order
                 },
-                scale: interpolate( currentState.scale, nextScale, k )
+                scale: interpolate( currentState.scale * windowScale, nextScale, k )
             };
 
             css( root, {

@@ -1,18 +1,22 @@
 // This file contains so much HTML, that we will just respectfully disagree about js
 /* jshint quotmark:single */
-/* global document, console, setTimeout, navigator */
+/* global document, console, setTimeout, navigator, QUnit */
 /* exported loadIframe, initPresentation, _impressSupported */
+
+// Log all QUnit assertions to console.log(), so that they are visible in karma output
+QUnit.log( function( details ) {
+  console.log( 'QUnit.log: ', details.result, details.message );
+} );
 
 var loadIframe = function( src, assert, callback ) {
   console.log( 'Begin loadIframe' );
 
   // When running in Karma, the #qunit-fixture appears from somewhere and we can't set its
-  // contents in advance.
+  // contents in advance, so we set it now.
   var fix = document.getElementById( 'qunit-fixture' );
   fix.innerHTML = [
     '\n',
     '    <iframe id="presentation-iframe"\n',
-    '            src="SET THIS IN YOUR QUNIT TESTS"\n',
     '            width="595" height="485"\n',
     '            frameborder="0" marginwidth="0" marginheight="0" scrolling="no"\n',
     '            style="border:1px solid #CCC; max-width: 100%;">\n',
@@ -39,20 +43,13 @@ var loadIframe = function( src, assert, callback ) {
     callback();
   };
 
-  // FIXME: Seems to be some race in loading js files inside the iframe (in CircleCI).
-  // The error that happens is that window.impress isn't set yet, even if onLoad event triggered.
-  // Needs more investigation.
-  var onLoadWrapper = function( event ) {
-    setTimeout( function() { onLoad( event ); }, 1000 );
-  };
-  iframe.addEventListener( 'load', onLoadWrapper );
+  iframe.addEventListener( 'load', onLoad );
 
-  assert.ok( true,
+  assert.ok( iframe.src = src,
              'Setting iframe.src = ' + src );
-  iframe.src = src;
 };
 
-var initPresentation = function( assert, callback ) {
+var initPresentation = function( assert, callback, rootId ) {
   console.log( 'Begin initPresentation' );
   var iframe = document.getElementById( 'presentation-iframe' );
   var iframeDoc = iframe.contentDocument;
@@ -75,7 +72,7 @@ var initPresentation = function( assert, callback ) {
   };
   iframeDoc.addEventListener( 'impress:stepenter', waitForStepEnterWrapper );
 
-  assert.strictEqual( iframeWin.impress().init(), undefined, 'Initializing impress.' );
+  assert.strictEqual( iframeWin.impress( rootId ).init(), undefined, 'Initializing impress.' );
 };
 
 // Helper function to determine whether this browser is supported by

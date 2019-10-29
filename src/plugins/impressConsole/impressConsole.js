@@ -380,17 +380,21 @@
                     // ... so I add a button to klick.
                     // workaround on firefox
                     var message = document.createElement( 'div' );
-                    message.id = 'consoleWindowError';
+                    message.id = 'impress-console-button';
                     message.style.position = 'fixed';
                     message.style.left = 0;
                     message.style.top = 0;
                     message.style.right = 0;
                     message.style.bottom = 0;
                     message.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
-                    var onClickStr = 'var x = document.getElementById(\'consoleWindowError\');' +
-                                     'x.parentNode.removeChild(x);impressConsole().open();';
-                    message.innerHTML = '<button style="margin: 25vh 25vw;width:50vw;height:50vh;' +
-                                                 'onclick="' + onClickStr + '">' +
+                    var clickStr = 'var x = document.getElementById(\'impress-console-button\');' +
+                                     'x.parentNode.removeChild(x);' +
+                                     'var r = document.getElementById(\'' + rootId + '\');' +
+                                     'impress(\'' + rootId +
+                                     '\').lib.util.triggerEvent(r, \'impress:console:open\', {})';
+                    var styleStr = 'margin: 25vh 25vw;width:50vw;height:50vh;';
+                    message.innerHTML = '<button style="' + styleStr + '" ' +
+                                                 'onclick="' + clickStr + '">' +
                                         lang.clickToOpen +
                                         '</button>';
                     document.body.appendChild( message );
@@ -551,31 +555,23 @@
             //Btw, you can also launch console automatically:
             //<div id="impress" data-console-autolaunch="true">
             if ( root.dataset.consoleAutolaunch === 'true' ) {
-                window.open();
+                open();
             }
         };
 
         var init = function( cssConsole, cssIframe ) {
             if ( ( cssConsole === undefined || cssConsole === cssFileOldDefault ) &&
                  ( cssIframe === undefined  || cssIframe === cssFileIframeOldDefault ) ) {
-                window.console.log( 'impressConsole.init() is deprecated. ' +
+                window.console.log( 'impressConsole().init() is deprecated. ' +
                                    'impressConsole is now initialized automatically when you ' +
                                    'call impress().init().' );
             }
             _init( cssConsole, cssIframe );
         };
 
-        document.addEventListener( 'impress:init', function() {
-            _init();
-
-            // Add 'P' to the help popup
-            triggerEvent( document, 'impress:help:add',
-                         { command: 'P', text: 'Presenter console', row: 10 } );
-        } );
-
         // New API for impress.js plugins is based on using events
         root.addEventListener( 'impress:console:open', function() {
-            window.open();
+            open();
         } );
 
         /**
@@ -591,10 +587,21 @@
 
         // Return the object
         allConsoles[ rootId ] = { init: init, open: open, clockTick: clockTick,
-                               registerKeyEvent: registerKeyEvent };
+                               registerKeyEvent: registerKeyEvent, _init: _init };
         return allConsoles[ rootId ];
 
     };
+
+    // This initializes impressConsole automatically when initializing impress itself
+    document.addEventListener( 'impress:init', function( event ) {
+
+        // Note: impressConsole wants the id string, not the DOM element directly
+        impressConsole( event.target.id )._init();
+
+        // Add 'P' to the help popup
+        triggerEvent( document, 'impress:help:add',
+                        { command: 'P', text: 'Presenter console', row: 10 } );
+    } );
 
     // Returns a string to be used inline as a css <style> element in the console window.
     // Apologies for length, but hiding it here at the end to keep it away from rest of the code.
@@ -741,7 +748,5 @@
             }
         </style>`;
     };
-
-    impressConsole();
 
 } )( document, window );
