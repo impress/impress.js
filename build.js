@@ -27,6 +27,7 @@ files.push('src/plugins/autoplay/autoplay.js',
            'src/plugins/stop/stop.js',
            'src/plugins/substep/substep.js',
            'src/plugins/touch/touch.js',
+           'src/plugins/touchY/touchY.js',
            'src/plugins/toolbar/toolbar.js')
 var output = files.map((f)=>{
   return fs.readFileSync(f).toString();
