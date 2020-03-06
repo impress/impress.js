@@ -84,16 +84,6 @@ body {
 .impress-enabled .step.active { opacity: 1 }
 
 /*
-    Speaker notes allow you to write comments within the steps, that will not 
-    be displayed as part of the presentation. However, they will be picked up
-    and displayed by impressConsole.js when integrated.
-*/
-
-.notes {
-    display: none;
-}
-
-/*
     These 'slide' step styles were heavily inspired by HTML5 Slides:
     http://html5slides.googlecode.com/svn/trunk/styles.css
     
@@ -304,21 +294,6 @@ img {
 }
 
 /*
-  This version of impress.js supports plugins, and in particular, a UI toolbar
-  plugin that allows easy navigation between steps and autoplay.
-*/
-.impress-enabled div#impress-toolbar {
-    position: fixed;
-    right: 1px;
-    bottom: 1px;
-    opacity: 0.6;
-    z-index: 10;
-}
-.impress-enabled div#impress-toolbar > span {
-    margin-right: 10px;
-}
-
-/*
     With help from the mouse-timeout plugin, we can hide the toolbar and
     have it show only when you move/click/touch the mouse.
 */
@@ -358,37 +333,6 @@ body.impress-mouse-timeout {
   text-align: left;
   font-size: 10pt;
   opacity: 0.6;
-}
-
-/* Help popup plugin */
-.impress-enabled #impress-help {
-    background: none repeat scroll 0 0 rgba(0, 0, 0, 0.5);
-    color: #EEEEEE;
-    font-size: 80%;
-    position: fixed;
-    left: 2em;
-    bottom: 2em;
-    width: 24em;
-    border-radius: 1em;
-    padding: 1em;
-    text-align: center;
-    z-index: 100;
-    font-family: Verdana, Arial, Sans;
-}
-.impress-enabled #impress-help td {
-    padding-left: 1em;
-    padding-right: 1em;
-}
-
-/* Substep plugin */
-
-#impress .step .substep {
-    opacity: 0;
-}
-
-#impress .step .substep.substep-visible {
-    opacity: 1;
-    transition: opacity 1s;
 }
 
 /*
@@ -461,5 +405,3 @@ body.impress-mouse-timeout {
 */
 .impress-enabled                          { pointer-events: none }
 .impress-enabled #impress                 { pointer-events: auto }
-.impress-enabled #impress-toolbar         { pointer-events: auto }
-.impress-enabled #impress-console-button  { pointer-events: auto }

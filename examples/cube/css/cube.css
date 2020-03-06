@@ -73,10 +73,6 @@ body {
 
 .impress-enabled .step.active { opacity: 1 }
 
-.notes {
-    display: none;
-}
-
 h1, 
 h2, 
 h3 {
@@ -152,22 +148,6 @@ small {
     font-size: 0.4em;
 }
 
-
-/*
-  This version of impress.js supports plugins, and in particular, a UI toolbar
-  plugin that allows easy navigation between steps and autoplay.
-*/
-.impress-enabled div#impress-toolbar {
-    position: fixed;
-    right: 1px;
-    bottom: 1px;
-    opacity: 0.6;
-    z-index: 10;
-}
-.impress-enabled div#impress-toolbar > span {
-    margin-right: 10px;
-}
-
 /*
     With help from the mouse-timeout plugin, we can hide the toolbar and
     have it show only when you move/click/touch the mouse.
@@ -210,26 +190,6 @@ body.impress-mouse-timeout {
   opacity: 0.6;
 }
 
-/* Help popup plugin */
-.impress-enabled #impress-help {
-    background: none repeat scroll 0 0 rgba(0, 0, 0, 0.5);
-    color: #EEEEEE;
-    font-size: 80%;
-    position: fixed;
-    left: 2em;
-    bottom: 2em;
-    width: 24em;
-    border-radius: 1em;
-    padding: 1em;
-    text-align: center;
-    z-index: 100;
-    font-family: Verdana, Arial, Sans;
-}
-.impress-enabled #impress-help td {
-    padding-left: 1em;
-    padding-right: 1em;
-}
-
 /*
     And as the last thing there is a workaround for quite strange bug.
     It happens a lot in Chrome. I don't remember if I've seen it in Firefox.
@@ -253,5 +213,3 @@ body.impress-mouse-timeout {
 */
 .impress-enabled                          { pointer-events: none }
 .impress-enabled #impress                 { pointer-events: auto }
-.impress-enabled #impress-toolbar         { pointer-events: auto }
-.impress-enabled #impress-console-button  { pointer-events: auto }
