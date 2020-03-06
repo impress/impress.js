@@ -529,20 +529,6 @@ a:focus {
 }
 
 /*
-    This version of impress.js supports plugins, and in particular, a UI toolbar
-    plugin that allows easy navigation between steps and autoplay.
-*/
-.impress-enabled div#impress-toolbar {
-    position: fixed;
-    right: 1px;
-    bottom: 1px;
-    opacity: 0.6;
-}
-.impress-enabled div#impress-toolbar > span {
-    margin-right: 10px;
-}
-
-/*
     With help from the mouse-timeout plugin, we can hide the toolbar and
     have it show only when you move/click/touch the mouse.
 */
@@ -714,8 +700,7 @@ body.impress-mouse-timeout {
 */
 .impress-enabled                          { pointer-events: none }
 .impress-enabled #impress                 { pointer-events: auto }
-.impress-enabled #impress-toolbar         { pointer-events: auto }
-.impress-enabled #impress-console-button  { pointer-events: auto }
+
 /*
     There is one funny thing I just realized.
 
