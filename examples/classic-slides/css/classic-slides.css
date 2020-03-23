@@ -7,7 +7,7 @@
   http://www.webupd8.org/2011/01/automatically-install-all-google-web.html
 */
 
-/* @import url(http://fonts.googleapis.com/css?family=Open+Sans:regular,semibold,italic,italicsemibold|PT+Sans:400,700,400italic,700italic|PT+Serif:400,700,400italic,700italic|Cutive+Mono); */
+/* @import url(https://fonts.googleapis.com/css?family=Open+Sans:regular,semibold,italic,italicsemibold|PT+Sans:400,700,400italic,700italic|PT+Serif:400,700,400italic,700italic|Cutive+Mono); */
 @import url(fonts.css);
 
 
@@ -62,14 +62,14 @@ body {
 
 .step {
     position: relative;
-    width: 900px;
-    padding: 40px;
-    margin: 20px auto;
+    width: 1800px;
+    padding: 60px;
+    margin: 60px auto;
 
     box-sizing:         border-box;
 
     font-family: 'PT Serif', georgia, serif;
-    font-size: 48px;
+    font-size: 60px;
     line-height: 1.5;
 }
 /*
@@ -105,21 +105,21 @@ body {
 .slide {
     display: block;
 
-    width: 900px;
-    height: 700px;
+    width: 1850px;
+    height: 1000px;
     padding: 40px 60px;
 
     background-image: url(../images/background.png);
     background-color: white;
-    border: 1px solid rgba(0, 0, 0, .3);
-    border-radius: 10px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, .1);
+    border: 2px solid rgba(0, 0, 0, .3);
+    border-radius: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, .1);
 
-    text-shadow: 0 2px 2px rgba(0, 0, 0, .1);
+    text-shadow: 0 3px 3px rgba(0, 0, 0, .2);
 
     font-family: 'Open Sans', Arial, sans-serif;
-    font-size: 30px;
-    letter-spacing: -1px;
+    font-size: 45px;
+    letter-spacing: -2px;
 }
 
 
@@ -137,13 +137,20 @@ body {
 }
 
 .slide li {
-    margin: 0.2em;    
+    margin-top: 0.2em;
+    margin-bottom: 0.2em;
+    margin-left: 3em;
+    margin-right: 3em;
 }
 
 /* Highlight.js used for coloring pre > code blocks. */
 .slide pre > code {
-    font-size: 14px;
+    font-size: 30px;
     text-shadow: 0 0 0 rgba(0, 0, 0, 0);
+}
+
+.slide input {
+    font-size: 1em;
 }
 
 /* Inline code, no Highlight.js */
@@ -157,38 +164,38 @@ a {
     text-decoration: none;
     padding: 0 0.1em;
     background: rgba(200,200,200,0.2);
-    text-shadow: -1px 1px 2px rgba(100,100,100,0.9);
+    text-shadow: -2px 2px 4px rgba(100,100,100,0.9);
     border-radius: 0.2em;
-    border-bottom: 1px solid rgba(100,100,100,0.2);
-    border-left:   1px solid rgba(100,100,100,0.2);
+    border-bottom: 3px solid rgba(100,100,100,0.2);
+    border-left:   3px solid rgba(100,100,100,0.2);
 
     transition:         0.5s;
 }
 a:hover,
 a:focus {
     background: rgba(200,200,200,1);
-    text-shadow: -1px 1px 2px rgba(100,100,100,0.5);
+    text-shadow: -2px 2px 3px rgba(100,100,100,0.5);
 }
 
 blockquote {
     font-family: 'PT Serif';
     font-style: italic;
-    font-weight: 400;    
+    font-weight: 400;
 }
 
 em {
-    text-shadow: 0 2px 2px rgba(0, 0, 0, .3);    
+    text-shadow: 0 6px 6px rgba(0, 0, 0, .3);
 }
 
 strong {
-    text-shadow: -1px 1px 2px rgba(100,100,100,0.5);
+    text-shadow: -3px 3px 6px rgba(100,100,100,0.5);
 }
 
 q {
     font-family: 'PT Serif';
     font-style: italic;
     font-weight: 400;    
-    text-shadow: 0 2px 2px rgba(0, 0, 0, .3);
+    text-shadow: 0 6px 6px rgba(0, 0, 0, .3);
 }
 
 strike {
@@ -200,34 +207,38 @@ small {
 }
 
 img {
-    width: 300px
+    width: 600px
+}
+
+td {
+    padding: 0.2em;
 }
 
 .slide .right {
     float: right;
-    margin-left:   40px;
+    margin-left:  60px;
     margin-right:   0px;
-    margin-top:    20px;
-    margin-bottom: 20px;
+    margin-top:    40px;
+    margin-bottom: 40px;
 }
 .slide .left {
     float: left;
-    margin-right:  40px;
+    margin-right: 60px;
     margin-left:    0px;
-    margin-top:    20px;
-    margin-bottom: 20px;
+    margin-top:    40px;
+    margin-bottom: 40px;
 }
 .slide .top {
     position: absolute;
-    top: 20px;
-    margin-bottom:  20px;
+    top: 40px;
+    margin-bottom:  40px;
     margin-top:      0px;    
 }
 .slide .bottom {
     position: absolute;
-    bottom: 20px;
+    bottom: 40px;
     margin-bottom:   0px;
-    margin-top:     20px;    
+    margin-top:     40px;    
 }
 
 /* 
@@ -242,13 +253,13 @@ img {
 .title h2,
 .title h3 {
     position: absolute;
-    left: 45px; /* slide width is 900px, so this is like a 5% margin on both sides */
+    left: 90px; /* slide width is 1800px, so this is like a 5% margin on both sides */
     width: 90%;
-    text-align: center;    
+    text-align: center;
 }
 .title h1 { top: 50px; }
-.title h2 { top: 400px; }
-.title h3 { top: 500px; }
+.title h2 { top: 600px; }
+.title h3 { top: 800px; }
 
 
 
@@ -258,7 +269,7 @@ img {
  fly-in class starts from a position outside the slide, then flies into it's correct position.
 */
 .future .fly-in {
-    transform: translateY(-700px);
+    transform: translateY(-2100px);
     opacity: 0.0; /* Make it invisible, just so it doesn't clutter some other slide that might be in the position where we moved it */
 }
 .present .fly-in {
@@ -267,7 +278,7 @@ img {
     transition:         2s;
 }
 .past .fly-out {
-    transform:         translateY(700px);
+    transform:         translateY(2100px);
     opacity: 0.0;
     transition:         2s;
 }
@@ -400,10 +411,10 @@ body.impress-mouse-timeout {
 #acme-graph-bottom {
     position: absolute;
     bottom: 100px;
-    left: 440px;
+    right: 200px;
     background-color: black;
-    width: 410px;
-    height: 2px;
+    width: 900px;
+    height: 3px;
 }
 
 /* height: is set from javascript */
@@ -412,30 +423,30 @@ body.impress-mouse-timeout {
 #acme-graph-q3,
 #acme-graph-q4 {
     border: solid 1px black;
-    width: 70px;
-    margin-left: 10px;
+    width: 140px;
+    margin-left: 30px;
     position: absolute;
     bottom: 100px;
 }
 
 #acme-graph-q1 {
     background-color: red;
-    left: 450px;
+    right: 900px;
 }
 
 #acme-graph-q2 {
     background-color: blue;
-    left: 550px;
+    right: 700px;
 }
 
 #acme-graph-q3 {
     background-color: green;
-    left: 650px;
+    right: 500px;
 }
 
 #acme-graph-q4 {
     background-color: purple;
-    left: 750px;
+    right: 300px;
 }
 
 /*
