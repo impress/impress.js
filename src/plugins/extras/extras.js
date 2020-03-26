@@ -25,10 +25,11 @@
             var markdownDivs = document.querySelectorAll( ".markdown" );
             for ( var idx = 0; idx < markdownDivs.length; idx++ ) {
               var element = markdownDivs[ idx ];
+              var dialect = element.dataset.markdownDialect;
 
               var slides = element.textContent.split( /^-----$/m );
               var i = slides.length - 1;
-              element.innerHTML = markdown.toHTML( slides[ i ] );
+              element.innerHTML = markdown.toHTML( slides[ i ], dialect );
 
               // If there's an id, unset it for last, and all other, elements,
               // and then set it for the first.

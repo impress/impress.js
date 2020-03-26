@@ -40,6 +40,12 @@ HTML and CSS that you can use with that plugin.
 For your convenience, below is some sample HTML and CSS code covering all the
 plugins that you may want to use or adapt.
 
+Additional parameters for addons
+--------------------------------
+
+Some addons can handle additional HTML data attributes to help us in further customization:
+- Markdown-JS: You can pass a specific Markdown dialect to the plugin using `data-markdown-dialect="Another Dialect"`.
+
 ### Sample HTML to enable plugins and extra addons
 
     <head>
