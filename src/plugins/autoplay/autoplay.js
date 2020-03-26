@@ -31,9 +31,10 @@
         // Element attributes starting with "data-", become available under
         // element.dataset. In addition hyphenized words become camelCased.
         var data = root.dataset;
+        var autoplay = util.getUrlParamValue( "impress-autoplay" ) || data.autoplay;
 
-        if ( data.autoplay ) {
-            autoplayDefault = util.toNumber( data.autoplay, 0 );
+        if ( autoplay ) {
+            autoplayDefault = util.toNumber( autoplay, 0 );
         }
 
         var toolbar = document.querySelector( "#impress-toolbar" );

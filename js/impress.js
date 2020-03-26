@@ -1207,6 +1207,17 @@
             return byId( window.location.hash.replace( /^#\/?/, "" ) );
         };
 
+        // `getUrlParamValue` return a given URL parameter value if it exists
+        // `undefined` if it doesn't exist
+        var getUrlParamValue = function( parameter ) {
+            var chunk = window.location.search.split( parameter + "=" )[ 1 ];
+            var value = chunk && chunk.split( "&" )[ 0 ];
+
+            if ( value !== "" ) {
+                return value;
+            }
+        };
+
         // Throttling function calls, by Remy Sharp
         // http://remysharp.com/2010/07/21/throttling-function-calls/
         var throttle = function( fn, delay ) {
@@ -1243,7 +1254,8 @@
             getElementFromHash: getElementFromHash,
             throttle: throttle,
             toNumber: toNumber,
-            triggerEvent: triggerEvent
+            triggerEvent: triggerEvent,
+            getUrlParamValue: getUrlParamValue
         };
         roots[ rootId ] = lib;
         return lib;
@@ -1287,9 +1299,10 @@
         // Element attributes starting with "data-", become available under
         // element.dataset. In addition hyphenized words become camelCased.
         var data = root.dataset;
+        var autoplay = util.getUrlParamValue( "impress-autoplay" ) || data.autoplay;
 
-        if ( data.autoplay ) {
-            autoplayDefault = util.toNumber( data.autoplay, 0 );
+        if ( autoplay ) {
+            autoplayDefault = util.toNumber( autoplay, 0 );
         }
 
         var toolbar = document.querySelector( "#impress-toolbar" );

@@ -14,7 +14,8 @@ rather require the user to invoke them somehow. For example:
 * The *navigation* plugin waits for the user to press some keys, arrows, page
   down, page up, space or tab.
 * The *autoplay* plugin looks for the HTML attribute `data-autoplay` to see
-  whether it should do its thing.
+  whether it should do its thing. It can also be triggered with a URL GET parameter
+  `?impress-autoplay=5` *5 is the waiting duration*. 
 * The *toolbar* plugin looks for a `<div>` element to become visible.
 
 Extra addons
