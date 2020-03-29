@@ -22,6 +22,7 @@
     "url": "https://github.com/impress/impress.js/issues"
   },
   "scripts": {
+    "all": "npm run build && npm run test && npm run lint",
     "build": "node build.js",
     "lint": "jshint src test/*.js && jscs src test/*.js",
     "new-lint": "eslint src test",

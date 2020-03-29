@@ -81,9 +81,7 @@ WANT TO CONTRIBUTE?
 For developers, once you've made changes to the code, you should run these commands for testing:
 
     npm install
-    npm run build
-    npm run test
-    npm run lint
+    npm run all
 
 Note that running `firefox qunit_test_runner.html` is usually more informative than running `karma` with `npm run test`. They both run the same tests.
 
