@@ -14,7 +14,8 @@ rather require the user to invoke them somehow. For example:
 * The *navigation* plugin waits for the user to press some keys, arrows, page
   down, page up, space or tab.
 * The *autoplay* plugin looks for the HTML attribute `data-autoplay` to see
-  whether it should do its thing.
+  whether it should do its thing. It can also be triggered with a URL GET parameter
+  `?impress-autoplay=5` *5 is the waiting duration*. 
 * The *toolbar* plugin looks for a `<div>` element to become visible.
 
 Extra addons
@@ -39,6 +40,12 @@ HTML and CSS that you can use with that plugin.
 
 For your convenience, below is some sample HTML and CSS code covering all the
 plugins that you may want to use or adapt.
+
+Additional parameters for addons
+--------------------------------
+
+Some addons can handle additional HTML data attributes to help us in further customization:
+- Markdown-JS: You can pass a specific Markdown dialect to the plugin using `data-markdown-dialect="Another Dialect"`.
 
 ### Sample HTML to enable plugins and extra addons
 
