@@ -74,11 +74,24 @@
     data-transition-duration sets the time in microseconds that is used for the
     animation when transtitioning between slides.
     
+    The width, height, scale and perspective options define a target screen size that you should
+    design your CSS against. impress.js will automatically scale all content to different screen
+    sizes. See DOCUMENTATION.md for details. Below, I have targeted full HD screen resolution.
+    
     data-autoplay can be used to set the time in seconds, after which presentation
     automatically moves to next slide. It can also be set individually for each
     slide, but here we just set a common duration for all slides.
 -->
-<div id="impress" data-transition-duration="1000" data-autoplay="10">
+<div id="impress"
+    data-transition-duration="1000"
+
+    data-width="1920"
+    data-height="1080"
+    data-max-scale="3"
+    data-min-scale="0"
+    data-perspective="1000"
+
+    data-autoplay="10">
 
     <!--
         Each step of the presentation should be an element inside the `#impress` with a class name
@@ -102,7 +115,7 @@
         powerpoint slide show. The "slide" class is entirely optional and indeed you wouldn't use it for
         your cooler impress.js presentations.
     -->
-    <div class="step slide title" data-x="-1000" data-y="-1500">
+    <div class="step slide title" data-x="-2200" data-y="-3000">
         <h1>Example Presentation: <br />
             Classic Slides</h1>
         <h2>Henrik Ingo</h2>
@@ -115,7 +128,7 @@
         </div>
     </div>
 
-    <div id="toc" class="step slide" data-rel-x="1000" data-rel-y="0">
+    <div id="toc" class="step slide" data-rel-x="2200" data-rel-y="0">
         <h1>Table of Contents</h1>
         <ul>
             <li><a href="#step-1">A title slide</a></li>
@@ -135,7 +148,7 @@
            <p>Note that instead of absolute positioning we use relative positioning,
            with the data-rel-x and data-rel-y attributes. This means the step is
            positioned relative to the foregoing step. In other words, this is 
-           equivalent to data-x="0" data-y="-1500".</p>
+           equivalent to data-x="0" data-y="-3000".</p>
         </div>
     </div>
 
@@ -175,7 +188,7 @@
         Notation shouldn't be a surprise. We use `data-rotate="30"` attribute, meaning that this
         element should be rotated by 30 degrees clockwise.        
     -->
-    <div class="step slide" data-rel-x="1100" data-rel-y="300" data-rotate="30">
+    <div class="step slide" data-rel-x="2200" data-rel-y="600" data-rotate="30">
         <h1>A blockquote &amp; image</h1>
         <img src="images/3476636111_c551295ca4_b.jpg" 
              alt="Mother Teresa holding a newborn baby" 
@@ -190,7 +203,7 @@
         </div>
     </div>
 
-    <div class="step slide" data-rel-x="800" data-rel-y="800" data-rotate="60">
+    <div class="step slide" data-rel-x="1600" data-rel-y="1600" data-rotate="60">
         <h1>More text styles</h1>
         <p>As usual, use <em>em</em> to emphasize, <br />
            <strong>strong</strong> for strong, <u>u</u> for underline,<br />
@@ -203,7 +216,7 @@
         </div>
     </div>
 
-    <div class="step slide" data-rel-x="300" data-rel-y="1100" data-rotate="90">
+    <div class="step slide" data-rel-x="600" data-rel-y="2200" data-rotate="90">
         <h1>Motion effects 101</h1>
         <p>Items on the slide can</p>
         <p class="fly-in fly-out">Fly in</p>
@@ -233,7 +246,7 @@
         </div>
     </div>
 
-    <div id="addons" class="step slide title" data-rel-x="-300" data-rel-y="1100" data-rotate="120">
+    <div id="addons" class="step slide title" data-rel-x="-600" data-rel-y="2200" data-rotate="120">
         <h2>Add-ons</h2>
         <div class="notes">
         <p>This version of impress.js includes several add-ons, striving to make this a
@@ -241,7 +254,7 @@
         </div>
     </div>
 
-    <div class="step slide" data-rel-x="-800" data-rel-y="800" data-rotate="150" data-autoplay="3">
+    <div class="step slide" data-rel-x="-1600" data-rel-y="1600" data-rotate="150" data-autoplay="3">
         <h1>Impress.js plugins</h1>
         <ul>
         <li>A new <a href="https://github.com/impress/impress.js/blob/master/src/plugins/README.md">plugin framework</a> allows for rich extensibility,
@@ -264,7 +277,7 @@
         </div>
     </div>
 
-    <div class="step slide" data-rel-x="-1100" data-rel-y="300" data-rotate="180">
+    <div class="step slide" data-rel-x="-2200" data-rel-y="600" data-rotate="180">
         <h1>Highlight.js</h1>
         <pre><code>
         // `init` API function that initializes (and runs) the presentation.
@@ -290,7 +303,7 @@
         </div>
     </div>
 
-    <div class="step slide" data-rel-x="-1100" data-rel-y="-300" data-rotate="210">
+    <div class="step slide" data-rel-x="-2200" data-rel-y="-600" data-rotate="210">
         <h1>Mermaid.js</h1>
         <div class="mermaid">
         %% This is a comment in mermaid markup
@@ -317,7 +330,7 @@
         </div>
     </div>
 
-    <div id="markdown" class="step slide markdown" data-rel-x="-800" data-rel-y="-800" data-rotate="240">
+    <div id="markdown" class="step slide markdown" data-rel-x="-1600" data-rel-y="-1600" data-rotate="240">
 # Markdown.js
         
 * [Markdown.js](https://github.com/evilstreak/markdown-js) integration: for authors in a hurry!
@@ -331,7 +344,7 @@
 * [A more advanced Markdown presentation is here.](../markdown/)
     </div>
 
-    <div id="acme" class="step slide" data-rel-x="-300" data-rel-y="-1100" data-rotate="270">
+    <div id="acme" class="step slide" data-rel-x="-600" data-rel-y="-2200" data-rotate="270">
         <ul>
         <li>Remember, in <em>impress.js</em> the full power of HTML5, CSS3 &amp; JavaScript is always at your fingertips!</li>
         <li>For example, you can use tables, forms, or dynamic charts as you would on any web page:</li>
@@ -385,7 +398,7 @@
             
             // Draw the bar graph
             for ( var q in profits ) {
-                var h = 200 * profits[q] / max;
+                var h = 300 * profits[q] / max;
                 var div = document.getElementById('acme-graph-'+q);
                 div.style = 'height: ' + h + 'px';
             }
@@ -399,7 +412,7 @@
         in the root div#impress element, but it is also allowed to set it for each step. Since transitioning
         to this step will rotate twice around it's axis, we give the transition a bit more time here.
     -->
-    <div id="moreinfo" class="step slide" data-x="2020" data-y="700" data-rotate="720" data-transition-duration="2000">
+    <div id="moreinfo" class="step slide" data-x="4400" data-y="1200" data-rotate="720" data-transition-duration="2000">
         <h1>More info</h1>
         <ul>
         <li><a href="https://github.com/impress/impress.js/blob/master/DOCUMENTATION.md">DOCUMENTATION.md</a> is the API reference.
@@ -429,7 +442,7 @@
          It's a common way of zooming out at the end, to show the whole presentation.
          In CSS, we set pointer-events:none to make this slide non-clickable. 
          It makes a difference at least for SVG content, such as the mermaid diagram. -->
-    <div id="overview" class="step" data-x="3000" data-y="1500" data-scale="10" style="pointer-events: none;">
+    <div id="overview" class="step" data-x="4500" data-y="1500" data-scale="10" style="pointer-events: none;">
     </div>
 </div>
 

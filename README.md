@@ -74,7 +74,6 @@ REPOSITORY STRUCTURE
 * [extras/](extras/) contains plugins that for various reasons aren't enabled by default. You have to explicitly add them with their own `script` element to use them.
 * [build.js](build.js): Simple build file that creates `js/impress.js`. It also creates a minified version `impress.min.js`, but that one is not included in the github repository.
 * [package.json](build.js): An NPM package specification. This was mainly added so you can easily install [buildify](https://www.npmjs.com/package/buildify) and run `node build.js`. Other than the build process, which is really just doing roughly `cat src/impress.js src/plugins/*/*.js > js/impress.js`, and testing, `impress.js` itself doesn't depend on Node or any NPM modules.
-* [bower.json](bower.json): A Bower package file. We also don't depend on Bower, but provide this file if you want to use it.
 
 WANT TO CONTRIBUTE?
 ---------------------
@@ -82,9 +81,7 @@ WANT TO CONTRIBUTE?
 For developers, once you've made changes to the code, you should run these commands for testing:
 
     npm install
-    npm run build
-    npm run test
-    npm run lint
+    npm run all
 
 Note that running `firefox qunit_test_runner.html` is usually more informative than running `karma` with `npm run test`. They both run the same tests.
 

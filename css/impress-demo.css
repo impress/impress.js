@@ -205,6 +205,12 @@ a:focus {
     ;)
 
     They cover everything what you see on first three steps of the demo.
+
+    All impress.js steps are wrapped inside a div element of 0 size! This means that relative
+    values for width and height (example: `width: 100%`) will not work. You need to use pixel
+    values. The pixel values used here correspond to the data-width and data-height given to the
+    #impress root element. When the presentation is viewed on a larger or smaller screen, impress.js
+    will automatically scale the steps to fit the screen.
 */
 .slide {
     display: block;
