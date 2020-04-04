@@ -180,20 +180,3 @@ img {
 .title h1 { top: 50px; }
 .title h2 { top: 400px; }
 .title h3 { top: 500px; }
-
-
-
-/***** Plugins ******/
-
-body.impress-mouse-timeout div#impress-toolbar {
-    display: none;
-}
-body.impress-mouse-timeout {
-    cursor: none;
-}
-
-/*
-   Disable mouse clicks / focus for body
-*/
-.impress-enabled                          { pointer-events: none }
-.impress-enabled #impress                 { pointer-events: auto }

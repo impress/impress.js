@@ -529,22 +529,6 @@ a:focus {
 }
 
 /*
-    With help from the mouse-timeout plugin, we can hide the toolbar and
-    have it show only when you move/click/touch the mouse.
-*/
-body.impress-mouse-timeout div#impress-toolbar {
-    display: none;
-}
-
-/*
-    In fact, we can hide the mouse cursor itself too, when mouse isn't used.
-*/
-body.impress-mouse-timeout {
-    cursor: none;
-}
-
-
-/*
     Now, when we have all the steps styled let's give users a hint how to navigate
     around the presentation.
 
@@ -676,41 +660,6 @@ body.impress-mouse-timeout {
     -o-transition:      opacity 1s 5s,      -o-transform 0.5s 4.5s;
     transition:         opacity 1s 5s,         transform 0.5s 4.5s;
 }
-
-/*
-    And as the last thing there is a workaround for quite strange bug.
-    It happens a lot in Chrome. I don't remember if I've seen it in Firefox.
-
-    Sometimes the element positioned in 3D (especially when it's moved back
-    along Z axis) is not clickable, because it falls 'behind' the <body>
-    element.
-
-    To prevent this, I decided to make <body> non clickable by setting
-    pointer-events property to `none` value.
-    Value if this property is inherited, so to make everything else clickable
-    I bring it back on the #impress element.
-
-    If you want to know more about `pointer-events` here are some docs:
-    https://developer.mozilla.org/en/CSS/pointer-events
-
-    There is one very important thing to notice about this workaround - it makes
-    everything 'unclickable' except what's in #impress element.
-
-    So use it wisely ... or don't use at all.
-*/
-.impress-enabled                          { pointer-events: none }
-.impress-enabled #impress                 { pointer-events: auto }
-
-/*
-    There is one funny thing I just realized.
-
-    Thanks to this workaround above everything except #impress element is invisible
-    for click events. That means that the hint element is also not clickable.
-    So basically all of this transforms and delayed transitions trickery was probably
-    not needed at all...
-
-    But it was fun to learn about it, wasn't it?
-*/
 
 /*
     That's all I have for you in this file.
