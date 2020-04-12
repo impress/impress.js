@@ -88,10 +88,6 @@ body {
 }
 .impress-enabled .step.active { opacity: 1 }
 
-.notes {
-    display: none;
-}
-
 h1, 
 h2, 
 h3 {
@@ -184,51 +180,3 @@ img {
 .title h1 { top: 50px; }
 .title h2 { top: 400px; }
 .title h3 { top: 500px; }
-
-
-
-/***** Plugins ******/
-.impress-enabled div#impress-toolbar {
-    position: fixed;
-    right: 1px;
-    bottom: 1px;
-    opacity: 0.6;
-}
-.impress-enabled div#impress-toolbar > span {
-    margin-right: 10px;
-}
-body.impress-mouse-timeout div#impress-toolbar {
-    display: none;
-}
-body.impress-mouse-timeout {
-    cursor: none;
-}
-/* Help popup plugin */
-.impress-enabled #impress-help {
-    background: none repeat scroll 0 0 rgba(0, 0, 0, 0.5);
-    color: #EEEEEE;
-    font-size: 80%;
-    position: fixed;
-    left: 2em;
-    bottom: 2em;
-    width: 24em;
-    border-radius: 1em;
-    padding: 1em;
-    text-align: center;
-    z-index: 100;
-    font-family: Verdana, Arial, Sans;
-}
-.impress-enabled #impress-help td {
-    padding-left: 1em;
-    padding-right: 1em;
-}
-
-
-
-/*
-   Disable mouse clicks / focus for body
-*/
-.impress-enabled                          { pointer-events: none }
-.impress-enabled #impress                 { pointer-events: auto }
-.impress-enabled #impress-toolbar         { pointer-events: auto }
-.impress-enabled #impress-console-button  { pointer-events: auto }

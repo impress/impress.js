@@ -1,6 +1,6 @@
 {
   "name": "impress.js",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "It's a presentation framework based on the power of CSS3 transforms and transitions in modern browsers and inspired by the idea behind prezi.com.",
   "main": "js/impress.js",
   "repository": {

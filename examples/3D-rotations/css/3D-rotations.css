@@ -58,10 +58,6 @@ body {
 
 }
 
-.notes {
-    display: none;
-}
-
 /* Overview step has no background or border */
 
 .overview {
@@ -165,85 +161,6 @@ small {
     font-size: 0.4em;
 }
 
-
-/*
-  This version of impress.js supports plugins, and in particular, a UI toolbar
-  plugin that allows easy navigation between steps and autoplay.
-*/
-.impress-enabled div#impress-toolbar {
-    position: fixed;
-    right: 1px;
-    bottom: 1px;
-    opacity: 0.6;
-    z-index: 10;
-}
-.impress-enabled div#impress-toolbar > span {
-    margin-right: 10px;
-}
-
-/*
-    With help from the mouse-timeout plugin, we can hide the toolbar and
-    have it show only when you move/click/touch the mouse.
-*/
-body.impress-mouse-timeout div#impress-toolbar {
-    display: none;
-}
-
-/*
-    In fact, we can hide the mouse cursor itself too, when mouse isn't used.
-*/
-body.impress-mouse-timeout {
-    cursor: none;
-}
-
-
-
-/* Progress bar */
-.impress-progressbar {
-  position: absolute;
-  right: 118px;
-  bottom: 1px;
-  left: 118px;
-  border-radius: 7px;
-  border: 2px solid rgba(100, 100, 100, 0.2);
-}
-.impress-progressbar DIV {
-  width: 0;
-  height: 2px;
-  border-radius: 5px;
-  background: rgba(75, 75, 75, 0.4);
-  transition: width 1s linear;
-}
-.impress-progress {
-  position: absolute;
-  left: 59px;
-  bottom: 1px;
-  text-align: left;
-  font-size: 10pt;
-  opacity: 0.6;
-}
-
-/* Help popup plugin */
-.impress-enabled #impress-help {
-    background: none repeat scroll 0 0 rgba(0, 0, 0, 0.5);
-    color: #EEEEEE;
-    font-size: 80%;
-    position: fixed;
-    left: 2em;
-    bottom: 2em;
-    width: 24em;
-    border-radius: 1em;
-    padding: 1em;
-    text-align: center;
-    z-index: 100;
-    font-family: Verdana, Arial, Sans;
-}
-.impress-enabled #impress-help td {
-    padding-left: 1em;
-    padding-right: 1em;
-}
-
-
 /* Styles specific to each step */
 
 #overview2 {
@@ -251,30 +168,3 @@ body.impress-mouse-timeout {
     padding-left: 200px;
     text-align: right;
 }
-
-
-/*
-    And as the last thing there is a workaround for quite strange bug.
-    It happens a lot in Chrome. I don't remember if I've seen it in Firefox.
-
-    Sometimes the element positioned in 3D (especially when it's moved back
-    along Z axis) is not clickable, because it falls 'behind' the <body>
-    element.
-
-    To prevent this, I decided to make <body> non clickable by setting
-    pointer-events property to `none` value.
-    Value if this property is inherited, so to make everything else clickable
-    I bring it back on the #impress element.
-
-    If you want to know more about `pointer-events` here are some docs:
-    https://developer.mozilla.org/en/CSS/pointer-events
-
-    There is one very important thing to notice about this workaround - it makes
-    everything 'unclickable' except what's in #impress element.
-
-    So use it wisely ... or don't use at all.
-*/
-.impress-enabled                          { pointer-events: none }
-.impress-enabled #impress                 { pointer-events: auto }
-.impress-enabled #impress-toolbar         { pointer-events: auto }
-.impress-enabled #impress-console-button  { pointer-events: auto }

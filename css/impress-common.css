@@ -1,0 +1,155 @@
+/* impress.js doesn't require any particular CSS file. 
+Each author should create their own, to achieve the visual style they want. 
+Yet in practice many plugins will not do anything useful without CSS. (See for example mouse-timeout plugin.) 
+This file contains sample CSS that you may want to use in your presentation. 
+It is focused on plugin functionality, not the visual style of your presentation. */
+
+/* Using the substep plugin, hide bullet points at first, then show them one by one. */
+#impress .step .substep {
+    opacity: 0;
+}
+
+#impress .step .substep.substep-visible {
+    opacity: 1;
+    transition: opacity 1s;
+}
+/*
+  Speaker notes allow you to write comments within the steps, that will not 
+  be displayed as part of the presentation. However, they will be picked up
+  and displayed by impressConsole.js when you press P.
+*/
+.notes {
+    display: none;
+}
+
+/* Toolbar plugin */
+.impress-enabled div#impress-toolbar {
+    position: fixed;
+    right: 1px;
+    bottom: 1px;
+    opacity: 0.6;
+    z-index: 10;
+}
+.impress-enabled div#impress-toolbar > span {
+    margin-right: 10px;
+}
+.impress-enabled div#impress-toolbar.impress-toolbar-show {
+    display: block;
+}
+.impress-enabled div#impress-toolbar.impress-toolbar-hide {
+    display: none;
+}
+
+/* Progress bar */
+.impress-progress {
+    position: absolute;
+    left: 59px;
+    bottom: 1px;
+    text-align: left;
+    font-size: 10pt;
+    opacity: 0.6;
+}
+.impress-enabled .impress-progressbar {
+  position: absolute;
+  right: 318px;
+  bottom: 1px;
+  left: 118px;
+  border-radius: 7px;
+  border: 2px solid rgba(100, 100, 100, 0.2);
+}
+.impress-progressbar {
+    right: 118px;
+}
+.impress-progressbar DIV {
+    width: 0;
+    height: 2px;
+    border-radius: 5px;
+    background: rgba(75, 75, 75, 0.4);
+    transition: width 1s linear;
+}
+.impress-enabled .impress-progress {
+  position: absolute;
+  left: 59px;
+  bottom: 1px;
+  text-align: left;
+  opacity: 0.6;
+}
+.impress-enabled #impress-help {
+    background: none repeat scroll 0 0 rgba(0, 0, 0, 0.5);
+    color: #EEEEEE;
+    font-size: 80%;
+    position: fixed;
+    left: 2em;
+    bottom: 2em;
+    width: 24em;
+    border-radius: 1em;
+    padding: 1em;
+    text-align: center;
+    z-index: 100;
+    font-family: Verdana, Arial, Sans;
+}
+.impress-enabled #impress-help td {
+    padding-left: 1em;
+    padding-right: 1em;
+}
+
+/*
+    With help from the mouse-timeout plugin, we can hide the toolbar and
+    have it show only when you move/click/touch the mouse.
+*/
+body.impress-mouse-timeout div#impress-toolbar {
+    display: none;
+}
+
+/*
+    In fact, we can hide the mouse cursor itself too, when mouse isn't used.
+*/
+body.impress-mouse-timeout {
+    cursor: none;
+}
+
+
+/*
+    And as the last thing there is a workaround for quite strange bug.
+    It happens a lot in Chrome. I don't remember if I've seen it in Firefox.
+
+    Sometimes the element positioned in 3D (especially when it's moved back
+    along Z axis) is not clickable, because it falls 'behind' the <body>
+    element.
+
+    To prevent this, I decided to make <body> non clickable by setting
+    pointer-events property to `none` value.
+    Value if this property is inherited, so to make everything else clickable
+    I bring it back on the #impress element.
+
+    If you want to know more about `pointer-events` here are some docs:
+    https://developer.mozilla.org/en/CSS/pointer-events
+
+    There is one very important thing to notice about this workaround - it makes
+    everything 'unclickable' except what's in #impress element.
+
+    So use it wisely ... or don't use at all.
+*/
+
+.impress-enabled                          { pointer-events: none }
+.impress-enabled #impress                 { pointer-events: auto }
+
+ /*If you disable pointer-events, you need to re-enable them for the toolbar.
+   And the speaker console while at it.*/
+
+.impress-enabled #impress-toolbar         { pointer-events: auto }
+.impress-enabled #impress-console-button  { pointer-events: auto }
+
+
+/*
+    There is one funny thing I just realized.
+
+    Thanks to this workaround above everything except #impress element is invisible
+    for click events. That means that the hint element is also not clickable.
+    So basically all of this transforms and delayed transitions trickery was probably
+    not needed at all...
+
+    But it was fun to learn about it, wasn't it?
+*/
+
+
