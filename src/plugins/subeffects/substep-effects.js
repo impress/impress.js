@@ -44,7 +44,7 @@
     var slide_from = null;
     /* Function for resetting the css attributes */
     function reset_css(sub_el){
-        for (var i = 0, atts = sub_el.attributes, n = atts.length, names = []; i < n; i++) {
+        for (var i = 0, atts = sub_el.attributes, n = atts.length; i < n; i++) {
             /* Find all objects that are referred by "data-style-only" */
             let len_str = "data-style-only".length;
             if ("data-style-only" === atts[i].nodeName.substring(0, len_str)) {
@@ -159,7 +159,7 @@
                 to_show.style.transition = "opacity 1s";
             });
             /* Apply the css attribute to the objects referred by "data-style-from" */ 
-            for (var i = 0, atts = sub_el.attributes, n = atts.length, names = []; i < n; i++) {
+            for (var i = 0, atts = sub_el.attributes, n = atts.length; i < n; i++) {
                 /* The css attribute are applied from the substep with "data-style-from" to the substep with "data-style-to" */
                 let len_str = "data-style-from".length;
                 if ("data-style-from" === atts[i].nodeName.substring(0, len_str)) {
@@ -204,7 +204,7 @@
                 to_show.style.transition = "opacity 1s";
             });
             
-            for (var i = 0, atts = sub_el.attributes, n = atts.length, names = []; i < n; i++) {
+            for (var i = 0, atts = sub_el.attributes, n = atts.length; i < n; i++) {
                 /* Apply the css attribute to the objects referred by "data-style-only" */ 
                 let len_str = "data-style-only".length;
                 if ("data-style-only" === atts[i].nodeName.substring(0, len_str)) {
