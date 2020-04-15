@@ -1,0 +1,505 @@
+/*
+We start with a good ol' reset.
+That's the one by Eric Meyer http://meyerweb.com/eric/tools/css/reset/
+You can probably argue if it is needed here, or not, but for sure it
+doesn't do any harm and gives us a fresh start.
+*/
+
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video,
+hr {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+}
+
+
+/* HTML5 display-role reset for older browsers */
+
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+    display: block;
+}
+
+body {
+    line-height: 1;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+/* Main - configurations */
+
+:root {
+    /* The basic color of the text*/
+    --ctext: white;
+    /* color of the background */
+    --cback: black;
+    /* Color of the object */
+    --cbasic: darkblue;
+    /* Todo color */
+    --ctodo: red;
+    /* Default margin and padding*/
+    --b-mar: 10px;
+    /* Slide size x */
+    --x-size: 1200px;
+    /* Slide size y */
+    --y-size: 675px;
+    /* Text size */
+    --size-text: 32px;
+    /* Slide padding */
+    --pad-size: 40px;
+    /* border size */
+    --border-size: 2px;
+    /* main-font */
+    --main-font: sans-serif;
+    /* Border radius */
+    --border-radius: 20px;
+}
+
+/* The substep is visible only when is active 
+   add to the substep a class only-active 
+*/
+
+#impress .step .substep {
+    opacity: 0;
+    transition: opacity 1s;
+}
+
+#impress .step .substep.substep-visible {
+    opacity: 1;
+    transition: opacity 1s;
+}
+
+
+/*
+    We display a fallback message for users with browsers that don't support
+    all the features required by it. All of the content will be still fully 
+    accessible for them, but some more advanced effects would be missing.
+    When impress.js detects that browser supports all necessary CSS3 features, 
+    the fallback-message style is hidden.
+*/
+
+.fallback-message {
+    font-family: var(--main-font);
+    line-height: 1.3;
+    width: 780px;
+    padding: 10px 10px 0;
+    margin: 20px auto;
+    border: 1px solid #E4C652;
+    border-radius: 10px;
+    background: #EEDC94;
+}
+
+.fallback-message p {
+    margin-bottom: 10px;
+}
+
+.impress-supported .fallback-message {
+    display: none;
+}
+
+
+/*
+  The body background is the bacgkround of "everything". Many
+  impress.js tools call it the "surface". It could also be a
+  picture or pattern, but we leave it as light gray.
+*/
+
+body {
+    font-family: var(--main-font);
+    min-height: 740px;
+    margin: 0px;
+    background: #000000;
+    color: #ffffff;
+}
+
+
+/*
+    Now let's style the presentation steps.
+*/
+
+.step {
+    display: block;
+    width: var(--x-size);
+    height: var(--y-size);
+    object-fit: cover;
+    padding: var(--pad-size) var(--pad-size);
+    color: var(--ctext);
+    font-style: normal;
+    font-size: var(--size-text);
+    letter-spacing: 1px;
+    line-height: normal;
+}
+
+.step .slide-border {
+    border: var(--border-size) solid var(--ctext);
+    width: 100%;
+    height: 100%;
+    margin: calc(-1 * var(--pad-size) - var(--border-size));
+    border-radius: var(--border-radius);
+    padding: var(--pad-size) var(--pad-size);
+}
+
+/* Inline code, no Highlight.js */
+
+code {
+    font-family: monospace;
+}
+
+
+/* Link */
+
+a {
+    color: inherit;
+    text-decoration: none;
+    padding: 0 0.1em;
+    background: rgba(200, 200, 200, 0.3);
+    text-shadow: -1px 1px 2px rgba(100, 100, 100, 0.9);
+    border-radius: 0.2em;
+    border-bottom: 1px solid rgba(100, 100, 100, 0.4);
+    border-left: 1px solid rgba(100, 100, 100, 0.4);
+    transition: 0.5s;
+}
+
+a:hover,
+a:focus {
+    background: rgba(200, 200, 200, 1);
+    text-shadow: -1px 1px 2px rgba(100, 100, 100, 0.5);
+}
+
+
+/* blockquote */
+
+blockquote,
+q {
+    quotes: initial;
+    display: inline;
+}
+
+blockquote:before,
+q:before {
+    content: open-quote;
+}
+
+blockquote:after,
+q:after {
+    content: close-quote;
+}
+
+
+/* list */
+
+ol,
+ul {
+    list-style: circle;
+    margin-block-start: 0em;
+    margin-block-end: 0em;
+    margin-left: 1em;
+}
+
+ul ul {
+    font-size: 0.9em;
+}
+
+ul li {
+    list-style-type: disc;
+}
+
+ul li li {
+    list-style-type: circle;
+}
+
+ul li li li {
+    list-style-type: square;
+}
+
+
+/*
+  This version of impress.js supports plugins, and in particular, a UI toolbar
+  plugin that allows easy navigation between steps and autoplay.
+*/
+
+.impress-enabled div#impress-toolbar {
+    position: fixed;
+    right: 1px;
+    bottom: 1px;
+    opacity: 0.6;
+    z-index: 10;
+}
+
+.impress-enabled div#impress-toolbar>span {
+    margin-right: 10px;
+}
+
+
+/*
+    With help from the mouse-timeout plugin, we can hide the toolbar and
+    have it show only when you move/click/touch the mouse.
+*/
+
+body.impress-mouse-timeout div#impress-toolbar {
+    display: none;
+}
+
+
+/*
+    In fact, we can hide the mouse cursor itself too, when mouse isn't used.
+*/
+
+body.impress-mouse-timeout {
+    cursor: none;
+}
+
+
+/* Progress bar */
+
+.impress-progressbar {
+    position: absolute;
+    right: 118px;
+    bottom: 3px;
+    left: 118px;
+    border-radius: 7px;
+    border: 2px solid rgba(100, 100, 100, 0.7);
+}
+
+.impress-progressbar DIV {
+    width: 0;
+    height: 3px;
+    border-radius: 5px;
+    background: rgba(75, 75, 75, 0.9);
+    transition: width 1s linear;
+}
+
+.impress-progress {
+    font-family: var(--main-font);
+    position: absolute;
+    right: 60px;
+    bottom: 1px;
+    font-size: 17px;
+    opacity: 0.9;
+}
+
+
+/* Help popup plugin */
+
+.impress-enabled #impress-help {
+    background: none repeat scroll 0 0 rgba(0, 0, 0, 0.5);
+    color: #EEEEEE;
+    font-size: 80%;
+    position: fixed;
+    right: 2em;
+    bottom: 2em;
+    width: 24em;
+    border-radius: 1em;
+    padding: 1em;
+    text-align: center;
+    z-index: 100;
+    font-family: var(--main-font);
+}
+
+.impress-enabled #impress-help td {
+    padding-left: 1em;
+    padding-right: 1em;
+}
+
+/* h1, h2, h3, lu layout */
+
+h1,
+h2,
+h3 {
+    margin-bottom: 0.1em;
+    margin-top: 0.1em;
+    text-align: left;
+}
+
+h1 {
+    font-size: 1.22em;
+}
+
+h2 {
+    font-size: 1.13em;
+}
+
+h3 {
+    font-size: 1.1em;
+}
+
+
+/* hr */
+
+hr {
+    border: 1px solid var(--ctext);
+    border-radius: 1px;
+    margin-top: var(--b-mar);
+    margin-bottom: var(--b-mar);
+}
+
+.slide-body div.vr,
+.slide-border div.vr {
+    border: 1px solid var(--ctext);
+    border-radius: 1px;
+    padding: 0px;
+}
+
+
+/* Body slide margins */
+
+.slide-body li,
+.slide-border li {
+    /* padding: var(--b-mar); */
+    margin: var(--b-mar);
+}
+
+.slide-body div,
+.slide-border div {
+    /* padding: var(--b-mar); */
+    margin: var(--b-mar);
+}
+
+.slide-body div.row,
+.slide-body .row>.column>div,
+.slide-border div.row,
+.slide-border .row>.column>div {
+    padding: 0px;
+    margin: 0px;
+    margin-top: -5px;
+}
+
+.slide-body .row,
+.slide-border .row {
+    display: flex;
+}
+
+.slide-body .column,
+.slide-border .column {
+    flex: 50%;
+}
+
+
+/* References */
+
+.slide-body .ref,
+.slide-border .ref {
+    font-size: 0.6em;
+    position: fixed;
+    bottom: 0px;
+    width: 90%;
+}
+
+
+/* Title tayout */
+
+.slide-border .title .logo {
+    width: 150px;
+    position: fixed;
+    top: 55px;
+    right: 75px;
+    filter: invert(1);
+}
+
+.slide-border .title {
+    margin-bottom: 20%;
+    margin-left: 3%;
+    margin-right: 3%;
+    margin-top: 15%;
+    text-align: left;
+}
+
+.slide-border .title h1 {
+    font-size: 1.3em;
+}
+

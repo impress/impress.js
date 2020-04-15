@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Substep Effects</title>
+    <meta name="description" content="How to use Substep Effect Plugin" />
+    <meta name="author" content="Gastone Pietro Rosati Papini" />
+    <link href="basic.css" rel="stylesheet" />
+</head>
+
+<body class="impress-not-supported">
+    <div class="fallback-message">
+        <p>Your browser <b>doesn't support the features required</b> by impress.js, so you are presented with a simplified version of this presentation.</p>
+        <p>For the best experience please use the latest <b>Chrome</b>, <b>Safari</b> or <b>Firefox</b> browser.</p>
+    </div>
+
+
+    <div id="impress" data-transition-duration="1000">
+        <div class="step" id="title" data-scale="1" data-rotate="0" data-x="0" data-y="0" data-z="0">
+            <div class="slide-border">
+                <div class="title">
+                    <h1>Substep Effects Plugin how it works!</h1>
+                    <div class="slide-body">
+                        <hr>
+                        <h2>Gastone Pietro Rosati Papini</h2>
+                        <div style="font-size: 0.75em; padding: 0; margin: 0; margin-top: 10px;"><a href="my-website">website</a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="step" id="dynamic-substep" data-scale="1" data-rotate="0" data-x="0" data-rel-y="1000" data-z="0">
+            <div class="slide-body slide-border">
+                <h1>Classic animation using 'substep'</h1>
+                <hr>
+                <pre style="font-size: 0.5em; line-height: 1em;">
+<code>&lt;ul>
+    &lt;li class="substep">Object 1&lt;/li>
+    &lt;li class="substep">Object 2&lt;/li>
+&lt;/ul></code>
+                </pre>
+                <hr>
+                <div>Add 'substep' class to add animations inside the slide</div>
+                <ul>
+                    <li class="substep">Object 1</li>
+                    <li class="substep">Object 2</li>
+                </ul>
+            </div>
+        </div>
+        <div class="step" id="dynamic-substep-show-from" data-scale="1" data-rotate="0" data-x="0" data-rel-y="1000" data-z="0">
+            <div class="slide-body slide-border">
+                <h1>Show other objects with the substep element</h1>
+                <hr>
+                <pre style="font-size: 0.5em;">
+<code>&lt;div class="substep" data-show-from="mylist">List&lt;/div>
+&lt;ul class="mylist">
+    &lt;li>Object 1&lt;/li>
+    &lt;li>List of List:
+        &lt;ul>
+            &lt;li class="substep">Object 1&lt;/li>
+            &lt;li>
+                List of List:
+                &lt;ul>
+                    &lt;li>Object 1&lt;/li>
+                    &lt;li>Object 2&lt;/li>
+                &lt;/ul>
+            &lt;/li>
+        &lt;/ul>
+    &lt;/li>
+&lt;/ul></code></pre>
+                <hr>
+                <div class="substep" data-show-from="my-list">Use 'data-show-from' attr in the substep to show other objects together</div>
+                <ul class="my-list">
+                    <li>Object 1</li>
+                    <li>List of List:
+                        <ul>
+                            <li class="substep">Object 1</li>
+                            <li>
+                                List of List:
+                                <ul>
+                                    <li>Object 1</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="step" id="dynamic-substep-show" data-scale="1" data-rotate="0" data-x="0" data-rel-y="1000" data-z="0">
+            <div class="slide-body slide-border">
+                <h1>Show objects only when substep is active</h1>
+                <hr>
+                <pre style="font-size: 0.5em;">
+<code>&lt;div class="row">
+    &lt;div class="column">
+        List
+        &lt;ul>
+            &lt;li class="substep" data-show-only="img1">Image 1&lt;/li>
+            &lt;li class="substep" data-show-only="img2">Image 2&lt;/li>
+        &lt;/ul>
+    &lt;/div>
+    &lt;div class="column" style="position: relative;">
+        &lt;div class="img1" style="position:absolute; width:100%; height: 200px; background: red;" >&lt;/div>
+        &lt;div class="img2" style="position:absolute; width:100%; height: 300px; background: green;" >&lt;/div>
+    &lt;/div>
+&lt;/div></code></pre>
+                <hr>
+                <div class="row">
+                    <div class="column">
+                        <div>Use 'data-show-only' attr in the substep to show other objects together but only when this substep is active</div>
+                        <ul>
+                            <li class="substep" data-show-only="img1-show">Image 1</li>
+                            <li class="substep" data-show-only="img2-show">Image 2</li>
+                        </ul>
+                    </div>
+                    <div class="column" style="position: relative;">
+                        <div class="img1-show" style="position:absolute; width:100%; height: 200px; background: red;"></div>
+                        <div class="img2-show" style="position:absolute; width:100%; height: 300px; background: green;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="step" id="dynamic-substep-hide" data-scale="1" data-rotate="0" data-x="0" data-rel-y="1000" data-z="0">
+            <div class="slide-body slide-border">
+                <h1>Hide objects only when substep is active</h1>
+                <hr>
+                <pre style="font-size: 0.5em;">
+<code>&lt;div class="row">
+    &lt;div class="column">
+        &lt;ul>
+            &lt;li class="substep" data-show-only="text1" data-hide-only="img1-hide">Hide image 1&lt;/li>
+            &lt;li class="substep" data-show-only="text2" data-hide-only="img2-hide">Hide image 2&lt;/li>
+        &lt;/ul>
+    &lt;/div>
+    &lt;div class="column" style="flex:30%">
+        &lt;div style="position: relative;">
+            &lt;div class="text1" style="position:absolute; bottom: 0;" >This is the first schema!&lt;/div>
+            &lt;img class="img1-hide" style="width:100%; background: red; height: 120px;" >&lt;/div>
+        &lt;/div>
+        &lt;div style="position: relative;">
+            &lt;div class="text2" style="position:absolute;" >This is the second schema!&lt;/div>
+            &lt;img class="img2-hide" style="width:100%; background: green; height: 120px;">&lt;/div>
+        &lt;/div>
+    &lt;/div>
+&lt;/div></code></pre>
+                <hr>
+                <div class="row">
+                    <div class="column">
+                        <div>Use 'data-hide-only' attr in the substep to hide objects when the substep is active</div>
+                        <ul>
+                            <li class="substep" data-show-only="text1" data-hide-only="img1-hide">Hide image 1</li>
+                            <li class="substep" data-show-only="text2" data-hide-only="img2-hide">Hide image 2</li>
+                        </ul>
+                    </div>
+                    <div class="column" style="flex:35%">
+                        <div style="position: relative;">
+                            <div class="text1" style="position:absolute; bottom: 0;" >This is the first schema!</div>
+                            <div class="img1-hide" style="width:100%; height: 120px; background: red;"></div>
+                        </div>
+                        <div style="position: relative;">
+                            <div class="text2" style="position:absolute;" >This is the second schema!</div>
+                            <div class="img2-hide" style="width:100%; height: 120px; background: green;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="step" id="dynamic-substep-hide-from" data-scale="1" data-rotate="0" data-x="0" data-rel-y="1000" data-z="0">
+            <div class="slide-body slide-border">
+                <h1>Hide objects from substep to substep</h1>
+                <hr>
+                <pre style="font-size: 0.5em;">
+<code>&lt;div class="column">
+    Hide the image from step 2 to step 4:
+    &lt;ul>
+        &lt;li class="substep">Step 1&lt;/li>
+        &lt;li class="substep" data-hide-from="img5">Step 2: Hide Img&lt;/li>
+        &lt;li class="substep">Step 3&lt;/li>
+        &lt;li class="substep" data-hide-to="img5">Step 4: Show Img&lt;/li>
+        &lt;li class="substep">Step 5&lt;/li>
+    &lt;/ul>
+    &lt;div class="img5" style="width:100%; height: 200px; background: red;">&lt;/div>
+&lt;/div></code></pre>
+                <hr>
+                <div class="row">
+                    <div class="column">
+                        Use 'data-hide-from' and 'data-hide-to' to hide the image from a substep to substep:
+                        <ul>
+                            <li class="substep">Step 1</li>
+                            <li class="substep" data-hide-from="img5">Step 2: Hide image</li>
+                            <li class="substep">Step 3</li>
+                            <li class="substep" data-hide-to="img5">Step 4: Show image</li>
+                            <li class="substep">Step 5</li>
+                        </ul>
+                    </div>
+                    <div class="column">
+                        <div class="img5" style="width:100%; height: 200px; background: red;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="step" id="dynamic-substep-show-from-to" data-scale="1" data-rotate="0" data-x="0" data-rel-y="1000" data-z="0">
+            <div class="slide-body slide-border">
+                <h1>Show objects from substep to substep</h1>
+                <hr>
+                <div class="row">
+                    <div class="column">
+                        <pre style="font-size: 0.5em;">
+<code>Show the image from 2 to 4 and from 7 to 9
+&lt;ul>
+    &lt;li class="substep">Step 1&lt;/li>
+    &lt;li class="substep" data-show-from="img6">Step 2: Show image&lt;/li>
+    &lt;li class="substep">Step 3&lt;/li>
+    &lt;li class="substep" data-show-to="img6">Step 4: Hide image&lt;/li>
+    &lt;li class="substep">Step 5&lt;/li>
+    &lt;li class="substep">Step 6&lt;/li>
+    &lt;li class="substep" data-show-from="img6">Step 7: Show image&lt;/li>
+    &lt;li class="substep">Step 8&lt;/li>
+    &lt;li class="substep" data-show-to="img6">Step 9: Hide image&lt;/li>
+    &lt;li class="substep">Step 10&lt;/li>
+&lt;/ul>
+&lt;div class="img6" 
+    style="width:100%; height: 150px; background: red;">&lt;/div></code></pre>
+                    </div>
+                    <div class="vr"></div>
+                    <div class="column" style="font-size: 0.75em;">
+                        Use 'data-show-from' and 'data-show-to' to show the image from a substep to a substep
+                        <ul>
+                            <li class="substep">Step 1</li>
+                            <li class="substep" data-show-from="img6">Step 2: Show image</li>
+                            <li class="substep">Step 3</li>
+                            <li class="substep" data-show-to="img6">Step 4: Hide image</li>
+                            <li class="substep">Step 5</li>
+                            <li class="substep" data-show-from="img6">Step 6: Show image</li>
+                            <li class="substep">Step 7</li>
+                            <li class="substep" data-show-to="img6">Step 8: Hide image</li>
+                            <li class="substep">Step 9</li>
+                        </ul>
+                        <div class="img6" style="width:100%; height: 150px; background: red;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="step" id="dynamic-substep-custom-attributes" data-scale="1" data-rotate="0" data-x="0" data-rel-y="1000" data-z="0">
+            <div class="slide-body slide-border">
+                <h1>Apply style to objects only when certain substep is active</h1>
+                <hr>
+                <pre style="font-size: 0.45em;">
+<code>&lt;div class="row">
+    &lt;div class="column" style="font-size: 0.65em;">
+        &lt;ul>
+            &lt;li class="substep obj1" data-style-only-obj5="opacity: 0;" 
+                data-style-only-obj1="transition: color 1s linear; color: yellow;">
+                Step 1: step 1 turns yellow and hide the figure&lt;/li>
+            &lt;li class="substep obj2" data-style-only-obj1="transition: color 1s linear; color: red;" 
+                data-style-only-obj2="border: 2px solid white;">Step 2: step 1 turns red and step 2 adds border&lt;/li>
+            &lt;li class="substep obj3" 
+                data-style-only-obj3="transition: opacity 1s linear, color 1s linear; opacity: 50%; color: yellow;">
+                Step 3: step 3 turn yellow and trasparent&lt;/li>
+            &lt;li class="substep obj4" data-style-only-obj1="border: 2px solid green;" 
+                data-style-only-obj4="transform: translate(50px,0px);">Step 4: step 1 adds border and step 4 moves&lt;/li>
+        &lt;/ul>
+    &lt;/div>
+    &lt;div class="column">
+        &lt;div class="img5" data-style-base="width:100%; height: 200px; background: red;">&lt;/div>
+    &lt;/div>
+&lt;/div></code></pre>
+                <hr>
+                <div class="row">
+                    <div class="column" style="font-size: 0.65em;">
+                        Use 'data-style-only-CLASS' to add properties to objects with class=CLASS using substeps:
+                        <ul>
+                            <li class="substep obj1" data-style-only-obj5="opacity: 0;" data-style-only-obj1="transition: color 1s linear; color: yellow;">Step 1: step 1 turns yellow and hide the figure</li>
+                            <li class="substep obj2" data-style-only-obj1="transition: color 1s linear; color: red;" data-style-only-obj2="border: 2px solid white;">Step 2: step 1 turns red and step 2 adds border</li>
+                            <li class="substep obj3" data-style-only-obj3="transition: opacity 1s linear, color 1s linear; opacity: 50%; color: yellow;">Step 3: step 3 turn yellow and trasparent</li>
+                            <li class="substep obj4" data-style-only-obj1="border: 2px solid green;" data-style-only-obj4="transform: translate(50px,0px);">Step 4: step 1 adds border and step 4 moves</li>
+                        </ul>
+                    </div>
+                    <div class="column">
+                        <div class="obj5" data-style-base="width:100%; height: 150px; background: red;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="step" id="dynamic-substep-custom-attributes-from" data-scale="1" data-rotate="0" data-x="0" data-rel-y="1000" data-z="0">
+            <div class="slide-body slide-border">
+                <h1>Apply style to objects from substep to substep</h1>
+                <hr>
+                <pre style="font-size: 0.45em;">
+<code>&lt;div class="row">
+    &lt;div class="column" style="font-size: 0.75em;">
+        Use 'data-style-form-CLASS' to add style to objects with class=CLASS from a substep until 'data-style-to-CLASS':
+        &lt;ul>
+            &lt;li class="substep obj1" data-style-from-obj5="opacity: 0;" 
+                data-style-form-obj1="transition: color 1s linear; color: yellow;">
+                Step 1: step 1 turns yellow and hide the figure&lt;/li>
+            &lt;li class="substep obj2" data-style-from-obj1="transition: color 1s linear; color: red;" 
+                data-style-from-obj2="border: 2px solid white;">Step 2: step 1 turns red and step 2 adds border&lt;/li>
+            &lt;li class="substep obj3" data-style-to-obj5 
+                data-style-from-obj3="transition: opacity 1s linear, color 1s linear; opacity: 50%; color: yellow;">
+                Step 3: step 3 turns yellow and trasparent and css of the figure is reset&lt;/li>
+            &lt;li class="substep obj4" data-style-to-obj1 data-style-from-obj4="transform: translate(50px,0px);">
+                Step 4: step 4 moves and css of step 1 is reset&lt;/li>
+        &lt;/ul>
+    &lt;/div>
+    &lt;div class="column">
+        &lt;div class="img5" data-style-base="width:100%; height: 200px; background: red;">&lt;/div>
+    &lt;/div>
+&lt;/div></code></pre>
+                <hr>
+                <div class="row">
+                    <div class="column" style="font-size: 0.60em;">
+                        Use 'data-style-form-CLASS' to add style to objects with class=CLASS from a substep until 'data-style-to-CLASS':
+                        <ul>
+                            <li class="substep obj1" data-style-from-obj5="opacity: 0;" data-style-form-obj1="transition: color 1s linear; color: yellow;">Step 1: step 1 turns yellow and hide the figure</li>
+                            <li class="substep obj2" data-style-from-obj1="transition: color 1s linear; color: red;" data-style-from-obj2="border: 2px solid white;">Step 2: step 1 turns red and step 2 adds border</li>
+                            <li class="substep obj3" data-style-to-obj5 data-style-from-obj3="transition: opacity 1s linear, color 1s linear; opacity: 50%; color: yellow;">Step 3: step 3 turns yellow and trasparent and css of the figure is reset</li>
+                            <li class="substep obj4" data-style-to-obj1 data-style-from-obj4="transform: translate(50px,0px);">Step 4: step 4 moves and css of step 1 is reset</li>
+                        </ul>
+                    </div>
+                    <div class="column">
+                        <div class="obj5" data-style-base="width:100%; height: 150px; background: red;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="impress-progressbar">
+        <div id="anim "></div>
+    </div>
+    <div class="impress-progress"></div>
+
+    <script type="text/javascript" src="../../../js/impress.js"></script>
+    <script type="text/javascript" src="substep-effects.js"></script>
+    <script>
+        impress().init();
+    </script>
+</body>
+
+</html>
