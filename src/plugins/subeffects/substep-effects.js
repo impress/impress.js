@@ -4,32 +4,32 @@
  * This plugin will do the following things:
  *
  *  - The plugin adds the effects for the substeps.
- * 
+ *
  *      When an object with class substep uses one of the following attributes, 
  *      the value of these attributes indicate the objects that are subjected to some effectes:
- * 
+ *
  *      - data-show-only = "CLASS" : The objects with class="CLASS" are shown only
  *          in the corresponding substep.
- * 
+ *
  *      - data-hide-only = "CLASS" : The objects with class="CLASS" are hidden only
  *          in the corresponding substep.
- * 
+ *
  *      - data-show-from = "CLASS" : The objects with class="CLASS" are shown from
  *          the corresponding substep until the end or "data-show-to".
  *      - data-show-to = "CLASS" : It is used with "data-show-from", the objects with
  *          class="CLASS" are shown from the substep with "data-show-from" to
  *          the corresponding substep.
- * 
+ *
  *      - data-hide-from = "CLASS" : The objects with class="CLASS" are hidden from the
  *          corresponding substep until the end or "data-hide-to".
  *      - data-hide-to = "CLASS" : It is used with "data-hide-from", the objects with
  *          class="CLASS" are hidden from the substep with "data-hide-from" to the
  *          corresponding substep.
- *      
+ *
  *      When an object with class substep uses one of the following attributes,
  *      the value of these attributes indicate the css style to apply to a certain class.
  *      In particular:
- * 
+ *
  *      - data-style-only-CLASS = "STYLE_LIST" : Apply to objects with class=CLASS the css
  *          style="STYL_LIST" only in the corresponding substep.
  *
@@ -39,7 +39,7 @@
  *          the objects with class="CLASS" are setted to style="" or if
  *          "data-style-base='LIST_STYLE_BASE'" is configured in the object with class=CLASS
  *          the style is setted to style="LIST_STYLE_BASE".
- *      
+ *
  *      Some examples of all these features are presented in the file example.html
  *
  *
@@ -83,7 +83,7 @@
         }
     }
 
-    document.addEventListener("impress:stepenter", function( event ) {
+    document.addEventListener( "impress:stepenter", function( event ) {
         /* It is used when I start from a slide (F5 - refesh) */
         event.target.querySelectorAll( ".substep" ).forEach( subElem => {
             /* Hide from the beginning all elements that are referred by "data-show-only"
@@ -104,7 +104,7 @@
             } );
             /* Set the base css attribute to the objects */
             resetCss( subElem );
-        });
+        } );
         /* Reset the of the objects that are modified to the default */
         /* It is useful when I show element of other slide */
         if ( slideFrom !== null ) {
@@ -149,7 +149,7 @@
             if (event.type === "impress:substep:stepleaveaborted") {
                 resetCss( subElem );
             }
-        });
+        } );
         /* Active the condition of the each visible substep */
         event.target.querySelectorAll( ".substep.substep-visible" ).forEach(subElem => {
             /* Show the elements that are referred between "data-show-from" and "data-show-to" */
@@ -240,7 +240,7 @@
                     document.querySelectorAll(
                         "." + atts[ i ].nodeName.substring( lenStr + 1 )
                     ).forEach( obj => {
-                        obj.setAttribute("style", value );
+                        obj.setAttribute( "style", value );
                     } );
                 }
                 /* Reset the css attribute to the objects referred  by "data-style-to" */
@@ -265,7 +265,7 @@
         /* At each substep */
         elem.addEventListener( "impress:substep:enter", subEffects, false );
         elem.addEventListener( "impress:substep:stepleaveaborted", subEffects, false );
-    });
+    } );
 
     document.addEventListener( "impress:stepleave", function( event ) {
         /* Save the step has to be reset when I enter in the new step */
@@ -280,7 +280,8 @@
             ).forEach( obj => {
                 obj.style.opacity = 0;
                 obj.style.transition = "";
-            });
+            } );
+
             /* Show all elements are referred by "data-hide-only" or "data-hide-only"
                 in all substeps */
             document.querySelectorAll(
@@ -290,8 +291,9 @@
                 obj.style.transition = "";
                 obj.style.opacity = 1;
             } );
+
             // /* Set the base css attribute to the objects */
             // resetCss(subElem);
         } );
     }, false );
-})( document );
+} )( document );
