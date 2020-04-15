@@ -127,7 +127,7 @@
             /* Show all elements are referred by "data-hide-only" and "data-hide-from" in all substeps */
             document.querySelectorAll(
                 "." + subElem.getAttribute("data-hide-only") + "," +
-                "." + subElemem.getAttribute("data-hide-from")
+                "." + subElem.getAttribute("data-hide-from")
             ).forEach(obj => {
                 obj.style.opacity = 1;
                 obj.style.transition = "opacity 1s";
