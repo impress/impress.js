@@ -1,9 +1,7 @@
 /**
  * Substep effects Plugin
  *
- * This plugin will do the following things:
- *
- *  - The plugin adds the effects for the substeps.
+ * The plugin adds the effects for the substeps, this plugin will do the following things:
  *
  *      When an object with class substep uses one of the following attributes, 
  *      the value of these attributes indicate the objects that are subjected to some effectes:
@@ -146,12 +144,12 @@
                 obj.style.transition = "opacity 1s";
             } );
             /* Set the base css attribute to the objects */
-            if (event.type === "impress:substep:stepleaveaborted") {
+            if ( event.type === "impress:substep:stepleaveaborted" ) {
                 resetCss( subElem );
             }
         } );
         /* Active the condition of the each visible substep */
-        event.target.querySelectorAll( ".substep.substep-visible" ).forEach(subElem => {
+        event.target.querySelectorAll( ".substep.substep-visible" ).forEach( subElem => {
             /* Show the elements that are referred between "data-show-from" and "data-show-to" */
             /* Hide the elements that are referred between "data-hide-from" and "data-hide-to" */
             /* Show all elements that are referred by "data-show-from" or "data-show-to" in the
@@ -221,7 +219,7 @@
                 obj.style.opacity = 0;
                 obj.style.transition = "opacity 1s";
             } );
-            
+
             for ( var i = 0, atts = subElem.attributes, n = atts.length; i < n; i++ ) {
                 /* Apply the css attribute to the objects referred by "data-style-only" */
                 let lenStr = "data-style-only".length;
