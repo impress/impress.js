@@ -163,10 +163,11 @@
                 /* The css attribute are applied from the substep with "data-style-from" to the substep with "data-style-to" */
                 let len_str = "data-style-from".length;
                 if ("data-style-from" === atts[i].nodeName.substring(0, len_str)) {
+                    let value = atts[i].value;
                     document.querySelectorAll(
                         "." + atts[i].nodeName.substring(len_str+1)
                     ).forEach(to_show => {
-                        to_show.setAttribute("style", atts[i].value);
+                        to_show.setAttribute("style", value);
                     });
                 }
                 len_str = "data-style-to".length;
@@ -208,19 +209,21 @@
                 /* Apply the css attribute to the objects referred by "data-style-only" */ 
                 let len_str = "data-style-only".length;
                 if ("data-style-only" === atts[i].nodeName.substring(0, len_str)) {
+                    let value = atts[i].value;
                     document.querySelectorAll(
                         "." + atts[i].nodeName.substring(len_str+1)
                     ).forEach(to_show => {
-                        to_show.setAttribute("style", atts[i].value);
+                        to_show.setAttribute("style", value);
                     });
                 }
                 /* Apply the css attribute to the objects referred  by "data-style-from" */ 
                 len_str = "data-style-from".length;
                 if ("data-style-from" === atts[i].nodeName.substring(0, len_str)) {
+                    let value = atts[i].value;
                     document.querySelectorAll(
                         "." + atts[i].nodeName.substring(len_str+1)
                     ).forEach(to_show => {
-                        to_show.setAttribute("style", atts[i].value);
+                        to_show.setAttribute("style", value);
                     });
                 }
                 /* Reset the css attribute to the objects referred  by "data-style-to" */ 
@@ -272,4 +275,4 @@
             // reset_css(sub_el);
         });
     }, false);
-})(document)
+})(document);
