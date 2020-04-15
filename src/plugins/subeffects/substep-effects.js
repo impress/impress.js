@@ -2,7 +2,7 @@
  * Substep effects Plugin
  *
  * The plugin adds the effects for the substeps, this plugin will do the following things:
- *      When an object with class substep uses one of the following attributes, 
+ *      When an object with class substep uses one of the following attributes,
  *      the value of these attributes indicate the objects that are subjected to some effectes:
  *
  *      - data-show-only = "CLASS" : The objects with class="CLASS" are shown only
