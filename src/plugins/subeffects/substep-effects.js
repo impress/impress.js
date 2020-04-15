@@ -27,7 +27,7 @@
  *          corresponding substep.
  *      
  *      When an object with class substep uses one of the following attributes,
- *      the value of these attributes indicate the css style to apply to a certain class. 
+ *      the value of these attributes indicate the css style to apply to a certain class.
  *      In particular:
  * 
  *      - data-style-only-CLASS = "STYLE_LIST" : Apply to objects with class=CLASS the css
@@ -172,8 +172,8 @@
                 obj.style.opacity = 0;
                 obj.style.transition = "opacity 1s";
             } );
-            /* Apply the css attribute to the objects referred by "data-style-from" */ 
-            for ( var i = 0, atts = subElem.attributes, n = atts.length; i < n; i++)  {
+            /* Apply the css attribute to the objects referred by "data-style-from" */
+            for ( var i = 0, atts = subElem.attributes, n = atts.length; i < n; i++ )  {
                 /* The css attribute are applied from the substep with "data-style-from" to the
                     substep with "data-style-to" */
                 let lenStr = "data-style-from".length;
@@ -182,7 +182,7 @@
                     document.querySelectorAll(
                         "." + atts[ i ].nodeName.substring( lenStr + 1 )
                     ).forEach( obj => {
-                        obj.setAttribute( "style" , value );
+                        obj.setAttribute( "style", value );
                     } );
                 }
                 lenStr = "data-style-to".length;
@@ -193,7 +193,7 @@
                         /* Set style to "" or set style to "data-style-base" */
                         obj.setAttribute( "style", "" );
                         if ( obj.getAttribute( "data-style-base" ) ) {
-                            obj.setAttribute( "style" , obj.getAttribute( "data-style-base" ));
+                            obj.setAttribute( "style", obj.getAttribute( "data-style-base" ) );
                         }
                     } );
                 }
@@ -223,19 +223,19 @@
             } );
             
             for ( var i = 0, atts = subElem.attributes, n = atts.length; i < n; i++ ) {
-                /* Apply the css attribute to the objects referred by "data-style-only" */ 
+                /* Apply the css attribute to the objects referred by "data-style-only" */
                 let lenStr = "data-style-only".length;
-                if ( "data-style-only" === atts[ i ].nodeName.substring( 0 , lenStr ) ) {
+                if ( "data-style-only" === atts[ i ].nodeName.substring( 0, lenStr ) ) {
                     const value = atts[ i ].value;
                     document.querySelectorAll(
                         "." + atts[ i ].nodeName.substring( lenStr + 1 )
                     ).forEach( obj => {
-                        obj.setAttribute( "style" , value );
+                        obj.setAttribute( "style", value );
                     } );
                 }
-                /* Apply the css attribute to the objects referred  by "data-style-from" */ 
+                /* Apply the css attribute to the objects referred  by "data-style-from" */
                 lenStr = "data-style-from".length;
-                if ( "data-style-from" === atts[ i ].nodeName.substring( 0 , lenStr ) ) {
+                if ( "data-style-from" === atts[ i ].nodeName.substring( 0, lenStr ) ) {
                     const value = atts[ i ].value;
                     document.querySelectorAll(
                         "." + atts[ i ].nodeName.substring( lenStr + 1 )
@@ -243,16 +243,16 @@
                         obj.setAttribute("style", value );
                     } );
                 }
-                /* Reset the css attribute to the objects referred  by "data-style-to" */ 
+                /* Reset the css attribute to the objects referred  by "data-style-to" */
                 lenStr = "data-style-to".length;
                 if ( "data-style-to" === atts[ i ].nodeName.substring( 0, lenStr ) ) {
                     document.querySelectorAll(
                         "." + atts[ i ].nodeName.substring( lenStr + 1 )
                     ).forEach( obj => {
                         /* Set style to "" or set style to "data-style-base" */
-                        obj.setAttribute( "style" , "" );
+                        obj.setAttribute( "style", "" );
                         if ( obj.getAttribute( "data-style-base" ) ) {
-                            obj.setAttribute( "style" , obj.getAttribute( "data-style-base" ) );
+                            obj.setAttribute( "style", obj.getAttribute( "data-style-base" ) );
                         }
                     } );
                 }
@@ -263,11 +263,11 @@
     let elementsArray = document.querySelectorAll( ".step" );
     elementsArray.forEach( function( elem ) {
         /* At each substep */
-        elem.addEventListener( "impress:substep:enter" , subEffects , false );
-        elem.addEventListener( "impress:substep:stepleaveaborted" , subEffects , false );
+        elem.addEventListener( "impress:substep:enter", subEffects, false );
+        elem.addEventListener( "impress:substep:stepleaveaborted", subEffects, false );
     });
 
-    document.addEventListener( "impress:stepleave" , function( event ) {
+    document.addEventListener( "impress:stepleave", function( event ) {
         /* Save the step has to be reset when I enter in the new step */
         slideFrom = event.target;
         /* Effect to be set-up before entering in the step */
