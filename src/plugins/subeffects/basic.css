@@ -503,9 +503,12 @@ hr {
     font-size: 1.3em;
 }
 
+.substep-to-show{
+    opacity: 0;
+    transition: opacity 1s ease 0s; 
+}
 
-
-.substep-show-element{
+.substep-to-show.substep-show-element{
     opacity: 1;
     transition: opacity 1s ease 0s;    
 }

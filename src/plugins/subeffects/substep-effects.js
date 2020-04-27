@@ -45,40 +45,59 @@
  * Released under the MIT license.
  */
 
+ // L'idea nuova è fare 3 classi
+ // data-addto-CLASS = "TOCLASS" applica la classe CLASS agli oggetti di classe TOCLASS solo per quel substep
+ // data-addto-CLASS = "TOCLASS" e data-removeto-CLASS = "TOCLASS" aggiungi la class CLASS all'oggetto TOCLASS dal substep from a al to
+
 ( function( document ) {
     "use strict";
     var slideFrom = null;
     /* Function for resetting the css attributes */
     function resetCss( subElem ) {
         for ( var i = 0, atts = subElem.attributes, n = atts.length; i < n; i++ ) {
-            /* Find all objects that are referred by "data-style-only" */
-            let lenStr = "data-style-only".length;
-            if ( "data-style-only" === atts[ i ].nodeName.substring( 0, lenStr ) ) {
+            let lenStr = "data-add-only".length;
+            if ( "data-add-only" === atts[ i ].nodeName.substring( 0, lenStr ) ) {
+                const toClass = atts[ i ].value;
                 document.querySelectorAll(
                     "." + atts[ i ].nodeName.substring( lenStr + 1 )
                 ).forEach( obj => {
-                    /* Set style to "" or set style to "data-style-base" */
-                    obj.setAttribute( "style", "" );
-                    if ( obj.getAttribute( "data-style-base" ) ) {
-                        obj.setAttribute( "style", obj.getAttribute( "data-style-base" ) );
-                    }
-                } );
-            }
-            /* Find all objects that are referred by "data-style-from" */
-            lenStr = "data-style-from".length;
-            if ( "data-style-from" === atts[ i ].nodeName.substring( 0, lenStr ) ) {
-                document.querySelectorAll(
-                    "." + atts[ i ].nodeName.substring( lenStr + 1 )
-                ).forEach( obj => {
-                    /* Set style to "" or set style to "data-style-base" */
-                    obj.setAttribute( "style", "" );
-                    if ( obj.getAttribute( "data-style-base" ) ) {
-                        obj.setAttribute( "style", obj.getAttribute( "data-style-base" ) );
-                    }
+                    /* Remove classes */
+                    obj.classList.remove(toClass);
                 } );
             }
         }
     }
+    /* Function for resetting the css attributes */
+    // function resetCss( subElem ) {
+    //     for ( var i = 0, atts = subElem.attributes, n = atts.length; i < n; i++ ) {
+    //         /* Find all objects that are referred by "data-style-only" */
+    //         let lenStr = "data-style-only".length;
+    //         if ( "data-style-only" === atts[ i ].nodeName.substring( 0, lenStr ) ) {
+    //             document.querySelectorAll(
+    //                 "." + atts[ i ].nodeName.substring( lenStr + 1 )
+    //             ).forEach( obj => {
+    //                 /* Set style to "" or set style to "data-style-base" */
+    //                 obj.setAttribute( "style", "" );
+    //                 if ( obj.getAttribute( "data-style-base" ) ) {
+    //                     obj.setAttribute( "style", obj.getAttribute( "data-style-base" ) );
+    //                 }
+    //             } );
+    //         }
+    //         /* Find all objects that are referred by "data-style-from" */
+    //         lenStr = "data-style-from".length;
+    //         if ( "data-style-from" === atts[ i ].nodeName.substring( 0, lenStr ) ) {
+    //             document.querySelectorAll(
+    //                 "." + atts[ i ].nodeName.substring( lenStr + 1 )
+    //             ).forEach( obj => {
+    //                 /* Set style to "" or set style to "data-style-base" */
+    //                 obj.setAttribute( "style", "" );
+    //                 if ( obj.getAttribute( "data-style-base" ) ) {
+    //                     obj.setAttribute( "style", obj.getAttribute( "data-style-base" ) );
+    //                 }
+    //             } );
+    //         }
+    //     }
+    // }
 
     document.addEventListener( "impress:stepenter", function( event ) {
         /* It is used when I start from a slide (or refesh) */
@@ -209,6 +228,20 @@
                     } );
                 }
             }
+            /* Apply the css attribute to the objects referred by "data-style-from" */
+            for ( var i = 0, atts = subElem.attributes, n = atts.length; i < n; i++ )  {
+                /* The css attribute are applied from the substep with "data-style-from" to the
+                    substep with "data-style-to" */
+                let lenStr = "data-add-only".length;
+                if ( "data-add-only" === atts[ i ].nodeName.substring( 0, lenStr ) ) {
+                    const value = atts[ i ].value;
+                    document.querySelectorAll(
+                        "." + atts[ i ].nodeName.substring( lenStr + 1 )
+                    ).forEach( obj => {
+                        obj.classList.add( value );
+                    } );
+                }
+            }
         } );
         /* Active the condition of the active substep */
         event.target.querySelectorAll( ".substep.substep-active" ).forEach( subElem => {
@@ -239,7 +272,17 @@
 
             for ( var i = 0, atts = subElem.attributes, n = atts.length; i < n; i++ ) {
                 /* Apply the css attribute to the objects referred by "data-style-only" */
-                let lenStr = "data-style-only".length;
+                let lenStr = "data-add-only".length;
+                if ( "data-add-only" === atts[ i ].nodeName.substring( 0, lenStr ) ) {
+                    const value = atts[ i ].value;
+                    document.querySelectorAll(
+                        "." + atts[ i ].nodeName.substring( lenStr + 1 )
+                    ).forEach( obj => {
+                        obj.classList.add( value );
+                    } );
+                }
+                /* Apply the css attribute to the objects referred by "data-style-only" */
+                lenStr = "data-style-only".length;
                 if ( "data-style-only" === atts[ i ].nodeName.substring( 0, lenStr ) ) {
                     const value = atts[ i ].value;
                     document.querySelectorAll(

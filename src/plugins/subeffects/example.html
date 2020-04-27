@@ -109,13 +109,13 @@
                     <div class="column">
                         <div>Use 'data-show-only' attr in the substep to show other objects together but only when this substep is active</div>
                         <ul>
-                            <li class="substep" data-show-only="img1-show">Image 1</li>
-                            <li class="substep" data-show-only="img2-show">Image 2</li>
+                            <li class="substep" data-add-only-img1-show="substep-show-element">Image 1</li>
+                            <li class="substep" data-add-only-img2-show="substep-show-element">Image 2</li>
                         </ul>
                     </div>
                     <div class="column" style="position: relative;">
-                        <div class="img1-show substep-hide-start" style="position:absolute; width:100%; height: 200px; background: red;"></div>
-                        <div class="img2-show substep-hide-start" style="position:absolute; width:100%; height: 300px; background: green;"></div>
+                        <div class="img1-show substep-to-show" style="position:absolute; width:100%; height: 200px; background: red;"></div>
+                        <div class="img2-show substep-to-show" style="position:absolute; width:100%; height: 300px; background: green;"></div>
                     </div>
                 </div>
             </div>
