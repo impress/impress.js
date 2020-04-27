@@ -49,7 +49,7 @@
         </div>
         <div class="step" id="dynamic-substep-show-from" data-scale="1" data-rotate="0" data-x="0" data-rel-y="1000" data-z="0">
             <div class="slide-body slide-border">
-                <h1>Show other objects with the substep element</h1>
+                <h1>Add class to other objects with the substep element</h1>
                 <hr>
                 <pre style="font-size: 0.5em;">
 <code>&lt;div class="substep" data-show-from="mylist">List&lt;/div>
@@ -69,8 +69,8 @@
     &lt;/li>
 &lt;/ul></code></pre>
                 <hr>
-                <div class="substep" data-show-from="my-list">Use 'data-show-from' attr in the substep to show other objects together</div>
-                <ul class="my-list">
+                <div class="substep" data-addfrom-my-list="substep-show-element" data-removefrom-my-list="substep-hide-element" >Use 'data-show-from' attr in the substep to show other objects together</div>
+                <ul class="my-list to-show">
                     <li>Object 1</li>
                     <li>List of List:
                         <ul>
@@ -109,13 +109,13 @@
                     <div class="column">
                         <div>Use 'data-show-only' attr in the substep to show other objects together but only when this substep is active</div>
                         <ul>
-                            <li class="substep" data-add-only-img1-show="substep-show-element">Image 1</li>
-                            <li class="substep" data-add-only-img2-show="substep-show-element">Image 2</li>
+                            <li class="substep" data-addonly-img1-show="substep-show-element">Image 1</li>
+                            <li class="substep" data-addonly-img2-show="substep-show-element">Image 2</li>
                         </ul>
                     </div>
                     <div class="column" style="position: relative;">
-                        <div class="img1-show substep-to-show" style="position:absolute; width:100%; height: 200px; background: red;"></div>
-                        <div class="img2-show substep-to-show" style="position:absolute; width:100%; height: 300px; background: green;"></div>
+                        <div class="img1-show" style="position:absolute; width:100%; height: 200px; background: red;"></div>
+                        <div class="img2-show" style="position:absolute; width:100%; height: 300px; background: green;"></div>
                     </div>
                 </div>
             </div>
@@ -148,8 +148,53 @@
                     <div class="column">
                         <div>Use 'data-hide-only' attr in the substep to hide objects when the substep is active</div>
                         <ul>
-                            <li class="substep" data-show-only="text1" data-hide-only="img1-hide">Hide image 1</li>
-                            <li class="substep" data-show-only="text2" data-hide-only="img2-hide">Hide image 2</li>
+                            <li class="substep" data-addonly-text1="substep-show-element" data-addonly-img1-hide="substep-hide-element">Hide image 1</li>
+                            <li class="substep" data-addonly-text2="substep-show-element" data-addonly-img2-hide="substep-hide-element">Hide image 2</li>
+                        </ul>
+                    </div>
+                    <div class="column" style="flex:35%">
+                        <div style="position: relative;">
+                            <div class="text1 substep-to-show" style="position:absolute; bottom: 0;" >This is the first schema!</div>
+                            <div class="img1-hide" style="width:100%; height: 120px; background: red;"></div>
+                        </div>
+                        <div style="position: relative;">
+                            <div class="text2 substep-to-show" style="position:absolute;" >This is the second schema!</div>
+                            <div class="img2-hide" style="width:100%; height: 120px; background: green;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="step" id="dynamic-substep-hide-2" data-scale="1" data-rotate="0" data-x="0" data-rel-y="1000" data-z="0">
+            <div class="slide-body slide-border">
+                <h1>Hide objects only when substep is active</h1>
+                <hr>
+                <pre style="font-size: 0.5em;">
+<code>&lt;div class="row">
+    &lt;div class="column">
+        &lt;ul>
+            &lt;li class="substep" data-show-only="text1" data-hide-only="img1-hide">Hide image 1&lt;/li>
+            &lt;li class="substep" data-show-only="text2" data-hide-only="img2-hide">Hide image 2&lt;/li>
+        &lt;/ul>
+    &lt;/div>
+    &lt;div class="column" style="flex:30%">
+        &lt;div style="position: relative;">
+            &lt;div class="text1" style="position:absolute; bottom: 0;" >This is the first schema!&lt;/div>
+            &lt;img class="img1-hide" style="width:100%; background: red; height: 120px;" >&lt;/div>
+        &lt;/div>
+        &lt;div style="position: relative;">
+            &lt;div class="text2" style="position:absolute;" >This is the second schema!&lt;/div>
+            &lt;img class="img2-hide" style="width:100%; background: green; height: 120px;">&lt;/div>
+        &lt;/div>
+    &lt;/div>
+&lt;/div></code></pre>
+                <hr>
+                <div class="row">
+                    <div class="column">
+                        <div>Use 'data-hide-only' attr in the substep to hide objects when the substep is active</div>
+                        <ul>
+                            <li class="substep" data-removeonly-text1="substep-hide-element" data-addonly-img1-hide="substep-hide-element">Hide image 1</li>
+                            <li class="substep" data-removeonly-text2="substep-hide-element" data-addonly-img2-hide="substep-hide-element">Hide image 2</li>
                         </ul>
                     </div>
                     <div class="column" style="flex:35%">
@@ -187,9 +232,9 @@
                         Use 'data-hide-from' and 'data-hide-to' to hide the image from a substep to substep:
                         <ul>
                             <li class="substep">Step 1</li>
-                            <li class="substep" data-hide-from="img5">Step 2: Hide image</li>
+                            <li class="substep" data-addfrom-img5 = "substep-hide-element">Step 2: Hide image</li>
                             <li class="substep">Step 3</li>
-                            <li class="substep" data-hide-to="img5">Step 4: Show image</li>
+                            <li class="substep" data-addto-img5 = "substep-hide-element">Step 4: Show image</li>
                             <li class="substep">Step 5</li>
                         </ul>
                     </div>

@@ -503,17 +503,17 @@ hr {
     font-size: 1.3em;
 }
 
-.substep-to-show{
-    opacity: 0;
+.substep-show-element-base{
     transition: opacity 1s ease 0s; 
+    opacity: 0;
 }
 
-.substep-to-show.substep-show-element{
+.substep-show-element{
+    transition: opacity 1s ease 0s; 
     opacity: 1;
-    transition: opacity 1s ease 0s;    
 }
 
 .substep-hide-element{
+    transition: opacity 1s ease 0s;  
     opacity: 0;
-    transition: opacity 1s ease 0s;    
 }

@@ -45,276 +45,177 @@
  * Released under the MIT license.
  */
 
- // L'idea nuova è fare 3 classi
- // data-addto-CLASS = "TOCLASS" applica la classe CLASS agli oggetti di classe TOCLASS solo per quel substep
- // data-addto-CLASS = "TOCLASS" e data-removeto-CLASS = "TOCLASS" aggiungi la class CLASS all'oggetto TOCLASS dal substep from a al to
+ // L'idea nuova è fare 6 classi
+ // data-addonly-CLASS = "TOCLASS" applica la classe CLASS agli oggetti di classe TOCLASS solo per quel substep
+ // data-removeonly-CLASS = "TOCLASS" applica la classe CLASS agli oggetti di classe TOCLASS solo per quel substep
+ // data-addfrom-CLASS = "TOCLASS" e data-addto-CLASS = "TOCLASS" aggiungi la class CLASS all'oggetto TOCLASS dal substep from a al to
 
 ( function( document ) {
     "use strict";
+    const stringAddClassOnlyNow = "data-addonly";
+    const stringRemoveClassOnlyNow = "data-removeonly";
+    const stringAddClassFromNow = "data-addfrom";
+    const stringAddClassToNow = "data-addto";
+    const stringRemoveClassFromNow = "data-removefrom";
+    const stringRemoveClassToNow = "data-removeto";
     var slideFrom = null;
-    /* Function for resetting the css attributes */
-    function resetCss( subElem ) {
+    /* Function for resetting the css attributes ????? */
+    function resetClasses( subElem ) {
         for ( var i = 0, atts = subElem.attributes, n = atts.length; i < n; i++ ) {
-            let lenStr = "data-add-only".length;
-            if ( "data-add-only" === atts[ i ].nodeName.substring( 0, lenStr ) ) {
+            let lenStr = stringAddClassOnlyNow.length;
+            if ( stringAddClassOnlyNow + "-" === atts[ i ].nodeName.substring( 0, lenStr + 1 ) ) {
                 const toClass = atts[ i ].value;
                 document.querySelectorAll(
                     "." + atts[ i ].nodeName.substring( lenStr + 1 )
                 ).forEach( obj => {
-                    /* Remove classes */
+                    /* Remove classes that will be addad at some point*/
+                    obj.classList.remove( toClass );
+                    obj.classList.add( toClass + "-base" );
+                } );
+            }
+            lenStr = stringRemoveClassOnlyNow.length;
+            if ( stringRemoveClassOnlyNow + "-" === atts[ i ].nodeName.substring( 0, lenStr + 1  ) ) {
+                const toClass = atts[ i ].value;
+                document.querySelectorAll(
+                    "." + atts[ i ].nodeName.substring( lenStr + 1 )
+                ).forEach( obj => {
+                    /* Add classes that will be addad at some point */
+                    obj.classList.add(toClass);
+                } );
+            }
+            lenStr = stringAddClassFromNow.length;
+            if ( stringAddClassFromNow + "-" === atts[ i ].nodeName.substring( 0, lenStr + 1  ) ) {
+                const toClass = atts[ i ].value;
+                document.querySelectorAll(
+                    "." + atts[ i ].nodeName.substring( lenStr + 1 )
+                ).forEach( obj => {
+                    /* Remove classes that will be addad at some point*/
+                    obj.classList.remove(toClass);
+                } );
+            }
+            lenStr = stringRemoveClassFromNow.length;
+            if ( stringRemoveClassFromNow + "-" === atts[ i ].nodeName.substring( 0, lenStr + 1  ) ) {
+                const toClass = atts[ i ].value;
+                document.querySelectorAll(
+                    "." + atts[ i ].nodeName.substring( lenStr + 1 )
+                ).forEach( obj => {
+                    /* Add classes that will be addad at some point */
+                    obj.classList.add(toClass);
+                } );
+            }
+        }
+    }
+
+    function applyOnlyClass( subElem ){
+        for ( var i = 0, atts = subElem.attributes, n = atts.length; i < n; i++ )  {
+            let lenStr = stringAddClassOnlyNow.length;
+            if ( stringAddClassOnlyNow + "-" === atts[ i ].nodeName.substring( 0, lenStr + 1  ) ) {
+                const toClass = atts[ i ].value;
+                document.querySelectorAll(
+                    "." + atts[ i ].nodeName.substring( lenStr + 1 )
+                ).forEach( obj => {
+                    /* Remove classes that will be addad at some point*/
+                    obj.classList.add(toClass);
+                } );
+            }
+            lenStr = stringRemoveClassOnlyNow.length;
+            if ( stringRemoveClassOnlyNow + "-" === atts[ i ].nodeName.substring( 0, lenStr + 1  ) ) {
+                const toClass = atts[ i ].value;
+                document.querySelectorAll(
+                    "." + atts[ i ].nodeName.substring( lenStr + 1 )
+                ).forEach( obj => {
+                    /* Add classes that will be addad at some point */
                     obj.classList.remove(toClass);
                 } );
             }
         }
     }
-    /* Function for resetting the css attributes */
-    // function resetCss( subElem ) {
-    //     for ( var i = 0, atts = subElem.attributes, n = atts.length; i < n; i++ ) {
-    //         /* Find all objects that are referred by "data-style-only" */
-    //         let lenStr = "data-style-only".length;
-    //         if ( "data-style-only" === atts[ i ].nodeName.substring( 0, lenStr ) ) {
-    //             document.querySelectorAll(
-    //                 "." + atts[ i ].nodeName.substring( lenStr + 1 )
-    //             ).forEach( obj => {
-    //                 /* Set style to "" or set style to "data-style-base" */
-    //                 obj.setAttribute( "style", "" );
-    //                 if ( obj.getAttribute( "data-style-base" ) ) {
-    //                     obj.setAttribute( "style", obj.getAttribute( "data-style-base" ) );
-    //                 }
-    //             } );
-    //         }
-    //         /* Find all objects that are referred by "data-style-from" */
-    //         lenStr = "data-style-from".length;
-    //         if ( "data-style-from" === atts[ i ].nodeName.substring( 0, lenStr ) ) {
-    //             document.querySelectorAll(
-    //                 "." + atts[ i ].nodeName.substring( lenStr + 1 )
-    //             ).forEach( obj => {
-    //                 /* Set style to "" or set style to "data-style-base" */
-    //                 obj.setAttribute( "style", "" );
-    //                 if ( obj.getAttribute( "data-style-base" ) ) {
-    //                     obj.setAttribute( "style", obj.getAttribute( "data-style-base" ) );
-    //                 }
-    //             } );
-    //         }
-    //     }
-    // }
+
+    function applyFromClass( subElem ){
+        for ( var i = 0, atts = subElem.attributes, n = atts.length; i < n; i++ )  {
+            let lenStr = stringAddClassFromNow.length;
+            if ( stringAddClassFromNow + "-" === atts[ i ].nodeName.substring( 0, lenStr + 1  ) ) {
+                const toClass = atts[ i ].value;
+                document.querySelectorAll(
+                    "." + atts[ i ].nodeName.substring( lenStr + 1 )
+                ).forEach( obj => {
+                    /* Remove classes that will be addad at some point*/
+                    obj.classList.add(toClass);
+                } );
+            }
+            lenStr = stringRemoveClassFromNow.length;
+            if ( stringRemoveClassFromNow + "-" === atts[ i ].nodeName.substring( 0, lenStr + 1  ) ) {
+                const toClass = atts[ i ].value;
+                document.querySelectorAll(
+                    "." + atts[ i ].nodeName.substring( lenStr + 1 )
+                ).forEach( obj => {
+                    /* Add classes that will be addad at some point */
+                    obj.classList.remove(toClass);
+                } );
+            }
+        }
+    }
+
+    function applyToClass( subElem ){
+        for ( var i = 0, atts = subElem.attributes, n = atts.length; i < n; i++ )  {
+            let lenStr = stringAddClassToNow.length;
+            if ( stringAddClassToNow + "-" === atts[ i ].nodeName.substring( 0, lenStr + 1  ) ) {
+                const toClass = atts[ i ].value;
+                document.querySelectorAll(
+                    "." + atts[ i ].nodeName.substring( lenStr + 1 )
+                ).forEach( obj => {
+                    /* Remove classes that will be addad at some point*/
+                    obj.classList.remove(toClass);
+                } );
+            }
+            lenStr = stringRemoveClassToNow.length;
+            if ( stringRemoveClassToNow + "-" === atts[ i ].nodeName.substring( 0, lenStr + 1  ) ) {
+                const toClass = atts[ i ].value;
+                document.querySelectorAll(
+                    "." + atts[ i ].nodeName.substring( lenStr + 1 )
+                ).forEach( obj => {
+                    /* Add classes that will be addad at some point */
+                    obj.classList.add(toClass);
+                } );
+            }
+        }
+    }
 
     document.addEventListener( "impress:stepenter", function( event ) {
         /* It is used when I start from a slide (or refesh) */
         event.target.querySelectorAll( ".substep" ).forEach( subElem => {
-            /* Hide from the beginning all elements that are referred by "data-show-only"
-                and "data-show-from"*/
-            document.querySelectorAll(
-                "." + subElem.getAttribute( "data-show-only" ) + "," +
-                "." + subElem.getAttribute( "data-show-from" )
-            ).forEach( obj => {
-                // obj.style.opacity = 0;
-                obj.classList.remove("substep-show-element");
-                obj.classList.add("substep-show-element");
-            } );
-            /* Show from the beginning all elements that are referred by "data-hide-only"
-                and "data-hide-from" */
-            document.querySelectorAll(
-                "." + subElem.getAttribute( "data-hide-only" ) + "," +
-                "." + subElem.getAttribute( "data-hide-from" )
-            ).forEach( obj => {
-                // obj.style.opacity = 1;
-                obj.classList.remove("substep-hide-element");
-                obj.classList.add("substep-show-element");
-            } );
-            /* Set the base css attribute to the objects */
-            resetCss( subElem );
+            /* Set the base classes to the objects */
+            resetClasses( subElem );
         } );
-        /* Reset the of the objects that are modified to the default */
+        /* Reset the classes of the objects that are modified */
         /* It is useful when I show element of other slide */
         if ( slideFrom !== null ) {
             slideFrom.querySelectorAll( ".substep" ).forEach( subElem => {
-                /* Reset opacity */
-                document.querySelectorAll(
-                    "." + subElem.getAttribute( "data-show-only" ) + "," +
-                    "." + subElem.getAttribute( "data-hide-only" ) + "," +
-                    "." + subElem.getAttribute( "data-show-from" ) + "," +
-                    "." + subElem.getAttribute( "data-hide-from" )
-                ).forEach( obj => {
-                    // obj.style.opacity = "";
-                    obj.classList.remove("substep-show-element");
-                    obj.classList.remove("substep-hide-element");
-                } );
                 /* Set the base css attribute to the objects */
-                resetCss( subElem );
+                resetClasses( subElem );
             } );
         }
     }, false );
 
     function subEffects( event ) {
-        /* Reset all condition at each substep */
+        /* Reset all classes at each substep */
         event.target.querySelectorAll( ".substep:not(.substep-active)" ).forEach( subElem => {
-            /* Hide all elements are referred by "data-show-only" and "data-show-from"
-                in all substeps */
-            document.querySelectorAll(
-                "." + subElem.getAttribute( "data-show-only" ) + "," +
-                "." + subElem.getAttribute( "data-show-from" )
-            ).forEach( obj => {
-                // obj.style.opacity = 0;
-                // obj.style.transition = "opacity 1s";
-                obj.classList.remove("substep-show-element");
-                obj.classList.add("substep-hide-element");
-            } );
-            /* Show all elements are referred by "data-hide-only" and "data-hide-from"
-                in all substeps */
-            document.querySelectorAll(
-                "." + subElem.getAttribute( "data-hide-only" ) + "," +
-                "." + subElem.getAttribute( "data-hide-from" )
-            ).forEach( obj => {
-                // obj.style.opacity = 1;
-                // obj.style.transition = "opacity 1s";
-                obj.classList.add("substep-show-element");
-                obj.classList.remove("substep-hide-element");
-            } );
             /* Set the base css attribute to the objects */
             if ( event.type === "impress:substep:stepleaveaborted" ) {
-                resetCss( subElem );
+                resetClasses( subElem );
             }
         } );
         /* Active the condition of the each visible substep */
         event.target.querySelectorAll( ".substep.substep-visible" ).forEach( subElem => {
-            /* Show the elements that are referred between "data-show-from" and "data-show-to" */
-            /* Hide the elements that are referred between "data-hide-from" and "data-hide-to" */
-            /* Show all elements that are referred by "data-show-from" or "data-show-to" in the
-                visible substeps */
-            document.querySelectorAll(
-                "." + subElem.getAttribute( "data-show-from" ) + "," +
-                "." + subElem.getAttribute( "data-hide-to" )
-            ).forEach( obj => {
-                obj.classList.add("substep-show-element");
-                obj.classList.remove("substep-hide-element");
-                // obj.style.opacity = 1;
-                // obj.style.transition = "opacity 1s";
-            } );
-            /* Hide all elements that are referred by "data-show-to" or "data-hide-from" in the
-                visible substeps */
-            document.querySelectorAll(
-                "." + subElem.getAttribute( "data-show-to" ) + "," +
-                "." + subElem.getAttribute( "data-hide-from" )
-            ).forEach( obj => {
-                obj.classList.remove("substep-show-element");
-                obj.classList.add("substep-hide-element");
-                // obj.style.opacity = 0;
-                // obj.style.transition = "opacity 1s";
-            } );
-            /* Apply the css attribute to the objects referred by "data-style-from" */
-            for ( var i = 0, atts = subElem.attributes, n = atts.length; i < n; i++ )  {
-                /* The css attribute are applied from the substep with "data-style-from" to the
-                    substep with "data-style-to" */
-                let lenStr = "data-style-from".length;
-                if ( "data-style-from" === atts[ i ].nodeName.substring( 0, lenStr ) ) {
-                    const value = atts[ i ].value;
-                    document.querySelectorAll(
-                        "." + atts[ i ].nodeName.substring( lenStr + 1 )
-                    ).forEach( obj => {
-                        obj.setAttribute( "style", value );
-                    } );
-                }
-                lenStr = "data-style-to".length;
-                if ( "data-style-to" === atts[ i ].nodeName.substring( 0, lenStr ) ) {
-                    document.querySelectorAll(
-                        "." + atts[ i ].nodeName.substring( lenStr + 1 )
-                    ).forEach( obj => {
-                        /* Set style to "" or set style to "data-style-base" */
-                        obj.setAttribute( "style", "" );
-                        if ( obj.getAttribute( "data-style-base" ) ) {
-                            obj.setAttribute( "style", obj.getAttribute( "data-style-base" ) );
-                        }
-                    } );
-                }
-            }
-            /* Apply the css attribute to the objects referred by "data-style-from" */
-            for ( var i = 0, atts = subElem.attributes, n = atts.length; i < n; i++ )  {
-                /* The css attribute are applied from the substep with "data-style-from" to the
-                    substep with "data-style-to" */
-                let lenStr = "data-add-only".length;
-                if ( "data-add-only" === atts[ i ].nodeName.substring( 0, lenStr ) ) {
-                    const value = atts[ i ].value;
-                    document.querySelectorAll(
-                        "." + atts[ i ].nodeName.substring( lenStr + 1 )
-                    ).forEach( obj => {
-                        obj.classList.add( value );
-                    } );
-                }
-            }
+            /* Apply the classes to the objects referred by "data-style-from" */
+            applyFromClass( subElem );
+            applyToClass( subElem );
         } );
         /* Active the condition of the active substep */
         event.target.querySelectorAll( ".substep.substep-active" ).forEach( subElem => {
-            /* Show all elements that are referred by "data-show-only", "data-show-from" or
-                "data-hide-to" in the active substep */
-            document.querySelectorAll(
-                "." + subElem.getAttribute( "data-show-only" ) + "," +
-                "." + subElem.getAttribute( "data-show-from" ) + "," +
-                "." + subElem.getAttribute( "data-hide-to" )
-            ).forEach( obj => {
-                obj.classList.add("substep-show-element");
-                obj.classList.remove("substep-hide-element");
-                // obj.style.opacity = 1;
-                // obj.style.transition = "opacity 1s";
-            } );
-            /* Hide all elements that are referred by "data-hide-only", "data-show-to" or
-                "data-hide-from" in the active substep */
-            document.querySelectorAll(
-                "." + subElem.getAttribute( "data-hide-only" ) + "," +
-                "." + subElem.getAttribute( "data-show-to" ) + "," +
-                "." + subElem.getAttribute( "data-hide-from" )
-            ).forEach( obj => {
-                obj.classList.add("substep-hide-element");
-                obj.classList.remove("substep-show-element");
-                // obj.style.opacity = 0;
-                // obj.style.transition = "opacity 1s";
-            } );
-
-            for ( var i = 0, atts = subElem.attributes, n = atts.length; i < n; i++ ) {
-                /* Apply the css attribute to the objects referred by "data-style-only" */
-                let lenStr = "data-add-only".length;
-                if ( "data-add-only" === atts[ i ].nodeName.substring( 0, lenStr ) ) {
-                    const value = atts[ i ].value;
-                    document.querySelectorAll(
-                        "." + atts[ i ].nodeName.substring( lenStr + 1 )
-                    ).forEach( obj => {
-                        obj.classList.add( value );
-                    } );
-                }
-                /* Apply the css attribute to the objects referred by "data-style-only" */
-                lenStr = "data-style-only".length;
-                if ( "data-style-only" === atts[ i ].nodeName.substring( 0, lenStr ) ) {
-                    const value = atts[ i ].value;
-                    document.querySelectorAll(
-                        "." + atts[ i ].nodeName.substring( lenStr + 1 )
-                    ).forEach( obj => {
-                        obj.setAttribute( "style", value );
-                    } );
-                }
-                /* Apply the css attribute to the objects referred  by "data-style-from" */
-                lenStr = "data-style-from".length;
-                if ( "data-style-from" === atts[ i ].nodeName.substring( 0, lenStr ) ) {
-                    const value = atts[ i ].value;
-                    document.querySelectorAll(
-                        "." + atts[ i ].nodeName.substring( lenStr + 1 )
-                    ).forEach( obj => {
-                        obj.setAttribute( "style", value );
-                    } );
-                }
-                /* Reset the css attribute to the objects referred  by "data-style-to" */
-                lenStr = "data-style-to".length;
-                if ( "data-style-to" === atts[ i ].nodeName.substring( 0, lenStr ) ) {
-                    document.querySelectorAll(
-                        "." + atts[ i ].nodeName.substring( lenStr + 1 )
-                    ).forEach( obj => {
-                        /* Set style to "" or set style to "data-style-base" */
-                        obj.setAttribute( "style", "" );
-                        if ( obj.getAttribute( "data-style-base" ) ) {
-                            obj.setAttribute( "style", obj.getAttribute( "data-style-base" ) );
-                        }
-                    } );
-                }
-            }
+            applyOnlyClass ( subElem );
+            applyFromClass( subElem );
+            applyToClass( subElem );
         } );
     }
 
@@ -330,32 +231,7 @@
         slideFrom = event.target;
         /* Effect to be set-up before entering in the step */
         event.detail.next.querySelectorAll( ".substep" ).forEach( subElem => {
-            /* Hide all elements are referred by "data-show-only" and "data-show-from"
-                in all substeps */
-            document.querySelectorAll(
-                "." + subElem.getAttribute( "data-show-only" ) + "," +
-                "." + subElem.getAttribute( "data-show-from" )
-            ).forEach( obj => {
-                obj.classList.add("substep-hide-element");
-                obj.classList.remove("substep-show-element");
-                // obj.style.opacity = 0;
-                // obj.style.transition = "";
-            } );
-
-            /* Show all elements are referred by "data-hide-only" or "data-hide-only"
-                in all substeps */
-            document.querySelectorAll(
-                "." + subElem.getAttribute( "data-hide-only" ) + "," +
-                "." + subElem.getAttribute( "data-hide-from" )
-            ).forEach( obj => {
-                obj.classList.add("substep-show-element");
-                obj.classList.remove("substep-hide-element");
-                // obj.style.transition = "";
-                // obj.style.opacity = 1;
-            } );
-
-            // /* Set the base css attribute to the objects */
-            // resetCss(subElem);
+            resetClasses( subElem );
         } );
     }, false );
 } )( document );
