@@ -1,32 +1,22 @@
 Substep Effects Plugin
 ===============
 
-This plugin allow easy creation of animation bind to substeps
+This plugin allow easy creation of animation bind to substeps appling custom classes
 
 ### USAGE
 
-This plugin will do the following things:
+The plugin adds the posibility to add custom classes at each substep to objects:
+When an object with class substep uses one of the following attributes, the following classes are added to certain objects.
 
-- The plugin adds the effects for the substeps. 
-        
-When an object with class substep uses one of the following attributes, the value of these attribute indicate the objects that are subjected to some effectes:
-        
-        - data-show-only = "CLASS" : The objects with class="CLASS" are shown only in the corresponding substep.
-        
-        - data-hide-only = "CLASS" : The objects with class="CLASS" are hidden only in the corresponding substep.
-        
-        - data-show-from = "CLASS" : The objects with class="CLASS" are shown from the corresponding substep until the end or "data-show-to".
-        - data-show-to = "CLASS" : It is used with "data-show-from", the objects with class="CLASS" are shown from the substep with "data-show-from" to the corresponding substep.
+The attributes are:
+        - `data-addonly-TOCLASS = "CLASS"` : This attribute is used to apply certain classes in particular `CLASS`, `CLASS-base`, `CLASS-before`, `CLASS-after`, following the rules explained in section classes.
+        - `data-addfrom-TOCLASS = "CLASS"` and `data-addto-TOCLASS = "CLASS"`: this two attributes are used to apply certain classes from the substep with the attribute `data-addfrom-TOCLASS = "CLASS"` to the substep with the attribute `data-addto-TOCLASS = "CLASS"` with the rules explained in the following.
 
-        - data-hide-from = "CLASS" : The objects with class="CLASS" are hidden from the corresponding substep until the end or "data-hide-to".
-        - data-hide-to = "CLASS" : It is used with "data-hide-from", the objects with class="CLASS" are hidden from the substep with "data-hide-from" to the corresponding substep. 
-
-When an object with class substep uses one of the following attributes, the value of these attributes indicate the css style to apply to a certain class. In particular:
-
-        - data-style-only-CLASS = "STYLE_LIST" : Apply to objects with class=CLASS the css style="STYL_LIST" only in the corresponding substep.
-
-        - data-style-from-CLASS = "STYLE_LIST" : Apply to objects with class=CLASS the css style="STYL_LIST" from the corresponding substep until the end or "data-syle-to-CLASS".
-        - data-style-to-CLASS = "STYLE_LIST" : It is used with "data-syle-from-CLASS", the objects with class="CLASS" are setted to style="" or if "data-style-base='LIST_STYLE_BASE'" is configured in the object with class=CLASS the style is setted to style="LIST_STYLE_BASE".
+The classes are:
+        - `CLASS-base`: This class is added at step enter to each object reffered by `TOCLASS`
+        - `CLASS-before`: This class is added at step enter to each obbject reffered by `TOCLASS` ad removed when the substep with the attribute `data-addonly-TOCLASS = "CLASS"` or `data-addfrom-TOCLASS = "CLASS"` is reached.
+        - `CLASS-after`: This class is added after the substep with the attribute `data-addonly-TOCLASS = "CLASS"` or `data-addto-TOCLASS = "CLASS"` is reached.
+        - `CLASS`: This class is added when the substep with the attribute `data-addonly-TOCLASS = "CLASS"` is reached and removed efterwards or between the substep with the attribute `data-addfrom-TOCLASS = "CLASS"` and `data-addto-TOCLASS = "CLASS"`.
 
 ### EXAMPLE
 
