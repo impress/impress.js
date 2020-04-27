@@ -508,6 +508,11 @@ hr {
     opacity: 0;
 }
 
+.substep-hide-element-base{
+    transition: opacity 1s ease 0s;  
+    opacity: 1;
+}
+
 .substep-show-element{
     transition: opacity 1s ease 0s; 
     opacity: 1;
@@ -517,3 +522,38 @@ hr {
     transition: opacity 1s ease 0s;  
     opacity: 0;
 }
+
+.obj5{
+    width: 100%; 
+    height: 150px; 
+    background: red;
+}
+
+.substep-color-yellow{
+    transition: color 1s linear; 
+    color: yellow;
+}
+
+.substep-color-red{
+    transition: color 1s linear; 
+    color: red;
+}
+
+.substep-border{
+    border: 2px solid white;
+}
+
+.substep-color-opacity{
+    transition: opacity 1s linear, color 1s linear; 
+    opacity: 50%; 
+    color: yellow;
+}
+
+.substep-border-green{
+    border: 2px solid green;
+}
+
+.substep-transform{
+    transform: translate(50px,0px);
+}
+
