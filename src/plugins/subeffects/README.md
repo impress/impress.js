@@ -5,7 +5,8 @@ This plugin allow easy creation of animation bind to substeps appling custom cla
 
 ### USAGE
 
-The plugin adds the posibility to add custom classes at each substep to objects:
+The plugin adds the posibility to add custom classes at each substep to objects.
+
 When an object with class substep uses one of the following attributes, the following classes are added to certain objects.
 
 The attributes are:
