@@ -147,26 +147,26 @@
             }
         }
 
+        function findSectionTitles( sectionElement, titles = [] ) {
+            if ( sectionElement.tagName === "SECTION" ) {
+                const headingElements = sectionElement.getElementsByTagName( "H1" );
+                if ( headingElements.length > 0 ) {
+                    titles = titles.concat( headingElements[ 0 ].textContent );
+                }
+            }
+
+            if ( sectionElement.parentElement !== null ) {
+                return findSectionTitles( sectionElement.parentElement, titles );
+            }
+
+            return titles;
+        }
+        const titles = indexedStep !== undefined ? findSectionTitles( indexedStep.sectionElement ).reverse() : [];
+
         if ( currentSection !== null ) {
             currentSection.innerHTML = "";
 
             if ( indexedStep !== undefined ) {
-                function findSectionTitles( sectionElement, titles = [] ) {
-                    if ( sectionElement.tagName === "SECTION" ) {
-                        const headingElements = sectionElement.getElementsByTagName( "H1" );
-                        if ( headingElements.length > 0 ) {
-                            titles = titles.concat( headingElements[ 0 ].textContent );
-                        }
-                    }
-
-                    if ( sectionElement.parentElement !== null ) {
-                        return findSectionTitles( sectionElement.parentElement, titles );
-                    }
-
-                    return titles;
-                }
-
-                const titles = findSectionTitles( indexedStep.sectionElement ).reverse();
                 titles.forEach( function( title, index ) {
                     if ( index > 0 ) {
                         const span = document.createElement( "span" );
@@ -190,8 +190,11 @@
             if ( currentSectionElement === null && sectionOfStep === null ) {
                 activeSection = true;
             }
-            if ( sectionOfStep !== null && sectionOfStep.sectionElement.isSameNode( currentSectionElement ) ) {
-                activeSection = true;
+            if ( sectionOfStep !== null && titles.length > 0 ) {
+                const titlesOfStep = findSectionTitles( sectionOfStep.sectionElement ).reverse();
+                if ( titlesOfStep.length > 0 && titlesOfStep[ 0 ] === titles[ 0 ] ) {
+                    activeSection = true;
+                }
             }
 
             if ( activeSection ) {

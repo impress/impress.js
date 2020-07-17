@@ -77,7 +77,7 @@ Furthermore, this plugin adds the class `active-section` to all steps of the act
 steps that do not belong to this section. You can use this classes, e.g. to hide the steps of another section:
 
 ```css
-.impress-enabled .step .hidden-section {
+.step.hidden-section {
     opacity: 0;
 }
 ```
