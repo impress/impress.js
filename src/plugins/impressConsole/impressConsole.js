@@ -169,7 +169,7 @@
                 var preSrc = baseURL + '#' + nextStep().id;
                 var slideView = consoleWindow.document.getElementById( 'slideView' );
 
-                // Setting them when they are already set causes glithes in Firefox, so check first:
+                // Setting when already set causes glitches in Firefox, so check first:
                 if ( slideView.src !== slideSrc ) {
                     slideView.src = slideSrc;
                 }
@@ -206,7 +206,7 @@
                 var preSrc = baseURL + '#' + nextStep().id;
                 var slideView = consoleWindow.document.getElementById( 'slideView' );
 
-                // Setting them when they are already set causes glithes in Firefox, so check first:
+                // Setting when already set causes glitches in Firefox, so check first:
                 if ( slideView.src !== slideSrc ) {
                     slideView.src = slideSrc;
                 }
