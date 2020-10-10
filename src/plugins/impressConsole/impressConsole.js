@@ -39,7 +39,8 @@
             'useAMPM': false
         };
         break;
-    case 'zh':
+    case 'zh-CN':
+    case 'zh-cn':
         lang = {
             'noNotes': '<div class="noNotes">当前帧没有备注</div>',
             'restart': '重新开始',
