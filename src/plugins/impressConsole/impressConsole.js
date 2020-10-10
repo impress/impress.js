@@ -39,6 +39,19 @@
             'useAMPM': false
         };
         break;
+    case 'zh':
+        lang = {
+            'noNotes': '<div class="noNotes">当前帧没有备注</div>',
+            'restart': '重新开始',
+            'clickToOpen': '点击以打开演讲者控制界面',
+            'prev': '上一帧',
+            'next': '下一帧',
+            'loading': '加载中',
+            'ready': '就绪',
+            'moving': '移动中',
+            'useAMPM': false
+        };
+        break;
     case 'en': // jshint ignore:line
     default : // jshint ignore:line
         lang = {
