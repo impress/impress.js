@@ -89,12 +89,63 @@
             const s3 = sin( stepRotates[ 2 ] / 2 );
 
             // And here comes math.
-            const rotateQuaternion = [
-                c1 * c2 * c3 - s1 * s2 * s3,
-                s1 * c2 * c3 + c1 * s2 * s3,
-                c1 * s2 * c3 - s1 * c2 * s3,
-                c1 * c2 * s3 + s1 * s2 * c3
-            ];
+            var rotateQuaternion;
+            switch ( ( presentStep.dataset.rotateOrder || 'xyz' ).toUpperCase() ){
+                case 'XYZ':
+                    rotateQuaternion = [
+                        c1 * c2 * c3 - s1 * s2 * s3,
+                        s1 * c2 * c3 + c1 * s2 * s3,
+                        c1 * s2 * c3 - s1 * c2 * s3,
+                        c1 * c2 * s3 + s1 * s2 * c3
+                    ]
+                    break;
+
+                case 'YXZ':
+                    rotateQuaternion = [
+                        c1 * c2 * c3 + s1 * s2 * s3,
+                        s1 * c2 * c3 + c1 * s2 * s3,
+                        c1 * s2 * c3 - s1 * c2 * s3,
+                        c1 * c2 * s3 - s1 * s2 * c3
+                    ]
+                    break;
+
+                case 'ZXY':
+                    rotateQuaternion = [
+                        c1 * c2 * c3 - s1 * s2 * s3,
+                        s1 * c2 * c3 - c1 * s2 * s3,
+                        c1 * s2 * c3 + s1 * c2 * s3,
+                        c1 * c2 * s3 + s1 * s2 * c3
+                    ]
+                    break;
+
+                case 'ZYX':
+                    rotateQuaternion = [
+                        c1 * c2 * c3 + s1 * s2 * s3,
+                        s1 * c2 * c3 - c1 * s2 * s3,
+                        c1 * s2 * c3 + s1 * c2 * s3,
+                        c1 * c2 * s3 - s1 * s2 * c3
+                    ]
+                    break;
+
+                case 'YZX':
+                    rotateQuaternion = [
+                        c1 * c2 * c3 - s1 * s2 * s3,
+                        s1 * c2 * c3 + c1 * s2 * s3,
+                        c1 * s2 * c3 + s1 * c2 * s3,
+                        c1 * c2 * s3 - s1 * s2 * c3
+                    ]
+                    break;
+
+                case 'XZY':
+                    rotateQuaternion = [
+                        c1 * c2 * c3 + s1 * s2 * s3,
+                        s1 * c2 * c3 - c1 * s2 * s3,
+                        c1 * s2 * c3 - s1 * c2 * s3,
+                        c1 * c2 * s3 + s1 * s2 * c3
+                    ]
+                    break;
+            }
+
             const rotateConjugate = [
                 rotateQuaternion[ 0 ],
                 rotateQuaternion[ 1 ] * -1,
