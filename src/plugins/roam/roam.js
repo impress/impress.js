@@ -181,7 +181,7 @@
             roams[ event.key ].start = -1;
             roams.keys += event.key;
         } else if ( event.type === "keyup" && roams.keys.includes( event.key ) ) {
-            roams.keys = roams.keys.replace( event.key, "" );
+            roams.keys = roams.keys.replaceAll( event.key, "" );
         }
     }
 
