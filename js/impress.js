@@ -2081,6 +2081,20 @@
             'useAMPM': false
         };
         break;
+    case 'zh-CN':
+    case 'zh-cn':
+        lang = {
+            'noNotes': '<div class="noNotes">当前帧没有备注</div>',
+            'restart': '重新开始',
+            'clickToOpen': '点击以打开演讲者控制界面',
+            'prev': '上一帧',
+            'next': '下一帧',
+            'loading': '加载中',
+            'ready': '就绪',
+            'moving': '移动中',
+            'useAMPM': false
+        };
+        break;
     case 'en': // jshint ignore:line
     default : // jshint ignore:line
         lang = {
@@ -4009,10 +4023,26 @@
 
     var showSubstepIfAny = function( step ) {
         var substeps = step.querySelectorAll( ".substep" );
-        var visible = step.querySelectorAll( ".substep-visible" );
         if ( substeps.length > 0 ) {
-            return showSubstep( substeps, visible );
+            var sorted = sortSubsteps( substeps );
+            var visible = step.querySelectorAll( ".substep-visible" );
+            return showSubstep( sorted, visible );
         }
+    };
+
+    var sortSubsteps = function( substepNodeList ) {
+        var substeps = Array.from( substepNodeList );
+        var sorted = substeps
+            .filter( el => el.dataset.substepOrder )
+            .sort( ( a, b ) => {
+                var orderA = a.dataset.substepOrder;
+                var orderB = b.dataset.substepOrder;
+                return parseInt( orderA ) - parseInt( orderB );
+            } )
+            .concat( substeps.filter( el => {
+                return el.dataset.substepOrder === undefined;
+            } ) );
+        return sorted;
     };
 
     var showSubstep = function( substeps, visible ) {
@@ -4030,8 +4060,9 @@
     var hideSubstepIfAny = function( step ) {
         var substeps = step.querySelectorAll( ".substep" );
         var visible = step.querySelectorAll( ".substep-visible" );
+        var sorted = sortSubsteps( visible );
         if ( substeps.length > 0 ) {
-            return hideSubstep( visible );
+            return hideSubstep( sorted );
         }
     };
 
