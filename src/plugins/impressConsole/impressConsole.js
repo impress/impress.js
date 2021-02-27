@@ -39,6 +39,20 @@
             'useAMPM': false
         };
         break;
+    case 'zh-CN':
+    case 'zh-cn':
+        lang = {
+            'noNotes': '<div class="noNotes">当前帧没有备注</div>',
+            'restart': '重新开始',
+            'clickToOpen': '点击以打开演讲者控制界面',
+            'prev': '上一帧',
+            'next': '下一帧',
+            'loading': '加载中',
+            'ready': '就绪',
+            'moving': '移动中',
+            'useAMPM': false
+        };
+        break;
     case 'en': // jshint ignore:line
     default : // jshint ignore:line
         lang = {
@@ -169,7 +183,7 @@
                 var preSrc = baseURL + '#' + nextStep().id;
                 var slideView = consoleWindow.document.getElementById( 'slideView' );
 
-                // Setting them when they are already set causes glithes in Firefox, so check first:
+                // Setting when already set causes glitches in Firefox, so check first:
                 if ( slideView.src !== slideSrc ) {
                     slideView.src = slideSrc;
                 }
@@ -206,7 +220,7 @@
                 var preSrc = baseURL + '#' + nextStep().id;
                 var slideView = consoleWindow.document.getElementById( 'slideView' );
 
-                // Setting them when they are already set causes glithes in Firefox, so check first:
+                // Setting when already set causes glitches in Firefox, so check first:
                 if ( slideView.src !== slideSrc ) {
                     slideView.src = slideSrc;
                 }
