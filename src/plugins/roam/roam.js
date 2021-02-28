@@ -59,7 +59,7 @@
         //
         // The `getVectorQuaternion()` function here converts a vector( which contains x, y and z coordinates )
         // in the step( which might be rotated ) coordinate system to the world coordinate system
-        // so that could be used to move the step int the world coordinate system.
+        // so that could be used to move the step in the world coordinate system.
         //
         // For those who missed the computer graphics lessons, you may say, "But whay quaternion?".
         // That's because CSS rotation uses Euler angles which is not easy to calculate,
