@@ -12,7 +12,8 @@
 
 ( function( document, window ) {
     "use strict";
-    var api = window.impress();
+    const api = window.impress();
+    const gc = api.lib.gc;
 
     // Seconds per frame, used to calculate the value move or rotate each time.
     var spf;
@@ -237,18 +238,20 @@
     }
 
     // Init `roams.keys` with `""`, which means no key's pressed down.
-    roams.keys = "";
-    Array.from( roamKeys ).forEach( ( key ) => {
-        roams[ key ] = {
-            start: undefined
-        };
-    } );
+    document.addEventListener( "impress:init", function() {
+        roams.keys = "";
+        Array.from( roamKeys ).forEach( ( key ) => {
+            roams[ key ] = {
+                start: undefined
+            };
+        } );
+    });
 
     // Request to be called before next frame renders.
     // And every single frame after is going to be called in the `roamAnimationFrame()` function.
     window.requestAnimationFrame( roamAnimationFrame );
 
     // Make the keys controlling.
-    document.addEventListener( "keydown", eventHandler );
-    document.addEventListener( "keyup", eventHandler );
+    gc.addEventListener( document, "keydown", eventHandler );
+    gc.addEventListener( document, "keyup", eventHandler );
 } )( document, window );
