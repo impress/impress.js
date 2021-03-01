@@ -12,8 +12,13 @@
 
 ( function( document, window ) {
     "use strict";
-    const api = window.impress();
-    const gc = api.lib.gc;
+    var api = window.impress();
+    var gc = api.lib.gc;
+
+    // Stores the active state of impress.
+    // It will be set to `true` when impress inits,
+    // and set to `false` when `impress().tear()` is called.
+    var impressActive;
 
     // Seconds per frame, used to calculate the value move or rotate each time.
     var spf;
@@ -40,7 +45,12 @@
 
     // Called every time before the browser renders the frame to change the view by moving, rotating or both of them.
     function roamAnimationFrame( timestamp ) {
-        // Request to be called before next time the frame renders.
+        if ( !impressActive ) {
+            // Stop requesting animation frame and do nothing for the coming frame if impress is no longer active.
+            return;
+        }
+
+        // Request to be called before next time the frame renders as long as impress is active.
         window.requestAnimationFrame( roamAnimationFrame );
 
         // The value of `spfNow` is the timestamp when the browser rendered last frame,
@@ -237,21 +247,35 @@
         }
     }
 
-    // Init `roams.keys` with `""`, which means no key's pressed down.
     document.addEventListener( "impress:init", function() {
+        // Update `api` and `gc` to current ones.
+        api = window.impress();
+        gc = api.lib.gc;
+
+        // Stop requesting animation frame when `impress().tear()` is called.
+        api.tear = new Proxy( api.tear, {
+            apply ( target, thisArg, argumentsList ) {
+                impressActive = false;
+                target.apply( thisArg, argumentsList );
+            }
+        } );
+
+        // Init `roams.keys` with `""`, which means no key's pressed down.
         roams.keys = "";
         Array.from( roamKeys ).forEach( ( key ) => {
             roams[ key ] = {
                 start: undefined
             };
         } );
-    });
 
-    // Request to be called before next frame renders.
-    // And every single frame after is going to be called in the `roamAnimationFrame()` function.
-    window.requestAnimationFrame( roamAnimationFrame );
+        // Make the keys controlling.
+        gc.addEventListener( document, "keydown", eventHandler );
+        gc.addEventListener( document, "keyup", eventHandler );
 
-    // Make the keys controlling.
-    gc.addEventListener( document, "keydown", eventHandler );
-    gc.addEventListener( document, "keyup", eventHandler );
+        impressActive = true;
+
+        // Request to be called before next frame renders.
+        // And every single frame after is going to be called in the `roamAnimationFrame()` function.
+        window.requestAnimationFrame( roamAnimationFrame );
+    } );
 } )( document, window );
