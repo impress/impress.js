@@ -61,10 +61,26 @@
 
     var showSubstepIfAny = function( step ) {
         var substeps = step.querySelectorAll( ".substep" );
-        var visible = step.querySelectorAll( ".substep-visible" );
         if ( substeps.length > 0 ) {
-            return showSubstep( substeps, visible );
+            var sorted = sortSubsteps( substeps );
+            var visible = step.querySelectorAll( ".substep-visible" );
+            return showSubstep( sorted, visible );
         }
+    };
+
+    var sortSubsteps = function( substepNodeList ) {
+        var substeps = Array.from( substepNodeList );
+        var sorted = substeps
+            .filter( el => el.dataset.substepOrder )
+            .sort( ( a, b ) => {
+                var orderA = a.dataset.substepOrder;
+                var orderB = b.dataset.substepOrder;
+                return parseInt( orderA ) - parseInt( orderB );
+            } )
+            .concat( substeps.filter( el => {
+                return el.dataset.substepOrder === undefined;
+            } ) );
+        return sorted;
     };
 
     var showSubstep = function( substeps, visible ) {
@@ -82,8 +98,9 @@
     var hideSubstepIfAny = function( step ) {
         var substeps = step.querySelectorAll( ".substep" );
         var visible = step.querySelectorAll( ".substep-visible" );
+        var sorted = sortSubsteps( visible );
         if ( substeps.length > 0 ) {
-            return hideSubstep( visible );
+            return hideSubstep( sorted );
         }
     };
 
