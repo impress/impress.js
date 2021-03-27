@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=1024" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <title>impress.js | presentation tool based on the power of CSS3 transforms and transitions in modern browsers | by Bartek Szopka @bartaz</title>
+    <title>MyShot Presentation | by Danial Asaria @danialasaria</title>
     
     <meta name="description" content="impress.js is a presentation tool based on the power of CSS3 transforms and transitions in modern browsers and inspired by the idea behind prezi.com." />
     <meta name="author" content="Bartek Szopka" />
@@ -57,6 +57,7 @@
     It doesn't have to be a `<div>`. Only `id` is important here as that's how the script find it.
     
     Often you don't need to use any attributes here, but for educational purposes I have used all of them below.
+
     To change the duration of the transition between slides use `data-transition-duration="2000"` giving it
     a number of ms. It defaults to 1000 (1s).
     
@@ -72,6 +73,7 @@
     
     We set the default time for autoplay plugin to 7 seconds. Autoplay will automatically advance
     to next slide after a timeout expires.
+
     TRANSITION TIME
 -->
 <div id="impress"
@@ -106,9 +108,6 @@
         Plugins: For first slide, set the autoplay time to a custom 10 seconds.
         
     -->
-    <div id="bored" class="step slide" data-x="-1000" data-y="-1500" data-autoplay="10">
-        <q>Aren’t you just <b>bored</b> with all those slides-based presentations?</q>
-    </div>
 
     <!--
         
@@ -125,13 +124,16 @@
         Using classic `id`-based links like `#step-2` makes these links usable also in fallback mode.
         
     -->
-    <div class="step slide" data-x="0" data-y="-1500">
-        <q>Don’t you think that presentations given <strong>in modern browsers</strong> shouldn’t <strong>copy </strong>‘classic’ slide decks?</q>
-    </div>
 
     <div class="step slide" data-x="1000" data-y="-1500">
-        <q>Well welcome to the <strong>MyShot</strong> Presentation  <strong></strong></q>
-    </div>
+        <q><strong><center>MyShot</center></strong> <strong></strong></q>
+    </span>
+    <h1>
+        <div style = "position:relative; top:150px;">
+        <sup><center><p style="font-size:45px">Reimagining incentivizing vaccinations</p></center></sup>
+        </div>
+    </h1>
+    <span class="footnote"><sup></sup> </span>    </div>
 
     <!--
         
@@ -143,12 +145,14 @@
         down (4 times) to make it back to its correct size.
          
     -->
+    <!--
     <div id="title" class="step" data-x="0" data-y="0" data-scale="4">
         <span class="try">
         </span>
         <h2><sup>Reimagining incentivizing vaccinations</sup></h2>
         <span class="footnote"><sup></sup> </span>
     </div>
+    -->
 
     <!--
           
@@ -161,11 +165,11 @@
     <div id="its" class="step" data-x="850" data-y="3000" data-rotate="90" data-scale="5">
         <p>MyShot is a <strong>revolutionary web app</strong> <br/>
         aimed to motivate Americans to get their vaccines
-        with a wide variety of rewards including  <strong>free doughnuts, rides, arcade tokens, popcorn, money, and much more.</strong></p>
+        with a wide variety of rewards including  <strong>free doughnuts, rides, arcade tokens, popcorn, and even money.</strong></p>
     </div>
 
     <div id="big" class="step" data-x="3500" data-y="2100" data-rotate="180" data-scale="2">
-        <p>Using the power of (Tech Stack)<b>Flutter +... </b> <span class="thoughts"></span></p>
+        <p>Tech Stack<b>Flutter +... </b> <span class="thoughts"></span></p>
     </div>
 
     <!--
@@ -352,7 +356,14 @@ if ("ontouchstart" in document.documentElement) {
     
     Stop right there!
     
+
     
    
     
 -->
+
+
+    
+
+
+
