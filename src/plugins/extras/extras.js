@@ -41,7 +41,7 @@
               i--;
               while ( i >= 0 ) {
                 var newElement = element.cloneNode( false );
-                newElement.innerHTML = markdown.toHTML( slides[ i ] );
+                newElement.innerHTML = markdown.toHTML( slides[ i ], dialect );
                 element.parentNode.insertBefore( newElement, element );
                 element = newElement;
                 i--;
