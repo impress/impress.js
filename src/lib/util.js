@@ -46,7 +46,8 @@
 
             // Get id from url # by removing `#` or `#/` from the beginning,
             // so both "fallback" `#slide-id` and "enhanced" `#/slide-id` will work
-            return byId( window.location.hash.replace( /^#\/?/, "" ) );
+            var encoded = window.location.hash.replace( /^#\/?/, "" );
+            return byId( decodeURIComponent( encoded ) );
         };
 
         // `getUrlParamValue` return a given URL parameter value if it exists
