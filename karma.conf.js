@@ -23,11 +23,14 @@ module.exports = function(config) {
       "test/non_default.js",
       "src/plugins/navigation/navigation_tests.js",
       "test/plugins/rel/relative_to_screen_size_tests.js",
+      "test/plugins/rel/rotation_tests.js",
+      "test/plugins/rel/padding_tests.js",
       // Presentation files, for the iframe
       {pattern: "test/*.html", watched: true, served: true, included: false},
       {pattern: "test/plugins/*/*.html", watched: true, served: true, included: false},
       // JS files for iframe
       {pattern: "js/impress.js", watched: true, served: true, included: false},
+      {pattern: "node_modules/qunit-assert-close/qunit-assert-close.js", watched: false, served: true, included: true},
       {pattern: "node_modules/syn/dist/global/syn.js", watched: false, served: true, included: false}
     ],
 

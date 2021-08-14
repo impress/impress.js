@@ -22,6 +22,13 @@ Following html attributes are supported for step elements:
     data-rel-z
     data-rel-to
 
+    data-rel-rotate-x
+    data-rel-rotate-y
+    data-rel-rotate-z
+
+    data-rel-position
+    data-rel-clear
+
 Non-zero values are also inherited from the previous step. This makes it easy to 
 create a boring presentation where each slide shifts for example 1000px down 
 from the previous.
@@ -47,6 +54,28 @@ If you need a reference to a step that is shown later make use of the goto plugi
     <div id="shown-earlier" class="step" data-rel-to="shown-later" data-rel-x="1000" data-rel-y="500" data-goto-prev="shown-first" data-goto-next="shown-later">
     <div id="shown-last" class="step" data-goto-prev="shown-later">
 
+Relative positioning
+--------------------
+
+All `data-rel-x`/`y`/`z` is used world coordinate by default. So the value should be alternated according to the rotation state of previous slides.
+
+To easy relative positioning, the `data-rel-position` attribute is introduced.
+
+`data-rel-position` has a default value of "absolute", which works like this attribute is not intrduced.
+
+When `data-rel-position="relative"`, everything changed. The rotation of previous is no need to be considered, you can set all the `data-rel-` attributes as if the previous has no rotation. This plugin will calculate the acual position according to the position and rotation of the previous slide and the relative settings.
+
+For example, if you want the slide slided in from the right hand side, all you need is `data-rel-x="1000"`, no matter the rotation of the previous slide. If the previous slide has `data-rotate-z="90"`, the actual attribute of this slide will work like `data-rel-y="1000"`.
+
+Not only relative positions, the relative rotations can be used while `data-rel-position="relative"`.
+
+For example, `data-rel-rotate-y="45"` will make the slide has an angle of 45 degree to the previous slide. It make it easy to build a circle and do other complicated positioning.
+
+If not set, the `data-rel-position` attribute will be inherited from previous slide. So we only need to set it at the first slide, then all done.
+
+Becuase the rotation is complicated, to avoid confusion, we don't want to mixing absolute rotation and relative rotation. If any of `data-rotate-x`/`y`/`z` is set, all `data-re-rotate-*` is disabled.
+
+To avoid the boring need to set most `data-rel-*` to zero, but set only one or two ones, we introduce a `data-rel-clear` attribute. Once set, all `data-rel-*` attrbutes will NOT inherited from previous slide, but the `data-rel-position` will still be inherit.
 
 IMPORTANT: Incompatible change
 ------------------------------
