@@ -421,18 +421,29 @@
     /**
      * Apply a relative rotation to the base rotation.
      *
+     * Calculate the coordinate after the rotation on each axis,
+     * and finally find out a one step rotation has the effect
+     * of two rotation.
+     *
+     * If there're multiple way to accomplish, select the one
+     * that is nearest to the base.
+     *
      * Return one rotation has the same effect.
      */
-    var combineRotations = function( base, relative ) {
+    var combineRotations = function( base, rotations ) {
 
-        // Apply two rotations to the unit coordinate
-        var coord1 = rotateCoordinate( worldUnitCoordinate, base );
-        var coord2 = rotateCoordinate( coord1, relative );
+        // Find out the base coordinate
+        var coordinate = rotateCoordinate( worldUnitCoordinate, base );
+
+        // One by one apply rotations in order
+        for ( var i = 0; i < rotations.length; i++ ) {
+            coordinate = rotateCoordinate( coordinate, rotations[ i ] );
+        }
 
         // Calculate one rotation from unit coordinate to rotated
         // coordinate.  Because there're multiple possibles,
         // select the one nearest to the base
-        var rotate = coordinateToRotation( base, coord2 );
+        var rotate = coordinateToRotation( base, coordinate );
 
         return rotate;
     };
@@ -466,7 +477,6 @@
                     prev.z = toNumber( ref.getAttribute( "data-z" ) );
                     prev.rotate.y = toNumber( ref.getAttribute( "data-rotate-y" ) );
                     prev.rotate.x = toNumber( ref.getAttribute( "data-rotate-x" ) );
-                    prev.rotate.y = toNumber( ref.getAttribute( "data-rotate-y" ) );
                     prev.rotate.z = toNumber(
                         ref.getAttribute( "data-rotate-z" ) || ref.getAttribute( "data-rotate" ) );
                     prev.relative = {};
@@ -548,7 +558,14 @@
             step.z = step.z + rel.z;
 
             if ( useRelativeRotate ) {
-                step.rotate = combineRotations( prev.rotate, step.relative.rotate );
+
+                // The rotations in CSS is applied in order, and after each rotation,
+                // the rotation coordinate is updated accordingly. So we can't just
+                // sum up the angles.
+                // We need to know the new coordinate after each rotation, and calculate
+                // the position after the rotation according to it, and finally find
+                // out a one step rotation.
+                step.rotate = combineRotations( prev.rotate, [ step.relative.rotate ] );
             }
         } else {
             step.x = step.x + step.relative.x;
@@ -592,14 +609,13 @@
             } );
             var step = computeRelativePositions( el, prev );
 
-            // Apply relative position ( if non-zero )
+            // Apply relative position (if non-zero)
             el.setAttribute( "data-x", step.x );
             el.setAttribute( "data-y", step.y );
             el.setAttribute( "data-z", step.z );
             el.setAttribute( "data-rotate-x", step.rotate.x );
             el.setAttribute( "data-rotate-y", step.rotate.y );
             el.setAttribute( "data-rotate-z", step.rotate.z );
-            el.setAttribute( "data-rotate-order", step.rotate.order );
             el.setAttribute( "data-rotate-order", step.rotate.order );
             el.setAttribute( "data-rel-position", step.relative.position );
             prev = step;
