@@ -1,4 +1,4 @@
-QUnit.module( "rel plugin" );
+QUnit.module( "rel plugin rotation tests" );
 
 QUnit.test( "rotation_relative", function( assert ) {
   window.console.log( "Begin rotation_relative" );

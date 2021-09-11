@@ -48,405 +48,12 @@
 ( function( document, window ) {
     "use strict";
 
+    var api;
     var startingState = {};
 
     var api;
     var toNumber;
     var toNumberAdvanced;
-
-    /**
-     * Round the number to 2 decimals, it's enough for use
-     */
-    var roundNumber = function( num ) {
-        return Math.round( ( num + Number.EPSILON ) * 100 ) / 100;
-    };
-
-    /**
-     * Get the length/norm of a vector.
-     *
-     * https://en.wikipedia.org/wiki/Norm_(mathematics)
-     */
-    var vectorLength = function( vec ) {
-        return Math.sqrt( vec.x * vec.x + vec.y * vec.y + vec.z * vec.z );
-    };
-
-    /**
-     * Dot product of two vectors.
-     *
-     * https://en.wikipedia.org/wiki/Dot_product
-     */
-    var vectorDotProd = function( vec1, vec2 ) {
-        return vec1.x * vec2.x + vec1.y * vec2.y + vec1.z * vec2.z;
-    };
-
-    /**
-     * Cross product of two vectors.
-     *
-     * https://en.wikipedia.org/wiki/Cross_product
-     */
-    var vectorCrossProd = function( vec1, vec2 ) {
-        return {
-            x: vec1.y * vec2.z - vec1.z * vec2.y,
-            y: vec1.z * vec2.x - vec1.x * vec2.z,
-            z: vec1.x * vec2.y - vec1.y * vec2.x
-        };
-    };
-
-    /**
-     * Determine wheter a vector is a zero vector
-     */
-    var isZeroVector = function( vec ) {
-        return !roundNumber( vec.x ) && !roundNumber( vec.y ) && !roundNumber( vec.z );
-    };
-
-    /**
-     * Scalar triple product of three vectors.
-     *
-     * It can be used to determine the handness of vectors.
-     *
-     * https://en.wikipedia.org/wiki/Triple_product#Scalar_triple_product
-     */
-    var tripleProduct = function( vec1, vec2, vec3 ) {
-        return vectorDotProd( vectorCrossProd( vec1, vec2 ), vec3 );
-    };
-
-    /**
-     * The world/absolute unit coordinates.
-     *
-     * This coordinate is used by browser to position objects.
-     * It will not be affected by object rotations.
-     * All relative positions will finally be converted to this
-     * coordinate to be used.
-     */
-    var worldUnitCoordinate = {
-        x: { x:1, y:0, z:0 },
-        y: { x:0, y:1, z:0 },
-        z: { x:0, y:0, z:1 }
-    };
-
-    /**
-     * Make quaternion from rotation axis and angle.
-     *
-     * q = [ cos(½θ), sin(½θ) axis ]
-     *
-     * If the angle is zero, returns the corresponded quaternion
-     * of axis.
-     *
-     * If the angle is not zero, returns the rotating quaternion
-     * which corresponds to rotation about the axis, by the angle θ.
-     *
-     * https://en.wikipedia.org/wiki/Quaternion
-     * https://en.wikipedia.org/wiki/Quaternions_and_spatial_rotation
-     */
-    var makeQuaternion = function( axis, theta = 0 ) {
-        var r = 0;
-        var t = 1;
-
-        if ( theta ) {
-            var radians = theta * Math.PI / 180;
-            r = Math.cos( radians / 2 );
-            t = Math.sin( radians / 2 ) / vectorLength( axis );
-        }
-
-        var q = [ r, axis.x * t, axis.y * t, axis.z * t ];
-
-        return q;
-    };
-
-    /**
-     * Extract vector from quaternion
-     */
-    var quaternionToVector = function( quaternion ) {
-        return {
-            x: roundNumber( quaternion[ 1 ] ),
-            y: roundNumber( quaternion[ 2 ] ),
-            z: roundNumber( quaternion[ 3 ] )
-        };
-    };
-
-    /**
-     * Returns the conjugate quaternion of a quaternion
-     *
-     * https://en.wikipedia.org/wiki/Quaternion#Conjugation,_the_norm,_and_reciprocal
-     */
-    var conjugateQuaternion = function( quaternion ) {
-        return [ quaternion[ 0 ], -quaternion[ 1 ], -quaternion[ 2 ], -quaternion[ 3 ] ];
-    };
-
-    /**
-     * Left multiple two quaternion.
-     *
-     * Is's used to combine two rotating quaternion into one.
-     */
-    var leftMulQuaternion = function( q1, q2 ) {
-        return [
-            ( q1[ 0 ] * q2[ 0 ] - q1[ 1 ] * q2[ 1 ] - q1[ 2 ] * q2[ 2 ] - q1[ 3 ] * q2[ 3 ] ),
-            ( q1[ 1 ] * q2[ 0 ] + q1[ 0 ] * q2[ 1 ] - q1[ 3 ] * q2[ 2 ] + q1[ 2 ] * q2[ 3 ] ),
-            ( q1[ 2 ] * q2[ 0 ] + q1[ 3 ] * q2[ 1 ] + q1[ 0 ] * q2[ 2 ] - q1[ 1 ] * q2[ 3 ] ),
-            ( q1[ 3 ] * q2[ 0 ] - q1[ 2 ] * q2[ 1 ] + q1[ 1 ] * q2[ 2 ] + q1[ 0 ] * q2[ 3 ] )
-        ];
-    };
-
-    /**
-     * Convert a rotation into a quaternion
-     */
-    var rotationToQuaternion = function( baseCoordinate, rotation ) {
-        var order = rotation.order ? rotation.order : "xyz";
-        var axes = order.split( "" );
-        var result = [ 1, 0, 0, 0 ];
-
-        for ( var i = 0; i < axes.length; i++ ) {
-            var deg = rotation[ axes[ i ] ];
-            if ( !deg || ( Math.abs( deg ) < 0.0001 ) ) {
-                continue;
-            }
-
-            // All CSS rotation is based on the rotated coordinate
-            // So we need to calculate the rotated coordinate first
-            var coordinate = baseCoordinate;
-            if ( i > 0 ) {
-                coordinate = {
-                    x: rotateByQuaternion( baseCoordinate.x, result ),
-                    y: rotateByQuaternion( baseCoordinate.y, result ),
-                    z: rotateByQuaternion( baseCoordinate.z, result )
-                };
-            }
-
-            result = leftMulQuaternion(
-                makeQuaternion( coordinate[ axes[ i ] ], deg ),
-                result );
-
-        }
-
-        return result;
-    };
-
-    /**
-     * Rotate a vector by a quaternion.
-     */
-    var rotateByQuaternion = function( vec, quaternion ) {
-        var q = makeQuaternion( vec );
-
-        q = leftMulQuaternion(
-            leftMulQuaternion( quaternion, q ),
-            conjugateQuaternion( quaternion ) );
-
-        return quaternionToVector( q );
-    };
-
-    /**
-     * Rotate a vector by rotaion sequence.
-     */
-    var rotateVector = function( baseCoordinate, vec, rotation ) {
-        var quaternion = rotationToQuaternion( baseCoordinate, rotation );
-
-        return rotateByQuaternion( vec, quaternion );
-    };
-
-    /**
-     * Given a rotation, return the rotationed coordinate
-     */
-    var rotateCoordinate = function( coordinate, rotation ) {
-        var quaternion = rotationToQuaternion( coordinate, rotation );
-
-        return {
-            x: rotateByQuaternion( coordinate.x, quaternion ),
-            y: rotateByQuaternion( coordinate.y, quaternion ),
-            z: rotateByQuaternion( coordinate.z, quaternion )
-        };
-    };
-
-    /**
-     * Return the angle between two vector.
-     *
-     * The axis is used to determine the rotation direction.
-     */
-    var angleBetweenTwoVector = function( axis, vec1, vec2 ) {
-        var vecLen1 = vectorLength( vec1 );
-        var vecLen2 = vectorLength( vec2 );
-
-        if ( !vecLen1 || !vecLen2 ) {
-            return 0;
-        }
-
-        var cos = vectorDotProd( vec1, vec2 ) / vecLen1 / vecLen2 ;
-        var angle = Math.acos( cos ) * 180 / Math.PI;
-
-        if ( tripleProduct( vec1, vec2, axis ) > 0 ) {
-            return angle;
-        } else {
-            return -angle;
-        }
-    };
-
-    /**
-     * Return the angle between a vector and a plane.
-     *
-     * The plane is determined by an axis and a vector on the plane.
-     */
-    var angleBetweenPlaneAndVector = function( axis, planeVec, rotatedVec ) {
-        var norm = vectorCrossProd( axis, planeVec );
-
-        if ( isZeroVector( norm ) ) {
-            return 0;
-        }
-
-        return 90 - angleBetweenTwoVector( axis, rotatedVec, norm );
-    };
-
-    /**
-     * Calculated a order specified rotation sequence to
-     * transform from the world coordinate to required coordinate.
-     */
-    var coordinateToOrderedRotation = function( coordinate, order ) {
-        var axis0 = order[ 0 ];
-        var axis1 = order[ 1 ];
-        var axis2 = order[ 2 ];
-        var reversedOrder = order.split( "" ).reverse().join( "" );
-
-        var rotate2 = angleBetweenPlaneAndVector(
-            coordinate[ axis2 ],
-            worldUnitCoordinate[ axis0 ],
-            coordinate[ axis0 ] );
-
-        // The r2 is the reverse of rotate for axis2
-        // The coordinate1 is the coordinate before rotate of axis2
-        var r2 = { order: reversedOrder };
-        r2[ axis2 ] = -rotate2;
-
-        var coordinate1 = rotateCoordinate( coordinate, r2 );
-
-        // Calculate the rotation for axis1
-        var rotate1 = angleBetweenTwoVector(
-            coordinate1[ axis1 ],
-            worldUnitCoordinate[ axis0 ],
-            coordinate1[ axis0 ] );
-
-        // The r1 is the reverse of rotate for axis1
-        // The v1 is the state before rotate for axis1
-        var r1 = { order: reversedOrder };
-        r1[ axis1 ] = -rotate1;
-        r1[ axis2 ] = -rotate2;
-
-        var coordinate0 = rotateCoordinate( coordinate, r1 );
-
-        // Calculate the rotation for axis0
-        var rotate0 = angleBetweenTwoVector(
-            coordinate0[ axis0 ],
-            worldUnitCoordinate[ axis1 ],
-            coordinate0[ axis1 ] );
-
-        var rotation = { };
-        rotation.order = order;
-        rotation[ axis0 ] = roundNumber( rotate0 );
-        rotation[ axis1 ] = roundNumber( rotate1 );
-        rotation[ axis2 ] = roundNumber( rotate2 );
-
-        return rotation;
-    };
-
-    /**
-     * Returns the possible rotations from unit coordinate
-     * to specified coordinate.
-     */
-    var possibleRotations = function( coordinate ) {
-        var orders = [ "xyz", "xzy", "yxz", "yzx", "zxy", "zyx" ];
-        var rotations = [ ];
-
-        for ( var i = 0; i < orders.length; ++i ) {
-            rotations.push(
-                coordinateToOrderedRotation( coordinate, orders[ i ] )
-            );
-        }
-
-        return rotations;
-    };
-
-    /**
-     * Calculate a degree which in range (-180, 180] of baseDeg
-     */
-    var nearestAngle = function( baseDeg, deg ) {
-        while ( deg > baseDeg + 180 ) {
-            deg -= 360;
-        }
-
-        while ( deg < baseDeg - 180 ) {
-            deg += 360;
-        }
-
-        return deg;
-    };
-
-    /**
-     * Given a base rotation and multiple rotations, return the best one.
-     *
-     * The best one is the one has least rotate from base.
-     */
-    var bestRotation = function( baseRotate, rotations ) {
-        var bestScore;
-        var bestRotation;
-
-        for ( var i = 0; i < rotations.length; ++i ) {
-            var rotation = {
-                order: rotations[ i ].order,
-                x: nearestAngle( baseRotate.x, rotations[ i ].x ),
-                y: nearestAngle( baseRotate.y, rotations[ i ].y ),
-                z: nearestAngle( baseRotate.z, rotations[ i ].z )
-            };
-
-            var score = Math.abs( rotation.x - baseRotate.x ) +
-                Math.abs( rotation.y - baseRotate.y ) +
-                Math.abs( rotation.z - baseRotate.z );
-
-            if ( !i || ( score < bestScore ) ) {
-                bestScore = score;
-                bestRotation = rotation;
-            }
-        }
-
-        return bestRotation;
-    };
-
-    /**
-     * Given a coordinate, return the best rotation to achieve it.
-     *
-     * The baseRotate is used to select the near rotation from it.
-     */
-    var coordinateToRotation = function( baseRotate, coordinate ) {
-        var rotations = possibleRotations( coordinate );
-
-        return bestRotation( baseRotate, rotations );
-    };
-
-    /**
-     * Apply a relative rotation to the base rotation.
-     *
-     * Calculate the coordinate after the rotation on each axis,
-     * and finally find out a one step rotation has the effect
-     * of two rotation.
-     *
-     * If there're multiple way to accomplish, select the one
-     * that is nearest to the base.
-     *
-     * Return one rotation has the same effect.
-     */
-    var combineRotations = function( base, rotations ) {
-
-        // Find out the base coordinate
-        var coordinate = rotateCoordinate( worldUnitCoordinate, base );
-
-        // One by one apply rotations in order
-        for ( var i = 0; i < rotations.length; i++ ) {
-            coordinate = rotateCoordinate( coordinate, rotations[ i ] );
-        }
-
-        // Calculate one rotation from unit coordinate to rotated
-        // coordinate.  Because there're multiple possibles,
-        // select the one nearest to the base
-        var rotate = coordinateToRotation( base, coordinate );
-
-        return rotate;
-    };
 
     var computeRelativePositions = function( el, prev ) {
         var data = el.dataset;
@@ -479,8 +86,11 @@
                     prev.rotate.x = toNumber( ref.getAttribute( "data-rotate-x" ) );
                     prev.rotate.z = toNumber(
                         ref.getAttribute( "data-rotate-z" ) || ref.getAttribute( "data-rotate" ) );
+
+                    // We don't inherit relatives from relTo slide
                     prev.relative = {};
                     prev.relative.position = ref.getAttribute( "data-rel-position" ) || "absolute";
+                    prev.relative.rotate = { x:0, y:0, z:0, order: "xyz" };
                 } else {
                     window.console.error(
                         "impress.js rel plugin: Step \"" + data.relTo + "\" is not defined " +
@@ -501,13 +111,27 @@
             }
         }
 
-        if ( el.hasAttribute( "data-rel-clear" ) ) {
+        // While ``data-rel-reset="relative"`` or just ``data-rel-reset``,
+        // ``data-rel-x/y/z`` and ``data-rel-rotate-x/y/z`` will have default value of 0,
+        // instead of inherit from previous slide.
+        //
+        // If ``data-rel-reset="all"``, ``data-rotate-*`` are not inherited from previous slide too.
+        // So ``data-rel-reset="all" data-rotate-x="90"`` means
+        // ``data-rotate-x="90" data-rotate-y="0" data-rotate-z="0"``, we doesn't need to
+        // bother clearing all unneeded attributes.
+
+        var inheritRotation = true;
+        if ( el.hasAttribute( "data-rel-reset" ) ) {
 
             // Don't inherit from prev, just use the relative setting for current element
             prev.relative = {
                 position: prev.relative.position,
                 x:0, y:0, z:0,
                 rotate: { x:0, y:0, z:0, order: "xyz" } };
+
+            if ( data.relReset === "all" ) {
+                inheritRotation = false;
+            }
         }
 
         var step = {
@@ -529,52 +153,53 @@
                         x: toNumber( data.relRotateX, prev.relative.rotate.x ),
                         y: toNumber( data.relRotateY, prev.relative.rotate.y ),
                         z: toNumber( data.relRotateZ, prev.relative.rotate.z ),
-                        order: data.relRotateOrder || "xyz"
+                        order: data.rotateOrder || "xyz"
                     }
                 }
             };
 
+        // The final relatives maybe or maybe not the same with orignal data-rel-*
+        var relative = step.relative;
+
+        if ( step.relative.position === "relative" ) {
+
+            // Calculate relatives based on previous slide
+            relative = api.lib.rotation.translateRelative(
+                step.relative, prev.rotate );
+
+            // Convert rotations to values that works with step.rotate
+            relative.rotate.x -= step.rotate.x;
+            relative.rotate.y -= step.rotate.y;
+            relative.rotate.z -= step.rotate.z;
+        }
+
         // Relative position is ignored/zero if absolute is given.
         // Note that this also has the effect of resetting any inherited relative values.
         if ( data.x !== undefined ) {
-            step.relative.x = 0;
+            relative.x = step.relative.x = 0;
         }
         if ( data.y !== undefined ) {
-            step.relative.y = 0;
+            relative.y = step.relative.y = 0;
         }
         if ( data.z !== undefined ) {
-            step.relative.z = 0;
+            relative.z = step.relative.z = 0;
+        }
+        if ( data.rotateX !== undefined || !inheritRotation ) {
+            relative.rotate.x = step.relative.rotate.x = 0;
+        }
+        if ( data.rotateY !== undefined || !inheritRotation ) {
+            relative.rotate.y = step.relative.rotate.y = 0;
+        }
+        if ( data.rotateZ !== undefined || !inheritRotation ) {
+            relative.rotate.z = step.relative.rotate.z = 0;
         }
 
-        // Once rotate-x/rotate-y/rotate-z is set, all three must be set or use default 0
-        var useRelativeRotate = data.rotateX === undefined &&
-            data.rotateY === undefined &&
-            data.rotateZ === undefined;
-
-        if ( step.relative.position === "relative" ) {
-            var rel = rotateVector( worldUnitCoordinate, step.relative, prev.rotate );
-            step.x = step.x + rel.x;
-            step.y = step.y + rel.y;
-            step.z = step.z + rel.z;
-
-            if ( useRelativeRotate ) {
-
-                // The rotations in CSS is applied in order, and after each rotation,
-                // the rotation coordinate is updated accordingly. So we can't just
-                // sum up the angles.
-                // We need to know the new coordinate after each rotation, and calculate
-                // the position after the rotation according to it, and finally find
-                // out a one step rotation.
-                step.rotate = combineRotations( prev.rotate, [ step.relative.rotate ] );
-            }
-        } else {
-            step.x = step.x + step.relative.x;
-            step.y = step.y + step.relative.y;
-            step.z = step.z + step.relative.z;
-            step.rotate.x = step.rotate.x /* + step.relative.rotate.x */;
-            step.rotate.y = step.rotate.y /* + step.relative.rotate.y */;
-            step.rotate.z = step.rotate.z /* + step.relative.rotate.z */;
-        }
+        step.x = step.x + relative.x;
+        step.y = step.y + relative.y;
+        step.z = step.z + relative.z;
+        step.rotate.x = step.rotate.x + relative.rotate.x;
+        step.rotate.y = step.rotate.y + relative.rotate.y;
+        step.rotate.z = step.rotate.z + relative.rotate.z;
 
         return step;
     };
@@ -604,8 +229,7 @@
                 relRotateY: el.getAttribute( "data-rel-rotate-y" ),
                 relRotateZ: el.getAttribute( "data-rel-rotate-z" ),
                 relPosition: el.getAttribute( "data-rel-position" ),
-                rotateOrder: el.getAttribute( "data-rotate-order" ),
-                relRotateOrder: el.getAttribute( "data-rel-rotate-order" )
+                rotateOrder: el.getAttribute( "data-rotate-order" )
             } );
             var step = computeRelativePositions( el, prev );
 

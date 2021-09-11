@@ -1,4 +1,4 @@
-QUnit.module( "rel plugin" );
+QUnit.module( "rel plugin padding tests" );
 
 QUnit.test( "padding_relative", function( assert ) {
   window.console.log( "Begin padding_relative" );

@@ -76,19 +76,19 @@
       <div id="box-front" class="step box" data-x="-3000" data-y="0" data-z="0" data-rotate-x="0" data-rotate-y="0" data-rotate-z="0">Front
           <p>There's two nested box here.</p>
       </div>
-      <div id="box-front1" class="step box1" data-rel-clear data-rel-z="-200" data-scale="0.6">Inside Front</div>
-      <div id="box-right1" class="step box1" data-rel-clear data-rel-x="300" data-rel-z="-300" data-rel-rotate-y="90" data-scale="0.6">Inside Right</div>
-      <div id="box-right" class="step box" data-rel-clear data-rel-z="200">Right</div>
-      <div id="box-back" class="step box" data-rel-clear data-rel-x="500" data-rel-z="-500" data-rel-rotate-y="90">Back</div>
-      <div id="box-back1" class="step box1" data-rel-clear data-rel-z="-200" data-scale="0.6">Inside Back</div>
-      <div id="box-top1" class="step box1" data-rel-clear data-rel-y="-300" data-rel-z="-300" data-rel-rotate-x="90" data-scale="0.6">Inside Top</div>
-      <div id="box-top" class="step box" data-rel-clear data-rel-z="200">Top</div>
-      <div id="box-left" class="step box" data-rel-clear data-rel-x="500" data-rel-z="-500" data-rel-rotate-y="90">Left</div>
-      <div id="box-left1" class="step box1" data-rel-clear data-rel-z="-200" data-scale="0.6">Inside Left</div>
-      <div id="box-bottom1" class="step box1" data-rel-clear data-rel-x="300" data-rel-z="-300" data-rel-rotate-y="90" data-scale="0.6">Inside Bottom</div>
-      <div id="box-bottom" class="step box" data-rel-clear data-rel-z="200">Bottom</div>
+      <div id="box-front1" class="step box1" data-rel-reset data-rel-z="-200" data-scale="0.6">Inside Front</div>
+      <div id="box-right1" class="step box1" data-rel-reset data-rel-x="300" data-rel-z="-300" data-rel-rotate-y="90" data-scale="0.6">Inside Right</div>
+      <div id="box-right" class="step box" data-rel-reset data-rel-z="200">Right</div>
+      <div id="box-back" class="step box" data-rel-reset data-rel-x="500" data-rel-z="-500" data-rel-rotate-y="90">Back</div>
+      <div id="box-back1" class="step box1" data-rel-reset data-rel-z="-200" data-scale="0.6">Inside Back</div>
+      <div id="box-top1" class="step box1" data-rel-reset data-rel-y="-300" data-rel-z="-300" data-rel-rotate-x="90" data-scale="0.6">Inside Top</div>
+      <div id="box-top" class="step box" data-rel-reset data-rel-z="200">Top</div>
+      <div id="box-left" class="step box" data-rel-reset data-rel-x="500" data-rel-z="-500" data-rel-rotate-y="90">Left</div>
+      <div id="box-left1" class="step box1" data-rel-reset data-rel-z="-200" data-scale="0.6">Inside Left</div>
+      <div id="box-bottom1" class="step box1" data-rel-reset data-rel-x="300" data-rel-z="-300" data-rel-rotate-y="90" data-scale="0.6">Inside Bottom</div>
+      <div id="box-bottom" class="step box" data-rel-reset data-rel-z="200">Bottom</div>
 
-      <div id="ring1-1" class="step" data-x="0" data-y="0" data-z="0" data-rotate-y="10">
+      <div id="ring1-1" class="step" data-rel-reset="all" data-x="0" data-y="0" data-z="0" data-rotate-y="10">
         <p>Slide one</p>
         <p>This is a ring of 8 slides.</p>
         <p>It's easy constucted with data-rel-position="relative" without calculates the coordinates of all slides.</p>
@@ -124,7 +124,7 @@
         <p>Slide eight</p>
       </div>
 
-      <div id="ring2-1" class="step ring2" data-x="-500" data-y="0" data-z="-1514" data-rotate-x="90" data-rotate-y="270" data-rotate-z="0">
+      <div id="ring2-1" class="step ring2" data-rel-reset="all" data-x="-500" data-y="0" data-z="-1514" data-rotate-x="90" data-rotate-y="270" data-rotate-z="0">
         <p>Slide one</p>
         <p>This is another ring of slides.</p>
         <p>Except for the this slide, its code is just cloned from the yellow ring.</p>
