@@ -31,6 +31,8 @@ QUnit.test( "padding_relative", function( assert ) {
       var z_y = iframeDoc.querySelector( "div#z_y" );
       var z_z = iframeDoc.querySelector( "div#z_z" );
 
+      var reset = iframeDoc.querySelector( "div#reset" );
+
       assert.close( origin.dataset.x, 0, 1, "origin data-x attribute" );
       assert.close( origin.dataset.y, 0, 1, "origin data-y attribute" );
       assert.close( origin.dataset.z, 0, 1, "origin data-z attribute" );
@@ -142,6 +144,13 @@ QUnit.test( "padding_relative", function( assert ) {
       assert.close( z_z.dataset.rotateX, 0, 1, "z_z data-rotate-x" );
       assert.close( z_z.dataset.rotateY, 0, 1, "z_z data-rotate-y" );
       assert.close( z_z.dataset.rotateZ, 90, 1, "z_z data-rotate-z" );
+
+      assert.close( reset.dataset.x, 100, 1, "reset data-x attribute" );
+      assert.close( reset.dataset.y, 200, 1, "reset data-y attribute" );
+      assert.close( reset.dataset.z, 800, 1, "reset data-z attribute" );
+      assert.close( reset.dataset.rotateX, 0, 1, "reset data-rotate-x" );
+      assert.close( reset.dataset.rotateY, 0, 1, "reset data-rotate-y" );
+      assert.close( reset.dataset.rotateZ, 0, 1, "reset data-rotate-z" );
 
       done();
       console.log( "End padding test (sync)" );

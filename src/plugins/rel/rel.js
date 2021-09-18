@@ -161,7 +161,7 @@
         // The final relatives maybe or maybe not the same with orignal data-rel-*
         var relative = step.relative;
 
-        if ( step.relative.position === "relative" ) {
+        if ( step.relative.position === "relative" && inheritRotation ) {
 
             // Calculate relatives based on previous slide
             relative = api.lib.rotation.translateRelative(
