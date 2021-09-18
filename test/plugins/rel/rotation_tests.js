@@ -19,6 +19,7 @@ QUnit.test( "rotation_relative", function( assert ) {
       var step7 = iframeDoc.querySelector( "div#step-7" );
       var step8 = iframeDoc.querySelector( "div#step-8" );
       var reset = iframeDoc.querySelector( "div#reset" );
+      var rotate = iframeDoc.querySelector( "div#rotate" );
 
       assert.close( step1.dataset.x, 0, 1, "step-1 data-x attribute" );
       assert.close( step1.dataset.y, 0, 1, "step-1 data-y attribute" );
@@ -83,6 +84,14 @@ QUnit.test( "rotation_relative", function( assert ) {
       assert.equal( reset.dataset.rotateY, 0, "reset data-rotate-y" );
       assert.equal( reset.dataset.rotateZ, 0, "reset data-rotate-z" );
       assert.equal( reset.dataset.rotateOrder, "zyx", "reset data-rotate-order" );
+
+      assert.equal( rotate.dataset.x, 0, "rotate data-x attribute" );
+      assert.equal( rotate.dataset.y, 0, "rotate data-y attribute" );
+      assert.equal( rotate.dataset.z, 0, "rotate data-z attribute" );
+      assert.equal( rotate.dataset.rotateX, 0, "rotate data-rotate-x" );
+      assert.equal( rotate.dataset.rotateY, 0, "rotate data-rotate-y" );
+      assert.equal( rotate.dataset.rotateZ, 123, "rotate data-rotate-z" );
+      assert.equal( rotate.dataset.rotateOrder, "xyz", "rotate data-rotate-order" );
 
       done();
       console.log( "End rotation test (sync)" );

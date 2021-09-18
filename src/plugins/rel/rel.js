@@ -141,7 +141,7 @@
                 rotate: {
                     x: toNumber( data.rotateX, 0 ),
                     y: toNumber( data.rotateY, 0 ),
-                    z: toNumber( data.rotateZ, 0 ),
+                    z: toNumber( data.rotateZ || data.rotate, 0 ),
                     order: data.rotateOrder || "xyz"
                 },
                 relative: {
@@ -190,7 +190,7 @@
         if ( data.rotateY !== undefined || !inheritRotation ) {
             relative.rotate.y = step.relative.rotate.y = 0;
         }
-        if ( data.rotateZ !== undefined || !inheritRotation ) {
+        if ( data.rotateZ !== undefined || data.rotate !== undefined || !inheritRotation ) {
             relative.rotate.z = step.relative.rotate.z = 0;
         }
 
@@ -225,6 +225,7 @@
                 rotateX: el.getAttribute( "data-rotate-x" ),
                 rotateY: el.getAttribute( "data-rotate-y" ),
                 rotateZ: el.getAttribute( "data-rotate-z" ),
+                rotate: el.getAttribute( "data-rotate" ),
                 relRotateX: el.getAttribute( "data-rel-rotate-x" ),
                 relRotateY: el.getAttribute( "data-rel-rotate-y" ),
                 relRotateZ: el.getAttribute( "data-rel-rotate-z" ),
