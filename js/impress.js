@@ -179,6 +179,9 @@
         transitionDuration: 1000
     };
 
+    // Configuration options
+    var config = null;
+
     // It's just an empty function ... and a useless comment.
     var empty = function() { return false; };
 
@@ -229,9 +232,6 @@
 
         // Array of step elements
         var steps = null;
-
-        // Configuration options
-        var config = null;
 
         // Scale factor of the browser window
         var windowScale = null;
@@ -323,9 +323,28 @@
             steps.forEach( initStep );
         };
 
+        // Build configuration from root and defaults
+        var buildConfig = function() {
+            var rootData = root.dataset;
+            return {
+                width: lib.util.toNumber( rootData.width, defaults.width ),
+                height: lib.util.toNumber( rootData.height, defaults.height ),
+                maxScale: lib.util.toNumber( rootData.maxScale, defaults.maxScale ),
+                minScale: lib.util.toNumber( rootData.minScale, defaults.minScale ),
+                perspective: lib.util.toNumber( rootData.perspective, defaults.perspective ),
+                transitionDuration: lib.util.toNumber(
+                    rootData.transitionDuration, defaults.transitionDuration
+                )
+            };
+        };
+
         // `init` API function that initializes (and runs) the presentation.
         var init = function() {
             if ( initialized ) { return; }
+
+            // Initialize configuration object to be used by pre-init plugins.
+            // Some config may be changed by pre-init plugins.
+            config = buildConfig();
             execPreInitPlugins( root );
 
             // First we set up the viewport for mobile devices.
@@ -337,18 +356,9 @@
                 document.head.appendChild( meta );
             }
 
-            // Initialize configuration object
-            var rootData = root.dataset;
-            config = {
-                width: lib.util.toNumber( rootData.width, defaults.width ),
-                height: lib.util.toNumber( rootData.height, defaults.height ),
-                maxScale: lib.util.toNumber( rootData.maxScale, defaults.maxScale ),
-                minScale: lib.util.toNumber( rootData.minScale, defaults.minScale ),
-                perspective: lib.util.toNumber( rootData.perspective, defaults.perspective ),
-                transitionDuration: lib.util.toNumber(
-                    rootData.transitionDuration, defaults.transitionDuration
-                )
-            };
+            // Initialize configuration object.
+            // Pre-init plugins may make some change, so we calculate it again.
+            config = buildConfig();
 
             windowScale = computeWindowScale( config );
 
@@ -888,6 +898,10 @@
             preStepLeavePlugins[ weight ] = [];
         }
         preStepLeavePlugins[ weight ].push( plugin );
+    };
+
+    impress.getConfig = function() {
+        return config;
     };
 
     // Called at beginning of goto(), to execute all preStepLeave plugins.
@@ -3663,7 +3677,8 @@
             return toNumber( numeric, fallback );
         } else {
             var value = parseFloat( ratio[ 1 ] );
-            var multiplier = ratio[ 2 ] === "w" ? window.innerWidth : window.innerHeight;
+            var config = window.impress.getConfig();
+            var multiplier = ratio[ 2 ] === "w" ? config.width : config.height;
             return value * multiplier;
         }
     };
