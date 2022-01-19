@@ -72,9 +72,10 @@
             };
         }
 
+        var ref = prev;
         if ( data.relTo ) {
 
-            var ref = document.getElementById( data.relTo );
+            ref = document.getElementById( data.relTo );
             if ( ref ) {
 
                 // Test, if it is a previous step that already has some assigned position data
@@ -132,6 +133,29 @@
             if ( data.relReset === "all" ) {
                 inheritRotation = false;
             }
+        } else if ( el.hasAttribute( "data-rel-inherit" ) ) {
+            var inheritFrom = null;
+            if ( data.relInherit ) {
+
+                // If data-rel-inherit has value, it's the referenced node
+                inheritFrom = document.getElementById( data.relInherit );
+            }
+
+            if ( !inheritFrom ) {
+                inheritFrom = ref;
+            }
+
+            prev.relative.x = toNumberAdvanced( inheritFrom.getAttribute( "data-rel-x" ), 0 );
+            prev.relative.y = toNumberAdvanced( inheritFrom.getAttribute( "data-rel-y" ), 0 );
+            prev.relative.z = toNumberAdvanced( inheritFrom.getAttribute( "data-rel-z" ), 0 );
+            prev.relative.rotate.x =
+                toNumberAdvanced( inheritFrom.getAttribute( "data-rel-rotate-x" ), 0 );
+            prev.relative.rotate.y =
+                toNumberAdvanced( inheritFrom.getAttribute( "data-rel-rotate-y" ), 0 );
+            prev.relative.rotate.z =
+                toNumberAdvanced( inheritFrom.getAttribute( "data-rel-rotate-z" ), 0 );
+            prev.relative.rotate.order =
+                inheritFrom.getAttribute( "data-rel-rotate-order" ) ||  "xyz";
         }
 
         var step = {
@@ -243,6 +267,12 @@
             el.setAttribute( "data-rotate-z", step.rotate.z );
             el.setAttribute( "data-rotate-order", step.rotate.order );
             el.setAttribute( "data-rel-position", step.relative.position );
+            el.setAttribute( "data-rel-x", step.relative.x );
+            el.setAttribute( "data-rel-y", step.relative.y );
+            el.setAttribute( "data-rel-z", step.relative.z );
+            el.setAttribute( "data-rel-rotate-x", step.relative.rotate.x );
+            el.setAttribute( "data-rel-rotate-y", step.relative.rotate.y );
+            el.setAttribute( "data-rel-rotate-z", step.relative.rotate.z );
             prev = step;
         }
     };
