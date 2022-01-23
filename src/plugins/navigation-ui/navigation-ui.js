@@ -46,7 +46,7 @@
             if ( hideSteps.indexOf( steps[ i ] ) < 0 ) {
                 options = options + '<option value="' + steps[ i ].id + '">' + // jshint ignore:line
 							(
-								steps[ i ].title ? steps[ i ].title : steps[ i ].id 
+								steps[ i ].title ? steps[ i ].title : steps[ i ].id
 							) + '</option>' + '\n';
             }
         }
