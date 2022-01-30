@@ -22,6 +22,7 @@ module.exports = function(config) {
       "test/core_tests.js",
       "test/non_default.js",
       "src/plugins/navigation/navigation_tests.js",
+      "test/plugins/rel/relative_to_screen_size_tests.js",
       // Presentation files, for the iframe
       {pattern: "test/*.html", watched: true, served: true, included: false},
       {pattern: "test/plugins/*/*.html", watched: true, served: true, included: false},

@@ -72,7 +72,8 @@
             return toNumber( numeric, fallback );
         } else {
             var value = parseFloat( ratio[ 1 ] );
-            var multiplier = ratio[ 2 ] === "w" ? window.innerWidth : window.innerHeight;
+            var config = window.impress.getConfig();
+            var multiplier = ratio[ 2 ] === "w" ? config.width : config.height;
             return value * multiplier;
         }
     };
