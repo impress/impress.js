@@ -45,7 +45,9 @@
             // Omit steps that are listed as hidden from select widget
             if ( hideSteps.indexOf( steps[ i ] ) < 0 ) {
                 options = options + '<option value="' + steps[ i ].id + '">' + // jshint ignore:line
-                                    steps[ i ].id + '</option>' + '\n'; // jshint ignore:line
+							(
+								steps[ i ].title ? steps[ i ].title : steps[ i ].id
+							) + '</option>' + '\n';
             }
         }
         return options;
