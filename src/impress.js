@@ -281,9 +281,9 @@
             var data = el.dataset,
                 step = {
                     translate: {
-                        x: lib.util.toNumber( data.x ),
-                        y: lib.util.toNumber( data.y ),
-                        z: lib.util.toNumber( data.z )
+                        x: lib.util.toNumberAdvanced( data.x ),
+                        y: lib.util.toNumberAdvanced( data.y ),
+                        z: lib.util.toNumberAdvanced( data.z )
                     },
                     rotate: {
                         x: lib.util.toNumber( data.rotateX ),
@@ -873,7 +873,7 @@
             var thisLevel = preInitPlugins[ i ];
             if ( thisLevel !== undefined ) {
                 for ( var j = 0; j < thisLevel.length; j++ ) {
-                    thisLevel[ j ]( root );
+                    thisLevel[ j ]( root, roots[ "impress-root-" + root.id ] );
                 }
             }
         }

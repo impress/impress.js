@@ -283,9 +283,9 @@
             var data = el.dataset,
                 step = {
                     translate: {
-                        x: lib.util.toNumber( data.x ),
-                        y: lib.util.toNumber( data.y ),
-                        z: lib.util.toNumber( data.z )
+                        x: lib.util.toNumberAdvanced( data.x ),
+                        y: lib.util.toNumberAdvanced( data.y ),
+                        z: lib.util.toNumberAdvanced( data.z )
                     },
                     rotate: {
                         x: lib.util.toNumber( data.rotateX ),
@@ -342,8 +342,7 @@
         var init = function() {
             if ( initialized ) { return; }
 
-            // Initialize configuration object to be used by pre-init plugins.
-            // Some config may be changed by pre-init plugins.
+            // Initialize the configuration object, so it can be used by pre-init plugins.
             config = buildConfig();
             execPreInitPlugins( root );
 
@@ -355,10 +354,6 @@
                 meta.name = "viewport";
                 document.head.appendChild( meta );
             }
-
-            // Initialize configuration object.
-            // Pre-init plugins may make some change, so we calculate it again.
-            config = buildConfig();
 
             windowScale = computeWindowScale( config );
 
@@ -880,7 +875,7 @@
             var thisLevel = preInitPlugins[ i ];
             if ( thisLevel !== undefined ) {
                 for ( var j = 0; j < thisLevel.length; j++ ) {
-                    thisLevel[ j ]( root );
+                    thisLevel[ j ]( root, roots[ "impress-root-" + root.id ] );
                 }
             }
         }
@@ -1253,6 +1248,26 @@
             return isNaN( numeric ) ? ( fallback || 0 ) : Number( numeric );
         };
 
+        /**
+         * Extends toNumber() to correctly compute also relative-to-screen-size values 5w and 5h.
+         *
+         * Returns the computed value in pixels with w/h postfix removed.
+         */
+        var toNumberAdvanced = function( numeric, fallback ) {
+            if ( typeof numeric !== "string" ) {
+                return toNumber( numeric, fallback );
+            }
+            var ratio = numeric.match( /^([+-]*[\d\.]+)([wh])$/ );
+            if ( ratio == null ) {
+                return toNumber( numeric, fallback );
+            } else {
+                var value = parseFloat( ratio[ 1 ] );
+                var config = window.impress.getConfig();
+                var multiplier = ratio[ 2 ] === "w" ? config.width : config.height;
+                return value * multiplier;
+            }
+        };
+
         // `triggerEvent` builds a custom DOM event with given `eventName` and `detail` data
         // and triggers it on element given as `el`.
         var triggerEvent = function( el, eventName, detail ) {
@@ -1269,6 +1284,7 @@
             getElementFromHash: getElementFromHash,
             throttle: throttle,
             toNumber: toNumber,
+            toNumberAdvanced: toNumberAdvanced,
             triggerEvent: triggerEvent,
             getUrlParamValue: getUrlParamValue
         };
@@ -3467,7 +3483,9 @@
             // Omit steps that are listed as hidden from select widget
             if ( hideSteps.indexOf( steps[ i ] ) < 0 ) {
                 options = options + '<option value="' + steps[ i ].id + '">' + // jshint ignore:line
-                                    steps[ i ].id + '</option>' + '\n'; // jshint ignore:line
+							(
+								steps[ i ].title ? steps[ i ].title : steps[ i ].id
+							) + '</option>' + '\n';
             }
         }
         return options;
@@ -3655,33 +3673,9 @@
 
     var startingState = {};
 
-    /**
-     * Copied from core impress.js. We currently lack a library mechanism to
-     * to share utility functions like this.
-     */
-    var toNumber = function( numeric, fallback ) {
-        return isNaN( numeric ) ? ( fallback || 0 ) : Number( numeric );
-    };
-
-    /**
-     * Extends toNumber() to correctly compute also relative-to-screen-size values 5w and 5h.
-     *
-     * Returns the computed value in pixels with w/h postfix removed.
-     */
-    var toNumberAdvanced = function( numeric, fallback ) {
-        if ( typeof numeric !== "string" ) {
-            return toNumber( numeric, fallback );
-        }
-        var ratio = numeric.match( /^([+-]*[\d\.]+)([wh])$/ );
-        if ( ratio == null ) {
-            return toNumber( numeric, fallback );
-        } else {
-            var value = parseFloat( ratio[ 1 ] );
-            var config = window.impress.getConfig();
-            var multiplier = ratio[ 2 ] === "w" ? config.width : config.height;
-            return value * multiplier;
-        }
-    };
+    var api;
+    var toNumber;
+    var toNumberAdvanced;
 
     var computeRelativePositions = function( el, prev ) {
         var data = el.dataset;
@@ -3755,7 +3749,11 @@
         return step;
     };
 
-    var rel = function( root ) {
+    var rel = function( root, impressApi ) {
+        api = impressApi;
+        toNumber = api.lib.util.toNumber;
+        toNumberAdvanced = api.lib.util.toNumberAdvanced;
+
         var steps = root.querySelectorAll( ".step" );
         var prev;
         startingState[ root.id ] = [];
