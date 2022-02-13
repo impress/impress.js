@@ -50,33 +50,9 @@
 
     var startingState = {};
 
-    /**
-     * Copied from core impress.js. We currently lack a library mechanism to
-     * to share utility functions like this.
-     */
-    var toNumber = function( numeric, fallback ) {
-        return isNaN( numeric ) ? ( fallback || 0 ) : Number( numeric );
-    };
-
-    /**
-     * Extends toNumber() to correctly compute also relative-to-screen-size values 5w and 5h.
-     *
-     * Returns the computed value in pixels with w/h postfix removed.
-     */
-    var toNumberAdvanced = function( numeric, fallback ) {
-        if ( typeof numeric !== "string" ) {
-            return toNumber( numeric, fallback );
-        }
-        var ratio = numeric.match( /^([+-]*[\d\.]+)([wh])$/ );
-        if ( ratio == null ) {
-            return toNumber( numeric, fallback );
-        } else {
-            var value = parseFloat( ratio[ 1 ] );
-            var config = window.impress.getConfig();
-            var multiplier = ratio[ 2 ] === "w" ? config.width : config.height;
-            return value * multiplier;
-        }
-    };
+    var api;
+    var toNumber;
+    var toNumberAdvanced;
 
     var computeRelativePositions = function( el, prev ) {
         var data = el.dataset;
@@ -150,7 +126,11 @@
         return step;
     };
 
-    var rel = function( root ) {
+    var rel = function( root, impressApi ) {
+        api = impressApi;
+        toNumber = api.lib.util.toNumber;
+        toNumberAdvanced = api.lib.util.toNumberAdvanced;
+
         var steps = root.querySelectorAll( ".step" );
         var prev;
         startingState[ root.id ] = [];
