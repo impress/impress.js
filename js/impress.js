@@ -4140,10 +4140,19 @@
                     prev.rotate.z = toNumber(
                         ref.getAttribute( "data-rotate-z" ) || ref.getAttribute( "data-rotate" ) );
 
-                    // We don't inherit relatives from relTo slide
-                    prev.relative = {};
-                    prev.relative.position = ref.getAttribute( "data-rel-position" ) || "absolute";
-                    prev.relative.rotate = { x:0, y:0, z:0, order: "xyz" };
+                    // We DO inherit relatives from relTo slide
+                    prev.relative = {
+                        position: ( ref.getAttribute( "data-rel-position" ) || "absolute" ),
+                        x: toNumberAdvanced( ref.getAttribute( "data-rel-x" ), 0 ),
+                        y: toNumberAdvanced( ref.getAttribute( "data-rel-y" ), 0 ),
+                        z: toNumberAdvanced( ref.getAttribute( "data-rel-z" ), 0 ),
+                        rotate: {
+                            x: toNumberAdvanced( ref.getAttribute( "data-rel-rotate-x" ), 0 ),
+                            y: toNumberAdvanced( ref.getAttribute( "data-rel-rotate-y" ), 0 ),
+                            z: toNumberAdvanced( ref.getAttribute( "data-rel-rotate-z" ), 0 ),
+                            order: ( ref.getAttribute( "data-rel-rotate-order" ) ||  "xyz" )
+                        }
+                    };
                 } else {
                     window.console.error(
                         "impress.js rel plugin: Step \"" + data.relTo + "\" is not defined " +
@@ -4185,29 +4194,6 @@
             if ( data.relReset === "all" ) {
                 inheritRotation = false;
             }
-        } else if ( el.hasAttribute( "data-rel-inherit" ) ) {
-            var inheritFrom = null;
-            if ( data.relInherit ) {
-
-                // If data-rel-inherit has value, it's the referenced node
-                inheritFrom = document.getElementById( data.relInherit );
-            }
-
-            if ( !inheritFrom ) {
-                inheritFrom = ref;
-            }
-
-            prev.relative.x = toNumberAdvanced( inheritFrom.getAttribute( "data-rel-x" ), 0 );
-            prev.relative.y = toNumberAdvanced( inheritFrom.getAttribute( "data-rel-y" ), 0 );
-            prev.relative.z = toNumberAdvanced( inheritFrom.getAttribute( "data-rel-z" ), 0 );
-            prev.relative.rotate.x =
-                toNumberAdvanced( inheritFrom.getAttribute( "data-rel-rotate-x" ), 0 );
-            prev.relative.rotate.y =
-                toNumberAdvanced( inheritFrom.getAttribute( "data-rel-rotate-y" ), 0 );
-            prev.relative.rotate.z =
-                toNumberAdvanced( inheritFrom.getAttribute( "data-rel-rotate-z" ), 0 );
-            prev.relative.rotate.order =
-                inheritFrom.getAttribute( "data-rel-rotate-order" ) ||  "xyz";
         }
 
         var step = {
