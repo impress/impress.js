@@ -51,7 +51,6 @@
     var api;
     var startingState = {};
 
-    var api;
     var toNumber;
     var toNumberAdvanced;
 

@@ -4104,7 +4104,6 @@
     var api;
     var startingState = {};
 
-    var api;
     var toNumber;
     var toNumberAdvanced;
 
@@ -4165,7 +4164,6 @@
             }
         }
 
-
         // While ``data-rel-reset="relative"`` or just ``data-rel-reset``,
         // ``data-rel-x/y/z`` and ``data-rel-rotate-x/y/z`` will have default value of 0,
         // instead of inherit from previous slide.
@@ -4195,17 +4193,21 @@
                 inheritFrom = document.getElementById( data.relInherit );
             }
 
-            if ( ! inheritFrom ) {
+            if ( !inheritFrom ) {
                 inheritFrom = ref;
             }
 
             prev.relative.x = toNumberAdvanced( inheritFrom.getAttribute( "data-rel-x" ), 0 );
             prev.relative.y = toNumberAdvanced( inheritFrom.getAttribute( "data-rel-y" ), 0 );
             prev.relative.z = toNumberAdvanced( inheritFrom.getAttribute( "data-rel-z" ), 0 );
-            prev.relative.rotate.x = toNumberAdvanced( inheritFrom.getAttribute( "data-rel-rotate-x" ), 0 );
-            prev.relative.rotate.y = toNumberAdvanced( inheritFrom.getAttribute( "data-rel-rotate-y" ), 0 );
-            prev.relative.rotate.z = toNumberAdvanced( inheritFrom.getAttribute( "data-rel-rotate-z" ), 0 );
-            prev.relative.rotate.order = inheritFrom.getAttribute( "data-rel-rotate-order" ) ||  "xyz";
+            prev.relative.rotate.x =
+                toNumberAdvanced( inheritFrom.getAttribute( "data-rel-rotate-x" ), 0 );
+            prev.relative.rotate.y =
+                toNumberAdvanced( inheritFrom.getAttribute( "data-rel-rotate-y" ), 0 );
+            prev.relative.rotate.z =
+                toNumberAdvanced( inheritFrom.getAttribute( "data-rel-rotate-z" ), 0 );
+            prev.relative.rotate.order =
+                inheritFrom.getAttribute( "data-rel-rotate-order" ) ||  "xyz";
         }
 
         var step = {
