@@ -73,7 +73,12 @@ For example, `data-rel-rotate-y="45"` will make the slide has an angle of 45 deg
 
 If not set, the `data-rel-position` attribute will be inherited from previous slide. So we only need to set it at the first slide, then all done.
 
-To avoid the boring need to set most `data-rel-*` to zero, but set only one or two ones, we introduce a `data-rel-reset` attribute. Once set, all `data-rel-*` attrbutes will NOT inherited from previous slide, but the `data-rel-position` will still be inherit. If `data-rel-reset` has a value of `"all"`, `data-rotation-*` will not inherit from previous slide too.  The `data-rel-reset="all"` is suitable to be applied to the first slide of a group of slides, to avoid being affected by previous slide.
+To avoid the boring need to set most `data-rel-*` to zero, but set only one or two ones, `data-rel-reset` attribute can be used: 
+
+- `data-rel-reset` equals to: `data-rel-x="0" data-rel-y="0" data-rel-z="0" data-rel-rotate-x="0" data-rel-rotate-y="0" data-rel-rotate-z="0"`
+- `data-rel-reset="all"` works like `data-rel-reset`, in additions `data-rotate-x="0" data-rotate-y="0" data-rotate-z="0"`
+
+When `data-rel-position="relative"` and `data-rel-to` is specified, `data-rotate-*` and `data-rel-*` will be inherited from specified slide too.
 
 IMPORTANT: Incompatible change
 ------------------------------

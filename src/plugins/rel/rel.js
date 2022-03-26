@@ -82,24 +82,42 @@
                     prev.x = toNumber( ref.getAttribute( "data-x" ) );
                     prev.y = toNumber( ref.getAttribute( "data-y" ) );
                     prev.z = toNumber( ref.getAttribute( "data-z" ) );
-                    prev.rotate.y = toNumber( ref.getAttribute( "data-rotate-y" ) );
-                    prev.rotate.x = toNumber( ref.getAttribute( "data-rotate-x" ) );
-                    prev.rotate.z = toNumber(
-                        ref.getAttribute( "data-rotate-z" ) || ref.getAttribute( "data-rotate" ) );
 
-                    // We DO inherit relatives from relTo slide
-                    prev.relative = {
-                        position: ( ref.getAttribute( "data-rel-position" ) || "absolute" ),
-                        x: toNumberAdvanced( ref.getAttribute( "data-rel-x" ), 0 ),
-                        y: toNumberAdvanced( ref.getAttribute( "data-rel-y" ), 0 ),
-                        z: toNumberAdvanced( ref.getAttribute( "data-rel-z" ), 0 ),
-                        rotate: {
-                            x: toNumberAdvanced( ref.getAttribute( "data-rel-rotate-x" ), 0 ),
-                            y: toNumberAdvanced( ref.getAttribute( "data-rel-rotate-y" ), 0 ),
-                            z: toNumberAdvanced( ref.getAttribute( "data-rel-rotate-z" ), 0 ),
-                            order: ( ref.getAttribute( "data-rel-rotate-order" ) ||  "xyz" )
-                        }
-                    };
+                    var prevPosition = ref.getAttribute( "data-rel-position" ) || "absolute";
+
+                    if ( prevPosition !== "relative" ) {
+
+                        // For compatibility with the old behavior, doesn't inherit otherthings,
+                        // just like a reset.
+                        prev.rotate = { x:0, y:0, z:0, order: "xyz" };
+                        prev.relative = {
+                            position: "absolute",
+                            x:0, y:0, z:0,
+                            rotate: { x:0, y:0, z:0, order:"xyz" }
+                        };
+                    } else {
+
+                        // For data-rel-position="relative", inherit all
+                        prev.rotate.y = toNumber( ref.getAttribute( "data-rotate-y" ) );
+                        prev.rotate.x = toNumber( ref.getAttribute( "data-rotate-x" ) );
+                        prev.rotate.z = toNumber(
+                            ref.getAttribute( "data-rotate-z" ) ||
+                            ref.getAttribute( "data-rotate" ) );
+
+                        // We also inherit relatives from relTo slide
+                        prev.relative = {
+                            position: prevPosition,
+                            x: toNumberAdvanced( ref.getAttribute( "data-rel-x" ), 0 ),
+                            y: toNumberAdvanced( ref.getAttribute( "data-rel-y" ), 0 ),
+                            z: toNumberAdvanced( ref.getAttribute( "data-rel-z" ), 0 ),
+                            rotate: {
+                                x: toNumberAdvanced( ref.getAttribute( "data-rel-rotate-x" ), 0 ),
+                                y: toNumberAdvanced( ref.getAttribute( "data-rel-rotate-y" ), 0 ),
+                                z: toNumberAdvanced( ref.getAttribute( "data-rel-rotate-z" ), 0 ),
+                                order: ( ref.getAttribute( "data-rel-rotate-order" ) ||  "xyz" )
+                            }
+                        };
+                    }
                 } else {
                     window.console.error(
                         "impress.js rel plugin: Step \"" + data.relTo + "\" is not defined " +

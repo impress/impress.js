@@ -59,7 +59,7 @@
         <p>Should be the same as abs-5</p>
       </div>
 
-      <div id="relative-1" class="step" data-rel-reset="all" data-rel-position="relative" data-x="0" data-y="1000" data-z="0" data-rel-x="0" data-rel-y="0" data-rel-z="0">
+      <div id="relative-1" class="step" data-rel-reset="all" data-rel-position="relative" data-x="0" data-y="1000" data-z="0">
         <p>Testing rel-position="relative"</p>
       </div>
 
@@ -80,6 +80,22 @@
       </div>
 
       <div id="relative-6" class="step">
+        <p>keep inheriting</p>
+      </div>
+
+      <div id="relative-7" class="step" data-rel-to="relative-3" data-rel-reset>
+        <p>Should re-position at relative-3, but clear all relative attributes</p>
+      </div>
+
+      <div id="relative-8" class="step">
+        <p>keep inheriting</p>
+      </div>
+
+      <div id="relative-9" class="step" data-rel-to="relative-3" data-rel-reset="all">
+        <p>Should re-position at relative-3, but clear data-rotate-* in addition to all relative attributes</p>
+      </div>
+
+      <div id="relative-10" class="step">
         <p>keep inheriting</p>
       </div>
     </div>
