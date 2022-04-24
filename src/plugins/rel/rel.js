@@ -48,9 +48,9 @@
 ( function( document, window ) {
     "use strict";
 
+    var api;
     var startingState = {};
 
-    var api;
     var toNumber;
     var toNumberAdvanced;
 
@@ -60,12 +60,21 @@
         if ( !prev ) {
 
             // For the first step, inherit these defaults
-            prev = { x:0, y:0, z:0, relative: { x:0, y:0, z:0 } };
+            prev = {
+                x:0, y:0, z:0,
+                rotate: { x:0, y:0, z:0, order:"xyz" },
+                relative: {
+                    position: "absolute",
+                    x:0, y:0, z:0,
+                    rotate: { x:0, y:0, z:0, order:"xyz" }
+                }
+            };
         }
 
+        var ref = prev;
         if ( data.relTo ) {
 
-            var ref = document.getElementById( data.relTo );
+            ref = document.getElementById( data.relTo );
             if ( ref ) {
 
                 // Test, if it is a previous step that already has some assigned position data
@@ -73,7 +82,42 @@
                     prev.x = toNumber( ref.getAttribute( "data-x" ) );
                     prev.y = toNumber( ref.getAttribute( "data-y" ) );
                     prev.z = toNumber( ref.getAttribute( "data-z" ) );
-                    prev.relative = {};
+
+                    var prevPosition = ref.getAttribute( "data-rel-position" ) || "absolute";
+
+                    if ( prevPosition !== "relative" ) {
+
+                        // For compatibility with the old behavior, doesn't inherit otherthings,
+                        // just like a reset.
+                        prev.rotate = { x:0, y:0, z:0, order: "xyz" };
+                        prev.relative = {
+                            position: "absolute",
+                            x:0, y:0, z:0,
+                            rotate: { x:0, y:0, z:0, order:"xyz" }
+                        };
+                    } else {
+
+                        // For data-rel-position="relative", inherit all
+                        prev.rotate.y = toNumber( ref.getAttribute( "data-rotate-y" ) );
+                        prev.rotate.x = toNumber( ref.getAttribute( "data-rotate-x" ) );
+                        prev.rotate.z = toNumber(
+                            ref.getAttribute( "data-rotate-z" ) ||
+                            ref.getAttribute( "data-rotate" ) );
+
+                        // We also inherit relatives from relTo slide
+                        prev.relative = {
+                            position: prevPosition,
+                            x: toNumberAdvanced( ref.getAttribute( "data-rel-x" ), 0 ),
+                            y: toNumberAdvanced( ref.getAttribute( "data-rel-y" ), 0 ),
+                            z: toNumberAdvanced( ref.getAttribute( "data-rel-z" ), 0 ),
+                            rotate: {
+                                x: toNumberAdvanced( ref.getAttribute( "data-rel-rotate-x" ), 0 ),
+                                y: toNumberAdvanced( ref.getAttribute( "data-rel-rotate-y" ), 0 ),
+                                z: toNumberAdvanced( ref.getAttribute( "data-rel-rotate-z" ), 0 ),
+                                order: ( ref.getAttribute( "data-rel-rotate-order" ) ||  "xyz" )
+                            }
+                        };
+                    }
                 } else {
                     window.console.error(
                         "impress.js rel plugin: Step \"" + data.relTo + "\" is not defined " +
@@ -94,34 +138,95 @@
             }
         }
 
+        // While ``data-rel-reset="relative"`` or just ``data-rel-reset``,
+        // ``data-rel-x/y/z`` and ``data-rel-rotate-x/y/z`` will have default value of 0,
+        // instead of inherit from previous slide.
+        //
+        // If ``data-rel-reset="all"``, ``data-rotate-*`` are not inherited from previous slide too.
+        // So ``data-rel-reset="all" data-rotate-x="90"`` means
+        // ``data-rotate-x="90" data-rotate-y="0" data-rotate-z="0"``, we doesn't need to
+        // bother clearing all unneeded attributes.
+
+        var inheritRotation = true;
+        if ( el.hasAttribute( "data-rel-reset" ) ) {
+
+            // Don't inherit from prev, just use the relative setting for current element
+            prev.relative = {
+                position: prev.relative.position,
+                x:0, y:0, z:0,
+                rotate: { x:0, y:0, z:0, order: "xyz" } };
+
+            if ( data.relReset === "all" ) {
+                inheritRotation = false;
+            }
+        }
+
         var step = {
                 x: toNumber( data.x, prev.x ),
                 y: toNumber( data.y, prev.y ),
                 z: toNumber( data.z, prev.z ),
+                rotate: {
+                    x: toNumber( data.rotateX, 0 ),
+                    y: toNumber( data.rotateY, 0 ),
+                    z: toNumber( data.rotateZ || data.rotate, 0 ),
+                    order: data.rotateOrder || "xyz"
+                },
                 relative: {
+                    position: data.relPosition || prev.relative.position,
                     x: toNumberAdvanced( data.relX, prev.relative.x ),
                     y: toNumberAdvanced( data.relY, prev.relative.y ),
-                    z: toNumberAdvanced( data.relZ, prev.relative.z )
+                    z: toNumberAdvanced( data.relZ, prev.relative.z ),
+                    rotate: {
+                        x: toNumber( data.relRotateX, prev.relative.rotate.x ),
+                        y: toNumber( data.relRotateY, prev.relative.rotate.y ),
+                        z: toNumber( data.relRotateZ, prev.relative.rotate.z ),
+                        order: data.rotateOrder || "xyz"
+                    }
                 }
             };
+
+        // The final relatives maybe or maybe not the same with orignal data-rel-*
+        var relative = step.relative;
+
+        if ( step.relative.position === "relative" && inheritRotation ) {
+
+            // Calculate relatives based on previous slide
+            relative = api.lib.rotation.translateRelative(
+                step.relative, prev.rotate );
+
+            // Convert rotations to values that works with step.rotate
+            relative.rotate.x -= step.rotate.x;
+            relative.rotate.y -= step.rotate.y;
+            relative.rotate.z -= step.rotate.z;
+        }
 
         // Relative position is ignored/zero if absolute is given.
         // Note that this also has the effect of resetting any inherited relative values.
         if ( data.x !== undefined ) {
-            step.relative.x = 0;
+            relative.x = step.relative.x = 0;
         }
         if ( data.y !== undefined ) {
-            step.relative.y = 0;
+            relative.y = step.relative.y = 0;
         }
         if ( data.z !== undefined ) {
-            step.relative.z = 0;
+            relative.z = step.relative.z = 0;
+        }
+        if ( data.rotateX !== undefined || !inheritRotation ) {
+            relative.rotate.x = step.relative.rotate.x = 0;
+        }
+        if ( data.rotateY !== undefined || !inheritRotation ) {
+            relative.rotate.y = step.relative.rotate.y = 0;
+        }
+        if ( data.rotateZ !== undefined || data.rotate !== undefined || !inheritRotation ) {
+            relative.rotate.z = step.relative.rotate.z = 0;
         }
 
-        // Apply relative position to absolute position, if non-zero
-        // Note that at this point, the relative values contain a number value of pixels.
-        step.x = step.x + step.relative.x;
-        step.y = step.y + step.relative.y;
-        step.z = step.z + step.relative.z;
+        step.x = step.x + relative.x;
+        step.y = step.y + relative.y;
+        step.z = step.z + relative.z;
+        step.rotate.x = step.rotate.x + relative.rotate.x;
+        step.rotate.y = step.rotate.y + relative.rotate.y;
+        step.rotate.z = step.rotate.z + relative.rotate.z;
 
         return step;
     };
@@ -143,7 +248,16 @@
                 z: el.getAttribute( "data-z" ),
                 relX: el.getAttribute( "data-rel-x" ),
                 relY: el.getAttribute( "data-rel-y" ),
-                relZ: el.getAttribute( "data-rel-z" )
+                relZ: el.getAttribute( "data-rel-z" ),
+                rotateX: el.getAttribute( "data-rotate-x" ),
+                rotateY: el.getAttribute( "data-rotate-y" ),
+                rotateZ: el.getAttribute( "data-rotate-z" ),
+                rotate: el.getAttribute( "data-rotate" ),
+                relRotateX: el.getAttribute( "data-rel-rotate-x" ),
+                relRotateY: el.getAttribute( "data-rel-rotate-y" ),
+                relRotateZ: el.getAttribute( "data-rel-rotate-z" ),
+                relPosition: el.getAttribute( "data-rel-position" ),
+                rotateOrder: el.getAttribute( "data-rotate-order" )
             } );
             var step = computeRelativePositions( el, prev );
 
@@ -151,6 +265,17 @@
             el.setAttribute( "data-x", step.x );
             el.setAttribute( "data-y", step.y );
             el.setAttribute( "data-z", step.z );
+            el.setAttribute( "data-rotate-x", step.rotate.x );
+            el.setAttribute( "data-rotate-y", step.rotate.y );
+            el.setAttribute( "data-rotate-z", step.rotate.z );
+            el.setAttribute( "data-rotate-order", step.rotate.order );
+            el.setAttribute( "data-rel-position", step.relative.position );
+            el.setAttribute( "data-rel-x", step.relative.x );
+            el.setAttribute( "data-rel-y", step.relative.y );
+            el.setAttribute( "data-rel-z", step.relative.z );
+            el.setAttribute( "data-rel-rotate-x", step.relative.rotate.x );
+            el.setAttribute( "data-rel-rotate-y", step.relative.rotate.y );
+            el.setAttribute( "data-rel-rotate-z", step.relative.rotate.z );
             prev = step;
         }
     };
@@ -164,28 +289,27 @@
         event.detail.api.lib.gc.pushCallback( function() {
             var steps = startingState[ root.id ];
             var step;
+            var attrs = [
+                [ "x", "relX" ],
+                [ "y", "relY" ],
+                [ "z", "relZ" ],
+                [ "rotate-x", "relRotateX" ],
+                [ "rotate-y", "relRotateY" ],
+                [ "rotate-z", "relRotateZ" ],
+                [ "rotate-order", "relRotateOrder" ]
+            ];
+
             while ( step = steps.pop() ) {
 
                 // Reset x/y/z in cases where this plugin has changed it.
-                if ( step.relX !== null ) {
-                    if ( step.x === null ) {
-                        step.el.removeAttribute( "data-x" );
-                    } else {
-                        step.el.setAttribute( "data-x", step.x );
-                    }
-                }
-                if ( step.relY !== null ) {
-                    if ( step.y === null ) {
-                        step.el.removeAttribute( "data-y" );
-                    } else {
-                        step.el.setAttribute( "data-y", step.y );
-                    }
-                }
-                if ( step.relZ !== null ) {
-                    if ( step.z === null ) {
-                        step.el.removeAttribute( "data-z" );
-                    } else {
-                        step.el.setAttribute( "data-z", step.z );
+                for ( var i = 0; i < attrs.length; i++ ) {
+                    if ( step[ attrs[ i ][ 1 ] ] !== null ) {
+                        if ( step[ attrs[ i ][ 0 ] ] === null ) {
+                            step.el.removeAttribute( "data-" + attrs[ i ][ 0 ] );
+                        } else {
+                            step.el.setAttribute(
+                                "data-" + attrs[ i ][ 0 ], step[ attrs[ i ][ 0 ] ] );
+                        }
                     }
                 }
             }

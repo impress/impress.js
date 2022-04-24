@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>The presentation steps used in an iframe in rel/padding_tests.js</title>
+    <style type="text/css" media="screen">
+.step {
+    position: relative;
+    width: 500px;
+    height: 500px;
+    padding: 40px 60px;
+    margin: 20px auto;
+
+    box-sizing:         border-box;
+
+    line-height: 1.5;
+
+    background-color: yellow;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, .1);
+
+    text-shadow: 0 2px 2px rgba(0, 0, 0, .1);
+
+    font-family: 'Open Sans', Arial, sans-serif;
+    font-size: 40pt;
+    letter-spacing: -1px;
+    border: solid 1px red;
+    opacity: 50%;
+}
+    </style>
+  </head>
+
+  <body class="impress-not-supported">
+    <div id="impress">
+      <div id="origin"   class="step" data-rel-position="relative" data-x="0" data-y="0" data-z="0"></div>
+      <div id="origin_x" class="step" data-rel-to="origin" data-rel-reset data-rel-x="500"></div>
+      <div id="origin_y" class="step" data-rel-to="origin" data-rel-reset data-rel-y="500"></div>
+      <div id="origin_z" class="step" data-rel-to="origin" data-rel-reset data-rel-z="500"></div>
+
+      <div id="x" class="step" data-rel-reset="all" data-x="0" data-y="0" data-z="0" data-rotate-x="90"></div>
+      <div id="x_x" class="step" data-rel-reset data-rel-to="x" data-rel-x="500"></div>
+      <div id="x_y" class="step" data-rel-reset data-rel-to="x" data-rel-y="500"></div>
+      <div id="x_z" class="step" data-rel-reset data-rel-to="x" data-rel-z="500"></div>
+
+      <div id="y" class="step" data-rel-reset="all" data-x="0" data-y="0" data-z="0" data-rotate-y="90"></div>
+      <div id="y_x" class="step" data-rel-reset data-rel-to="y" data-rel-x="500"></div>
+      <div id="y_y" class="step" data-rel-reset data-rel-to="y" data-rel-y="500"></div>
+      <div id="y_z" class="step" data-rel-reset data-rel-to="y" data-rel-z="500"></div>
+
+      <div id="z" class="step" data-rel-reset="all" data-x="0" data-y="0" data-z="0" data-rotate-z="90"></div>
+      <div id="z_x" class="step" data-rel-reset data-rel-to="z" data-rel-x="500"></div>
+      <div id="z_y" class="step" data-rel-reset data-rel-to="z" data-rel-y="500"></div>
+      <div id="z_z" class="step" data-rel-reset data-rel-to="z" data-rel-z="500"></div>
+
+      <div id="reset" class="step" data-rel-reset="all" data-rel-x="100" data-rel-y="200" data-rel-z="300">
+          by data prel-reset="all", paddings should be calculated as if data-rotate-*=0
+      </div>
+
+      <div id="overview" class="step overview" data-x="0" data-y="-1000" data-z="100" data-scale="4" data-rotate-x="45">
+      </div>
+
+    </div>
+
+    <script src="../../../js/impress.js"></script>
+    <!-- <script>impress().init();</script> -->
+  </body>
+<html>

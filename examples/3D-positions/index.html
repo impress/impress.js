@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>relative rotations</title>
+    <link href="..\..\css\impress-common.css" rel="stylesheet" />
+    <style type="text/css" media="screen">
+#overview {
+    background: none;
+    border: none;
+    box-shadow: none;
+    width: 1800px;
+    height: 1300px;
+}
+
+#overview div {
+    width: 100%;
+    height: 100%;
+}
+
+.step {
+    position: relative;
+    width: 1000px;
+    height: 1000px;
+    padding: 40px 60px;
+    margin: 20px auto;
+
+    box-sizing:         border-box;
+
+    line-height: 1.5;
+
+    background-color: yellow;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, .1);
+
+    text-shadow: 0 2px 2px rgba(0, 0, 0, .1);
+
+    font-family: 'Open Sans', Arial, sans-serif;
+    font-size: 40pt;
+    letter-spacing: -1px;
+    border: solid 2px red;
+
+    opacity: 40%;
+}
+
+.step.active {
+    opacity: 100%;
+}
+
+.step.ring2 {
+    background-color: cyan;
+}
+
+.step.box {
+    background-color: purple;
+    opacity: 70%;
+}
+
+.step.box1 {
+    background-color: lightblue;
+}
+    </style>
+  </head>
+
+  <body class="impress-not-supported">
+    <div id="impress" data-width="2000" data-height="1500">
+      <div id="overview" class="step overview" data-rel-position="relative" data-x="-1000" data-y="-1500" data-z="100" data-scale="3" data-rotate-x="45" data-rotate-y="10">
+          <div>
+              <h2>Demo of <code>data-rel-position</code></h2>
+              <p>This demo use <code>data-rel-position="relative"</code><br>
+                  and <code>data-rel-rotate-x/y/z</code><br>
+                  to easy 3D positioning of slides.</p>
+          </div>
+      </div>
+
+      <div id="box-front" class="step box" data-x="-3000" data-y="0" data-z="0" data-rotate-x="0" data-rotate-y="0" data-rotate-z="0">Front
+          <p>There's two nested box here.</p>
+      </div>
+      <div id="box-front1" class="step box1" data-rel-reset data-rel-z="-200" data-scale="0.6">Inside Front</div>
+      <div id="box-right1" class="step box1" data-rel-reset data-rel-x="300" data-rel-z="-300" data-rel-rotate-y="90" data-scale="0.6">Inside Right</div>
+      <div id="box-right" class="step box" data-rel-reset data-rel-z="200">Right</div>
+      <div id="box-back" class="step box" data-rel-reset data-rel-x="500" data-rel-z="-500" data-rel-rotate-y="90">Back</div>
+      <div id="box-back1" class="step box1" data-rel-reset data-rel-z="-200" data-scale="0.6">Inside Back</div>
+      <div id="box-top1" class="step box1" data-rel-reset data-rel-y="-300" data-rel-z="-300" data-rel-rotate-x="90" data-scale="0.6">Inside Top</div>
+      <div id="box-top" class="step box" data-rel-reset data-rel-z="200">Top</div>
+      <div id="box-left" class="step box" data-rel-reset data-rel-x="500" data-rel-z="-500" data-rel-rotate-y="90">Left</div>
+      <div id="box-left1" class="step box1" data-rel-reset data-rel-z="-200" data-scale="0.6">Inside Left</div>
+      <div id="box-bottom1" class="step box1" data-rel-reset data-rel-x="300" data-rel-z="-300" data-rel-rotate-y="90" data-scale="0.6">Inside Bottom</div>
+      <div id="box-bottom" class="step box" data-rel-reset data-rel-z="200">Bottom</div>
+
+      <div id="ring1-1" class="step" data-rel-reset="all" data-x="0" data-y="0" data-z="0" data-rotate-y="10">
+        <p>Slide one</p>
+        <p>This is a ring of 8 slides.</p>
+        <p>It's easy constucted with data-rel-position="relative" without calculates the coordinates of all slides.</p>
+      </div>
+
+      <div id="ring1-2" class="step" data-rel-rotate-y="45" data-rel-z="-354" data-rel-x="854">
+        <p>Slide two</p>
+        <p>The position of this slide is calculated as relatived position and rotation of the first slide.</p>
+        <p>The following slides don't need to set any position attributes, they are inherit from this slide.</p>
+      </div>
+
+      <div id="ring1-3" class="step">
+        <p>Slide three</p>
+      </div>
+
+      <div id="ring1-4" class="step">
+        <p>Slide four</p>
+      </div>
+
+      <div id="ring1-5" class="step">
+        <p>Slide five</p>
+      </div>
+
+      <div id="ring1-6" class="step">
+        <p>Slide six</p>
+      </div>
+
+      <div id="ring1-7" class="step">
+        <p>Slide seven</p>
+      </div>
+
+      <div id="ring1-8" class="step">
+        <p>Slide eight</p>
+      </div>
+
+      <div id="ring2-1" class="step ring2" data-rel-reset="all" data-x="-500" data-y="0" data-z="-1514" data-rotate-x="90" data-rotate-y="270" data-rotate-z="0">
+        <p>Slide one</p>
+        <p>This is another ring of slides.</p>
+        <p>Except for the this slide, its code is just cloned from the yellow ring.</p>
+        <p>Just change the position of first slide, all the following slides are position relatived to it.</p>
+      </div>
+
+      <div id="ring2-2" class="step ring2" data-rel-rotate-y="45" data-rel-z="-354" data-rel-x="854" data-rel-y="0">
+        <p>Slide two</p>
+      </div>
+
+      <div id="ring2-3" class="step ring2">
+        <p>Slide three</p>
+      </div>
+
+      <div id="ring2-4" class="step ring2">
+        <p>Slide four</p>
+      </div>
+
+      <div id="ring2-5" class="step ring2">
+        <p>Slide five</p>
+      </div>
+
+      <div id="ring2-6" class="step ring2">
+        <p>Slide six</p>
+      </div>
+
+      <div id="ring2-7" class="step ring2">
+        <p>Slide seven</p>
+      </div>
+
+      <div id="ring2-8" class="step ring2">
+        <p>Slide eight</p>
+      </div>
+    </div>
+
+    <div id="impress-toolbar"></div>
+    <div id="impress-help"></div>
+
+    <script type="text/javascript" src="../../js/impress.js"></script>
+    <script>impress().init();</script>
+  </body>
+<html>

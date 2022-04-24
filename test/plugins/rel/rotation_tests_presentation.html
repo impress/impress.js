@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>The presentation steps used in an iframe in rel/rotation_tests.js</title>
+    <style type="text/css" media="screen">
+.step {
+    position: relative;
+    width: 1000px;
+    height: 1000px;
+    padding: 40px 60px;
+    margin: 20px auto;
+
+    box-sizing:         border-box;
+
+    line-height: 1.5;
+
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, .1);
+
+    text-shadow: 0 2px 2px rgba(0, 0, 0, .1);
+
+    font-family: 'Open Sans', Arial, sans-serif;
+    font-size: 40pt;
+    letter-spacing: -1px;
+    border: solid 1px red;
+}
+    </style>
+  </head>
+
+  <body class="impress-not-supported">
+    <div id="impress">
+      <div id="overview" class="step overview" data-x="0" data-y="-1000" data-z="100" data-scale="4" data-rotate-x="45">
+        <h1>3D Rotations Demo</h1>
+      </div>
+
+      <div id="step-1" class="step" data-x="0" data-y="0" data-z="0" data-goto-prev="step-8">
+        <p>Slide one</p>
+      </div>
+
+      <div id="step-2" class="step" data-rel-position="relative" data-rel-rotate-y="45" data-rel-z="-354" data-rel-x="854" data-rel-y="-125">
+        <p>Slide two</p>
+      </div>
+
+      <div id="step-3" class="step">
+        <p>Slide three</p>
+      </div>
+
+      <div id="step-4" class="step">
+        <p>Slide four</p>
+      </div>
+
+      <div id="step-5" class="step">
+        <p>Slide five</p>
+      </div>
+
+      <div id="step-6" class="step" data-rel-y="125">
+        <p>Slide six</p>
+      </div>
+
+      <div id="step-7" class="step">
+        <p>Slide seven</p>
+      </div>
+
+      <div id="step-8" class="step" data-goto-next="step-1">
+        <p>Slide eight</p>
+      </div>
+
+      <div id="reset" class="step" data-x=0 data-y=0 data-z=0 data-rotate-x=0 data-rotate-y=0 data-rotate-z=0 data-rotate-order="zyx">
+        <p>Reset all properties</p>
+      </div>
+
+      <div id="rotate" class="step" data-rotate=123>
+        <p>Testing the data-rotate attribute</p>
+      </div>
+    </div>
+
+    <script src="../../../js/impress.js"></script>
+    <!-- <script>impress().init();</script> -->
+  </body>
+<html>

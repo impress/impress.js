@@ -24,9 +24,9 @@
   "scripts": {
     "all": "npm run build && npm run test && npm run lint",
     "build": "node build.js",
-    "lint": "jshint src test/*.js && jscs src test/*.js",
-    "new-lint": "eslint src test",
-    "test": "karma start --log-level debug --single-run=true"
+    "lint": "npm exec -- jshint src test/*.js && npm exec -- jscs src test/*.js",
+    "new-lint": "npm exec -- eslint src test",
+    "test": "npm exec -- karma start --log-level debug --single-run=true"
   },
   "devDependencies": {
     "eslint": "^6.8.0",
@@ -39,8 +39,8 @@
     "ls": "^0.2.1",
     "puppeteer": "^2.1.1",
     "qunit": "^2.9.3",
+    "qunit-assert-close": "^2.1.2",
     "syn": "^0.14.1",
     "terser": "^4.6.7"
-  },
-  "dependencies": {}
+  }
 }
