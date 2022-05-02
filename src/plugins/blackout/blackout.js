@@ -88,7 +88,6 @@
         root = event.target;
         canvas = root.firstElementChild;
         var gc = api.lib.gc;
-        var util = api.lib.util;
 
         gc.addEventListener( document, "keydown", function( event ) {
 
