@@ -21,8 +21,12 @@ You need to use pixel values. The pixel values used here correspond to the `data
 given to the `#impress` root element. When the presentation is viewed on a larger or smaller screen, impress.js
 will automatically scale the steps to fit the screen.
 
-**NOTE:** I intend to change the defaults to target HD screens in 2021. So you may want to make a habit
-of explicitly defining these attributes for now, to avoid any disruption when the defaults change.
+**NOTE:** The default width and height have been changed to target HD screens in v1.2.0. If you
+don't set target width and height explicitly, layout and dimensions of your presentations are likely
+to be affected. In order to get back the old target resolution, use:
+
+    <div id="impress" data-width="1024" data-height="768" data-max-scale="1" data-min-scale="0"
+
 
 You can also control the perspective with `data-perspective="500"` giving it a number of pixels.
 It defaults to 1000. You can set it to 0 if you don't want any 3D effects.
@@ -36,9 +40,9 @@ See also [the plugin README](src/plugins/README.md) for documentation on `data-a
 Attribute                | Default   | Explanation
 -------------------------|-----------|------------
 data-transition-duration | 1000 (ms) | Speed of transition between steps.
-data-width               | 1024 (px) | Width of target screen size. When presentation is viewed on a larger or smaller screen, impress.js will scale all content automatically.
-data-height              | 768 (px)  | Height of target screen size.
-data-max-scale           | 1         | Maximum scale factor. (Note that the default 1 will not increase content size on larger screens!)
+data-width               | 1920 (px) | Width of target screen size. When presentation is viewed on a larger or smaller screen, impress.js will scale all content automatically.
+data-height              | 1080 (px) | Height of target screen size.
+data-max-scale           | 3         | Maximum scale factor. (Note that the default 1 will not increase content size on larger screens!)
 data-min-scale           | 0         | Minimum scale factor.
 data-perspective         | 1000      | Perspective for 3D rendering. See https://developer.mozilla.org/en/CSS/perspective
 
