@@ -15,6 +15,7 @@ QUnit.test( "relative_to_screen_size", function( assert ) {
       var step1 = iframeDoc.querySelector( "div#step1" );
       var step2 = iframeDoc.querySelector( "div#step2" );
       var step3 = iframeDoc.querySelector( "div#step3" );
+      var overview = iframeDoc.querySelector( "div#overview" );
 
       assert.equal( origin.dataset.x, 0, "origin data-x attribute" );
       assert.equal( origin.dataset.y, 0, "origin data-y attribute" );
@@ -31,6 +32,10 @@ QUnit.test( "relative_to_screen_size", function( assert ) {
       assert.equal( step3.dataset.x, 1000, "step3 data-x attribute" );
       assert.equal( step3.dataset.y, -750, "step3 data-y attribute" );
       assert.equal( step3.dataset.z, 1000, "step3 data-z attribute" );
+
+      assert.equal( overview.dataset.x, 2000,  "overview data-x attribute" );
+      assert.equal( overview.dataset.y, -1500, "overview data-y attribute" );
+      assert.equal( overview.dataset.z, 1500,  "overview data-z attribute" );
 
       done();
       console.log( "End relative_to_screen_size test (sync)" );

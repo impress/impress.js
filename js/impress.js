@@ -4131,9 +4131,9 @@
 
                 // Test, if it is a previous step that already has some assigned position data
                 if ( el.compareDocumentPosition( ref ) & Node.DOCUMENT_POSITION_PRECEDING ) {
-                    prev.x = toNumber( ref.getAttribute( "data-x" ) );
-                    prev.y = toNumber( ref.getAttribute( "data-y" ) );
-                    prev.z = toNumber( ref.getAttribute( "data-z" ) );
+                    prev.x = toNumberAdvanced( ref.getAttribute( "data-x" ) );
+                    prev.y = toNumberAdvanced( ref.getAttribute( "data-y" ) );
+                    prev.z = toNumberAdvanced( ref.getAttribute( "data-z" ) );
 
                     var prevPosition = ref.getAttribute( "data-rel-position" ) || "absolute";
 
@@ -4214,9 +4214,9 @@
         }
 
         var step = {
-                x: toNumber( data.x, prev.x ),
-                y: toNumber( data.y, prev.y ),
-                z: toNumber( data.z, prev.z ),
+                x: toNumberAdvanced( data.x, prev.x ),
+                y: toNumberAdvanced( data.y, prev.y ),
+                z: toNumberAdvanced( data.z, prev.z ),
                 rotate: {
                     x: toNumber( data.rotateX, 0 ),
                     y: toNumber( data.rotateY, 0 ),
