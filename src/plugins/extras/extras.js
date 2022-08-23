@@ -16,6 +16,10 @@
 
     const SLIDE_SEPARATOR = /^-----$/m;
 
+    // Max length for title.
+    // Line longer than this won't be used as title
+    const MAX_TITLE_LEN = 40;
+
     const getMarkdownParser = function( ) {
         if ( window.hasOwnProperty( "marked" ) ) {
 
@@ -46,6 +50,21 @@
         }
 
         return text.split( SLIDE_SEPARATOR );
+    };
+
+    const guessSlideTitle = function( text ) {
+        for ( var line of text.split( "\n" ) ) {
+            line = line.trim( );
+            if ( line.length > 0 ) {
+                if ( line.length <= MAX_TITLE_LEN ) {
+                    return line;
+                }
+
+                // The first non-blank is too long to be a title
+                return "";
+            }
+        }
+        return "";
     };
 
     const convertMarkdowns = function( selector ) {
@@ -87,8 +106,14 @@
                 slideElems[ i ].innerHTML =
                     parseMarkdown( slideElems[ i ], slides[ i ] );
 
+                // Set the slide title.
+                // The first slide will use original title if exists.
+                var title = guessSlideTitle( slideElems[ i ].innerText );
+
                 if ( origTitle && ( i === 0 ) ) {
                     slideElems[ i ].title = origTitle;
+                } else if ( title ) {
+                    slideElems[ i ].title = title;
                 }
             }
         }
