@@ -17,7 +17,7 @@
     const SLIDE_SEPARATOR = /^-----$/m;
 
     // Max length for title.
-    // Line longer than this won't be used as title
+    // Line longer than this will be cutted.
     const MAX_TITLE_LEN = 40;
 
     const getMarkdownParser = function( ) {
@@ -58,10 +58,9 @@
             if ( line.length > 0 ) {
                 if ( line.length <= MAX_TITLE_LEN ) {
                     return line;
+                } else {
+                    return line.slice( 0, MAX_TITLE_LEN - 3 ) + "...";
                 }
-
-                // The first non-blank is too long to be a title
-                return "";
             }
         }
         return "";
