@@ -3952,6 +3952,33 @@
         return tempDiv.firstChild;
     };
 
+    var getStepTitle = function( step ) {
+
+        // Max length for title.
+        // Line longer than this will be cutted.
+        const MAX_TITLE_LEN = 40;
+
+        if ( step.title ) {
+            return step.title;
+        }
+
+        // Neither title nor id is defined
+        if ( step.id.startsWith( 'step-' ) ) {
+            for ( var line of step.innerText.split( '\n' ) ) {
+                line = line.trim( );
+                if ( line.length > 0 ) {
+                    if ( line.length <= MAX_TITLE_LEN ) {
+                        return line;
+                    } else {
+                        return line.slice( 0, MAX_TITLE_LEN - 3 ) + '...';
+                    }
+                }
+            }
+        }
+
+        return step.id;
+    };
+
     var selectOptionsHtml = function() {
         var options = '';
         for ( var i = 0; i < steps.length; i++ ) {
@@ -3960,7 +3987,7 @@
             if ( hideSteps.indexOf( steps[ i ] ) < 0 ) {
                 options = options + '<option value="' + steps[ i ].id + '">' + // jshint ignore:line
 							(
-								steps[ i ].title ? steps[ i ].title : steps[ i ].id
+								getStepTitle( steps[ i ] )
 							) + '</option>' + '\n';
             }
         }
