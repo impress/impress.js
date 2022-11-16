@@ -364,12 +364,12 @@
             root.appendChild( canvas );
 
             // Set initial styles
-            document.documentElement.style.height = "100%";
+            // document.documentElement.style.height = "100%";
 
-            css( body, {
-                height: "100%",
-                overflow: "hidden"
-            } );
+            // css( body, {
+            //     height: "100%",
+            //     overflow: "scroll"
+            // } );
 
             var rootStyles = {
                 position: "absolute",
