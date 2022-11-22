@@ -2891,8 +2891,8 @@
                 var preView = consoleWindow.document.getElementById( 'preView' );
 
                 // Firefox:
-                slideView.contentDocument.body.classList.add( 'impress-console' );
-                preView.contentDocument.body.classList.add( 'impress-console' );
+                slideView.contentDocument.body.classList.add( 'impress-console', 'slideView' );
+                preView.contentDocument.body.classList.add( 'impress-console', 'preView' );
                 if ( cssFileIframe !== undefined ) {
                     slideView.contentDocument.head.insertAdjacentHTML(
                         'beforeend',
@@ -2906,7 +2906,8 @@
 
                 // Chrome:
                 slideView.addEventListener( 'load', function() {
-                        slideView.contentDocument.body.classList.add( 'impress-console' );
+                        slideView.contentDocument.body.classList.add( 'impress-console',
+                            'slideView' );
                         if ( cssFileIframe !== undefined ) {
                             slideView.contentDocument.head.insertAdjacentHTML(
                                 'beforeend',
@@ -2916,7 +2917,7 @@
                         }
                 } );
                 preView.addEventListener( 'load', function() {
-                        preView.contentDocument.body.classList.add( 'impress-console' );
+                        preView.contentDocument.body.classList.add( 'impress-console', 'preView' );
                         if ( cssFileIframe !== undefined ) {
                             preView.contentDocument.head.insertAdjacentHTML(
                                 'beforeend',
