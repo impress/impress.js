@@ -357,7 +357,8 @@
 
                 // Chrome:
                 slideView.addEventListener( 'load', function() {
-                        slideView.contentDocument.body.classList.add( 'impress-console', 'slideView' );
+                        slideView.contentDocument.body.classList.add( 'impress-console',
+                            'slideView' );
                         if ( cssFileIframe !== undefined ) {
                             slideView.contentDocument.head.insertAdjacentHTML(
                                 'beforeend',
