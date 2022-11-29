@@ -18,7 +18,7 @@
 
     var notes = window.document.getElementsByClassName( 'notes' );
 
-    for (let items in Object.entries( notes ).values) {
+    for ( let items in Object.entries( notes ).values ) {
         items.style.display = 'none';
     }
 
