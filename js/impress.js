@@ -2565,10 +2565,10 @@
 ( function( document, window ) {
     'use strict';
 
-    var notes = window.document.getElementsByClassName("notes")
+    var notes = window.document.getElementsByClassName('notes');
 
     for (let items in Object.entries(notes).values) {
-        items.style.display = "none"
+        items.style.display = 'none';
     }
 
     // TODO: Move this to src/lib/util.js
