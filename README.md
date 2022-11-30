@@ -13,6 +13,8 @@ impress.js may not help you if you have nothing interesting to say ;)
 
 HOW TO USE IT
 ---------------
+### Getting Started Guide
+Check out our new [Getting Started](GettingStarted.md) guide if you want a quick introduction to the project!
 
 ### Checking out and initializing the git repository
 
