@@ -2,7 +2,7 @@
 Welcome to impress.js! This presentation framework allows you to create stunning presentations with the power of CSS3 transformations. It is inspired by the idea behind [prezi.com](https://prezi.com). 
 **NOTE:** This Guide is not made for you, if you have never written HTML and/or CSS before. Knowing your way around in JavaScript certainly helps, but is not a necessity, as we won't go over how you may use JavaScript in conjunction with this framework here. You may still continue this tutorial and try to understand what we do as you go. 
 
-Also, if you are an experienced (or sorta experienced user, anyway), you might prefer the [DOCUMENTATION] (DOCUMENTATION.md).
+Also, if you are an experienced (or sorta experienced user, anyway), you might prefer the [DOCUMENTATION](DOCUMENTATION.md).
 
 # Getting started with impress.js
 ## Installation / acquiring the framework
@@ -90,6 +90,7 @@ Now, that you have created the slides, you might want to style them. This is whe
 <h1>Powerful, yet still simple</h1>
 </div>
 ```
+**NOTE:** You may also use negative numbers for all these properties!
 
 ## More advanced features
 You might want to change some default settings, like the transition speed, the width & height of the target screen, etc. This table is from the [DOCUMENTATION](DOCUMENTATION.md) and was slightly adapted.
