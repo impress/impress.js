@@ -16,7 +16,6 @@
 ( function( document, window ) {
     'use strict';
 
-
     // TODO: Move this to src/lib/util.js
     var triggerEvent = function( el, eventName, detail ) {
         var event = document.createEvent( 'CustomEvent' );
