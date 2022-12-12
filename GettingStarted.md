@@ -1,12 +1,12 @@
 # Introduction
 Welcome to impress.js! This presentation framework allows you to create stunning presentations with the power of CSS3 transformations. It is inspired by the idea behind [prezi.com](https://prezi.com). 
-**NOTE:** This Guide is not made for you, if you have never written HTML and/or CSS before. Knowing your way around in JavaScript certainly helps, but is not a necessity, as we won't go over how you may use JavaScript in conjunction with this framework here. You may still continue this tutorial and try to understand what we do as you go. 
+**NOTE:** This Guide is not made for you, if you have never written HTML and/or CSS before. Knowing your way around in JavaScript certainly helps, but is not a necessity. You may still continue this tutorial and try to understand what we do as you go. 
 
 Also, if you are an experienced (or sorta experienced user, anyway), you might prefer the [DOCUMENTATION](DOCUMENTATION.md).
 
 # Getting started with impress.js
 ## Installation / acquiring the framework
-You first need to decide if you want to use the bleeding edge (most up to date, but higher risk of experiencing problems) or the stable release. 
+You first need to decide if you want to use the bleeding edge (most up to date, generally very reliable as well, but may contain more problems) or the stable release. 
 
 ### **Stable release:**
 Head to the releases tab and download the source code as zip or as a tarball. Go ahead and unzip / untar it. You may find the framework under ```/js/impress.js.```
@@ -46,7 +46,7 @@ Now, head into a file-manager, navigate to the file you just created (*index.htm
 
 Well, first things first, you should probably give your presentation a title. You may do this in normal HTML fashion by changing the *title* HTML tag.
 
-So not, we reached the HTML body. You can see that it already belongs to a class. This class just tells impress.js that this is the body where the "fallback-message" should be displayed when it detects, that your browser does not support CSS3 and therefore impress.js won't work. You can easily omit that class though, including the "fallback-message" div with its content, if you only intend to use the presentation for yourself and you know about the fact that some browsers might not work.
+So now, we reached the HTML body. You can see that it already belongs to a class. This class just tells impress.js that this is the body where the "fallback-message" should be displayed when it detects, that your browser does not support CSS3 and therefore impress.js won't work. You can easily omit that class though, including the "fallback-message" div with its content, if you only intend to use the presentation for yourself and you know about the fact that some browsers might not work.
 
 Now, probably the most important part of all is the *div* that belongs to the ```impress``` class. This *div* should contain all the HTML code you write, as everything outside that class will not be animated by impress.js. 
 
@@ -83,7 +83,7 @@ These are the basic positioning options in impress.js. All of the attributes tak
 
 Now, that you have created the slides, you might want to style them. This is where CSS comes into play. Add another file to your project called, e.g., ```style.css```. 
 
-**NOTE:** It is not intended that you modify the CSS properties of the built-in class *step*. Instead add another class to that element and style that class. See the example below.
+**NOTE:** As a general rule, you should avoid modifying the CSS properties of the built-in class *step*, as this might break your presentation. You may change the font of it, but I recommend to instead add another class to that element and style that class. Whatever you do, do not mess with positioning and rotation of the div that belongs to the class *step*, but add a div inside of it, if you really have to mess with those properties. See the example below.
 
 ```
 <div class="step yourClassNameHere" data-x="1000" data-y="1000" data-z="-1000" data-scale="2" data-rotate-z="90">
@@ -114,19 +114,22 @@ Each Plugin has a README.md file which you may read to get an idea on how to use
 
 **NOTE:** As previously mentioned, if you'd like to get more info about how it works, take a look at the [DOCUMENTATION](DOCUMENTATION.md) or the README.md files of the plugins.
 
-## impressConsole
+## [impressConsole](/src/plugins/impressConsole/README.md)
 This plugin opens up and additional browser tab which contains a speaker console. There you can see the current slide, the past slide and your notes. You add notes to your presentation by adding a *div* that belongs to the class "notes" to your *div* that belongs to the class "step". 
 
 To enter it, press P.
 
-## Goto
+## [Goto](/src/plugins/goto/README.md)
 This plugin allows you to directly go to a certain step, by either passing in a number or the id of the step you'd like to go to.
 
-## Progress
+## [Progress](/src/plugins/progress/README.md)
 This plugin, as its name implies, displays the progress in your presentation.
 
-## Blackout
+## [Blackout](/src/plugins/blackout/blackout.js)
 This plugin hides the screen, if you press B, which is handy in a lot of situations.
+
+## Other plugins
+You may find the other plugins [here](/src/plugins/). It certainly helps if you familiarise yourself with the plugins.
 
 
 # Thank you for reading this
