@@ -110,6 +110,8 @@ You can give each step an ID. The name of the ID will be displayed in the browse
 # Using PLUGINS
 Impress.js is limited to everything that we have discussed so far and some other details, we won't go over here. Check the [DOCUMENTATION](DOCUMENTATION.md) for that.
 
+impress.js has accumulated a lot of very useful plugins. Read the [GettingStarted](/src/plugins/GettingStarted.md)-Guide in the plugins folder to learn everything in more depth.
+
 Each Plugin has a README.md file which you may read to get an idea on how to use them. Some of the plugins run unnoticed in the background, like the *resize* plugin, which automatically resizes the presentation whenever the browser window changed in size. Here, I will give you an overview of some of the plugins that impress.js includes by default. 
 
 **NOTE:** As previously mentioned, if you'd like to get more info about how it works, take a look at the [DOCUMENTATION](DOCUMENTATION.md) or the README.md files of the plugins.
