@@ -13,6 +13,7 @@ impress.js may not help you if you have nothing interesting to say ;)
 
 HOW TO USE IT
 ---------------
+
 ### Checking out and initializing the git repository
 
     git clone --recursive https://github.com/impress/impress.js.git
