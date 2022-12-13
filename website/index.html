@@ -4,8 +4,12 @@
         <title>impress.js - the stunning javascript presentation framework</title>
         <meta name="description" content="impress.js, a javascript presentation framework that uses the power of CSS 3 to create stunning presentations in your browser! It is inspired by the idea behind prezi.com">
         <link rel="stylesheet" href="./css/style.css">
+        <!--<link rel="stylesheet" href="./css/dark_hljs.css">-->
         <!--I am using jquery for the fancy typing animation and button animations (plus loading of the navbar and footer)-->
         <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>-->
+
+        <!--I will be using highlight.js to highlight the syntax, but I still need to figure out how to use it.-->
+        <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js" integrity="sha512-bgHRAiTjGrzHzLyKOnpFvaEpGzJet3z4tZnXGjpsCcqOnAH6VGUx9frc5bcIhKTVLEiCO6vEhNAgx5jtLUYrfA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>-->
     </head>
     <body>
         <!--Here, the navbar is inserted by jquery-->
@@ -17,7 +21,7 @@
             <div class="title-buttons">
                 <a class="button" id="demobutton" href="./demo/index.html">Watch the demo</a>
                 <br>
-                <a class="button go-impress" href="./docs/home.html">Get started!</a>
+                <a class="button go-impress" href="./docs/gettingStarted.html">Get started!</a>
                 <!--TODO: Add a direct download link for the file-->
                 <a class="button download-base" href="https://raw.githubusercontent.com/impress/impress.js/master/js/impress.js">Download</a>
             </div>
@@ -30,9 +34,9 @@
                 </div>
                 <div class="crazy-styled">
                     <h3>And CSS</h3>
-                    <p>To create stunning presentations</p>
                     <!--TODO: Add CSS demo-code-->
                 </div>
+                <p>To create stunning presentations</p>
             </div>
 
             <!--FEATURE OVERVIEW-->
@@ -40,15 +44,15 @@
             <div class="features">
                 <div class="feature-item">
                     <h3>FULL power of CSS.</h3>
-                    <p>Use the powerful styling tools CSS offers with only minimal restrictions</p>
+                    <p>Use the powerful styling tools CSS offers with only minimal restrictions. Because a tool should not restrict your options, such that the only limit is your imagination. (And your skills in CSS)</p>
                 </div>
                 <div class="feature-item">
                     <h3>Familiar.</h3>
-                    <p>impress.js presentations can be written in HTML with only a few simple to understand element attributes.</p>
+                    <p>impress.js presentations can be written in HTML with only a few simple to understand element attributes. Highly detailed Documentation helps you in getting started!</p>
                 </div>
                 <div class="feature-item">
                     <h3>Minimalist.</h3>
-                    <p>The framework only delivers what is essential, without compromising on functionality</p>
+                    <p>The framework only delivers what is essential, without compromising on functionality. You can expand on its functionality by writing some more javascript code or by using more CSS transitions and transforms.</p>
                 </div>
                 <div class="feature-item">
                     <h3>Plugins.</h3>
@@ -62,11 +66,22 @@
                 <h2>Impressed?</h2>
                 <h3>Then you should try impress.js</h3>
                 <p>*no rhyme intended</p>
-                <a class="button go-impress" href="./docs/home.html">Get started!</a>
+                <a class="button go-impress" href="./docs/gettingStarted.html">Get started!</a>
                 <!--TODO: Add a direct download link for the file-->
-                <a class="button download-base" href="https://raw.githubusercontent.com/impress/impress.js/master/js/impress.js">Download</a>
+                <a class="button download-base" href="https://cdn.jsdelivr.net/gh/impress/impress.js/js/impress.js">Download</a>
+            </div>
+
+            <div class="more-info">
+                <h2>Want to get more documentation or examples?</h2>
+                <p>Then check out our <a href="./docs/home.html">documentation</a> and <a href="./demo/examples/index.html">examples</a></p>
+            </div>
+
+            <div class="contributing">
+                <h2>Want to help develop this project?</h2>
+                <p>Then you should head over to our GitHub and take a look at our contributing Documentation and guidelines which you can find <a href=./docs/contributing/gettingStarted.html>here</a></p>
             </div>
         </div>
         <div id="footer"></div>
+        <script>hljs.highlightAll();</script>
     </body>
 </html>

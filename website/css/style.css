@@ -78,6 +78,27 @@ body {
 */
 
 .content {
-    width: 80vw;
-    margin-left: 10vw;
+    width: 75vw;
+    margin-left: 12.5vw;
+}
+
+.create {
+    display: grid;
+    justify-content: center;
+    text-align: center;
+}
+
+/* This div will have crazy cool style, as this should represent that you can use (almost) all the CSS you want.*/
+.create .crazy-styled {
+    background-color: aqua;
+}
+
+.features {
+    text-align: center;
+}
+
+.feature-item {
+    display: inline-block;
+    width: 40%;
+    margin: 2%;
 }
