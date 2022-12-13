@@ -6,7 +6,21 @@ Also, if you are an experienced (or sorta experienced user, anyway), you might p
 
 # Getting started with impress.js
 ## Installation / acquiring the framework
-You first need to decide if you want to use the bleeding edge (most up to date, generally very reliable as well, but may contain more problems) or the stable release. 
+You first need to decide if you want to use the bleeding edge (most up to date, generally very reliable as well, but may contain more problems) or the stable release. You can use one of the methods mentioned below or the direct download link to only the javascript file. The benefit is, you don't have to find the file in the repository and you can copy the link and directly load the file from the cdn. 
+
+### **Direct links to only impress.js file**
+- V2.0.0: https://cdn.jsdelivr.net/gh/impress/impress.js@2.0.0/js/impress.js
+- V1.1.0: https://cdn.jsdelivr.net/gh/impress/impress.js@1.1.0/js/impress.js
+- Source: https://cdn.jsdelivr.net/gh/impress/impress.js/js/impress.js
+
+For older versions, please just replace the version number behind the @!
+
+**Loading the script directly from cdn**
+Loading the script from the cdn is quite straight forward. You need to include a script tag in the head of the HTML document:
+
+```
+<script src="https://cdn.jsdelivr.net/gh/impress/impress.js@2.0.0/js/impress.js"></script>
+```
 
 ### **Stable release:**
 Head to the releases tab and download the source code as zip or as a tarball. Go ahead and unzip / untar it. You may find the framework under ```/js/impress.js.```
