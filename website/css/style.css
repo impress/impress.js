@@ -1,0 +1,83 @@
+/*
+*
+*   impress.js Website
+*   
+*
+*/
+
+body {
+    background-color: #dcdcdc;
+    /*TODO: Choose better font*/
+    font-family: sans-serif;
+}
+
+
+/*
+    TITLE
+*/
+
+/* This is the tile element with the background image and the title */
+
+.title {
+    /* TODO: Add background image*/
+    /* make div full width (well technically oversized and move it to -1% offset */
+    display: block;
+    width: 103vw;
+    height: 100vh;
+    margin-top: -1vh;
+    margin-left: -1vw;
+    text-align: center;
+}
+
+.title-content {
+    position: relative;
+    top: 20vh;
+}
+
+.title-buttons {
+    position: relative;
+    top: 40vh;
+}
+
+.type-animation {
+    font-size: 500%;
+}
+
+
+/* 
+*
+*   GENERAL ITEMS
+*
+*/
+
+/* Buttons */
+.button {
+    display: inline-block;
+    background-color: green;
+    text-decoration: none;
+    color: white;
+    font-size: 150%;
+    margin: 5px;
+    font-weight: bold;
+    padding: 30px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    border-radius: 50px;
+}
+
+.button:hover {
+    background-color: lightgreen;
+}
+
+
+
+/*
+*
+*   CONTENT BOX
+*
+*/
+
+.content {
+    width: 80vw;
+    margin-left: 10vw;
+}

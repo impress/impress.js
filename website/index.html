@@ -3,6 +3,7 @@
     <head>
         <title>impress.js - the stunning javascript presentation framework</title>
         <meta name="description" content="impress.js, a javascript presentation framework that uses the power of CSS 3 to create stunning presentations in your browser! It is inspired by the idea behind prezi.com">
+        <link rel="stylesheet" href="./css/style.css">
         <!--I am using jquery for the fancy typing animation and button animations (plus loading of the navbar and footer)-->
         <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>-->
     </head>
@@ -10,12 +11,16 @@
         <!--Here, the navbar is inserted by jquery-->
         <div id="navbar"></div>
         <div class="title">
-            <h1 class="type-animation">impress.js</h1>
-            <a class="button" id="demobutton" href="./demo/index.html">Watch the demo</a>
-            <br>
-            <a class="button go-impress" href="./docs/home.html">Get started!</a>
-            <!--TODO: Add a direct download link for the file-->
-            <a class="button download-base" href="https://raw.githubusercontent.com/impress/impress.js/master/js/impress.js">Download</a>
+            <div class="title-content">
+                <h1 class="type-animation">impress.js</h1>
+            </div>
+            <div class="title-buttons">
+                <a class="button" id="demobutton" href="./demo/index.html">Watch the demo</a>
+                <br>
+                <a class="button go-impress" href="./docs/home.html">Get started!</a>
+                <!--TODO: Add a direct download link for the file-->
+                <a class="button download-base" href="https://raw.githubusercontent.com/impress/impress.js/master/js/impress.js">Download</a>
+            </div>
         </div>
         <div class="content">
             <div class="create">
