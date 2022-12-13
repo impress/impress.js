@@ -9,7 +9,14 @@ impress.js may not help you if you have nothing interesting to say ;)
 
 
 # How to use it
-Run `npm i impress.js` to get the framework or head to our GitHub page and follow the instructions in the [README](/README.md) there. 
+Run `npm i impress.js` to get the framework or head to our GitHub page and follow the instructions in the [README](/README.md) there. You may also use one of the links provided down below to include the script directly from a cdn. *Note:* This might not always work, so if it doesn't, just download the file and put it into a folder on your hard drive.
+
+## Direct links to only impress.js file
+- V2.0.0: https://cdn.jsdelivr.net/gh/impress/impress.js@2.0.0/js/impress.js
+- V1.1.0: https://cdn.jsdelivr.net/gh/impress/impress.js@1.1.0/js/impress.js
+- Source: https://cdn.jsdelivr.net/gh/impress/impress.js/js/impress.js
+
+For older versions, please just replace the version number behind the @!
 
 ## Getting Started guide
 Alternative download instructions that are more exhaustive are also included in our new [Getting Started](/GettingStarted.md) file where you can also get an introduction to impress.js.
