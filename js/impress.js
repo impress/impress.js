@@ -2568,7 +2568,7 @@
     var notes = window.document.getElementsByClassName( 'notes' );
 
     for ( let items in Object.entries( notes ).values ) {
-        items.cssText = "display: none";
+        items.cssText = 'display: none';
     }
 
     // TODO: Move this to src/lib/util.js
