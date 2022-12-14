@@ -1,0 +1,27 @@
+.Topmenu {
+    width: 101vw;
+    padding: 0.3%;
+    background-color: blue;
+    margin-left: -1%;
+    margin-top: -1%;
+}
+
+.menubody {
+    width: 90%;
+    margin-top: 1.5%;
+    margin-left: 5%;
+}
+
+.Menu {
+    display: inline-flex;
+    justify-content: center;
+    align-content: center;
+    width: 80vw;
+    height: 100%;
+}
+
+.menubutton {
+    text-decoration: none;
+    background-color: none;
+    color: white;
+}
