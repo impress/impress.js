@@ -22,6 +22,12 @@ It is focused on plugin functionality, not the visual style of your presentation
     display: none;
 }
 
+
+/* Hide the fallback-message whenever impress.js is supported by the browser */
+.impress-supported .fallback-message {
+    display: none;
+}
+
 /* Toolbar plugin */
 .impress-enabled div#impress-toolbar {
     position: fixed;
