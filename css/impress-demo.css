@@ -153,10 +153,6 @@ a:focus {
     margin-bottom: 10px;
 }
 
-.impress-supported .fallback-message {
-    display: none;
-}
-
 /*
     Now let's style the presentation steps.
 
