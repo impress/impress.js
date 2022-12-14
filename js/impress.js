@@ -219,6 +219,7 @@
         lib = initLibraries( rootId );
 
         body.classList.remove( "impress-not-supported" );
+        document.getElementsByClassName( "fallback-message" ).setAttribute("style", "display: none;")
         body.classList.add( "impress-supported" );
 
         // Data of all presentation steps
