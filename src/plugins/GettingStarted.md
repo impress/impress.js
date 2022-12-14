@@ -8,7 +8,22 @@ impress.js has a plugin system that allows you to expand its functionality. It s
 * [Form](#form)
 * [Fullscreen](#fullscreen)
 * [Goto](#fullscreen)
-
+* [Help](#help)
+* [Impress Console](#impressconsole)
+* [Media](#media)
+* [Mobile](#mobile)
+* [Mouse Timout](#mouse-timeout)
+* [Navigation UI](#navigation-ui)
+* [Navigation](#navigation)
+* [Progress](#progress)
+* [Relative positioning](#relative-positioning)
+* [Resize](#resize)
+* [Skip](#skip)
+* [Stop](#stop)
+* [Substep](#substep)
+* [Toolbar](#toolbar)
+* [Touch](#touch)
+* [Extra](#extra-plugins)
 
 
 # Main plugins
