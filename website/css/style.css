@@ -102,3 +102,17 @@ body {
     width: 40%;
     margin: 2%;
 }
+
+
+/* GETTING STARTED BOX AND CHILDREN */
+
+.getting-started {
+    margin-top: 5%;
+    width: 100%;
+    height: 50vh;
+    text-align: center;
+}
+
+.big-text {
+    font-size: 200%;
+}
