@@ -1,7 +1,9 @@
 /*
 *
-*   impress.js Website
+*   impress.js Website style.css
 *   
+*   copyright 2022 Janis Hutz
+*
 *
 */
 
@@ -9,6 +11,10 @@ body {
     background-color: #dcdcdc;
     /*TODO: Choose better font*/
     font-family: sans-serif;
+}
+
+::selection {
+    background-color: #0000ff;
 }
 
 
@@ -22,10 +28,10 @@ body {
     /* TODO: Add background image*/
     /* make div full width (well technically oversized and move it to -1% offset */
     display: block;
-    width: 103vw;
-    height: 100vh;
-    margin-top: -1vh;
-    margin-left: -1vw;
+    width: 101vw;
+    height: 130vh;
+    margin-top: -0.5vh;
+    margin-left: -0.5vw;
     text-align: center;
 }
 
@@ -41,6 +47,7 @@ body {
 
 .type-animation {
     font-size: 500%;
+    color: white
 }
 
 

@@ -4,11 +4,18 @@
         <title>impress.js - the stunning javascript presentation framework</title>
         <meta name="description" content="impress.js, a javascript presentation framework that uses the power of CSS 3 to create stunning presentations in your browser! It is inspired by the idea behind prezi.com">
         <link rel="stylesheet" href="./css/style.css">
-        <!--<link rel="stylesheet" href="./css/dark_hljs.css">-->
+        <link rel="stylesheet" href="./css/dark_hljs.css">
         <!--I am using jquery for the fancy typing animation and button animations (plus loading of the navbar and footer)-->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
         <script src="./js/index.js"></script>
 
+        <style>
+            .title {
+                background-image: url("main_bg_cut.png");
+                background-repeat: no-repeat;
+                background-size: cover;
+            }
+        </style>
         <!--I will be using highlight.js to highlight the syntax, but I still need to figure out how to use it.-->
         <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js" integrity="sha512-bgHRAiTjGrzHzLyKOnpFvaEpGzJet3z4tZnXGjpsCcqOnAH6VGUx9frc5bcIhKTVLEiCO6vEhNAgx5jtLUYrfA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>-->
     </head>
@@ -18,13 +25,14 @@
         <div class="title">
             <div class="title-content">
                 <h1 class="type-animation">impress.js</h1>
+                
             </div>
             <div class="title-buttons">
                 <a class="button" id="demobutton" href="./demo/index.html">Watch the demo</a>
                 <br>
                 <a class="button go-impress" href="./docs/gettingStarted.html">Get started!</a>
                 <!--TODO: Add a direct download link for the file-->
-                <a class="button download-base" href="https://raw.githubusercontent.com/impress/impress.js/master/js/impress.js">Download</a>
+                <a class="button download-base" href="./download.html">Download</a>
             </div>
         </div>
         <div class="content">
@@ -69,7 +77,7 @@
                 <p>*no rhyme intended</p>
                 <a class="button go-impress" href="./docs/gettingStarted.html">Get started!</a>
                 <!--TODO: Add a direct download link for the file-->
-                <a class="button download-base" href="https://cdn.jsdelivr.net/gh/impress/impress.js/js/impress.js">Download</a>
+                <a class="button download-base" href="./download.html">Download</a>
             </div>
 
             <div class="more-info">
