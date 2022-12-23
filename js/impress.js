@@ -4692,9 +4692,24 @@
             for ( var i = 0; i < substeps.length; i++ ) {
                 substeps[ i ].classList.remove( "substep-active" );
             }
-            var el = substeps[ visible.length ];
-            el.classList.add( "substep-visible" );
-            el.classList.add( "substep-active" );
+
+            // Loop over all substeps that are not yet visible and set
+            //   those of currentSubstepOrder to visible and active
+            var el;
+            var currentSubstepOrder;
+            for ( var j = visible.length; j < substeps.length; j++ ) {
+                if ( currentSubstepOrder &&
+                    currentSubstepOrder !== substeps[ j ].dataset.substepOrder ) {
+
+                    // Stop if the substepOrder is greater
+                    break;
+                }
+                el = substeps[ j ];
+                currentSubstepOrder = el.dataset.substepOrder;
+                el.classList.add( "substep-visible" );
+                el.classList.add( "substep-active" );
+            }
+
             return el;
         }
     };
@@ -4722,6 +4737,14 @@
             }
             var el = visible[ visible.length - 1 ];
             el.classList.remove( "substep-visible" );
+
+            // Continue if there is another substep with the same substepOrder
+            if ( current > 0 &&
+                visible[ current - 1 ].dataset.substepOrder ===
+                visible[ current ].dataset.substepOrder ) {
+                visible.pop();
+                return hideSubstep( visible );
+            }
             return el;
         }
     };
