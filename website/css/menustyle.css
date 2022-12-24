@@ -16,8 +16,17 @@
     display: inline-flex;
     justify-content: center;
     align-content: center;
+    list-style-type: none;
     width: 80vw;
     height: 100%;
+}
+
+.mainitems {
+    padding: 1%;
+}
+
+.mainitems:hover {
+    background-color: darkblue;
 }
 
 .menubutton {

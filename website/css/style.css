@@ -29,7 +29,7 @@ body {
     /* make div full width (well technically oversized and move it to -1% offset */
     display: block;
     width: 101vw;
-    height: 130vh;
+    height: 120vh;
     margin-top: -0.5vh;
     margin-left: -0.5vw;
     text-align: center;
@@ -37,17 +37,18 @@ body {
 
 .title-content {
     position: relative;
+    color: white;
     top: 20vh;
 }
 
 .title-buttons {
     position: relative;
-    top: 40vh;
+    top: 30vh;
 }
 
 .type-animation {
-    font-size: 500%;
-    color: white
+    font-size: 600%;
+    color: white !important;
 }
 
 
