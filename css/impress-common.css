@@ -127,7 +127,7 @@ It is focused on plugin functionality, not the visual style of your presentation
   content: "";
   border: 5px solid red;
 }
-.impress-console.slideView #impress .step:not(.future) .substep:not(.substep-visible):after {
+.impress-console.slideView #impress .step:not(.future):has(.substep[data-substep-order]) .substep:not(.substep-visible):after {
   position: absolute;
   height: 60px;
   width: 60px;
@@ -142,7 +142,7 @@ It is focused on plugin functionality, not the visual style of your presentation
   border-radius: 30px;
   padding: 0;
 }
-.impress-console.slideView #impress .step:not(.future) .substep[data-substep-order]:not(.substep-visible):after {
+.impress-console.slideView #impress .step:not(.future):has(.substep[data-substep-order]) .substep[data-substep-order]:not(.substep-visible):after {
   content: attr(data-substep-order);
 }
 
