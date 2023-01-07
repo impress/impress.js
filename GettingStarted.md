@@ -16,17 +16,24 @@ You first need to decide if you want to use the bleeding edge (most up to date, 
 For older versions, please just replace the version number behind the @!
 
 **Loading the script directly from cdn**
-Loading the script from the cdn is quite straight forward. You need to include a script tag in the head of the HTML document:
+Loading the script from the cdn is quite straight forward. You need to include a script tag in the head of the HTML document or where ever you want to include it.:
 
 ```
 <script src="https://cdn.jsdelivr.net/gh/impress/impress.js@2.0.0/js/impress.js"></script>
 ```
 
+Note: in order for this to work, you need to be sure that you have a WiFi connection when giving your presentation! If you are sure, then you may use this variant. But be sure to remove 
+
+```
+<script type="text/javascript" src='./impress.js></script>
+```
+from the below example.
+
 ### **Stable release:**
-Head to the releases tab and download the source code as zip or as a tarball. Go ahead and unzip / untar it. You may find the framework under ```/js/impress.js.```
+Head to the releases tab and download the source code as zip or as a tarball. Go ahead and unzip / untar it. You may find the framework under ```/js/impress.js```. Do also include the ```/css/impress-common.css```, if you want to make your life a bit easier.
 
 ### **Bleeding Edge:**
-In the github repository, click the "Code"-Button, then click "Download ZIP". Go ahead and unzip / untar it. You may find the framework under ```/js/impress.js.```
+In the github repository, click the "Code"-Button, then click "Download ZIP". Go ahead and unzip / untar it. You may find the framework under ```/js/impress.js```. Do also include the ```/css/impress-common.css```, if you want to make your life a bit easier.
 
 ## Setting up the project
 Open up your favorite text-editor / IDE, for example Visual Studio Code, Atom, Notepad ++, ...
@@ -35,24 +42,27 @@ Now, copy the *impress.js* file into the folder you are working in and create a 
 ```
 <!DOCTYPE html>
 <html>
-<head>
-    <title></title>
-</head>
-<body class="impress-not-supported">
-    <div class="fallback-message">
-        <p>Your browser <b>doesn't support the features required</b> by impress.js, so you are presented with a simplified version of this presentation.</p>
-        <p>For the best experience please use the latest <b>Chrome</b>, <b>Safari</b> or <b>Firefox</b> browser.</p>
-    </div>
-
-    <div id="impress">
-        <div id="myFirstSlide" class="step">
-            <h1>My first Slide</h1>
+    <head>
+        <title>My first presentation</title>
+        <link rel="stylesheet" href="/css/impress-common.css"><!--Leave out, if you don't use impress-common.css-->
+    </head>
+    <body class="impress-not-supported">
+        <div class="fallback-message">
+            <p>Your browser <b>doesn't support the features required</b> by impress.js, so you are presented with a simplified version of this presentation.</p>
+            <p>For the best experience please use the latest <b>Chrome</b>, <b>Safari</b> or <b>Firefox</b> browser.</p>
         </div>
-    </div>
 
-    <script type="text/javascript" src='./impress.js></script>
-    <script>impress().init()</script>
-</body>
+        <div id="impress">
+            <div id="myFirstSlide" class="step">
+                <h1>My first Slide</h1>
+            </div>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/gh/impress/impress.js@2.0.0/js/impress.js"></script><!--Only use, if you have internet connection when giving the presentation!-->
+
+        <script type="text/javascript" src='./impress.js></script><!--Only use, if you are not using the cdn!-->
+        <script>impress().init()</script>
+    </body>
 </html>
 ```
 
@@ -97,7 +107,7 @@ These are the basic positioning options in impress.js. All of the attributes tak
 
 Now, that you have created the slides, you might want to style them. This is where CSS comes into play. Add another file to your project called, e.g., ```style.css```. 
 
-**NOTE:** As a general rule, you should avoid modifying the CSS properties of the built-in class *step*, as this might break your presentation. You may change the font of it, but I recommend to instead add another class to that element and style that class. Whatever you do, do not mess with positioning and rotation of the div that belongs to the class *step*, but add a div inside of it, if you really have to mess with those properties. See the example below.
+**NOTE:** As a general rule, you should avoid modifying the CSS properties of the built-in class *step*, as this will modify ***ALL*** the steps! You may change the font of it, but I recommend to instead add another class to that element and style that class. Whatever you do, do not mess with positioning and rotation of the div that belongs to the class *step*, but add a div inside of it, if you really have to mess with those properties. See the example below.
 
 ```
 <div class="step yourClassNameHere" data-x="1000" data-y="1000" data-z="-1000" data-scale="2" data-rotate-z="90">
