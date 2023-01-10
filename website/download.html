@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Download impress.js</title>
+        <meta name="description" content="Download impress.js, a javascript presentation framework that uses the power of CSS 3 to create stunning presentations in your browser! It is inspired by the idea behind prezi.com">
+        <link rel="stylesheet" href="/css/style.css">
+        <!--I am using jquery for button animations (plus loading of the navbar and footer)-->
+        <script defer src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+        <script defer src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js" crossorigin="anonymous" referrerpolicy="no-referrer" ></script>
+        <script defer src="/js/index.js"></script>
+    </head>
+    <body>
+        <div id="navbar"></div>
+        <div class="title">
+            <div class="title-content">
+                <h1 class="heading">Download impress.js</h1>
+                <h2 class="subheading">Ready to bring your presentations to the next level?</h2>
+            </div>
+            <div class="title-buttons">
+                <a class="button" id="demobutton" href="/demo/">Watch the demo</a>
+                <a class="button go-impress" href="/docs/gettingStarted.html">Get started!</a>
+            </div>
+        </div>
+        <div class="content">
+            <div class="centered">
+                <h3>Choose your download option!</h3>
+                <!--TODO: Add a direct download link for the file-->
+                <div class="sidebyside">
+                    <a class="button download-base" href="https://cdn.jsdelivr.net/gh/impress/impress.js@2.0.0/js/impress.js">From cdn (jsdelivr.net)</a>
+                    <a class="button download-base" href="https://github.com/impress/impress.js/blob/v2.0.0/js/impress.js">Full JavaScript File</a>
+                    <a class="button download-base" href="https://github.com/impress/impress.js/">Full source code</a>
+                    <a class="button download-base" href="https://www.npmjs.com/package/impress.js">npmjs</a>
+                </div>
+                <p>Note: The cdn link can be included directly in the HTML file of your presentation. See <a href="/docs/gettingStarted.html">here</a> for more info!</p>
+            </div>
+            <br><br><br>
+        </div>
+        <div id="footer"></div>
+    </body>
+</html>
