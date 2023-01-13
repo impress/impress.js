@@ -12,5 +12,6 @@ What needs to be done:
 - Create good background image for main page
 - use jQuery and maybe some other tools to do crazy CSS scroll animations
 
-## Docs
-If you want to contribute more documentation, then you may create a new MarkDown file in the docs/md folder, where all markdown files for the documentation reside. After you have written your documentation, you should run ```node build-docs.js``` to create the navigation menu entries. The title specified in the md file will be set as the navigation name. You may then change the navigation items in /docs/modules/nav.html
+# DOCS
+## Contributing Documentation
+You may find more documentation for contributing documentation in ./docs/Contributing.md
