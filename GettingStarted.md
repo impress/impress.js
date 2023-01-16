@@ -1,21 +1,15 @@
 # Introduction
-Welcome to impress.js! This presentation framework allows you to create stunning presentations with the power of CSS3 transformations. It is inspired by the idea behind [prezi.com](https://prezi.com). 
+Welcome to impress.js! This presentation framework allows you to create stunning presentations with the power of CSS3 transformations.
 **NOTE:** This Guide is not made for you, if you have never written HTML and/or CSS before. Knowing your way around in JavaScript certainly helps, but is not a necessity. You may still continue this tutorial and try to understand what we do as you go. 
 
-Also, if you are an experienced (or sorta experienced user, anyway), you might prefer the [DOCUMENTATION](DOCUMENTATION.md).
+For more advanced and complete documentation, you might prefer the [DOCUMENTATION](DOCUMENTATION.md).
 
 # Getting started with impress.js
 ## Installation / acquiring the framework
-You first need to decide if you want to use the bleeding edge (most up to date, generally very reliable as well, but may contain more problems) or the stable release. You can use one of the methods mentioned below or the direct download link to only the javascript file. The benefit is, you don't have to find the file in the repository and you can copy the link and directly load the file from the cdn. 
+First of all, you need to know, if you are going to have WiFi connection when you hold your presentation. If you are not sure, please use the method where you download the file instead of the cdn.
 
-### **Direct links to only impress.js file**
-- V2.0.0: https://cdn.jsdelivr.net/gh/impress/impress.js@2.0.0/js/impress.js
-- V1.1.0: https://cdn.jsdelivr.net/gh/impress/impress.js@1.1.0/js/impress.js
-- Source: https://cdn.jsdelivr.net/gh/impress/impress.js/js/impress.js
 
-For older versions, please just replace the version number behind the @!
-
-**Loading the script directly from cdn**
+### Including from cdn
 Loading the script from the cdn is quite straight forward. You need to include a script tag in the head of the HTML document or where ever you want to include it.:
 
 ```
@@ -29,15 +23,18 @@ Note: in order for this to work, you need to be sure that you have a WiFi connec
 ```
 from the below example.
 
+**Direct links to different versions of the impress.js file**
+- V2.0.0: https://cdn.jsdelivr.net/gh/impress/impress.js@2.0.0/js/impress.js
+- V1.1.0: https://cdn.jsdelivr.net/gh/impress/impress.js@1.1.0/js/impress.js
+- Source: https://cdn.jsdelivr.net/gh/impress/impress.js/js/impress.js
+
 ### **Stable release:**
 Head to the releases tab and download the source code as zip or as a tarball. Go ahead and unzip / untar it. You may find the framework under ```/js/impress.js```. Do also include the ```/css/impress-common.css```, if you want to make your life a bit easier.
 
-### **Bleeding Edge:**
-In the github repository, click the "Code"-Button, then click "Download ZIP". Go ahead and unzip / untar it. You may find the framework under ```/js/impress.js```. Do also include the ```/css/impress-common.css```, if you want to make your life a bit easier.
 
 ## Setting up the project
 Open up your favorite text-editor / IDE, for example Visual Studio Code, Atom, Notepad ++, ...
-Now, copy the *impress.js* file into the folder you are working in and create a new file called *index.html* and create the basic HTML layout:
+Now, copy the folder */js/* and the folder */css* (if you want to make your life a bit easier) into the folder you are working in and create a new file called *index.html* and create the basic HTML layout:
 
 ```
 <!DOCTYPE html>
@@ -60,7 +57,7 @@ Now, copy the *impress.js* file into the folder you are working in and create a 
 
         <script src="https://cdn.jsdelivr.net/gh/impress/impress.js@2.0.0/js/impress.js"></script><!--Only use, if you have internet connection when giving the presentation!-->
 
-        <script type="text/javascript" src='./impress.js></script><!--Only use, if you are not using the cdn!-->
+        <script type="text/javascript" src='./js/impress.js></script><!--Only use, if you are not using the cdn!-->
         <script>impress().init()</script>
     </body>
 </html>
@@ -129,7 +126,7 @@ data-min-scale           | 0         | Minimum scale factor.
 data-perspective         | 1000      | Perspective for 3D rendering. See https://developer.mozilla.org/en/CSS/perspective
 
 ### **Renaming Steps**
-You can give each step an ID. The name of the ID will be displayed in the browsers navigation bar instead of the default *step-x* whereas x is replaced by the current step number. This can be especially helpful, when trying to jump between steps and go back to a previous one. If you want to know how to move to a specific slide, you should take a look at the [DOCUMENTATION](DOCUMENTATION.md). This functionality is part of the "Goto" plugin
+You can give each step an ID. The name of the ID will be displayed in the browsers navigation bar instead of the default *step-x* whereas x is replaced by the current step number. This can be especially helpful, when trying to jump between steps and go back to a previous one. If you want to know how to move to a specific slide, you should take a look at the [DOCUMENTATION](./src/plugins/goto/README.md) of the "Goto" plugin. 
 
 # Using PLUGINS
 Impress.js is limited to everything that we have discussed so far and some other details, we won't go over here. Check the [DOCUMENTATION](DOCUMENTATION.md) for that.
@@ -142,6 +139,25 @@ Each Plugin has a README.md file which you may read to get an idea on how to use
 
 ## [impressConsole](/src/plugins/impressConsole/README.md)
 This plugin opens up and additional browser tab which contains a speaker console. There you can see the current slide, the past slide and your notes. You add notes to your presentation by adding a *div* that belongs to the class "notes" to your *div* that belongs to the class "step". 
+
+### **adding notes to your presentation**
+You may add notes to your presentation by adding a div of class *notes* into the div of class *step*, like so:
+
+```
+    <div class="step">
+        Some text that is being displayed on your slides
+        <div class="notes">
+            this won't be displayed in your presentation
+        </div>
+    </div>
+```
+Now that you have added the notes to your HTML, it is time to hide them. You need to add the following code to your CSS file (or in the style tag in the header):
+
+```
+    .notes {
+        display: none;
+    }
+```
 
 To enter it, press P.
 
