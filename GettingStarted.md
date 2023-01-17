@@ -126,12 +126,12 @@ data-min-scale           | 0         | Minimum scale factor.
 data-perspective         | 1000      | Perspective for 3D rendering. See https://developer.mozilla.org/en/CSS/perspective
 
 ### **Renaming Steps**
-You can give each step an ID. The name of the ID will be displayed in the browsers navigation bar instead of the default *step-x* whereas x is replaced by the current step number. This can be especially helpful, when trying to jump between steps and go back to a previous one. If you want to know how to move to a specific slide, you should take a look at the [DOCUMENTATION](./src/plugins/goto/README.md) of the "Goto" plugin. 
+You can give each step an ID. The name of the ID will be displayed in the browsers navigation bar instead of the default *step-x* whereas x is replaced by the current step number. This can be especially helpful, when trying to jump between steps and go back to a previous one. If you want to know how to move to a specific slide, you should take a look at the [README](./src/plugins/goto/README.md) of the "Goto" plugin. 
 
 # Using PLUGINS
 Impress.js is limited to everything that we have discussed so far and some other details, we won't go over here. Check the [DOCUMENTATION](DOCUMENTATION.md) for that.
 
-impress.js has accumulated a lot of very useful plugins. Read the [GettingStarted](/src/plugins/GettingStarted.md)-Guide in the plugins folder to learn everything in more depth.
+impress.js has accumulated a lot of very useful plugins. You may find all of them [here](./src/plugins/)!
 
 Each Plugin has a README.md file which you may read to get an idea on how to use them. Some of the plugins run unnoticed in the background, like the *resize* plugin, which automatically resizes the presentation whenever the browser window changed in size. Here, I will give you an overview of some of the plugins that impress.js includes by default. 
 

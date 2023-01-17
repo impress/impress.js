@@ -22,7 +22,6 @@ You can include this link directly inside of your HTML file in its header. If yo
 - V1.1.0: https://cdn.jsdelivr.net/gh/impress/impress.js@1.1.0/js/impress.js
 - Source: https://cdn.jsdelivr.net/gh/impress/impress.js/js/impress.js
 
-For older versions, please just replace the version number behind the @!
 
 ### Checking out and initializing the git repository
 
