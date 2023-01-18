@@ -57,7 +57,7 @@ Now, copy the folder */js/* and the folder */css* (if you want to make your life
 
         <script src="https://cdn.jsdelivr.net/gh/impress/impress.js@2.0.0/js/impress.js"></script><!--Only use, if you have internet connection when giving the presentation!-->
 
-        <script type="text/javascript" src='./js/impress.js></script><!--Only use, if you are not using the cdn!-->
+        <!--<script type="text/javascript" src='./js/impress.js></script> Decomment, if you are not using the cdn and also make sure to remove the script tag above (the one with cdn.jsdelivr.net... in the src)!-->
         <script>impress().init()</script>
     </body>
 </html>
