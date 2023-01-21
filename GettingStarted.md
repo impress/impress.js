@@ -8,33 +8,21 @@ For more advanced and complete documentation, you might prefer the [DOCUMENTATIO
 ## Installation / acquiring the framework
 First of all, you need to know, if you are going to have WiFi connection when you hold your presentation. If you are not sure, please use the method where you download the file instead of the cdn.
 
-
 ### Including from cdn
-Loading the script from the cdn is quite straight forward. You need to include a script tag in the head of the HTML document or where ever you want to include it.:
-
-```
-<script src="https://cdn.jsdelivr.net/gh/impress/impress.js@2.0.0/js/impress.js"></script>
-```
-
-Note: in order for this to work, you need to be sure that you have a WiFi connection when giving your presentation! If you are sure, then you may use this variant. But be sure to remove 
-
-```
-<script type="text/javascript" src='./impress.js></script>
-```
-from the below example.
+Loading the script from the cdn is quite straight forward. If you copy the below example code, you need to do nothing else, impress will be loaded automatically.
 
 **Direct links to different versions of the impress.js file**
 - V2.0.0: https://cdn.jsdelivr.net/gh/impress/impress.js@2.0.0/js/impress.js
 - V1.1.0: https://cdn.jsdelivr.net/gh/impress/impress.js@1.1.0/js/impress.js
 - Source: https://cdn.jsdelivr.net/gh/impress/impress.js/js/impress.js
 
-### **Stable release:**
-Head to the releases tab and download the source code as zip or as a tarball. Go ahead and unzip / untar it. You may find the framework under ```/js/impress.js```. Do also include the ```/css/impress-common.css```, if you want to make your life a bit easier.
+## Download the file to your PC
+Head to the releases tab and download the source code as zip or as a tarball. Go ahead and unzip / untar it. You need to copy the folder */js/* and the folder */css/* (if you want to make your life a bit easier) into the folder you are working in. 
 
 
 ## Setting up the project
 Open up your favorite text-editor / IDE, for example Visual Studio Code, Atom, Notepad ++, ...
-Now, copy the folder */js/* and the folder */css* (if you want to make your life a bit easier) into the folder you are working in and create a new file called *index.html* and create the basic HTML layout:
+Now, create a new file called *index.html* and create the basic HTML structure:
 
 ```
 <!DOCTYPE html>
@@ -55,9 +43,8 @@ Now, copy the folder */js/* and the folder */css* (if you want to make your life
             </div>
         </div>
 
-        <script src="https://cdn.jsdelivr.net/gh/impress/impress.js@2.0.0/js/impress.js"></script><!--Only use, if you have internet connection when giving the presentation!-->
-
-        <!--<script type="text/javascript" src='./js/impress.js></script> Decomment, if you are not using the cdn and also make sure to remove the script tag above (the one with cdn.jsdelivr.net... in the src)!-->
+        <script> src="js/impress.js"></script>
+        <script>window.impress || document.write('<script src="https://cdn.jsdelivr.net/gh/impress/impress.js@2.0.0/js/impress.js">\x3C/script>');</script>
         <script>impress().init()</script>
     </body>
 </html>
@@ -71,7 +58,7 @@ So now, we reached the HTML body. You can see that it already belongs to a class
 
 Now, probably the most important part of all is the *div* that belongs to the ```impress``` class. This *div* should contain all the HTML code you write, as everything outside that class will not be animated by impress.js. 
 
-Finally, we load the ```impress.js``` script and execute 
+Finally, we load the ```impress.js``` script from your local copy (if you have one) or from the cdn, if you do not have a local copy and execute 
 ```
 impress().init()
 ```
@@ -104,11 +91,13 @@ These are the basic positioning options in impress.js. All of the attributes tak
 
 Now, that you have created the slides, you might want to style them. This is where CSS comes into play. Add another file to your project called, e.g., ```style.css```. 
 
-**NOTE:** As a general rule, you should avoid modifying the CSS properties of the built-in class *step*, as this will modify ***ALL*** the steps! You may change the font of it, but I recommend to instead add another class to that element and style that class. Whatever you do, do not mess with positioning and rotation of the div that belongs to the class *step*, but add a div inside of it, if you really have to mess with those properties. See the example below.
+**NOTE:** As a general rule, you should avoid modifying the CSS properties of the built-in class *step*, as this will modify ***ALL*** the steps! You may change the font of it, but I recommend to instead add another class to that element and style that class. Whatever you do, do not mess with positioning and rotation of the div that belongs to the class *step*, but add a div inside of it, if you really have to mess with these properties. See the example below. Always position *steps* with the *data-* attribute!
 
 ```
 <div class="step yourClassNameHere" data-x="1000" data-y="1000" data-z="-1000" data-scale="2" data-rotate-z="90">
-<h1>Powerful, yet still simple</h1>
+    <div class="yourSubClassNameHere">
+        <h1>Powerful, yet still simple</h1>
+    </div>
 </div>
 ```
 **NOTE:** You may also use negative numbers for all these properties!
