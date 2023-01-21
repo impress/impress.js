@@ -1,0 +1,37 @@
+.nav-container {
+    background-color: blue;
+    width: 100%;
+    height: 100vh;
+}
+
+.nav-list {
+    display: flex;
+    flex-direction: column;
+    overflow: scroll;
+}
+
+.navitem {
+    text-decoration: none;
+    color: white;
+    padding: 5%;
+    width: 90%;
+    background-color: rgb(22, 22, 117);
+    font-size: 1rem;
+}
+
+.navitem:hover {
+    background-color: black;
+}
+
+.nav-subitem {
+    text-decoration: none;
+    color: white;
+    padding: 5%;
+    padding-left: 25%;
+    font-size: 0.8rem;
+    width: 70%;
+    background-color: rgb(27, 27, 165);
+}
+.nav-subitem:hover {
+    background-color: rgb(43, 43, 43);
+}

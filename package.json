@@ -26,13 +26,14 @@
     "build": "node build.js",
     "lint": "npm exec -- jshint src test/*.js && npm exec -- jscs src test/*.js",
     "new-lint": "npm exec -- eslint src test",
-    "test": "npm exec -- karma start --log-level debug --single-run=true"
+    "test": "npm exec -- karma start --log-level debug --single-run=true",
+    "build-website": "node ./website/src/build.js"
   },
   "devDependencies": {
     "eslint": "^6.8.0",
-    "jscs": "^3.0.7",
+    "jscs": "^2.1.1",
     "jshint": "^2.11.0",
-    "karma": "^4.4.1",
+    "karma": "^6.4.1",
     "karma-chrome-launcher": "^3.1.0",
     "karma-firefox-launcher": "^1.3.0",
     "karma-qunit": "^4.0.0",
@@ -41,6 +42,7 @@
     "qunit": "^2.9.3",
     "qunit-assert-close": "^2.1.2",
     "syn": "^0.14.1",
-    "terser": "^4.6.7"
+    "terser": "^4.6.7",
+    "node-html-markdown": "^1.3.0"
   }
 }

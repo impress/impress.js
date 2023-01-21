@@ -1,0 +1,52 @@
+/*
+*
+*   impress.js - documentation stylesheet
+*
+*       Created 2023 by Janis Hutz
+*
+*/
+
+html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-size: calc(16pt + 0.4vw);
+    font-family: sans-serif;
+}
+
+.content {
+    background-color: rgb(255, 255, 255);
+    color: black;
+    display: grid;
+    grid-template-areas:
+        'menu main main main main'
+        'menu main main main main'
+        'menu main main main main'
+        'menu main main main main'
+        'menu main main main main'
+        'menu main main main main'
+        'menu main main main main'
+        'menu main main main main'
+        'menu footer footer footer footer';
+}
+
+.darkMode {
+    background-color: rgb(46, 46, 46);
+    color: white
+}
+
+#nav {
+    grid-area: menu;
+    width: 90%;
+    height: 100%;
+}
+
+#docPage {
+    grid-area: main;
+    overflow: scroll;
+}
+
+#footer {
+    grid-area: footer;
+}
