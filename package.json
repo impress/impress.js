@@ -1,6 +1,6 @@
 {
   "name": "impress.js",
-  "version": "1.1.0",
+  "version": "2.1.0",
   "description": "It's a presentation framework based on the power of CSS3 transforms and transitions in modern browsers and inspired by the idea behind prezi.com.",
   "main": "js/impress.js",
   "repository": {
@@ -27,7 +27,7 @@
     "lint": "npm exec -- jshint src test/*.js && npm exec -- jscs src test/*.js",
     "new-lint": "npm exec -- eslint src test",
     "test": "npm exec -- karma start --log-level debug --single-run=true",
-    "build-website": "node ./website/src/build.js"
+    "build-website": "node ./website/docs/src/build.js"
   },
   "devDependencies": {
     "eslint": "^6.8.0",
