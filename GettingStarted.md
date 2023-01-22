@@ -29,7 +29,7 @@ Now, create a new file called *index.html* and create the basic HTML structure:
 <html>
     <head>
         <title>My first presentation</title>
-        <link rel="stylesheet" href="/css/impress-common.css"><!--Leave out, if you don't use impress-common.css-->
+        <link rel="stylesheet" href="./css/impress-common.css"><!--Leave out, if you don't use impress-common.css-->
     </head>
     <body class="impress-not-supported">
         <div class="fallback-message">
@@ -43,7 +43,7 @@ Now, create a new file called *index.html* and create the basic HTML structure:
             </div>
         </div>
 
-        <script> src="js/impress.js"></script>
+        <script src="js/impress.js"></script>
         <script>window.impress || document.write('<script src="https://cdn.jsdelivr.net/gh/impress/impress.js@2.0.0/js/impress.js">\x3C/script>');</script>
         <script>impress().init()</script>
     </body>
