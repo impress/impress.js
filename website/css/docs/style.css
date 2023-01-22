@@ -20,6 +20,7 @@ html, body {
     color: black;
     display: grid;
     grid-template-areas:
+        'menu header header header header'
         'menu main main main main'
         'menu main main main main'
         'menu main main main main'
@@ -31,22 +32,38 @@ html, body {
         'menu footer footer footer footer';
 }
 
-.darkMode {
-    background-color: rgb(46, 46, 46);
-    color: white
+.logo {
+    width: 60%;
+    height: auto;
+    margin-left: 20%;
+    margin-top: 5%;
+    margin-bottom: 5%;
 }
 
 #nav {
     grid-area: menu;
-    width: 90%;
+    min-width: 20vw;
+    width: 100%;
     height: 100%;
+    overflow: scroll;
 }
 
 #docPage {
+    max-width: 75vw;
+    margin: 0;
     grid-area: main;
     overflow: scroll;
 }
 
+.doc-container {
+    width: 90%;
+    margin: 5%;
+}
+
 #footer {
     grid-area: footer;
+}
+
+#top {
+    grid-area: header;
 }

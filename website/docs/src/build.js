@@ -14,7 +14,8 @@
 
 const fs = require( 'fs' );
 const path = require( 'path' );
-const md2html = require( 'node-html-markdown' );
+const mdhtml = require( 'markdown-it' );
+const md2html = new mdhtml();
 
 const pluginsPath = path.join( __dirname + '/../../../src/plugins' );
 
@@ -26,7 +27,7 @@ for ( let item in plugins ) {
         if ( error ) {
             parseJS( path.join( pluginsPath + '/' + plugins[item] ) );
         } else {
-            console.log( data );
+            console.log( md2html.render( '' + data ) );
         };
     } );
 }

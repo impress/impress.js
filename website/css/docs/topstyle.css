@@ -1,0 +1,15 @@
+.top-container {
+    background-color: rgb(223, 223, 223);
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.top-wrapper {
+    display: flex;
+    width: 80%;
+    margin-right: 5%;
+    justify-content: flex-end;
+}

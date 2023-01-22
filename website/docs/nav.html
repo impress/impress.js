@@ -11,11 +11,62 @@
                 <div class="nav-list">
                     <a class="navitem" id="home" href="/docs">Home</a>
                     <a class="navitem" id="gettingStarted" href="/docs/gettingStarted.html">Getting Started</a>
-                    <a class="navitem" id="advanced" href="/docs/reference">API reference</a>
-                    <a class="nav-subitem" id="advanced" href="/docs/advanced/root">Root element</a>
-                    <a class="navitem" id="plugins" href="/docs/plugins.html">Plugins</a>
+                    <a class="navitem" id="referenceNav" onclick="toggleList( 'reference' );">API reference</a>
+                    <div class="dropdown" id="reference">
+                        <a class="nav-subitem" id="root" href="/docs/reference">Home</a>
+                        <a class="nav-subitem" id="root" href="/docs/reference/root">Root element</a>
+                    </div>
+                    <a class="navitem" id="pluginsNav" onclick="toggleList( 'plugins' );">Plugins</a>
+                    <div class="dropdown" id="plugins">
+                        <a class="nav-subitem" id="impressConsole" href="/docs/plugins/impressConsole.html">Impress Console</a>
+                    </div>
+                    <a class="navitem" id="contributingNav" onclick="toggleList( 'contributing' );">Contributing</a>
+                    <div class="dropdown" id="contributing">
+                        <a class="nav-subitem" id="contributing-gettingStarted" href="/docs/contributing/gettingStarted.html">Getting Started</a>
+                    </div>
                 </div>
             </div>
         </div>
     </body>
+    <script>
+        function highlightPath () { 
+
+        };
+
+        $(document).ready(function () {
+            $( '.navitem' ).mouseenter( function () { 
+                $( this ).stop();
+                $( this ).animate( { 'background-color': 'black' }, 100 );
+            } );
+
+            $( '.navitem' ).mouseleave( function () { 
+                if ( sessionStorage.getItem( 'theme' ) == 'dark' ) {
+                    $( this ).stop();
+                    $( this ).animate( { 'background-color': 'rgb(12, 12, 60)' }, 100 );
+                } else {
+                    $( this ).stop();
+                    $( this ).animate( { 'background-color': 'rgb(22, 22, 117)' }, 100 );
+                }
+            } );
+
+            $( '.nav-subitem' ).mouseenter( function () { 
+                $( this ).stop();
+                $( this ).animate( { 'background-color': 'rgb(43, 43, 43)' }, 100 );
+            } );
+
+            $( '.nav-subitem' ).mouseleave( function () { 
+                if ( sessionStorage.getItem( 'theme' ) == 'dark' ) {
+                    $( this ).stop();
+                    $( this ).animate( { 'background-color': 'rgb(18, 18, 99)' }, 100 );
+                } else {
+                    $( this ).stop();
+                    $( this ).animate( { 'background-color': 'rgb(27, 27, 165)' }, 100 );
+                }
+            } );
+        });
+
+        function toggleList ( id ) {
+            $( `#${id}` ).slideToggle();
+        };
+    </script>
 </html>
