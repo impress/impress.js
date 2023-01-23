@@ -37,3 +37,11 @@ function parseJS ( filepath ) {
     console.log( 'no readme found' );
     let jsFiles = fs.readdirSync( filepath );
 }
+
+function checkLinks ( html ) {
+
+}
+
+function storeHTML ( html, path ) {
+    
+}
