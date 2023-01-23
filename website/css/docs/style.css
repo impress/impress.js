@@ -58,6 +58,7 @@ html, body {
 #doc-container {
     width: 90%;
     margin: 5%;
+    max-height: 70vh;
 }
 
 #footer {
@@ -67,3 +68,4 @@ html, body {
 #top {
     grid-area: header;
 }
+

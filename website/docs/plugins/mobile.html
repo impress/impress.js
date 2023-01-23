@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+    <html>
+        <head>
+        <title>Docs - impress.js</title>
+        <!--I am using jquery for button animations.-->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/dark.min.css">
+        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script>
+        <script src="/js/docs/loader.js"></script>
+        <link rel="stylesheet" href="/css/docs/style.css">
+    </head>
+    <body>
+        <div class="content">
+            <div id="nav"></div>
+            <div id="top"></div>
+            <div id="docPage">
+                <div id="doc-container">
+                    <h1>Mobile devices support</h1>
+<p>Presentations with a lot of 3D effects and graphics can consume a lot of resources, especially on mobile devices.
+This plugin provides some CSS classes that can be used to hide most of the slides, only showing the current, previous
+and next slide.</p>
+<p>In particular, this plugin adds:</p>
+<p><code>body.impress-mobile</code> class, if it detects running on a mobile OS.</p>
+<p><code>div.prev</code> and <code>div.prev</code> to the adjacent steps to the current one. Note that the current slide is already identified
+by <code>present</code> and <code>active</code> CSS classes.</p>
+<h2>Example CSS</h2>
+<pre><code>    body.impress-mobile .step { 
+        display:none;
+    }
+    body.impress-mobile .step.active,
+    body.impress-mobile .step.present,
+    body.impress-mobile .step.next,
+    body.impress-mobile .step.prev { 
+        display:block; 
+    }
+</code></pre>
+<h2>Note</h2>
+<p>This plugin does not take into account redirects that could happen with skip, goto and other plugins. The active
+step will of course always be correct, but &quot;non-linear&quot; transitions to anything else than the actual previous and next
+steps will probably not look correct.</p>
+<h2>Author</h2>
+<p>Kurt Zenisek (@KZeni)</p>
+</div>
+                </div>
+                <div id="footer"></div>
+            </div>
+        </body>
+    </html>

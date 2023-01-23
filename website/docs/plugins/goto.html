@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+    <html>
+        <head>
+        <title>Docs - impress.js</title>
+        <!--I am using jquery for button animations.-->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/dark.min.css">
+        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script>
+        <script src="/js/docs/loader.js"></script>
+        <link rel="stylesheet" href="/css/docs/style.css">
+    </head>
+    <body>
+        <div class="content">
+            <div id="nav"></div>
+            <div id="top"></div>
+            <div id="docPage">
+                <div id="doc-container">
+                    <h1>Goto Plugin</h1>
+<p>The goto plugin is a pre-stepleave plugin. It is executed before
+<code>impress:stepleave</code> event, and will alter the destination where to transition next.</p>
+<p>Example:</p>
+<pre><code>    &lt;!-- When leaving this step, go directly to &quot;step-5&quot; --&gt;
+    &lt;div class=&quot;step&quot; data-goto=&quot;step-5&quot;&gt;
+
+    &lt;!-- When leaving this step with next(), go directly to &quot;step-5&quot;, instead of the next step.
+         If moving backwards to previous step - e.g. prev() instead of next() - then go to &quot;step-1&quot;. --&gt;
+    &lt;div class=&quot;step&quot; data-goto-next=&quot;step-5&quot; data-goto-prev=&quot;step-1&quot;&gt;
+
+    &lt;!-- data-goto-key-list and data-goto-next-list allow you to build advanced non-linear navigation. --&gt;
+    &lt;div class=&quot;step&quot; data-goto-key-list=&quot;ArrowUp ArrowDown ArrowRight ArrowLeft&quot; data-goto-next-list=&quot;step-4 step-3 step-2 step-5&quot;&gt;
+</code></pre>
+<p>See https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values for a table
+of what strings to use for each key.</p>
+<h2>Author</h2>
+<p>Copyright 2016 Henrik Ingo (@henrikingo)
+Released under the MIT license.</p>
+</div>
+                </div>
+                <div id="footer"></div>
+            </div>
+        </body>
+    </html>

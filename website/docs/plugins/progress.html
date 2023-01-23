@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+    <html>
+        <head>
+        <title>Docs - impress.js</title>
+        <!--I am using jquery for button animations.-->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/dark.min.css">
+        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script>
+        <script src="/js/docs/loader.js"></script>
+        <link rel="stylesheet" href="/css/docs/style.css">
+    </head>
+    <body>
+        <div class="content">
+            <div id="nav"></div>
+            <div id="top"></div>
+            <div id="docPage">
+                <div id="doc-container">
+                    <h1>Progress plugin</h1>
+<p>Progressbar and pagexounter for impress.js presentations</p>
+<h2>Usage</h2>
+<p>Add a div for progressbar and/or progress as you can see it here:</p>
+<h3>HTML</h3>
+<pre><code>  &lt;div class=&quot;impress-progressbar&quot;&gt;&lt;div&gt;&lt;/div&gt;&lt;/div&gt;
+  &lt;div class=&quot;impress-progress&quot;&gt;&lt;/div&gt;
+</code></pre>
+<h3>Sample CSS</h3>
+<pre><code>.impress-progressbar {
+  position: absolute;
+  right: 318px;
+  bottom: 1px;
+  left: 118px;
+  border-radius: 7px;
+  border: 2px solid rgba(100, 100, 100, 0.2);
+}
+.impress-progressbar DIV {
+  width: 0;
+  height: 2px;
+  border-radius: 5px;
+  background: rgba(75, 75, 75, 0.4);
+  transition: width 1s linear;
+}
+.impress-progress {
+  position: absolute;
+  left: 59px;
+  bottom: 1px;
+  text-align: left;
+  opacity: 0.6;
+}
+</code></pre>
+<p>Feel free to change the style of your progressbar as you like by editing the CSS file.</p>
+<h2>Author</h2>
+<p>Copyright 2014: Matthias Bilger (@m42e)</p>
+</div>
+                </div>
+                <div id="footer"></div>
+            </div>
+        </body>
+    </html>

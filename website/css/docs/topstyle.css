@@ -13,3 +13,10 @@
     margin-right: 5%;
     justify-content: flex-end;
 }
+
+#darkToggle {
+    background-color: rgba(0, 0, 0, 0);
+    border-style: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+}

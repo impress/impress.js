@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <link rel="stylesheet" href="/css/docs/navstyle.css">
+    </head>
+    <body>
+        <div class="nav-container">
+            <a class="logo-container" href="/"><img class="logo" src="/assets/apple-touch-icon.png" alt="impress-logo"></a>
+            <div class="nav-wrapper">
+                <div class="nav-list">
+                    <a class="navitem" id="home" href="/docs">Home</a>
+                    <a class="navitem" id="gettingStarted" href="/docs/gettingStarted.html">Getting Started</a>
+                    <a class="navitem" id="referenceNav" onclick="toggleList( 'reference' );">API reference</a>
+                    <div class="dropdown" id="reference">
+                        <a class="nav-subitem" id="root" href="/docs/reference">Home</a>
+                        <a class="nav-subitem" id="root" href="/docs/reference/root">Root element</a>
+                    </div>
+                    <a class="navitem" id="pluginsNav" onclick="toggleList( 'plugins' );">Plugins</a>
+                    <div class="dropdown" id="plugins">
+                        <a class="nav-subitem" id="impressConsole" href="/docs/plugins/impressConsole.html">Impress Console</a>
+                    </div>
+                    <a class="navitem" id="contributingNav" onclick="toggleList( 'contributing' );">Contributing</a>
+                    <div class="dropdown" id="contributing">
+                        <a class="nav-subitem" id="contributing-gettingStarted" href="/docs/contributing/gettingStarted.html">Getting Started</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+    <script src="/js/docs/nav.js"></script>
+</html>

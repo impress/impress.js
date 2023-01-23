@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+    <html>
+        <head>
+        <title>Docs - impress.js</title>
+        <!--I am using jquery for button animations.-->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/dark.min.css">
+        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script>
+        <script src="/js/docs/loader.js"></script>
+        <link rel="stylesheet" href="/css/docs/style.css">
+    </head>
+    <body>
+        <div class="content">
+            <div id="nav"></div>
+            <div id="top"></div>
+            <div id="docPage">
+                <div id="doc-container">
+                    <h1>Extras Plugin</h1>
+<p>The Extras plugin will initialize the optional addon plugins from
+<a href="../../../extras/">extras/</a> directory, if they were loaded.</p>
+<p>Generally, for an extras plugin to have been loaded, 2 things must have happened:</p>
+<ol>
+<li>The extras plugins must be present in extras/ directory, for example after
+running <code>git submodule update</code></li>
+<li>One or more extras plugins are added to the impress.js presentation (the HTML
+file) by the author using a regular <code>&lt;script&gt;</code> tag.</li>
+</ol>
+<p>If one or more extras plugins were so added, this plugin will automatically
+discover them and perform initialization (such as calling
+<code>mermaid.initialize()</code>).</p>
+<p>If no extras plugins are added to a presentation, this plugin does nothing.</p>
+<p>Note that some extra plugins (like mathjax) initialize themselves immediately, and
+there's nothing to do here.</p>
+<h2>Author</h2>
+<p>Henrik Ingo (@henrikingo), 2016</p>
+</div>
+                </div>
+                <div id="footer"></div>
+            </div>
+        </body>
+    </html>

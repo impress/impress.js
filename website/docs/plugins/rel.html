@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+    <html>
+        <head>
+        <title>Docs - impress.js</title>
+        <!--I am using jquery for button animations.-->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/dark.min.css">
+        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script>
+        <script src="/js/docs/loader.js"></script>
+        <link rel="stylesheet" href="/css/docs/style.css">
+    </head>
+    <body>
+        <div class="content">
+            <div id="nav"></div>
+            <div id="top"></div>
+            <div id="docPage">
+                <div id="doc-container">
+                    <h1>Relative Positioning Plugin</h1>
+<p>This plugin provides support for defining the coordinates of a step relative
+to previous steps. This is often more convenient when creating presentations,
+since as you add, remove or move steps, you may not need to edit the positions
+as much as is the case with the absolute coordinates supported by impress.js
+core.</p>
+<p>Example:</p>
+<pre><code>&lt;!-- Position step 1000 px to the right and 500 px up from the previous step. --&gt;
+&lt;div class=&quot;step&quot; data-rel-x=&quot;1000&quot; data-rel-y=&quot;500&quot;&gt;
+    
+&lt;!-- Position step 1000 px to the left and 750 px up from the step with id &quot;title&quot;. --&gt;
+&lt;div class=&quot;step&quot; data-rel-x=&quot;-1000&quot; data-rel-y=&quot;750&quot; data-rel-to=&quot;title&quot;&gt;
+</code></pre>
+<p>Following html attributes are supported for step elements:</p>
+<pre><code>data-rel-x
+data-rel-y
+data-rel-z
+data-rel-to
+
+data-rel-rotate-x
+data-rel-rotate-y
+data-rel-rotate-z
+
+data-rel-position
+data-rel-reset
+</code></pre>
+<p>Non-zero values are also inherited from the previous step. This makes it easy to
+create a boring presentation where each slide shifts for example 1000px down
+from the previous.</p>
+<p>The above relative values are ignored, or set to zero, if the corresponding
+absolute value (<code>data-x</code> etc...) is set. Note that this also has the effect of
+resetting the inheritance functionality.</p>
+<p>In addition to plain numbers, which are pixel values, it is also possible to
+define relative positions as a multiple of screen height and width, using
+a unit of &quot;h&quot; and &quot;w&quot;, respectively, appended to the number.</p>
+<p>Example:</p>
+<pre><code>&lt;div class=&quot;step&quot; data-rel-x=&quot;1.5w&quot; data-rel-y=&quot;1.5h&quot;&gt;
+</code></pre>
+<p>Note that referencing a special step with the <code>data-rel-to</code> attribute is <em>limited to previous steps</em> to avoid the possibility of circular or offending positioning.
+If you need a reference to a step that is shown later make use of the goto plugin:</p>
+<pre><code>&lt;div id=&quot;shown-first&quot; class=&quot;step&quot; data-goto-next=&quot;shown-earlier&quot;&gt;
+&lt;div id=&quot;shown-later&quot; class=&quot;step&quot; data-goto-prev=&quot;shown-earlier&quot; data-goto-next=&quot;shown-last&quot;&gt;
+&lt;div id=&quot;shown-earlier&quot; class=&quot;step&quot; data-rel-to=&quot;shown-later&quot; data-rel-x=&quot;1000&quot; data-rel-y=&quot;500&quot; data-goto-prev=&quot;shown-first&quot; data-goto-next=&quot;shown-later&quot;&gt;
+&lt;div id=&quot;shown-last&quot; class=&quot;step&quot; data-goto-prev=&quot;shown-later&quot;&gt;
+</code></pre>
+<h2>Relative positioning</h2>
+<p>All <code>data-rel-x</code>/<code>y</code>/<code>z</code> is used world coordinate by default. So the value should be alternated according to the rotation state of previous slides.</p>
+<p>To easy relative positioning, the <code>data-rel-position</code> attribute is introduced.</p>
+<p><code>data-rel-position</code> has a default value of &quot;absolute&quot;, which works like this attribute is not introduced.</p>
+<p>When <code>data-rel-position=&quot;relative&quot;</code>, everything changed. The rotation of previous is no need to be considered, you can set all the <code>data-rel-</code> attributes as if the previous has no rotation. This plugin will calculate the acual position according to the position and rotation of the previous slide and the relative settings. This make it possible to split a presentation into parts, construct each parts standalone without consider the final position, and then assemble them together.</p>
+<p>For example, if you want the slide slided in from the right hand side, all you need is <code>data-rel-x=&quot;1000&quot;</code>, no matter the rotation of the previous slide. If the previous slide has <code>data-rotate-z=&quot;90&quot;</code>, the actual attribute of this slide will work like <code>data-rel-y=&quot;1000&quot;</code>.</p>
+<p>Not only relative positions, the relative rotations can be used while <code>data-rel-position=&quot;relative&quot;</code>.</p>
+<p>For example, <code>data-rel-rotate-y=&quot;45&quot;</code> will make the slide has an angle of 45 degree to the previous slide. It make it easy to build a circle and do other complicated positioning.</p>
+<p>If not set, the <code>data-rel-position</code> attribute will be inherited from previous slide. So we only need to set it at the first slide, then all done.</p>
+<p>To avoid the boring need to set most <code>data-rel-*</code> to zero, but set only one or two ones, <code>data-rel-reset</code> attribute can be used:</p>
+<ul>
+<li><code>data-rel-reset</code> equals to: <code>data-rel-x=&quot;0&quot; data-rel-y=&quot;0&quot; data-rel-z=&quot;0&quot; data-rel-rotate-x=&quot;0&quot; data-rel-rotate-y=&quot;0&quot; data-rel-rotate-z=&quot;0&quot;</code></li>
+<li><code>data-rel-reset=&quot;all&quot;</code> works like <code>data-rel-reset</code>, in additions <code>data-rotate-x=&quot;0&quot; data-rotate-y=&quot;0&quot; data-rotate-z=&quot;0&quot;</code></li>
+</ul>
+<p>When <code>data-rel-position=&quot;relative&quot;</code> and <code>data-rel-to</code> is specified, <code>data-rotate-*</code> and <code>data-rel-*</code> will be inherited from specified slide too.</p>
+<h2>IMPORTANT: Incompatible change</h2>
+<p>Enabling / adding this plugin has a small incompatible side effect on default values.</p>
+<p>Prior to this plugin, a missing data-x/y/z attribute would be assigned the default value of 0.
+But when using a version of impress.js with this plugin enabled, a missing data-x/y/z attribute
+will inherit the value from the previous step. (The first step will inherit the default value of 0.)</p>
+<p>For example, if you have an old presentation with the following 3 steps, they would be positioned
+differently when using a version of impress.js that includes this plugin:</p>
+<pre><code>&lt;div class=&quot;step&quot; data-x=&quot;100&quot; data-y=&quot;100&quot; data-z=&quot;100&quot;&gt;&lt;/div&gt;
+&lt;div class=&quot;step&quot; data-x=&quot;100&quot; data-y=&quot;100&quot;&gt;&lt;/div&gt;
+&lt;div class=&quot;step&quot; data-x=&quot;100&quot; data-y=&quot;100&quot;&gt;&lt;/div&gt;
+</code></pre>
+<p>To get the same rendering now, you need to add an explicit <code>data-z=&quot;0&quot;</code> to the second step:</p>
+<pre><code>&lt;div class=&quot;step&quot; data-x=&quot;100&quot; data-y=&quot;100&quot; data-z=&quot;100&quot;&gt;&lt;/div&gt;
+&lt;div class=&quot;step&quot; data-x=&quot;100&quot; data-y=&quot;100&quot; data-z=&quot;0&quot;&gt;&lt;/div&gt;
+&lt;div class=&quot;step&quot; data-x=&quot;100&quot; data-y=&quot;100&quot;&gt;&lt;/div&gt;
+</code></pre>
+<p>Note that the latter code will render correctly also in old versions of impress.js.</p>
+<p>If you have an old presentation that doesn't use relative positioning, and for some reason you
+cannot or don't want to add the explicit 0 values where needed, your last resort is to simply
+remove the <code>rel.js</code> plugin completely. You can either:</p>
+<ul>
+<li>
+<p>Remove <code>rel.js</code> from <a href="../../../build.js">/build.js</a> and recompile <code>impress.js</code> with: <code>npm build</code></p>
+</li>
+<li>
+<p>Just open [/js/impress.js] in an editor and delete the <code>rel.js</code> code.</p>
+</li>
+<li>
+<p>Or, just uncomment the following single line, which is the last line of the plugin:</p>
+<pre><code>  impress.addPreInitPlugin( rel );
+</code></pre>
+</li>
+</ul>
+<h2>About Pre-Init Plugins</h2>
+<p>This plugin is a <em>pre-init plugin</em>. It is called synchronously from impress.js
+core at the beginning of <code>impress().init()</code>. This allows it to process its own
+data attributes first, and possibly alter the data-x, data-y and data-z attributes
+that will then be processed by <code>impress().init()</code>.</p>
+<p>(Another name for this kind of plugin might be called a <em>filter plugin</em>, but
+<em>pre-init plugin</em> is more generic, as a plugin might do whatever it wants in
+the pre-init stage.)</p>
+<h2>Author</h2>
+<p>Henrik Ingo (@henrikingo), 2016</p>
+</div>
+                </div>
+                <div id="footer"></div>
+            </div>
+        </body>
+    </html>
