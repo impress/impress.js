@@ -16,6 +16,7 @@ const fs = require( 'fs' );
 const path = require( 'path' );
 const mdhtml = require( 'markdown-it' );
 const md2html = new mdhtml();
+const docRoot = path.join( __dirname + '/../' );
 
 const pluginsPath = path.join( __dirname + '/../../../src/plugins' );
 
@@ -39,9 +40,31 @@ function parseJS ( filepath ) {
 }
 
 function checkLinks ( html ) {
-
+    
 }
 
 function storeHTML ( html, path ) {
-    
+    let fileOut = `<!DOCTYPE html>
+    <html>
+        <head>
+        <title>Docs - impress.js</title>
+        <!--I am using jquery for button animations.-->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="/js/docs/loader.js"></script>
+        <link rel="stylesheet" href="/css/docs/style.css">
+    </head>
+    <body>
+        <div class="content">
+            <div id="nav"></div>
+            <div id="top"></div>
+            <div id="docPage">
+                <div id="doc-container">` + html 
+                + `</div>
+                </div>
+                <div id="footer"></div>
+            </div>
+        </body>
+    </html>`;
+    fs.writeFileSync( docRoot + '/plugins/' + path + '.html', fileOut );
 }

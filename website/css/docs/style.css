@@ -55,7 +55,7 @@ html, body {
     overflow: scroll;
 }
 
-.doc-container {
+#doc-container {
     width: 90%;
     margin: 5%;
 }
