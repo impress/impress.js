@@ -32,6 +32,10 @@ html, body {
         'menu footer footer footer footer';
 }
 
+.docs-link {
+    color: blue;
+}
+
 .logo {
     width: 60%;
     height: auto;

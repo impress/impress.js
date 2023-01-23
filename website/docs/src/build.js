@@ -42,7 +42,7 @@ function parseJS ( filepath ) {
 }
 
 function checkLinks ( html ) {
-
+    
 }
 
 function storeHTML ( html, path ) {
