@@ -29,8 +29,7 @@ for ( let item in plugins ) {
             parseJS( path.join( pluginsPath + '/' + plugins[item] ) );
         } else {
             let html = md2html.render( '' + data );
-            findLinks( html, path.join( pluginsPath + '/' + plugins[item] + '/README.md' ) );
-            storeHTML( html, plugins[item] );
+            storeHTML( findLinks( html, path.join( pluginsPath + '/' + plugins[item] ) ), plugins[item] );
         };
     } );
 }
@@ -44,33 +43,63 @@ function parseJS ( filepath ) {
 }
 
 function findLinks ( html, path ) {
+    let returnHTML = html;
     for ( let letter in html ) {
         if ( html[letter] === '<' ) {
             if ( html.slice( parseInt( letter ), parseInt( letter ) + 9 ) === '<a href="' ) {
                 let i = 9;
                 while ( html.slice( parseInt( letter ) + i, parseInt( letter ) + i + 1 ) !== '"' ) {
-                    i += 1
-                }
-                checkLinks( html.slice( parseInt( letter ) + 9, parseInt( letter ) + i  ), path );
+                    i += 1;
+                };
+                returnHTML = html.slice( 0, parseInt( letter ) ) + checkLinks( html.slice( parseInt( letter ) + 9, parseInt( letter ) + i  ), path ) + html.slice( parseInt( letter ) + i + 2, parseInt( html.length ) );
             };
         };
     };
+    return returnHTML;
 };
 
-function checkLinks ( link, path ) {
+function checkLinks ( link, fpath ) {
+    console.log( link );
+    let filepath = fpath;
     let pos = 0;
     if ( link.slice( parseInt( link.length ) - 9, parseInt( link.length ) ) === 'README.md' ) {
-        console.log( 'linking to readme' );
-    } else {
-        if ( link.slice( 0, 2 ) === '..' ) {
-            while ( link.slice( pos, pos + 2 ) === '.' || link.slice( pos, pos + 2 ) === '/' ) {
-                pos += 1;
+        while ( link.slice( parseInt( link.length ) - pos - 11, parseInt( link.length ) - pos - 10 ) !== '/' ) {
+            pos += 1;
+        };
+        return '<a href="/docs/plugins/' + link.slice( parseInt( link.length ) - pos - 10, parseInt( link.length ) - 10 ) + '">';
+    } else if ( link.slice( 0, 2 ) === '..' ) {
+        // here we map the relative path to an absolute path that can be used with the GitHub repo.
+        while ( link.slice( pos, pos + 3 ) === '../' ) {
+            pos += 3;
+            let pathPos = 1;
+            while ( filepath.slice( parseInt( filepath.length ) - pathPos, parseInt( filepath.length ) - pathPos + 1 ) !== '/' ) {
+                pathPos += 1;
             };
-        } else if ( link.slice( 0, 1 ) !== '.' && link.slice( 0, 1 ) !== '/' ) {
-            console.log( 'relative path in same folder' );
-        } else {
-            throw Error( 'Invalid link found! Link is: "' + link + '" in file: ' + path );
-        }
+            filepath = filepath.slice( 0, parseInt( filepath.length ) - pathPos + 1 );
+        };
+
+        // Here we find the impress.js root in the filepath to remove it and finish the link generation
+        let fsPos = 0;
+        while ( filepath.slice( parseInt( filepath.length ) - fsPos - 10, parseInt( filepath.length ) - fsPos ) !== 'impress.js' ) {
+            fsPos += 1;
+        };
+        let fpSlice = filepath.slice( parseInt( filepath.length ) - fsPos, parseInt( filepath.length ) );
+        let linkSlice = link.slice( pos, link.length );
+        
+        // now let's assemble a link and add it back into the html
+        return '<a href="https://github.com/impress/impress.js' + fpSlice + linkSlice + '">';
+    } else if ( link.slice( 0, 1 ) !== '.' && link.slice( 0, 1 ) !== '/' ) {
+        let fsPos = 0;
+        while ( filepath.slice( parseInt( filepath.length ) - fsPos - 10, parseInt( filepath.length ) - fsPos ) !== 'impress.js' ) {
+            fsPos += 1;
+        };
+        let fpSlice = filepath.slice( parseInt( filepath.length ) - fsPos, parseInt( filepath.length ) );
+        return '<a href="https://github.com/impress/impress.js' + link + '">';
+    } else if ( link.slice( 0, 7 ) === 'http://' || link.slice( 0, 8 ) === 'https://' ) {
+        console.log( 'hi' );
+        return '<a href="' + link + '">';
+    } else {
+        throw Error( 'Invalid link found! Link is: "' + link + '" in file: ' + filepath + '/README.md' );
     };
 };
 
