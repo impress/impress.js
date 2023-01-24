@@ -28,7 +28,9 @@ for ( let item in plugins ) {
         if ( error ) {
             parseJS( path.join( pluginsPath + '/' + plugins[item] ) );
         } else {
-            storeHTML( md2html.render( '' + data ), plugins[item] );
+            let html = md2html.render( '' + data );
+            findLinks( html, path.join( pluginsPath + '/' + plugins[item] + '/README.md' ) );
+            storeHTML( html, plugins[item] );
         };
     } );
 }
@@ -41,9 +43,34 @@ function parseJS ( filepath ) {
     let jsFiles = fs.readdirSync( filepath );
 }
 
-function checkLinks ( html ) {
-    
-}
+function findLinks ( html, path ) {
+    for ( let letter in html ) {
+        if ( html[letter] === '<' ) {
+            if ( html.slice( parseInt( letter ), parseInt( letter ) + 9 ) === '<a href="' ) {
+                let i = 9;
+                while ( html.slice( parseInt( letter ) + i, parseInt( letter ) + i + 1 ) !== '"' ) {
+                    i += 1
+                }
+                checkLinks( html.slice( parseInt( letter ) + 9, parseInt( letter ) + i  ), path );
+            };
+        };
+    };
+};
+
+function checkLinks ( link, path ) {
+    console.log( link );
+    if ( link.slice( parseInt( link.length ) - 9, parseInt( link.length ) ) === 'README.md' ) {
+        console.log( 'linking to readme' );
+    } else {
+        if ( link.slice( 0, 2 ) === '..' ) {
+            console.log( 'relative path' );
+        } else if ( link.slice( 0, 1 ) !== '.' && link.slice( 0, 1 ) !== '/' ) {
+            console.log( 'relative path in same folder' );
+        } else {
+            throw Error( 'Invalid link found! Link is: "' + link + '" in file: ' + path );
+        }
+    };
+};
 
 function storeHTML ( html, path ) {
     let fileOut = `<!DOCTYPE html>
@@ -73,7 +100,7 @@ function storeHTML ( html, path ) {
         </body>
     </html>`;
     fs.writeFileSync( docRoot + '/plugins/' + path + '.html', fileOut );
-}
+};
 
 
 function generateNav () {
@@ -100,7 +127,7 @@ function generateNav () {
                     `;
     for ( let item in plugins ) {
         fileStruct += `<a class="nav-subitem" id="${ plugins[item] }" href="/docs/plugins/${ plugins[item] }.html">${ plugins[item] }</a>`;
-    }
+    };
     fileStruct += `</div>
                     <a class="navitem" id="contributingNav" onclick="toggleList( 'contributing' );">Contributing</a>
                     <div class="dropdown" id="contributing">
@@ -113,4 +140,4 @@ function generateNav () {
     <script src="/js/docs/nav.js"></script>
 </html>`;
     fs.writeFileSync( docRoot + '/nav.html', fileStruct );
-}
+};
