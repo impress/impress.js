@@ -58,12 +58,14 @@ function findLinks ( html, path ) {
 };
 
 function checkLinks ( link, path ) {
-    console.log( link );
+    let pos = 0;
     if ( link.slice( parseInt( link.length ) - 9, parseInt( link.length ) ) === 'README.md' ) {
         console.log( 'linking to readme' );
     } else {
         if ( link.slice( 0, 2 ) === '..' ) {
-            console.log( 'relative path' );
+            while ( link.slice( pos, pos + 2 ) === '.' || link.slice( pos, pos + 2 ) === '/' ) {
+                pos += 1;
+            };
         } else if ( link.slice( 0, 1 ) !== '.' && link.slice( 0, 1 ) !== '/' ) {
             console.log( 'relative path in same folder' );
         } else {

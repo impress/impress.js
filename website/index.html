@@ -4,13 +4,14 @@
         <title>impress.js - the stunning javascript presentation framework</title>
         <meta name="description" content="impress.js, a javascript presentation framework that uses the power of CSS 3 to create stunning presentations in your browser! It is inspired by the idea behind prezi.com">
         <link rel="stylesheet" href="/css/style.css">
-        <link rel="stylesheet" href="/css/dark_hljs.css">
         <!--I am using jquery for button animations (plus loading of the navbar and footer)-->
         <script defer src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-        <script defer src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js" crossorigin="anonymous" referrerpolicy="no-referrer" ></script>
+        <script defer src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <script defer src="/js/index.js"></script>
         <!--I will be using highlight.js to highlight the syntax, but I still need to figure out how to use it.-->
-        <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js" integrity="sha512-bgHRAiTjGrzHzLyKOnpFvaEpGzJet3z4tZnXGjpsCcqOnAH6VGUx9frc5bcIhKTVLEiCO6vEhNAgx5jtLUYrfA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>-->
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/dark.min.css">
+        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script>
     </head>
     <body>
         <!--Here, the navbar is inserted by jquery-->
@@ -30,7 +31,12 @@
             <div class="create">
                 <div class="unstyled-html">
                     <h3>Use HTML</h3>
-                    <!--TODO: Add HTML demo-code-->
+                    <!--TODO: Add html demo code-->
+                    <pre>
+                        <code>
+&lt;div&gt;&lt;/div&gt;
+                        </code>
+                    </pre>
                 </div>
                 <div class="crazy-styled">
                     <h3>And CSS</h3>
