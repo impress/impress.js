@@ -35,6 +35,7 @@ for ( let item in plugins ) {
 }
 
 generateNav ();
+storeHTML( md2html.render( '' + fs.readFileSync( path.join( __dirname + '/../../../GettingStarted.md' ) ) ), path.join( __dirname + '/../gettingStarted.html' ) );
 
 
 function parseJS ( filepath ) {
