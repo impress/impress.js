@@ -1,3 +1,6 @@
+let theme = '';
+theme = sessionStorage.getItem( 'theme' ) || getPreferredTheme();
+
 $( document ).ready( function () {
     $( '#nav' ).load( '/docs/nav.html' );
     $( '#top' ).load( '/docs/top.html' );
@@ -5,7 +8,6 @@ $( document ).ready( function () {
 } );
 
 
-let theme = sessionStorage.getItem( 'theme' ) || getPreferredTheme();
 
 // set theme on page load
 function setTheme () {
