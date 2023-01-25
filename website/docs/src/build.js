@@ -26,7 +26,7 @@ delete plugins[0];
 for ( let item in plugins ) {
     fs.readFile( path.join( pluginsPath + '/' + plugins[item] + '/README.md' ), ( error, data ) => {
         if ( error ) {
-            parseJS( path.join( pluginsPath + '/' + plugins[item] ) );
+            console.log( 'NO README found for ' + path.join( pluginsPath + '/' + plugins[item] ) + ' PLEASE MAKE SURE YOU HAVE CREATED A README!' );
         } else {
             let html = md2html.render( '' + data );
             storeHTML( findLinks( html, path.join( pluginsPath + '/' + plugins[item] ) ), plugins[item] );
@@ -35,13 +35,9 @@ for ( let item in plugins ) {
 }
 
 generateNav ();
+parseDocumentationMD();
 storeHTML( md2html.render( '' + fs.readFileSync( path.join( __dirname + '/../../../GettingStarted.md' ) ) ), path.join( __dirname + '/../gettingStarted.html' ) );
 
-
-function parseJS ( filepath ) {
-    console.log( 'no readme found for ' + filepath );
-    let jsFiles = fs.readdirSync( filepath );
-}
 
 function findLinks ( html, path ) {
     let returnHTML = html;
@@ -173,3 +169,15 @@ function generateNav () {
 </html>`;
     fs.writeFileSync( docRoot + '/nav.html', fileStruct );
 };
+
+
+function parseDocumentationMD () {
+    let doc = '' + fs.readFileSync( path.join( __dirname + '/../../../DOCUMENTATION.md' ) );
+    for ( let letter in doc ) {
+        if ( doc[letter] == '#' ) {
+            if ( doc.slice( parseInt( letter ), parseInt( letter ) + 2 ) === '##' ) {
+                console.log( '## found at ' + letter );
+            };
+        };
+    };
+}
