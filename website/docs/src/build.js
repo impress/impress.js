@@ -122,6 +122,10 @@ function checkLinks ( link, fpath ) {
     };
 };
 
+/* 
+    This function generates & stores the HTML in the correct directory
+*/
+
 function storeHTML ( html, path, type ) {
     let fileOut = `<!DOCTYPE html>
     <html>
@@ -152,7 +156,9 @@ function storeHTML ( html, path, type ) {
     fs.writeFileSync( docRoot + '/' + type + '/' + path + '.html', fileOut );
 };
 
-
+/*
+    This function, as the name implies, generates the navbar on the side in the docs.
+*/
 function generateNav () {
     let fileStruct = `<!DOCTYPE html>
     <html>
@@ -171,7 +177,7 @@ function generateNav () {
                     <div class="dropdown" id="reference">
                         <a class="nav-subitem" id="root" href="/docs/reference">Home</a>`
     for ( let item in docPages ) {
-        fileStruct += `<a class="nav-subitem" id="${ docPages[item] }" href="/docs/reference/${ docPages[item] }.html">${ docPages[item] }</a>`;
+        fileStruct += `<a class="nav-subitem" id="${ docPages[item] }" href="/docs/reference/${ docPages[item] }">${ docPages[item] }</a>`;
     };
     fileStruct += `</div>
                     <a class="navitem" id="pluginsNav" onclick="toggleList( 'plugins' );">Plugins</a>
@@ -217,6 +223,45 @@ function parseDocumentationMD () {
                 break;
             };
         };
-        storeHTML( md2html.render( doc.slice( parseInt( posArray[parseInt( item )] ), parseInt( posArray[parseInt( item ) + 1] ) || parseInt( doc.length ) ) ), title, 'reference' );
+
+        let page = md2html.render( doc.slice( parseInt( posArray[parseInt( item )] ), parseInt( posArray[parseInt( item ) + 1] ) || parseInt( doc.length ) ) );
+        let updatedPage = page;
+
+        for ( let letter in page ) {
+            if ( page[letter] === '<' ) {
+                if ( page.slice( parseInt( letter ), parseInt( letter ) + 9 ) === '<a href="' ) {
+                    let i = 9;
+                    while ( page.slice( parseInt( letter ) + i, parseInt( letter ) + i + 1 ) !== '"' ) {
+                        i += 1;
+                    };
+                    let link = '' + page.slice( parseInt( letter ) + 9, parseInt( letter ) + i  );
+                    let updatedLink = '';
+                    if ( link.slice( 0, 8 ) === 'https://' || link.slice( 0, 7 ) === 'http://' || link.slice( 0, 1 ) === '#' ) {
+                        updatedLink = link;
+                    } else {
+                        if ( link.slice( 0, 12 ) === 'src/plugins/' ) {
+                            if ( link.slice( link.length - 9, link.length ) === 'README.md' ) {
+                                updatedLink = '/docs/' + link.slice( 4, link.length - 9 );
+                            } else {
+                                updatedLink = 'https://github.com/impress/impress.js/' + link;
+                            }
+                        } else if ( link.slice( 0, 9 ) === 'examples/' ) {
+                            updatedLink = '/demo/' + link;
+                        } else {
+                            updatedLink = 'https://github.com/impress/impress.js/' + link;
+                        };
+                        console.log( updatedLink + ' at: ' + posArray[item] );
+                        updatedPage = page.slice( 0, parseInt( letter ) + 9 ) + updatedLink + page.slice( parseInt( letter ) + i + 2, parseInt( page.length ) );
+                    }
+                } else if ( page.slice( parseInt( letter ), parseInt( letter ) + 4 ) === '<h1>' ) {
+                    let i = 9;
+                    while ( page.slice( parseInt( letter ) + i, parseInt( letter ) + i + 1 ) !== '<' ) {
+                        i += 1;
+                    };
+                    let heading = '' + page.slice( parseInt( letter ) + 9, parseInt( letter ) + i  );
+                }
+            };
+            storeHTML( updatedPage, title, 'reference' );
+        }
     }
 }
