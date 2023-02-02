@@ -13,7 +13,7 @@
  *
  * ------------------------------------------------
  *  author:  Bartek Szopka, Henrik Ingo
- *  version: 2.1.0
+ *  version: 2.0.0
  *  url:     http://impress.js.org
  *  source:  http://github.com/impress/impress.js/
  */
