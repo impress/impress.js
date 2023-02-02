@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+    <html>
+        <head>
+        <title>CSS :: reference | DOCS - impress.js</title>
+        <!--I am using jquery for button animations.-->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/dark.min.css">
+        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script>
+        <script src="/js/docs/loader.js"></script>
+        <link rel="stylesheet" href="/css/docs/style.css">
+        </head>
+        <body>
+            <div class="content">
+                <div id="nav"></div>
+                <div id="top"></div>
+                    <div id="docPage">
+                        <div id="doc-container">
+                        <h2>CSS</h2>
+<h3>4D States (.past, .present and .future classes)</h3>
+<p>The <code>.future</code> class is added to all <a href="#step-element">Step Elements</a> that haven't been visited yet.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="language-CSS">.future {
+  display: none;
+}
+</code></pre>
+<p>The <code>.present</code> class is added to the <a href="#step-element">Step Element</a> that is currently at the center of the camera. This is useful to create animations inside the step once the camera navigates to it.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="language-CSS">.present .rotating {
+  transform: rotate(-10deg);
+  transition-delay: 0.25s;
+}
+</code></pre>
+<p>The <code>.past</code> class is added to all <a href="#step-element">Step Elements</a> that have been visited at least once.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="language-CSS">.past {
+  display: none;
+}
+</code></pre>
+<h3>Current Active Step (.active class)</h3>
+<p>The <code>.active</code> class is added to the <a href="#step-element">Step Element</a> that is currently visible at the center of the camera.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="language-CSS">.step {
+  opacity: 0.3;
+  transition: opacity 1s;
+}
+.step.active {
+  opacity: 1
+}
+</code></pre>
+<p>At the same time, the <code>impress-on-*</code> class is added to the body element, the class name represents the active <a href="#step-element">Step Element</a> id. This allows for custom global styling, since you can't match a CSS class backwards from the active <a href="#step-element">Step Element</a> to the <code>body</code>.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="language-CSS">.impress-on-overview .step {
+    opacity: 1;
+    cursor: pointer;
+}
+.impress-on-step-1,
+.impress-on-step-2,
+.impress-on-step-3 {
+  background: LightBlue;
+}
+</code></pre>
+<h3>Progressive Enhancement (.impress-not-supported class)</h3>
+<p>The <code>.impress-not-supported</code> class is added to the <code>body</code> element if the browser doesn't support the features required by impress.js to work, it is useful to apply some fallback styles in the CSS.</p>
+<p>It's not necessary to add it manually on the <code>body</code> element. If the script detects that the browser lacks important features it will add this class.</p>
+<p>It is recommended to add the class manually to the <code>body</code> element though, because that means that users without JavaScript will also get fallback styles. When impress.js script detects that the browser supports all required features, the <code>.impress-not-support</code> class will be removed from the <code>body</code> element.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="language-CSS">.impress-not-supported .step {
+  display: inline-block;
+}
+</code></pre>
+</div>
+                    </div>
+                <div id="footer"></div>
+            </div>
+        </body>
+    </html>

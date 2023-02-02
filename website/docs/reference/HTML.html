@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+    <html>
+        <head>
+        <title>HTML :: reference | DOCS - impress.js</title>
+        <!--I am using jquery for button animations.-->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/dark.min.css">
+        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script>
+        <script src="/js/docs/loader.js"></script>
+        <link rel="stylesheet" href="/css/docs/style.css">
+        </head>
+        <body>
+            <div class="content">
+                <div id="nav"></div>
+                <div id="top"></div>
+                    <div id="docPage">
+                        <div id="doc-container">
+                        <h2>HTML</h2>
+<h3>Root Element</h3>
+<p>impress.js requires a Root Element. All the content of the presentation will be created inside that element. It is not recommended to manipulate any of the styles, attributes or classes that are created by impress.js inside the Root Element after initialization.</p>
+<p>To change the duration of the transition between slides use <code>data-transition-duration=&quot;2000&quot;</code> giving it
+a number of ms. It defaults to 1000 (1s).</p>
+<p>When authoring impress.js presentations, you should target some screen size, which you can define here.
+The default is 1024 x 768. You should write your CSS as if this is the screen size used for the
+presentation. When you present your presentation on a screen (or browser window) of different size,
+impress.js will automatically scale the presentation to fit the screen. The minimum and maximum limits
+to this scaling can also be defined here.</p>
+<p>All impress.js steps are wrapped inside a div element of 0 size! This means that in your CSS you
+can't use relative values for width and height (example: <code>width: 100%</code>) to define the size of step elements.
+You need to use pixel values. The pixel values used here correspond to the <code>data-width</code> and <code>data-height</code>
+given to the <code>#impress</code> root element. When the presentation is viewed on a larger or smaller screen, impress.js
+will automatically scale the steps to fit the screen.</p>
+<p><strong>NOTE:</strong> The default width and height have been changed to target HD screens in v1.2.0. If you
+don't set target width and height explicitly, layout and dimensions of your presentations are likely
+to be affected. In order to get back the old target resolution, use:</p>
+<pre><code>&lt;div id=&quot;impress&quot; data-width=&quot;1024&quot; data-height=&quot;768&quot; data-max-scale=&quot;1&quot; data-min-scale=&quot;0&quot;
+</code></pre>
+<p>You can also control the perspective with <code>data-perspective=&quot;500&quot;</code> giving it a number of pixels.
+It defaults to 1000. You can set it to 0 if you don't want any 3D effects.
+If you are willing to change this value make sure you understand how CSS perspective works:
+https://developer.mozilla.org/en/CSS/perspective</p>
+<p>See also <a href="src/plugins/README.md">the plugin README</a> for documentation on <code>data-autoplay</code>.</p>
+<p><strong>Attributes</strong></p>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Default</th>
+<th>Explanation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>data-transition-duration</td>
+<td>1000 (ms)</td>
+<td>Speed of transition between steps.</td>
+</tr>
+<tr>
+<td>data-width</td>
+<td>1920 (px)</td>
+<td>Width of target screen size. When presentation is viewed on a larger or smaller screen, impress.js will scale all content automatically.</td>
+</tr>
+<tr>
+<td>data-height</td>
+<td>1080 (px)</td>
+<td>Height of target screen size.</td>
+</tr>
+<tr>
+<td>data-max-scale</td>
+<td>3</td>
+<td>Maximum scale factor. (Note that the default 1 will not increase content size on larger screens!)</td>
+</tr>
+<tr>
+<td>data-min-scale</td>
+<td>0</td>
+<td>Minimum scale factor.</td>
+</tr>
+<tr>
+<td>data-perspective</td>
+<td>1000</td>
+<td>Perspective for 3D rendering. See https://developer.mozilla.org/en/CSS/perspective</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<pre><code class="language-html">&lt;div id=&quot;impress&quot;
+    data-transition-duration=&quot;1000&quot;
+
+    data-width=&quot;1024&quot;
+    data-height=&quot;768&quot;
+    data-max-scale=&quot;3&quot;
+    data-min-scale=&quot;0&quot;
+    data-perspective=&quot;1000&quot;
+
+    data-autoplay=&quot;7&quot;&gt;
+</code></pre>
+<h3>Step Element</h3>
+<p>A Step Element is an element that contains metadata that defines how it is going to be presented in the screen.
+A Step Element should contain a <code>.step</code> class and an optional <code>id</code> attribute.
+The content represents an html fragment that will be positioned at the center of the camera.
+In the Step Element, you can define a specific set of default attributes and positioning, that are documented below.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="language-html">&lt;div id=&quot;bored&quot; class=&quot;step&quot; data-x=&quot;-1000&quot;&gt;
+    &lt;q&gt;Aren’t you just &lt;b&gt;bored&lt;/b&gt; with all those slides-based presentations?&lt;/q&gt;
+&lt;/div&gt;
+</code></pre>
+<h4>2D Coordinates Positioning (data-x, data-y)</h4>
+<p>Define the pixel based position in which the <strong>center</strong> of the <a href="#step-element">Step Element</a> will be positioned inside the infinite canvas.</p>
+<p><strong>Attributes</strong></p>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Default</th>
+<th>Explanation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>data-x</td>
+<td>0</td>
+<td>X coordinate for step position</td>
+</tr>
+<tr>
+<td>data-y</td>
+<td>0</td>
+<td>Y coordinate for step position</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<pre><code class="language-html">&lt;div id=&quot;bored&quot; class=&quot;step&quot; data-x=&quot;-1000&quot; data-y=&quot;-1500&quot;&gt;
+    &lt;q&gt;Aren’t you just &lt;b&gt;bored&lt;/b&gt; with all those slides-based presentations?&lt;/q&gt;
+&lt;/div&gt;
+</code></pre>
+<h4>2D Scaling (data-scale)</h4>
+<p>Defines the scaling multiplier of the <a href="#step-element">Step Element</a> relative to other Step Elements. For example, <code>data-scale=&quot;4&quot;</code> means that the element will appear to be 4 times larger than the others. From the presentation and transitions point of view, it means that it will have to be scaled down (4 times) to make it back to its correct size.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="language-html">&lt;div id=&quot;title&quot; class=&quot;step&quot; data-x=&quot;0&quot; data-y=&quot;0&quot; data-scale=&quot;4&quot;&gt;
+    &lt;span class=&quot;try&quot;&gt;then you should try&lt;/span&gt;
+    &lt;h1&gt;impress.js&lt;sup&gt;*&lt;/sup&gt;&lt;/h1&gt;
+    &lt;span class=&quot;footnote&quot;&gt;&lt;sup&gt;*&lt;/sup&gt; no rhyme intended&lt;/span&gt;
+&lt;/div&gt;
+</code></pre>
+<h4>2D Rotation (data-rotate)</h4>
+<p>Represents the amount of clockwise rotation of the element relative to 360 degrees.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="language-html">&lt;div id=&quot;its&quot; class=&quot;step&quot; data-x=&quot;850&quot; data-y=&quot;3000&quot; data-rotate=&quot;90&quot; data-scale=&quot;5&quot;&gt;
+    &lt;p&gt;
+      It’s a &lt;strong&gt;presentation tool&lt;/strong&gt; &lt;br&gt;
+      inspired by the idea behind &lt;a href=&quot;http://prezi.com&quot;&gt;prezi.com&lt;/a&gt; &lt;br&gt;
+      and based on the &lt;strong&gt;power of CSS3 transforms and transitions&lt;/strong&gt; in modern browsers.
+    &lt;/p&gt;
+&lt;/div&gt;
+</code></pre>
+<h4>3D Coordinates Positioning (data-z)</h4>
+<p>Define the pixel based position in which the <strong>center</strong> of the <a href="#step-element">Step Element</a> will be positioned inside the infinite canvas on the third dimension (Z) axis. For example, if we use <code>data-z=&quot;-3000&quot;</code>, it means that the <a href="#step-element">Step Element</a> will be positioned far away from the camera (by 3000px).</p>
+<p><strong>Example:</strong></p>
+<pre><code class="language-html">&lt;div id=&quot;tiny&quot; class=&quot;step&quot; data-x=&quot;2825&quot; data-y=&quot;2325&quot; data-z=&quot;-3000&quot; data-rotate=&quot;300&quot; data-scale=&quot;1&quot;&gt;
+    &lt;p&gt;and &lt;b&gt;tiny&lt;/b&gt; ideas&lt;/p&gt;
+&lt;/div&gt;
+</code></pre>
+<p><strong>Note:</strong> The introduction of the <a href="src/plugins/rel/README.md">rel</a> plugin includes a slight backward incompatible change.
+Previously the default value for <code>data-x</code>, <code>data-y</code> and <code>data-z</code> was zero. The <code>rel</code> plugin changes the default to inherit
+the value of the previous slide. This means, you need to explicitly set these values to zero, if they ever were non-zero.</p>
+<h4>3D Rotation (data-rotate-x, data-rotate-y, data-rotate-z)</h4>
+<p>You can not only position a <a href="#step-element">Step Element</a> in 3D, but also rotate it around any axis.</p>
+<p><strong>Example:</strong></p>
+<p>The example below will get rotated by -40 degrees (40 degrees anticlockwise) around X axis and 10 degrees (clockwise) around Y axis.</p>
+<p>You can of course rotate it around Z axis with <code>data-rotate-z</code> - it has exactly the same effect as <code>data-rotate</code> (these two are basically aliases).</p>
+<pre><code class="language-HTML">&lt;div id=&quot;its-in-3d&quot; class=&quot;step&quot; data-x=&quot;6200&quot; data-y=&quot;4300&quot; data-z=&quot;-100&quot; data-rotate-x=&quot;-40&quot; data-rotate-y=&quot;10&quot; data-scale=&quot;2&quot;&gt;
+    &lt;p&gt;
+      &lt;span class=&quot;have&quot;&gt;have&lt;/span&gt;
+      &lt;span class=&quot;you&quot;&gt;you&lt;/span&gt;
+      &lt;span class=&quot;noticed&quot;&gt;noticed&lt;/span&gt;
+      &lt;span class=&quot;its&quot;&gt;it’s&lt;/span&gt;
+      &lt;span class=&quot;in&quot;&gt;in&lt;/span&gt;
+      &lt;b&gt;3D&lt;sup&gt;*&lt;/sup&gt;&lt;/b&gt;?
+    &lt;/p&gt;
+    &lt;span class=&quot;footnote&quot;&gt;* beat that, prezi ;)&lt;/span&gt;
+&lt;/div&gt;
+</code></pre>
+<h4>3D Rotation Order (data-rotate-order)</h4>
+<p>The order in which the CSS <code>rotateX(), rotateY(), rotateZ()</code> transforms are applied matters. This is because each rotation is relative to the then current position of the element.</p>
+<p>By default the rotation order is <code>data-rotate-order=&quot;xyz&quot;</code>. For some advanced uses you may need to change it. The demo presentation <a href="examples/3D-rotations/index.html">3D rotations</a> sets this attribute to rotate some steps into positions that are impossible to reach with the default order.</p>
+</div>
+                    </div>
+                <div id="footer"></div>
+            </div>
+        </body>
+    </html>

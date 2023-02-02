@@ -17,6 +17,9 @@ const path = require( 'path' );
 const mdhtml = require( 'markdown-it' );
 const md2html = new mdhtml();
 const docRoot = path.join( __dirname + '/../' );
+const prompt = require( 'prompt-sync' )( {
+    sigint: true
+} );
 
 const pluginsPath = path.join( __dirname + '/../../../src/plugins' );
 
@@ -29,16 +32,33 @@ for ( let item in plugins ) {
             console.log( 'NO README found for ' + path.join( pluginsPath + '/' + plugins[item] ) + ' PLEASE MAKE SURE YOU HAVE CREATED A README!' );
         } else {
             let html = md2html.render( '' + data );
-            storeHTML( findLinks( html, path.join( pluginsPath + '/' + plugins[item] ) ), plugins[item] );
+            storeHTML( findLinks( html, path.join( pluginsPath + '/' + plugins[item] ) ), plugins[item], 'plugins' );
         };
     } );
 }
 
+if ( prompt( 'Do you want to regenerate the API reference? (y/n) ' ).toLowerCase() == 'y' ) {
+    console.log( 'Regenerating API reference' );
+    parseDocumentationMD();
+}
+
+if ( prompt( 'Do you want to regenerate the Getting Started Guide? (y/n) ' ).toLowerCase() == 'y' ) {
+    console.log( 'Regenerating Getting Started Guide' );
+    storeHTML( md2html.render( '' + fs.readFileSync( path.join( __dirname + '/../../../GettingStarted.md' ) ) ), '/gettingStarted.html', '' );
+}
+
+let docPages = fs.readdirSync( __dirname + '/../../../website/docs/reference' );
+for ( let obj in docPages ) {
+    if ( docPages[obj] == 'index.html' ) {
+        delete docPages[obj];
+    };
+}
+
 generateNav ();
-parseDocumentationMD();
-storeHTML( md2html.render( '' + fs.readFileSync( path.join( __dirname + '/../../../GettingStarted.md' ) ) ), path.join( __dirname + '/../gettingStarted.html' ) );
 
-
+/*
+    This function finds links. The reason for this is possible incompatibilities with links on the website
+*/
 function findLinks ( html, path ) {
     let returnHTML = html;
     for ( let letter in html ) {
@@ -55,8 +75,11 @@ function findLinks ( html, path ) {
     return returnHTML;
 };
 
+/*
+    This function takes care of checking links. This is necessary, as documentation may contain links that will
+    not work on the website, as it has relative paths.
+*/
 function checkLinks ( link, fpath ) {
-    console.log( link );
     let filepath = fpath;
     let pos = 0;
     if ( link.slice( parseInt( link.length ) - 9, parseInt( link.length ) ) === 'README.md' ) {
@@ -93,18 +116,17 @@ function checkLinks ( link, fpath ) {
         let fpSlice = filepath.slice( parseInt( filepath.length ) - fsPos, parseInt( filepath.length ) );
         return '<a href="https://github.com/impress/impress.js' + link + '">';
     } else if ( link.slice( 0, 7 ) === 'http://' || link.slice( 0, 8 ) === 'https://' ) {
-        console.log( 'hi' );
         return '<a href="' + link + '">';
     } else {
         throw Error( 'Invalid link found! Link is: "' + link + '" in file: ' + filepath + '/README.md' );
     };
 };
 
-function storeHTML ( html, path ) {
+function storeHTML ( html, path, type ) {
     let fileOut = `<!DOCTYPE html>
     <html>
         <head>
-        <title>Docs - impress.js</title>
+        <title>${path} :: ${type} | DOCS - impress.js</title>
         <!--I am using jquery for button animations.-->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -113,21 +135,21 @@ function storeHTML ( html, path ) {
         <script>hljs.highlightAll();</script>
         <script src="/js/docs/loader.js"></script>
         <link rel="stylesheet" href="/css/docs/style.css">
-    </head>
-    <body>
-        <div class="content">
-            <div id="nav"></div>
-            <div id="top"></div>
-            <div id="docPage">
-                <div id="doc-container">
-                    ` + html 
-                    + `</div>
-                </div>
+        </head>
+        <body>
+            <div class="content">
+                <div id="nav"></div>
+                <div id="top"></div>
+                    <div id="docPage">
+                        <div id="doc-container">
+                        ` + html 
+                        + `</div>
+                    </div>
                 <div id="footer"></div>
             </div>
         </body>
     </html>`;
-    fs.writeFileSync( docRoot + '/plugins/' + path + '.html', fileOut );
+    fs.writeFileSync( docRoot + '/' + type + '/' + path + '.html', fileOut );
 };
 
 
@@ -147,9 +169,11 @@ function generateNav () {
                     <a class="navitem" id="gettingStarted" href="/docs/gettingStarted.html">Getting Started</a>
                     <a class="navitem" id="referenceNav" onclick="toggleList( 'reference' );">API reference</a>
                     <div class="dropdown" id="reference">
-                        <a class="nav-subitem" id="root" href="/docs/reference">Home</a>
-                        <a class="nav-subitem" id="root" href="/docs/reference/root">Root element</a>
-                    </div>
+                        <a class="nav-subitem" id="root" href="/docs/reference">Home</a>`
+    for ( let item in docPages ) {
+        fileStruct += `<a class="nav-subitem" id="${ docPages[item] }" href="/docs/reference/${ docPages[item] }.html">${ docPages[item] }</a>`;
+    };
+    fileStruct += `</div>
                     <a class="navitem" id="pluginsNav" onclick="toggleList( 'plugins' );">Plugins</a>
                     <div class="dropdown" id="plugins">
                     `;
@@ -173,11 +197,26 @@ function generateNav () {
 
 function parseDocumentationMD () {
     let doc = '' + fs.readFileSync( path.join( __dirname + '/../../../DOCUMENTATION.md' ) );
+    let lastHashtagPos = 0;
+    let posArray = [];
     for ( let letter in doc ) {
         if ( doc[letter] == '#' ) {
-            if ( doc.slice( parseInt( letter ), parseInt( letter ) + 2 ) === '##' ) {
-                console.log( '## found at ' + letter );
+            if ( doc.slice( parseInt( letter ), parseInt( letter ) + 3 ) === '###' || doc.slice( parseInt( letter ), parseInt( letter ) + 4 ) === '####'  ) {
+            } else if ( doc.slice( parseInt( letter ), parseInt( letter ) + 2 ) === '##' && lastHashtagPos + 1 < parseInt( letter ) ) {
+                posArray.push(letter);
             };
+            lastHashtagPos = parseInt( letter );
         };
     };
+    for ( let item in posArray ) {
+        let titleArea = doc.slice( parseInt( posArray[item] ), parseInt( posArray[item] + 20 ) );
+        let title = '';
+        for ( let pos in titleArea ) {
+            if ( titleArea[pos] === '\n' ) {
+                title = titleArea.slice( 3, pos );
+                break;
+            };
+        };
+        storeHTML( md2html.render( doc.slice( parseInt( posArray[parseInt( item )] ), parseInt( posArray[parseInt( item ) + 1] ) || parseInt( doc.length ) ) ), title, 'reference' );
+    }
 }
