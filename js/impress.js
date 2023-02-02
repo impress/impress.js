@@ -8,13 +8,14 @@
  * in modern browsers and inspired by the idea behind prezi.com.
  *
  *
- * Copyright 2011-2012 Bartek Szopka (@bartaz), 2016-2020 Henrik Ingo (@henrikingo)
+ * Copyright 2011-2012 Bartek Szopka (@bartaz), 2016-2023 Henrik Ingo (@henrikingo) 
+ * and 70+ other contributors
  *
  * Released under the MIT License.
  *
  * ------------------------------------------------
  *  author:  Bartek Szopka, Henrik Ingo
- *  version: 1.1.0
+ *  version: 2.0.0
  *  url:     http://impress.js.org
  *  source:  http://github.com/impress/impress.js/
  */
