@@ -131,8 +131,6 @@ In particular, impress.js makes use of the following JS and CSS features:
 COPYRIGHT AND LICENSE
 ---------------------
 
-Copyright 2011-2016 Bartek Szopka
-
-Copyright 2015-2017 Henrik Ingo
+Copyright 2011-2012 Bartek Szopka (@bartaz), 2016-2023 Henrik Ingo (@henrikingo) and [70+ other contributors](https://github.com/impress/impress.js/graphs/contributors)
 
 Released under the MIT [License](LICENSE)

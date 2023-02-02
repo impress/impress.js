@@ -16,8 +16,8 @@ Loading the script from the cdn is quite straight forward. If you copy the below
 - V1.1.0: https://cdn.jsdelivr.net/gh/impress/impress.js@1.1.0/js/impress.js
 - Source: https://cdn.jsdelivr.net/gh/impress/impress.js/js/impress.js
 
-## Download the file to your PC
-Head to the releases tab and download the source code as zip or as a tarball. Go ahead and unzip / untar it. You need to copy the folder */js/* and the folder */css/* (if you want to make your life a bit easier) into the folder you are working in. 
+### Download the file to your PC
+Head to the releases tab and download the source code as zip or as a tarball. Go ahead and unzip / untar it. You need to copy the folder */js/* into the folder you are working in. Optionally, if you want to make your life a bit easier, you can copy also copy the folder */css/* in there.
 
 
 ## Setting up the project
@@ -91,7 +91,7 @@ These are the basic positioning options in impress.js. All of the attributes tak
 
 Now, that you have created the slides, you might want to style them. This is where CSS comes into play. Add another file to your project called, e.g., ```style.css```. 
 
-**NOTE:** As a general rule, you should avoid modifying the CSS properties of the built-in class *step*, as this will modify ***ALL*** the steps! You may change the font of it, but I recommend to instead add another class to that element and style that class. Whatever you do, do not mess with positioning and rotation of the div that belongs to the class *step*, but add a div inside of it, if you really have to mess with these properties. See the example below. Always position *steps* with the *data-* attribute!
+**NOTE:** Whatever you do, do not mess with positioning and rotation of the div that belongs to the class *step*, but add a div inside of it, if you really have to mess with these properties. See the example below. Always position *steps* with the *data-* attribute!
 
 ```
 <div class="step yourClassNameHere" data-x="1000" data-y="1000" data-z="-1000" data-scale="2" data-rotate-z="90">
