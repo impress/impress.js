@@ -1,5 +1,4 @@
 # Autoplay
-*This documentation here was not authored by the creator of the plugin*
 
 The [autoplay](/src/plugins/autoplay/autoplay.js) plugin automatically advances the presentation after a certain timeout expired. 
 
