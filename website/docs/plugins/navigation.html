@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+    <html>
+        <head>
+        <title>navigation :: plugins | DOCS - impress.js</title>
+        <!--I am using jquery for button animations.-->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/dark.min.css">
+        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script>
+        <script src="/js/docs/loader.js"></script>
+        <link rel="stylesheet" href="/css/docs/style.css">
+        </head>
+        <body>
+            <div class="content">
+                <div id="nav"></div>
+                <div id="top"></div>
+                    <div id="docPage">
+                        <div id="doc-container">
+                        <h1>Navigation</h1>
+<p>As you can see this part is separate from the impress.js core code.
+It's because these navigation actions only need what impress.js provides with
+its simple API.
+This plugin is what we call an <em>init plugin</em>. It's a simple kind of
+impress.js plugin. When loaded, it starts listening to the <code>impress:init</code>
+event. That event listener initializes the plugin functionality - in this
+case we listen to some keypress and mouse events. The only dependencies on
+core impress.js functionality is the <code>impress:init</code> method, as well as using
+the public api <code>next(), prev(),</code> etc when keys are pressed.
+Copyright 2011-2012 Bartek Szopka (@bartaz)
+Released under the MIT license.</p>
+<p><em><strong>Author:</strong></em></p>
+<p>Bartek Szopka</p>
+</div>
+                    </div>
+                <div id="footer"></div>
+            </div>
+        </body>
+    </html>

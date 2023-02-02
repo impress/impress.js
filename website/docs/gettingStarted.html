@@ -1,25 +1,214 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>Getting Started - impress.js</title>
+    <html>
+        <head>
+        <title>/gettingStarted ::  | DOCS - impress.js</title>
         <!--I am using jquery for button animations.-->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/dark.min.css">
+        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script>
         <script src="/js/docs/loader.js"></script>
         <link rel="stylesheet" href="/css/docs/style.css">
-    </head>
-    <body>
-        <div class="content">
-            <div id="nav"></div>
-            <div id="top"></div>
-            <div id="docPage">
-                <div id="doc-container">
-                    <h1>Getting Started with impress.js</h1>
-                    <p>impress.js is a JavaScript framework to create stunning presentations. Note: impress may not help you, if you have nothing interesting to say!</p>
-                    <p>If you are new to impress and you want to learn to use it, we suggest you <a href="./gettingStarted.html" class="docs-link">start here</a>!</p>
-                </div>
+        </head>
+        <body>
+            <div class="content">
+                <div id="nav"></div>
+                <div id="top"></div>
+                    <div id="docPage">
+                        <div id="doc-container">
+                        <h1>Introduction</h1>
+<p>Welcome to impress.js! This presentation framework allows you to create stunning presentations with the power of CSS3 transformations.
+<strong>NOTE:</strong> This Guide is not made for you, if you have never written HTML and/or CSS before. Knowing your way around in JavaScript certainly helps, but is not a necessity. You may still continue this tutorial and try to understand what we do as you go.</p>
+<p>For more advanced and complete documentation, you might prefer the <a href="DOCUMENTATION.md">DOCUMENTATION</a>.</p>
+<h1>Getting started with impress.js</h1>
+<h2>Installation / acquiring the framework</h2>
+<p>First of all, you need to know, if you are going to have WiFi connection when you hold your presentation. If you are not sure, please use the method where you download the file instead of the cdn.</p>
+<h3>Including from cdn</h3>
+<p>Loading the script from the cdn is quite straight forward. If you copy the below example code, you need to do nothing else, impress will be loaded automatically.</p>
+<p><strong>Direct links to different versions of the impress.js file</strong></p>
+<ul>
+<li>V2.0.0: https://cdn.jsdelivr.net/gh/impress/impress.js@2.0.0/js/impress.js</li>
+<li>V1.1.0: https://cdn.jsdelivr.net/gh/impress/impress.js@1.1.0/js/impress.js</li>
+<li>Source: https://cdn.jsdelivr.net/gh/impress/impress.js/js/impress.js</li>
+</ul>
+<h3>Download the file to your PC</h3>
+<p>Head to the releases tab and download the source code as zip or as a tarball. Go ahead and unzip / untar it. You need to copy the folder <em>/js/</em> into the folder you are working in. Optionally, if you want to make your life a bit easier, you can copy also copy the folder <em>/css/</em> in there.</p>
+<h2>Setting up the project</h2>
+<p>Open up your favorite text-editor / IDE, for example Visual Studio Code, Atom, Notepad ++, ...
+Now, create a new file called <em>index.html</em> and create the basic HTML structure:</p>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;title&gt;My first presentation&lt;/title&gt;
+        &lt;link rel=&quot;stylesheet&quot; href=&quot;./css/impress-common.css&quot;&gt;&lt;!--Leave out, if you don't use impress-common.css--&gt;
+    &lt;/head&gt;
+    &lt;body class=&quot;impress-not-supported&quot;&gt;
+        &lt;div class=&quot;fallback-message&quot;&gt;
+            &lt;p&gt;Your browser &lt;b&gt;doesn't support the features required&lt;/b&gt; by impress.js, so you are presented with a simplified version of this presentation.&lt;/p&gt;
+            &lt;p&gt;For the best experience please use the latest &lt;b&gt;Chrome&lt;/b&gt;, &lt;b&gt;Safari&lt;/b&gt; or &lt;b&gt;Firefox&lt;/b&gt; browser.&lt;/p&gt;
+        &lt;/div&gt;
+
+        &lt;div id=&quot;impress&quot;&gt;
+            &lt;div id=&quot;myFirstSlide&quot; class=&quot;step&quot;&gt;
+                &lt;h1&gt;My first Slide&lt;/h1&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+
+        &lt;script src=&quot;js/impress.js&quot;&gt;&lt;/script&gt;
+        &lt;script&gt;window.impress || document.write('&lt;script src=&quot;https://cdn.jsdelivr.net/gh/impress/impress.js@2.0.0/js/impress.js&quot;&gt;\x3C/script&gt;');&lt;/script&gt;
+        &lt;script&gt;impress().init()&lt;/script&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>Now, head into a file-manager, navigate to the file you just created (<em>index.html</em>) and open it. You should end up in a browser where you should see &quot;My first Slide&quot; displayed. As this is not really exciting, we are not gonna change anything about that and are gonna look at what you just typed. What do these lines mean?</p>
+<p>Well, first things first, you should probably give your presentation a title. You may do this in normal HTML fashion by changing the <em>title</em> HTML tag.</p>
+<p>So now, we reached the HTML body. You can see that it already belongs to a class. This class just tells impress.js that this is the body where the &quot;fallback-message&quot; should be displayed when it detects, that your browser does not support CSS3 and therefore impress.js won't work. You can easily omit that class though, including the &quot;fallback-message&quot; div with its content, if you only intend to use the presentation for yourself and you know about the fact that some browsers might not work.</p>
+<p>Now, probably the most important part of all is the <em>div</em> that belongs to the <code>impress</code> class. This <em>div</em> should contain all the HTML code you write, as everything outside that class will not be animated by impress.js.</p>
+<p>Finally, we load the <code>impress.js</code> script from your local copy (if you have one) or from the cdn, if you do not have a local copy and execute</p>
+<pre><code>impress().init()
+</code></pre>
+<p>to initialize impress.js. Now, let's continue on to explore more and more features of this amazing tool!</p>
+<h2>Creating slides</h2>
+<p>Creating slides is fairly easy. You create a <em>div</em> that belongs to the class <code>step</code> and you are off to the races! Let me give you an example:</p>
+<pre><code>&lt;div class=&quot;step&quot;&gt;
+Hello World
+&lt;/div&gt;
+</code></pre>
+<p>Now, if you reload the presentation, you start to see a *slight* problem. All your text is stacked... How do we work around that?</p>
+<p>Obviously, impress.js has an answer to it. You can add the following additional attributes to your div, to make it work:</p>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Explanation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>data-x</td>
+<td>Position the element along the x-axis (from left to right)</td>
+</tr>
+<tr>
+<td>data-y</td>
+<td>Position the element along the y-axis (from top to bottom)</td>
+</tr>
+<tr>
+<td>data-z</td>
+<td>Position the element along the z-axis (3D-Effect, move the element behind another one)</td>
+</tr>
+<tr>
+<td>data-rotate</td>
+<td>Rotate the element (if not using data-z!)</td>
+</tr>
+<tr>
+<td>data-rotate-x</td>
+<td>Rotate the element along the x-axis</td>
+</tr>
+<tr>
+<td>data-rotate-y</td>
+<td>Rotate the element along the y-axis</td>
+</tr>
+<tr>
+<td>data-rotate-z</td>
+<td>Rotate the element along the z-axis</td>
+</tr>
+<tr>
+<td>data-scale</td>
+<td>Scale the element.</td>
+</tr>
+</tbody>
+</table>
+<p>These are the basic positioning options in impress.js. All of the attributes take Strings as arguments, so be aware of the fact, that you need to put quotation marks around the numbers! The <em>data-rotate</em> attributes take an angle in form of a String as argument.</p>
+<p>Now, that you have created the slides, you might want to style them. This is where CSS comes into play. Add another file to your project called, e.g., <code>style.css</code>.</p>
+<p><strong>NOTE:</strong> Whatever you do, do not mess with positioning and rotation of the div that belongs to the class <em>step</em>, but add a div inside of it, if you really have to mess with these properties. See the example below. Always position <em>steps</em> with the <em>data-</em> attribute!</p>
+<pre><code>&lt;div class=&quot;step yourClassNameHere&quot; data-x=&quot;1000&quot; data-y=&quot;1000&quot; data-z=&quot;-1000&quot; data-scale=&quot;2&quot; data-rotate-z=&quot;90&quot;&gt;
+    &lt;div class=&quot;yourSubClassNameHere&quot;&gt;
+        &lt;h1&gt;Powerful, yet still simple&lt;/h1&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+<p><strong>NOTE:</strong> You may also use negative numbers for all these properties!</p>
+<h2>More advanced features</h2>
+<p>You might want to change some default settings, like the transition speed, the width &amp; height of the target screen, etc. This table is from the <a href="DOCUMENTATION.md">DOCUMENTATION</a> and was slightly adapted.</p>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Default</th>
+<th>Explanation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>data-transition-duration</td>
+<td>1000 (ms)</td>
+<td>Speed of transition between steps.</td>
+</tr>
+<tr>
+<td>data-width</td>
+<td>1920 (px)</td>
+<td>Width of target screen size. When presentation is viewed on a larger or smaller screen, impress.js will scale all content automatically.</td>
+</tr>
+<tr>
+<td>data-height</td>
+<td>1080 (px)</td>
+<td>Height of target screen size.</td>
+</tr>
+<tr>
+<td>data-max-scale</td>
+<td>3</td>
+<td>Maximum scale factor. (Note that the default 1 will not increase content size on larger screens!)</td>
+</tr>
+<tr>
+<td>data-min-scale</td>
+<td>0</td>
+<td>Minimum scale factor.</td>
+</tr>
+<tr>
+<td>data-perspective</td>
+<td>1000</td>
+<td>Perspective for 3D rendering. See https://developer.mozilla.org/en/CSS/perspective</td>
+</tr>
+</tbody>
+</table>
+<h3><strong>Renaming Steps</strong></h3>
+<p>You can give each step an ID. The name of the ID will be displayed in the browsers navigation bar instead of the default <em>step-x</em> whereas x is replaced by the current step number. This can be especially helpful, when trying to jump between steps and go back to a previous one. If you want to know how to move to a specific slide, you should take a look at the <a href="./src/plugins/goto/README.md">README</a> of the &quot;Goto&quot; plugin.</p>
+<h1>Using PLUGINS</h1>
+<p>Impress.js is limited to everything that we have discussed so far and some other details, we won't go over here. Check the <a href="DOCUMENTATION.md">DOCUMENTATION</a> for that.</p>
+<p>impress.js has accumulated a lot of very useful plugins. You may find all of them <a href="./src/plugins/">here</a>!</p>
+<p>Each Plugin has a README.md file which you may read to get an idea on how to use them. Some of the plugins run unnoticed in the background, like the <em>resize</em> plugin, which automatically resizes the presentation whenever the browser window changed in size. Here, I will give you an overview of some of the plugins that impress.js includes by default.</p>
+<p><strong>NOTE:</strong> As previously mentioned, if you'd like to get more info about how it works, take a look at the <a href="DOCUMENTATION.md">DOCUMENTATION</a> or the README.md files of the plugins.</p>
+<h2><a href="/src/plugins/impressConsole/README.md">impressConsole</a></h2>
+<p>This plugin opens up and additional browser tab which contains a speaker console. There you can see the current slide, the past slide and your notes. You add notes to your presentation by adding a <em>div</em> that belongs to the class &quot;notes&quot; to your <em>div</em> that belongs to the class &quot;step&quot;.</p>
+<h3><strong>adding notes to your presentation</strong></h3>
+<p>You may add notes to your presentation by adding a div of class <em>notes</em> into the div of class <em>step</em>, like so:</p>
+<pre><code>    &lt;div class=&quot;step&quot;&gt;
+        Some text that is being displayed on your slides
+        &lt;div class=&quot;notes&quot;&gt;
+            this won't be displayed in your presentation
+        &lt;/div&gt;
+    &lt;/div&gt;
+</code></pre>
+<p>Now that you have added the notes to your HTML, it is time to hide them. You need to add the following code to your CSS file (or in the style tag in the header):</p>
+<pre><code>    .notes {
+        display: none;
+    }
+</code></pre>
+<p>To enter it, press P.</p>
+<h2><a href="/src/plugins/goto/README.md">Goto</a></h2>
+<p>This plugin allows you to directly go to a certain step, by either passing in a number or the id of the step you'd like to go to.</p>
+<h2><a href="/src/plugins/progress/README.md">Progress</a></h2>
+<p>This plugin, as its name implies, displays the progress in your presentation.</p>
+<h2><a href="/src/plugins/blackout/blackout.js">Blackout</a></h2>
+<p>This plugin hides the screen, if you press B, which is handy in a lot of situations.</p>
+<h2>Other plugins</h2>
+<p>You may find the other plugins <a href="/src/plugins/">here</a>. It certainly helps if you familiarise yourself with the plugins.</p>
+<h1>Thank you for reading this</h1>
+<p>If you want to know more, you can always ready the <a href="DOCUMENTATION.md">DOCUMENTATION</a> or, even better, read the Source Code and try to understand how it works!</p>
+</div>
+                    </div>
+                <div id="footer"></div>
             </div>
-            <div id="footer"></div>
-        </div>
-    </body>
-</html>
+        </body>
+    </html>

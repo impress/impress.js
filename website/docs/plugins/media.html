@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+    <html>
+        <head>
+        <title>media :: plugins | DOCS - impress.js</title>
+        <!--I am using jquery for button animations.-->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/dark.min.css">
+        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script>
+        <script src="/js/docs/loader.js"></script>
+        <link rel="stylesheet" href="/css/docs/style.css">
+        </head>
+        <body>
+            <div class="content">
+                <div id="nav"></div>
+                <div id="top"></div>
+                    <div id="docPage">
+                        <div id="doc-container">
+                        <h1>Media</h1>
+<p>This plugin will do the following things:</p>
+<ul>
+<li>Add a special class when playing (body.impress-media-video-playing and body.impress-media-video-playing) and pausing media (body.impress-media-video-paused and body.impress-media-audio-paused) (removing them when ending). This can be useful for example for darkening the background or fading out other elements while a video is playing. Only media at the current step are taken into account. All classes are removed when leaving a step.</li>
+<li>Introduce the following new data attributes:
+<ul>
+<li>data-media-autoplay=&quot;true&quot;: Autostart media when entering its step.</li>
+<li>data-media-autostop=&quot;true&quot;: Stop media (= pause and reset to start), when leaving its step.</li>
+<li>data-media-autopause=&quot;true&quot;: Pause media but keep current time when leaving its step.</li>
+</ul>
+</li>
+</ul>
+<p>When these attributes are added to a step they are inherited by all media on this step. Of course this setting can be overwritten by adding different attributes to inidvidual media.</p>
+<p>The same rule applies when this attributes is added to the root element. Settings can be overwritten for individual steps and media.
+Examples:</p>
+<ul>
+<li>data-media-autoplay=&quot;true&quot; data-media-autostop=&quot;true&quot;: start media on enter, stop on leave, restart from beginning when re-entering the step.</li>
+<li>data-media-autoplay=&quot;true&quot; data-media-autopause=&quot;true&quot;: start media on enter, pause on leave, resume on re-enter</li>
+<li>data-media-autoplay=&quot;true&quot; data-media-autostop=&quot;true&quot; data-media-autopause=&quot;true&quot;: start media on enter, stop on leave (stop overwrites pause).</li>
+<li>data-media-autoplay=&quot;true&quot; data-media-autopause=&quot;false&quot;: let media start automatically when entering a step and let it play when leaving the step.</li>
+<li><code>&lt;div id=&quot;impress&quot; data-media-autoplay=&quot;true&quot;&gt; ... &lt;div class=&quot;step&quot; data-media-autoplay=&quot;false&quot;&gt;</code>
+All media is startet automatically on all steps except the one that has the data-media-autoplay=&quot;false&quot; attribute.</li>
+<li>Pro tip: Use <code>&lt;audio onended=&quot;impress().next()&quot;&gt; or &lt;video onended=&quot;impress().next()&quot;&gt;</code> to proceed to the next step automatically, when the end of the media is reached.</li>
+</ul>
+</div>
+                    </div>
+                <div id="footer"></div>
+            </div>
+        </body>
+    </html>

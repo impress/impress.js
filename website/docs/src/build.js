@@ -44,7 +44,7 @@ if ( prompt( 'Do you want to regenerate the API reference? (y/n) ' ).toLowerCase
 
 if ( prompt( 'Do you want to regenerate the Getting Started Guide? (y/n) ' ).toLowerCase() == 'y' ) {
     console.log( 'Regenerating Getting Started Guide' );
-    storeHTML( md2html.render( '' + fs.readFileSync( path.join( __dirname + '/../../../GettingStarted.md' ) ) ), '/gettingStarted.html', '' );
+    storeHTML( md2html.render( '' + fs.readFileSync( path.join( __dirname + '/../../../GettingStarted.md' ) ) ), '/gettingStarted', '' );
 }
 
 let docPages = fs.readdirSync( __dirname + '/../../../website/docs/reference' );
@@ -117,6 +117,8 @@ function checkLinks ( link, fpath ) {
         return '<a href="https://github.com/impress/impress.js' + link + '">';
     } else if ( link.slice( 0, 7 ) === 'http://' || link.slice( 0, 8 ) === 'https://' ) {
         return '<a href="' + link + '">';
+    } else if ( link.slice( 0, 1 ) === '/' ) {
+        return '<a href="https://github.com/impress/impress.js' + link + '">';
     } else {
         throw Error( 'Invalid link found! Link is: "' + link + '" in file: ' + filepath + '/README.md' );
     };
@@ -177,7 +179,7 @@ function generateNav () {
                     <div class="dropdown" id="reference">
                         <a class="nav-subitem" id="root" href="/docs/reference">Home</a>`
     for ( let item in docPages ) {
-        fileStruct += `<a class="nav-subitem" id="${ docPages[item] }" href="/docs/reference/${ docPages[item] }">${ docPages[item] }</a>`;
+        fileStruct += `<a class="nav-subitem" id="${ docPages[item] }" href="/docs/reference/${ docPages[item] }">${ docPages[item].slice( 0, docPages[item].length - 5) }</a>`;
     };
     fileStruct += `</div>
                     <a class="navitem" id="pluginsNav" onclick="toggleList( 'plugins' );">Plugins</a>
