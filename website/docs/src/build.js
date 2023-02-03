@@ -44,9 +44,10 @@ if ( prompt( 'Do you want to regenerate the API reference? (y/n) ' ).toLowerCase
 
 if ( prompt( 'Do you want to regenerate the Getting Started Guide? (y/n) ' ).toLowerCase() == 'y' ) {
     console.log( 'Regenerating Getting Started Guide' );
-    storeHTML( md2html.render( '' + fs.readFileSync( path.join( __dirname + '/../../../GettingStarted.md' ) ) ), '/gettingStarted', '' );
+    storeHTML( md2html.render( '' + fs.readFileSync( path.join( __dirname + '/../../../GettingStarted.md' ) ) ), 'gettingStarted', '' );
 }
 
+console.log( 'regenerating plugins documentation' );
 let docPages = fs.readdirSync( __dirname + '/../../../website/docs/reference' );
 for ( let obj in docPages ) {
     if ( docPages[obj] == 'index.html' ) {
@@ -54,6 +55,7 @@ for ( let obj in docPages ) {
     };
 }
 
+console.log( 'regenerating Nav' );
 generateNav ();
 
 /*
@@ -179,7 +181,7 @@ function generateNav () {
                     <div class="dropdown" id="reference">
                         <a class="nav-subitem" id="root" href="/docs/reference">Home</a>`
     for ( let item in docPages ) {
-        fileStruct += `<a class="nav-subitem" id="${ docPages[item] }" href="/docs/reference/${ docPages[item] }">${ docPages[item].slice( 0, docPages[item].length - 5) }</a>`;
+        fileStruct += `<a class="nav-subitem" id="${ docPages[item].slice( 0, docPages[item].length - 5) }" href="/docs/reference/${ docPages[item] }">${ docPages[item].slice( 0, docPages[item].length - 5) }</a>`;
     };
     fileStruct += `</div>
                     <a class="navitem" id="pluginsNav" onclick="toggleList( 'plugins' );">Plugins</a>
@@ -252,7 +254,6 @@ function parseDocumentationMD () {
                         } else {
                             updatedLink = 'https://github.com/impress/impress.js/' + link;
                         };
-                        console.log( updatedLink + ' at: ' + posArray[item] );
                         updatedPage = page.slice( 0, parseInt( letter ) + 9 ) + updatedLink + page.slice( parseInt( letter ) + i + 2, parseInt( page.length ) );
                     }
                 } else if ( page.slice( parseInt( letter ), parseInt( letter ) + 4 ) === '<h1>' ) {

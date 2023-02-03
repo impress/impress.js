@@ -63,4 +63,5 @@ function toggleDarkMode () {
         document.getElementById( 'darkToggle' ).innerHTML = '&#9789;';
         setPreferredTheme( 'light' );
     }
+    setTimeout( highlightPath, 1000 ); 
 }
