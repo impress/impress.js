@@ -20,6 +20,7 @@ function setTheme () {
         $( '.navitem' ).css( 'background-color', 'rgb(12, 12, 60)' );
         $( '.nav-container' ).css( 'background-color', 'rgb(0, 0, 100)' );
         $( '.docs-link' ).css( 'color', 'white' );
+        $( '#darkToggle' ).css( 'color', 'white' );
     }
 }
 
@@ -50,6 +51,7 @@ function toggleDarkMode () {
         $( '.nav-subitem' ).animate( { 'background-color': 'rgb(18, 18, 99)' } );
         $( '.navitem' ).animate( { 'background-color': 'rgb(12, 12, 60)' } );
         $( '.nav-container' ).animate( { 'background-color': 'rgb(0, 0, 100)' } );
+        $( '#darkToggle' ).animate( { 'color': 'white' } );
         document.getElementById( 'darkToggle' ).innerHTML = '&#9788;';
         setPreferredTheme( 'dark' );
     } else {
@@ -60,6 +62,7 @@ function toggleDarkMode () {
         $( '.navitem' ).animate( { 'background-color': 'rgb(22, 22, 117)' } );
         $( '.nav-container' ).animate( { 'background-color': 'blue' } );
         $( '.top-container' ).animate( { 'background-color': 'rgb(223, 223, 223)' } );
+        $( '#darkToggle' ).animate( { 'color': 'black' } );
         document.getElementById( 'darkToggle' ).innerHTML = '&#9789;';
         setPreferredTheme( 'light' );
     }
