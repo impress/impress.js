@@ -272,8 +272,8 @@ function parseDocumentationMD () {
     };
 }
 
-function generateGettingStarted ( html ) {
-    let returnHTML = '';
+function generateGettingStarted ( inputHTML ) {
+    let html = inputHTML;
     for ( let letter in html ) {
         if ( html[letter] === '<' ) {
             if ( html.slice( parseInt( letter ), parseInt( letter ) + 9 ) === '<a href="' ) {
@@ -281,18 +281,28 @@ function generateGettingStarted ( html ) {
                 while ( html.slice( parseInt( letter ) + i, parseInt( letter ) + i + 1 ) !== '"' ) {
                     i += 1;
                 };
-                console.log( html.slice( parseInt( letter ) + 9, parseInt( letter ) + i  ) );
+                let link = html.slice( parseInt( letter ) + 9, parseInt( letter ) + i  )
                 let checkedLink = '';
-                if ( html.slice( parseInt( letter ) + 9, parseInt( letter ) + i  ) === 'DOCUMENTATION.md' ) {
+                if ( link === 'DOCUMENTATION.md' ) {
                     checkedLink = '/docs/reference';
+                } else if ( link.slice( 0, 13 ) === './src/plugins' ) {
+                    if ( link.slice( link.length - 9, link.length ) === 'README.md' ) {
+                        checkedLink = '/docs/plugins' + link.slice( 13, link.length - 10 ) + '.html';
+                    } else {
+                        checkedLink = '/docs/plugins' + link.slice( 13, link.length ) + '.html';
+                    }
+                } else if ( link.slice( 0, 12 ) === '/src/plugins' ) {
+                    if ( link.slice( link.length - 9, link.length ) === 'README.md' ) {
+                        checkedLink = '/docs/plugins' + link.slice( 12, link.length - 10 ) + '.html';
+                    } else {
+                        checkedLink = '/docs/plugins' + link.slice( 12, link.length ) + '.html';
+                    }
                 }
-                console.log( checkedLink );
-                returnHTML = html.slice( 0, parseInt( letter ) + 9 ) + checkedLink + html.slice( parseInt( letter ) + i, parseInt( html.length ) );
+                html = html.slice( 0, parseInt( letter ) + 9 ) + checkedLink + html.slice( parseInt( letter ) + i, parseInt( html.length ) );
             };
         };
     };
-    console.log( returnHTML );
-    return returnHTML;
+    return html;
 }
 
 function buildExamplesPage () {
