@@ -171,3 +171,7 @@ body {
         width: 40%;
     }
 }
+
+code {
+    text-align: justify;
+}

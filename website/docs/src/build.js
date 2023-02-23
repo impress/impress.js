@@ -17,6 +17,7 @@ const path = require( 'path' );
 const mdhtml = require( 'markdown-it' );
 const md2html = new mdhtml();
 const docRoot = path.join( __dirname + '/../' );
+const ls = require( 'ls' );
 const prompt = require( 'prompt-sync' )( {
     sigint: true
 } );
@@ -57,6 +58,8 @@ for ( let obj in docPages ) {
 
 console.log( 'regenerating Nav' );
 generateNav ();
+
+buildExamplesPage();
 
 /*
     This function finds links. The reason for this is possible incompatibilities with links on the website
@@ -265,6 +268,28 @@ function parseDocumentationMD () {
                 }
             };
             storeHTML( updatedPage, title, 'reference' );
-        }
-    }
+        };
+    };
+}
+
+function generateGettingStarted () {
+
+}
+
+function buildExamplesPage () {
+        /* Auto generate an index.html that lists all the directories under examples/
+    * This is useful for gh-pages, so you can link to http://impress.github.io/impress.js/examples
+    */
+    var html_list = '<ul><br />\n'
+    let dirList = fs.readdirSync( path.join( __dirname + '/../../demo/examples' ) )
+    dirList.forEach( function( dir ) {
+        html_list += '  <li><a href="' + dir['file'] + '/">' + dir[ 'name' ] + '</a></li>\n';
+    });
+    html_list += '</ul>\n'
+
+    var html = '<html>\n<head>\n<title>Example presentations</title>\n</head>\n<body>'
+    html += '<h1>Example presentations</h1>\n' + html_list
+    html += '</body>\n</html>'
+
+    fs.writeFileSync( path.join( __dirname + '/../../demo/examples/index.html' ), html );
 }
