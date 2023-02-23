@@ -45,7 +45,7 @@ if ( prompt( 'Do you want to regenerate the API reference? (y/n) ' ).toLowerCase
 
 if ( prompt( 'Do you want to regenerate the Getting Started Guide? (y/n) ' ).toLowerCase() == 'y' ) {
     console.log( 'Regenerating Getting Started Guide' );
-    storeHTML( md2html.render( '' + fs.readFileSync( path.join( __dirname + '/../../../GettingStarted.md' ) ) ), 'gettingStarted', '' );
+    storeHTML( generateGettingStarted( md2html.render( '' + fs.readFileSync( path.join( __dirname + '/../../../GettingStarted.md' ) ) ) ), 'gettingStarted', '' );
 }
 
 console.log( 'regenerating plugins documentation' );
@@ -272,8 +272,27 @@ function parseDocumentationMD () {
     };
 }
 
-function generateGettingStarted () {
-
+function generateGettingStarted ( html ) {
+    let returnHTML = '';
+    for ( let letter in html ) {
+        if ( html[letter] === '<' ) {
+            if ( html.slice( parseInt( letter ), parseInt( letter ) + 9 ) === '<a href="' ) {
+                let i = 9;
+                while ( html.slice( parseInt( letter ) + i, parseInt( letter ) + i + 1 ) !== '"' ) {
+                    i += 1;
+                };
+                console.log( html.slice( parseInt( letter ) + 9, parseInt( letter ) + i  ) );
+                let checkedLink = '';
+                if ( html.slice( parseInt( letter ) + 9, parseInt( letter ) + i  ) === 'DOCUMENTATION.md' ) {
+                    checkedLink = '/docs/reference';
+                }
+                console.log( checkedLink );
+                returnHTML = html.slice( 0, parseInt( letter ) + 9 ) + checkedLink + html.slice( parseInt( letter ) + i, parseInt( html.length ) );
+            };
+        };
+    };
+    console.log( returnHTML );
+    return returnHTML;
 }
 
 function buildExamplesPage () {
