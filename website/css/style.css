@@ -119,8 +119,29 @@ body {
 }
 
 /* This div will have crazy cool style, as this should represent that you can use (almost) all the CSS you want.*/
-.create .crazy-styled {
+.create .special-style {
     background-color: aqua;
+    border-radius: 50px;
+    font-family: cursive;
+    padding: 5%;
+    animation-name: background;
+    animation-duration: 5s;
+    animation-iteration-count: 500;
+}
+
+@keyframes background {
+    0% {
+        background-color: aqua;
+        border-radius: 50px;
+    }
+    50% {
+        background-color: rgba(0, 255, 255, 0.2);
+        border-radius: 200px;
+    }
+    100% {
+        background-color: aqua;
+        border-radius: 50px;
+    }
 }
 
 .centered {

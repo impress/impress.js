@@ -1,6 +1,6 @@
 $( document ).ready( function () {
-    $( '#navbar' ).load( 'nav.html' );
-    $( '#footer' ).load( 'footer.html' );
+    $( '#navbar' ).load( '/nav.html' );
+    $( '#footer' ).load( '/footer.html' );
 
     $( document ).ready(function () {
         $( '.button' ).mouseenter( function () {

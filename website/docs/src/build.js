@@ -372,16 +372,48 @@ function buildExamplesPage () {
     /* Auto generate an index.html that lists all the directories under examples/
     * This is useful for gh-pages, so you can link to http://impress.github.io/impress.js/examples
     */
-    var html_list = '<ul><br />\n'
-    let dirList = fs.readdirSync( path.join( __dirname + '/../../demo/examples' ) )
+    console.log( 'building examples page' );
+    let html_list = '<ul class="list"><br>\n';
+    let dirList = fs.readdirSync( path.join( __dirname + '/../../demo/examples' ) );
     dirList.forEach( function( dir ) {
-        html_list += '  <li><a href="' + dir['file'] + '/">' + dir[ 'name' ] + '</a></li>\n';
+        if ( dir === 'index.html' ) {} else {
+            html_list += '                  <li class="button"><a class="list-element" href="' + dir + '/">' + dir + '</a></li>\n';
+        };
     });
-    html_list += '</ul>\n'
-
-    var html = '<html>\n<head>\n<title>Example presentations</title>\n</head>\n<body>'
-    html += '<h1>Example presentations</h1>\n' + html_list
-    html += '</body>\n</html>'
+    let html = `
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="/css/style.css">
+        <title>Example presentations</title>
+        <script defer src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+        <script defer src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script defer src="/js/index.js"></script>
+        <style>
+            .list {
+                margin-top: 10%;
+                font-size: 1.5rem;
+                list-style: none;
+            }
+            .list-element {
+                text-decoration: none;
+                color: white;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="navbar"></div>
+        <div class="title">
+            <div class="title-content">
+                <h1 class="heading">Examples</h1>
+            </div>
+                ${ html_list }
+                </ul>
+            </div>
+        <div id="footer"></div>
+    </body>
+</html>`;
 
     fs.writeFileSync( path.join( __dirname + '/../../demo/examples/index.html' ), html );
 }
