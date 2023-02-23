@@ -199,7 +199,8 @@ function generateNav () {
     fileStruct += `</div>
                     <a class="navitem" id="contributingNav" onclick="toggleList( 'contributing' );">Contributing</a>
                     <div class="dropdown" id="contributing">
-                        <a class="nav-subitem" id="contributing-gettingStarted" href="/docs/contributing/gettingStarted.html">Getting Started</a>
+                        <a class="nav-subitem" id="contributing-gettingStarted" href="/docs/contributing">Getting Started</a>
+                        <a class="nav-subitem" id="website" href="/docs/contributing/website.html">Website</a>
                     </div>
                 </div>
             </div>
@@ -352,13 +353,13 @@ function generateGettingStarted ( inputHTML ) {
                         checkedLink = '/docs/plugins' + link.slice( 13, link.length - 10 ) + '.html';
                     } else {
                         checkedLink = '/docs/plugins' + link.slice( 13, link.length ) + '.html';
-                    }
+                    };
                 } else if ( link.slice( 0, 12 ) === '/src/plugins' ) {
                     if ( link.slice( link.length - 9, link.length ) === 'README.md' ) {
                         checkedLink = '/docs/plugins' + link.slice( 12, link.length - 10 ) + '.html';
                     } else {
                         checkedLink = '/docs/plugins' + link.slice( 12, link.length ) + '.html';
-                    }
+                    };
                 }
                 html = html.slice( 0, parseInt( letter ) + 9 ) + checkedLink + html.slice( parseInt( letter ) + i, parseInt( html.length ) );
             };
@@ -368,7 +369,7 @@ function generateGettingStarted ( inputHTML ) {
 }
 
 function buildExamplesPage () {
-        /* Auto generate an index.html that lists all the directories under examples/
+    /* Auto generate an index.html that lists all the directories under examples/
     * This is useful for gh-pages, so you can link to http://impress.github.io/impress.js/examples
     */
     var html_list = '<ul><br />\n'

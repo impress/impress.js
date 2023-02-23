@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Docs - impress.js</title>
+        <!--I am using jquery for button animations.-->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/dark.min.css">
+        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script>
+        <script src="/js/docs/loader.js"></script>
+        <link rel="stylesheet" href="/css/docs/style.css">
+    </head>
+    <body>
+        <div class="content">
+            <div id="nav"></div>
+            <div id="top"></div>
+            <div id="docPage">
+                <div id="doc-container">
+                    <h1>Contributing - Website</h1>
+                    <h3>So, you'd like to contribute to the impress.js website?</h3>
+                    <p>Do you want to contribute to the impress.js website by writing more documentation, improving existing documentation or by adding more pages, fixing some or by doing some better styling? Then let's show you how!</p>
+                    <p>You should start by cloning the impress.js repository. How to do that is explained <a href="/docs/contributing">here</a>. The impress.js website is located in the <a href="https://github.com/impress/impress.js/tree/master/website">website/</a> directory. You may find the website build script in the <a href="https://github.com/impress/impress.js/tree/master/website/docs/src">website/docs/src</a> directory together with the template which you should always use when creating new pages.</p>
+                    <p>Whenever you add a new page to the impress.js docs, you need first add a new navigation entry in the build-script and then run it to regenerate the navigation menu:</p>
+                    <pre>
+                        <code>
+npm i
+npm run build-website
+                        </code>
+                    </pre>
+                    <h4>Adding a new plugin to impress.js</h4>
+                    <p>Whenever you add a plugin to impress.js, please also provide a README.md file. Then run the build script as described above. The script will go through the plugins directory and automatically generate the HTML files from the README's</p>
+                    <h3>Ideas for what to do</h3>
+                    <ul>
+                        <li>Translate into other languages</li>
+                        <li>Guess plugin title from title of READMEs instead of filename</li>
+                        <li>Optimize dark mode recognition</li>
+                    </ul>
+                </div>
+            </div>
+            <div id="footer"></div>
+        </div>
+    </body>
+</html>

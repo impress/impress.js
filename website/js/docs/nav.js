@@ -17,6 +17,16 @@ function highlightPath () {
         $( '#plugins' ).slideDown();
         bannedIDs.push( 'pluginsNav' );
         setTimeout( highlightSubPath( 14 ), 300 );
+    } else if ( $( location ).attr( 'pathname' ).slice( 6, 19 ) === 'contributing/' ) {
+        $( '#contributingNav' ).animate( { 'background-color': 'black' }, 200 );
+        $( '#contributing' ).slideDown();
+        bannedIDs.push( 'contributingNav' );
+        if ( $( location ).attr( 'pathname' ).length < 21 ) {
+            $( '#contributing-gettingStarted' ).animate( { 'background-color': 'rgb(43, 43, 43)' }, 200 );
+            bannedIDs.push( 'contributing-gettingStarted' );
+        } else {
+            setTimeout( highlightSubPath( 19 ), 300 );
+        };
     }
 };
 
@@ -44,8 +54,8 @@ $( document ).ready( function () {
             } else {
                 $( this ).stop();
                 $( this ).animate( { 'background-color': 'rgb(22, 22, 117)' }, 100 );
-            }
-        }
+            };
+        };
     } );
 
     $( '.nav-subitem' ).mouseenter( function () { 
@@ -61,8 +71,8 @@ $( document ).ready( function () {
             } else {
                 $( this ).stop();
                 $( this ).animate( { 'background-color': 'rgb(27, 27, 165)' }, 100 );
-            }
-        }
+            };
+        };
     } );
     setTimeout( highlightPath, 300 );
 });
