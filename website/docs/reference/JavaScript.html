@@ -17,21 +17,21 @@
                 <div id="top"></div>
                     <div id="docPage">
                         <div id="doc-container">
-                        <h2>JavaScript</h2>
-<h3>impress( [ id ] )</h3>
-<p>A factory function that creates the <a href="#impressapi">ImpressAPI</a>.</p>
+                        <h2 id="javascript">JavaScript</h2>
+<h3 id="impress--id--">impress( [ id ] )</h3>
+<p>A factory function that creates the <a href="/docs/reference/JavaScript.html#impressapi">ImpressAPI</a>.</p>
 <p>Accepts a <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String"><code>String</code></a> that represents the id of the root element in the page. If omitted, impress.js will lookup for the element with the id &quot;impress&quot; by default.</p>
 <p><strong>Example:</strong></p>
 <pre><code class="language-JavaScript">var impressAPI = impress( &quot;root&quot; );
 </code></pre>
-<h3>ImpressAPI</h3>
+<h3 id="impressapi">ImpressAPI</h3>
 <p>The main impress.js API that handles common operations of impress.js, listed below.</p>
-<h4>.init()</h4>
+<h4 id="-init">.init()</h4>
 <p>Initializes impress.js globally in the page. Only one instance of impress.js is supported per document.</p>
 <p><strong>Example:</strong></p>
 <pre><code class="language-JavaScript">impress().init();
 </code></pre>
-<p>Triggers the <code>impress:init</code> event in the <a href="#root-element">Root Element</a> after the presentation is initialized.</p>
+<p>Triggers the <code>impress:init</code> event in the <a href="/docs/reference/HTML.html#root-element">Root Element</a> after the presentation is initialized.</p>
 <p><strong>Example:</strong></p>
 <pre><code class="language-JavaScript">var rootElement = document.getElementById( &quot;impress&quot; );
 rootElement.addEventListener( &quot;impress:init&quot;, function() {
@@ -39,7 +39,7 @@ rootElement.addEventListener( &quot;impress:init&quot;, function() {
 });
 impress().init();
 </code></pre>
-<h4>.tear()</h4>
+<h4 id="-tear">.tear()</h4>
 <p>Resets the DOM to its original state, as it was before <code>init()</code> was called.</p>
 <p>This can be used to &quot;unload&quot; impress.js. A particular use case for this is, if you want to do
 dynamic changes to the presentation, you can do a teardown, apply changes, then call <code>init()</code>
@@ -48,21 +48,21 @@ beyond the intended dynamic changes.)</p>
 <p><strong>Example:</strong></p>
 <pre><code class="language-JavaScript">impress().tear();
 </code></pre>
-<h4>.next()</h4>
-<p>Navigates to the next step of the presentation using the <a href="#impressgotostepindexstepelementidstepelement-duration"><code>goto()</code> function</a>.</p>
+<h4 id="-next">.next()</h4>
+<p>Navigates to the next step of the presentation using the <a href="/docs/reference/JavaScript.html#-goto-stepindex--stepelementid--stepelement---duration--"><code>goto()</code> function</a>.</p>
 <p><strong>Example:</strong></p>
 <pre><code class="language-JavaScript">var api = impress();
 api.init();
 api.next();
 </code></pre>
-<h4>.prev()</h4>
-<p>Navigates to the previous step of the presentation using the <a href="#impressgotostepindexstepelementidstepelement-duration"><code>goto()</code> function</a>.</p>
+<h4 id="-prev">.prev()</h4>
+<p>Navigates to the previous step of the presentation using the <a href="/docs/reference/JavaScript.html#-goto-stepindex--stepelementid--stepelement---duration--"><code>goto()</code> function</a>.</p>
 <p><strong>Example:</strong></p>
 <pre><code class="language-JavaScript">var api = impress();
 api.init();
 api.prev();
 </code></pre>
-<h4>.goto( stepIndex | stepElementId | stepElement, [ duration ] )</h4>
+<h4 id="-goto-stepindex--stepelementid--stepelement---duration--">.goto( stepIndex | stepElementId | stepElement, [ duration ] )</h4>
 <p>Accepts a <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number"><code>Number</code></a> that represents the step index.</p>
 <p>Navigates to the step given the provided step index.</p>
 <p><strong>Example:</strong></p>
@@ -70,15 +70,15 @@ api.prev();
 api.init();
 api.goto(7);
 </code></pre>
-<p>Accepts a <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String"><code>String</code></a> that represents the <a href="#step-element">Step Element</a> id.</p>
-<p>Navigates to the step given the provided <a href="#step-element">Step Element</a> id.</p>
+<p>Accepts a <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String"><code>String</code></a> that represents the <a href="/docs/reference/HTML.html#step-element">Step Element</a> id.</p>
+<p>Navigates to the step given the provided <a href="/docs/reference/HTML.html#step-element">Step Element</a> id.</p>
 <p><strong>Example:</strong></p>
 <pre><code class="language-JavaScript">var api = impress();
 api.init();
 api.goto( &quot;overview&quot; );
 </code></pre>
-<p>Accepts an <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement"><code>HTMLElement</code></a> that represents the <a href="#step-element">Step Element</a>.</p>
-<p>Navigates to the step given the provided <a href="#step-element">Step Element</a>.</p>
+<p>Accepts an <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement"><code>HTMLElement</code></a> that represents the <a href="/docs/reference/HTML.html#step-element">Step Element</a>.</p>
+<p>Navigates to the step given the provided <a href="/docs/reference/HTML.html#step-element">Step Element</a>.</p>
 <p><strong>Example:</strong></p>
 <pre><code class="language-JavaScript">var overview = document.getElementById( &quot;overview&quot; );
 var api = impress();
@@ -86,7 +86,7 @@ api.init();
 api.goto( overview );
 </code></pre>
 <p>Accepts an optional <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a> in the last argument that represents the duration of the transition in milliseconds. If not provided, the default transition duration for the presentation will be used.</p>
-<p>Triggers the <code>impress:stepenter</code> event in the <a href="#root-element">Root Element</a> when the presentation navigates to the target <a href="#step-element">Step Element</a>.</p>
+<p>Triggers the <code>impress:stepenter</code> event in the <a href="/docs/reference/HTML.html#root-element">Root Element</a> when the presentation navigates to the target <a href="/docs/reference/HTML.html#step-element">Step Element</a>.</p>
 <p><strong>Example:</strong></p>
 <pre><code class="language-JavaScript">var rootElement = document.getElementById( &quot;impress&quot; );
 rootElement.addEventListener( &quot;impress:stepenter&quot;, function(event) {
@@ -94,7 +94,7 @@ rootElement.addEventListener( &quot;impress:stepenter&quot;, function(event) {
   console.log( &quot;Entered the Step Element '&quot; + currentStep.id + &quot;'&quot; );
 });
 </code></pre>
-<p>Triggers the <code>impress:stepleave</code> event in the <a href="#root-element">Root Element</a> when the presentation navigates away from the current <a href="#step-element">Step Element</a>.</p>
+<p>Triggers the <code>impress:stepleave</code> event in the <a href="/docs/reference/HTML.html#root-element">Root Element</a> when the presentation navigates away from the current <a href="/docs/reference/HTML.html#step-element">Step Element</a>.</p>
 <p><strong>Example:</strong></p>
 <pre><code class="language-JavaScript">var rootElement = document.getElementById( &quot;impress&quot; );
 rootElement.addEventListener( &quot;impress:stepleave&quot;, function(event) {

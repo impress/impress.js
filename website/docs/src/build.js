@@ -43,17 +43,20 @@ if ( prompt( 'Do you want to regenerate the API reference? (y/n) ' ).toLowerCase
     parseDocumentationMD();
 }
 
-if ( prompt( 'Do you want to regenerate the Getting Started Guide? (y/n) ' ).toLowerCase() == 'y' ) {
+if ( prompt( 'Do you want to regenerate the getting started guide? (y/n) ' ).toLowerCase() == 'y' ) {
     console.log( 'Regenerating Getting Started Guide' );
     storeHTML( generateGettingStarted( md2html.render( '' + fs.readFileSync( path.join( __dirname + '/../../../GettingStarted.md' ) ) ) ), 'gettingStarted', '' );
 }
 
-console.log( 'regenerating plugins documentation' );
 let docPages = fs.readdirSync( __dirname + '/../../../website/docs/reference' );
-for ( let obj in docPages ) {
-    if ( docPages[obj] == 'index.html' ) {
-        delete docPages[obj];
-    };
+
+if ( prompt( 'Do you want to regenerate the plugins documentation? (y/n) ' ).toLowerCase() == 'y' ) {
+    console.log( 'regenerating plugins documentation' );
+    for ( let obj in docPages ) {
+        if ( docPages[obj] == 'index.html' ) {
+            delete docPages[obj];
+        };
+    }
 }
 
 console.log( 'regenerating Nav' );
@@ -221,6 +224,9 @@ function parseDocumentationMD () {
             lastHashtagPos = parseInt( letter );
         };
     };
+
+    let titles = {};
+
     for ( let item in posArray ) {
         let titleArea = doc.slice( parseInt( posArray[item] ), parseInt( posArray[item] + 20 ) );
         let title = '';
@@ -232,9 +238,45 @@ function parseDocumentationMD () {
         };
 
         let page = md2html.render( doc.slice( parseInt( posArray[parseInt( item )] ), parseInt( posArray[parseInt( item ) + 1] ) || parseInt( doc.length ) ) );
-        let updatedPage = page;
 
         for ( let letter in page ) {
+            let titleTag = page.slice( parseInt( letter ), parseInt( letter ) + 4 );
+            if ( titleTag === '<h1>' || titleTag === '<h2>' || titleTag === '<h3>' || titleTag === '<h4>' ) {
+                let i = 4;
+                while ( page.slice( parseInt( letter ) + i, parseInt( letter ) + i + 1 ) !== '<' ) {
+                    i += 1;
+                };
+                let heading = '' + page.slice( parseInt( letter ) + 4, parseInt( letter ) + i  );
+                let output = '';
+                for ( let pos in heading ) {
+                    let letter = heading[ pos ];
+                    if ( letter === ' ' || letter === '.' || letter === ',' ) {
+                        output += '-';
+                    } else if ( letter === '(' || letter === ')' || letter === '[' || letter === ']' || letter === '|' ) {
+
+                    } else {
+                        output += letter;
+                    };
+                };
+                titles[ output.toLowerCase() ] = title;
+            };
+        };
+    } 
+
+    for ( let item in posArray ) {
+        let titleArea = doc.slice( parseInt( posArray[item] ), parseInt( posArray[item] + 20 ) );
+        let title = '';
+        for ( let pos in titleArea ) {
+            if ( titleArea[pos] === '\n' ) {
+                title = titleArea.slice( 3, pos );
+                break;
+            };
+        };
+
+        let page = md2html.render( doc.slice( parseInt( posArray[parseInt( item )] ), parseInt( posArray[parseInt( item ) + 1] ) || parseInt( doc.length ) ) );
+
+        for ( let letter in page ) {
+            let titleTag = page.slice( parseInt( letter ), parseInt( letter ) + 4 );
             if ( page[letter] === '<' ) {
                 if ( page.slice( parseInt( letter ), parseInt( letter ) + 9 ) === '<a href="' ) {
                     let i = 9;
@@ -244,30 +286,50 @@ function parseDocumentationMD () {
                     let link = '' + page.slice( parseInt( letter ) + 9, parseInt( letter ) + i  );
                     let updatedLink = '';
                     if ( link.slice( 0, 8 ) === 'https://' || link.slice( 0, 7 ) === 'http://' || link.slice( 0, 1 ) === '#' ) {
-                        updatedLink = link;
+                        if ( link.slice( 0, 1 ) === '#' ) {
+                            if ( titles[ link.slice( 1, parseInt( link.length ) ) ] !== undefined ) {
+                                updatedLink = '/docs/reference/' + titles[ link.slice( 1, parseInt( link.length ) ) ] + '.html' + link;
+                            } else {
+                                console.log( 'unable to map link ' + link );
+                            }
+                        } else {
+                            updatedLink = link;
+                        }
                     } else {
                         if ( link.slice( 0, 12 ) === 'src/plugins/' ) {
                             if ( link.slice( link.length - 9, link.length ) === 'README.md' ) {
                                 updatedLink = '/docs/' + link.slice( 4, link.length - 9 );
                             } else {
                                 updatedLink = 'https://github.com/impress/impress.js/' + link;
-                            }
+                            };
                         } else if ( link.slice( 0, 9 ) === 'examples/' ) {
                             updatedLink = '/demo/' + link;
                         } else {
                             updatedLink = 'https://github.com/impress/impress.js/' + link;
                         };
-                        updatedPage = page.slice( 0, parseInt( letter ) + 9 ) + updatedLink + page.slice( parseInt( letter ) + i + 2, parseInt( page.length ) );
                     }
-                } else if ( page.slice( parseInt( letter ), parseInt( letter ) + 4 ) === '<h1>' ) {
-                    let i = 9;
+                    page = page.slice( 0, parseInt( letter ) + 9 ) + updatedLink + page.slice( parseInt( letter ) + i, parseInt( page.length ) );
+                } else if ( titleTag === '<h1>' || titleTag === '<h2>' || titleTag === '<h3>' || titleTag === '<h4>' ) {
+                    let i = 4;
                     while ( page.slice( parseInt( letter ) + i, parseInt( letter ) + i + 1 ) !== '<' ) {
                         i += 1;
                     };
-                    let heading = '' + page.slice( parseInt( letter ) + 9, parseInt( letter ) + i  );
-                }
+                    let heading = '' + page.slice( parseInt( letter ) + 4, parseInt( letter ) + i  );
+                    let output = '';
+                    for ( let pos in heading ) {
+                        let letter = heading[ pos ];
+                        if ( letter === ' ' || letter === '.' || letter === ',' ) {
+                            output += '-';
+                        } else if ( letter === '(' || letter === ')' || letter === '[' || letter === ']' || letter === '|' ) {
+
+                        } else {
+                            output += letter;
+                        };
+                    };
+                    page = page.slice( 0, parseInt( letter ) + 3 ) + ' id="' + output.toLowerCase() + '">' + page.slice( parseInt( letter ) + 4, parseInt( page.length ) );
+                };
             };
-            storeHTML( updatedPage, title, 'reference' );
+            storeHTML( page, title, 'reference' );
         };
     };
 }

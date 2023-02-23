@@ -1,7 +1,6 @@
 let bannedIDs = [];
 
 function highlightPath () { 
-    console.log( 'highlighting' );
     if ( $( location ).attr( 'pathname' ).slice( 6, location.pathname.length ) === '' ) {
         $( '#home' ).animate( { 'background-color': 'black' }, 200 );
         bannedIDs.push( 'home' );
@@ -22,7 +21,6 @@ function highlightPath () {
 };
 
 function highlightSubPath ( sliceStart ) {
-    console.log( $( location ).attr( 'pathname' ).slice( sliceStart, parseInt( location.pathname.length ) - 5 ) );
     if ( $( location ).attr( 'pathname' ).slice( sliceStart, parseInt( location.pathname.length ) - 5 ) === '' ) {
         $( '#root' ).animate( { 'background-color': 'black' }, 200 );
         bannedIDs.push( 'root' );

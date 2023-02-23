@@ -319,7 +319,7 @@ impress().tear();
 
 #### .next()
 
-Navigates to the next step of the presentation using the [`goto()` function](#impressgotostepindexstepelementidstepelement-duration).
+Navigates to the next step of the presentation using the [`goto()` function](#-goto-stepindex--stepelementid--stepelement---duration--).
 
 **Example:**
 
@@ -331,7 +331,7 @@ api.next();
 
 #### .prev()
 
-Navigates to the previous step of the presentation using the [`goto()` function](#impressgotostepindexstepelementidstepelement-duration).
+Navigates to the previous step of the presentation using the [`goto()` function](#-goto-stepindex--stepelementid--stepelement---duration--).
 
 **Example:**
 
