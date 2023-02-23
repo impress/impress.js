@@ -187,14 +187,16 @@ function generateNav () {
                     <div class="dropdown" id="reference">
                         <a class="nav-subitem" id="root" href="/docs/reference">Home</a>`
     for ( let item in docPages ) {
-        fileStruct += `<a class="nav-subitem" id="${ docPages[item].slice( 0, docPages[item].length - 5) }" href="/docs/reference/${ docPages[item] }">${ docPages[item].slice( 0, docPages[item].length - 5) }</a>`;
+        if ( docPages[ item ] === 'index' ) {} else {
+            fileStruct += `<a class="nav-subitem" id="${ docPages[ item ].slice( 0, docPages[ item ].length - 5 ) }" href="/docs/reference/${ docPages[ item ] }">${ docPages[ item ].slice( 0, docPages[ item ].length - 5 ) }</a>`;
+        };
     };
     fileStruct += `</div>
                     <a class="navitem" id="pluginsNav" onclick="toggleList( 'plugins' );">Plugins</a>
                     <div class="dropdown" id="plugins">
                     `;
     for ( let item in plugins ) {
-        fileStruct += `<a class="nav-subitem" id="${ plugins[item] }" href="/docs/plugins/${ plugins[item] }.html">${ plugins[item] }</a>`;
+        fileStruct += `<a class="nav-subitem" id="${ plugins[ item ] }" href="/docs/plugins/${ plugins[ item ] }.html">${ plugins[ item ] }</a>`;
     };
     fileStruct += `</div>
                     <a class="navitem" id="contributingNav" onclick="toggleList( 'contributing' );">Contributing</a>
