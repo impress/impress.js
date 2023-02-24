@@ -32,7 +32,7 @@ function highlightPath () {
 
 function highlightSubPath ( sliceStart ) {
     if ( $( location ).attr( 'pathname' ).slice( sliceStart, parseInt( location.pathname.length ) - 5 ) === '' ) {
-        $( '#root' ).animate( { 'background-color': 'black' }, 200 );
+        $( '#root' ).animate( { 'background-color': 'rgb(43, 43, 43)' }, 200 );
         bannedIDs.push( 'root' );
     } else {
         $( `#${location.pathname.slice( sliceStart, parseInt( location.pathname.length ) - 5 )}` ).animate( { 'background-color': 'rgb(43, 43, 43)' }, 200 );
