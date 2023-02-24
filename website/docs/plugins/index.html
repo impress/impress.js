@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+    <html>
+        <head>
+        <title>index :: plugins | DOCS - impress.js</title>
+        <!--I am using jquery for button animations.-->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/dark.min.css">
+        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script>
+        <script src="/js/docs/loader.js"></script>
+        <link rel="stylesheet" href="/css/docs/style.css">
+        </head>
+        <body>
+            <div class="content">
+                <div id="nav"></div>
+                <div id="top"></div>
+                    <div id="docPage">
+                        <div id="doc-container">
+                        <h1>Impress.js Plugins documentation</h1>
+<h2>The default set of plugins</h2>
+<p>A lot of impress.js features are and will be implemented as plugins. Each plugin
+has user documentation in a README.md file in <a href="https://github.com/impress/impress.js/tree/master/src/plugins/./">its own directory</a>.</p>
+<p>The plugins in this directory are called default plugins, and - unsurprisingly -
+are enabled by default. However, most of them won't do anything by default,
+rather require the user to invoke them somehow. For example:</p>
+<ul>
+<li>The <em>navigation</em> plugin waits for the user to press some keys, arrows, page
+down, page up, space or tab.</li>
+<li>The <em>autoplay</em> plugin looks for the HTML attribute <code>data-autoplay</code> to see
+whether it should do its thing. It can also be triggered with a URL GET parameter
+<code>?impress-autoplay=5</code> <em>5 is the waiting duration</em>.</li>
+<li>The <em>toolbar</em> plugin looks for a <code>&lt;div&gt;</code> element to become visible.</li>
+</ul>
+<h2>Extra addons</h2>
+<p>Yet more features are available in presentations that enable
+<a href="https://github.com/impress/impress-extras">extra addons</a>. Extra addons are 3rd party plugins
+that are not part of impress.js, but that we have nevertheless collected together into the
+impress-extras repo to provide convenient and standardized access to them. To include
+the extra addons when checking out impress.js, use git clone --recursive. Even then, they
+are not activated by default in a presentation, rather each must be included with their own <code>&lt;script&gt;</code> tag.</p>
+<p>Note: The enabled extra addons are automatically initialized by the <em>extras</em>
+plugin.</p>
+<h2>Example HTML and CSS</h2>
+<p>Generally plugins will do something sane, or nothing, by default. Hence, no
+particular HTML or CSS is required. The README file of each plugin documents the
+HTML and CSS that you can use with that plugin.</p>
+<p>For your convenience, below is some sample HTML and CSS code covering all the
+plugins that you may want to use or adapt.</p>
+<h2>Additional parameters for addons</h2>
+<p>Some addons can handle additional HTML data attributes to help us in further customization:</p>
+<ul>
+<li>Markdown-JS: You can pass a specific Markdown dialect to the plugin using <code>data-markdown-dialect=&quot;Another Dialect&quot;</code>.</li>
+</ul>
+<h3>Sample HTML to enable plugins and extra addons</h3>
+<pre><code>&lt;head&gt;
+  &lt;!-- CSS files if using Highlight.js or Mermaid.js extras. --&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;../../extras/highlight/styles/github.css&quot;&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;../../extras/mermaid/mermaid.forest.css&quot;&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;div id=&quot;impress&quot; data-autoplay=&quot;10&quot;&gt;
+    &lt;div class=&quot;step&quot;
+         data-autoplay=&quot;15&quot;
+         data-rel-x=&quot;1000&quot;
+         data-rel-y=&quot;1000&quot;&gt;
+
+      &lt;h1&gt;Slide content&lt;/h1&gt;
+      
+      &lt;ul&gt;
+        &lt;li class=&quot;substep&quot;&gt;Point 1&lt;/li&gt;
+        &lt;li class=&quot;substep&quot;&gt;Point 2&lt;/li&gt;
+      &lt;/ul&gt;
+
+      &lt;div class=&quot;notes&quot;&gt;
+      Speaker notes are shown in the impressConsole.
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  
+  &lt;div id=&quot;impress-toolbar&quot;&gt;&lt;/div&gt;
+  &lt;div class=&quot;impress-progressbar&quot;&gt;&lt;div&gt;&lt;/div&gt;&lt;/div&gt;
+  &lt;div class=&quot;impress-progress&quot;&gt;&lt;/div&gt;
+  &lt;div id=&quot;impress-help&quot;&gt;&lt;/div&gt;
+
+  &lt;script type=&quot;text/javascript&quot; src=&quot;../../extras/highlight/highlight.pack.js&quot;&gt;&lt;/script&gt;
+  &lt;script type=&quot;text/javascript&quot; src=&quot;../../extras/mermaid/mermaid.min.js&quot;&gt;&lt;/script&gt;
+  &lt;script type=&quot;text/javascript&quot; src=&quot;../../extras/markdown/markdown.js&quot;&gt;&lt;/script&gt;
+  &lt;script type=&quot;text/javascript&quot; src=&quot;../../extras/mathjax/MathJax.js?config=TeX-AMS_CHTML&quot;&gt;&lt;/script&gt;
+&lt;/body&gt;
+</code></pre>
+<h3>Sample CSS related to plugins and extra addons</h3>
+<p>The sample css related to plugins and extra addons is located in <a href="https://github.com/impress/impress.js/tree/master/./css/impress-common.css">css/impress-common.css</a>.</p>
+<h1>For developers</h1>
+<p>The vision for impress.js is to provide a compact core library doing the
+actual presentations, with a collection of plugins that provide additional
+functionality. A default set of plugins are distributed together with the core
+impress.js, and are located in this directory. They are called <em>default plugins</em>
+because they are distributed and active when users use the <a href="https://github.com/impress/impress.js/tree/master/./js/impress.js">js/impress.js</a>
+in their presentations.</p>
+<h2>Building js/impress.js</h2>
+<p>The common way to use impress.js is to link to the file
+<a href="https://github.com/impress/impress.js/tree/master/./js/impress.js">js/impress.js</a>. This is a simple concatenation of the
+core impress.js and all plugins in this directory. If you edit or add code
+under <a href="https://github.com/impress/impress.js/tree/master/">src/</a>, you can run <code>node build.js</code> to recreate the distributable
+<code>js/impress.js</code> file. The build script also creates a minified file, but this
+is not included in the git repository.</p>
+<h3>Tip: Build errors</h3>
+<p>If your code has parse errors, the <code>build.js</code> will print a rather unhelpful
+exception like</p>
+<pre><code>/home/hingo/hacking/impress.js/js/impress.js
+
+/home/hingo/hacking/impress.js/node_modules/uglify-js/lib/parse-js.js:271
+    throw new JS_Parse_Error(message, line, col, pos);
+          ^
+Error
+    at new JS_Parse_Error (/home/hingo/hacking/impress.js/node_modules/uglify-js/lib/parse-js.js:263:18)
+    at js_error (/home/hingo/hacking/impress.js/node_modules/uglify-js/lib/parse-js.js:271:11)
+    at croak (/home/hingo/hacking/impress.js/node_modules/uglify-js/lib/parse-js.js:733:9)
+    at token_error (/home/hingo/hacking/impress.js/node_modules/uglify-js/lib/parse-js.js:740:9)
+    at unexpected (/home/hingo/hacking/impress.js/node_modules/uglify-js/lib/parse-js.js:746:9)
+    at Object.semicolon [as 1] (/home/hingo/hacking/impress.js/node_modules/uglify-js/lib/parse-js.js:766:43)
+    at prog1 (/home/hingo/hacking/impress.js/node_modules/uglify-js/lib/parse-js.js:1314:21)
+    at simple_statement (/home/hingo/hacking/impress.js/node_modules/uglify-js/lib/parse-js.js:906:27)
+    at /home/hingo/hacking/impress.js/node_modules/uglify-js/lib/parse-js.js:814:19
+    at block_ (/home/hingo/hacking/impress.js/node_modules/uglify-js/lib/parse-js.js:1003:20)
+</code></pre>
+<p>You will be pleased to know, that the concatenation of the unminified file
+<a href="https://github.com/impress/impress.js/tree/master/./js/impress.js">js/impress.js</a> has already succeeded at this point. Just
+open a test in your browser, and the browser will show you the line and error.</p>
+<h3>Structure, naming and policy</h3>
+<p>Each plugin is contained within its own directory. The name of the directory
+is the name of the plugin. For example, imagine a plugin called <em>pluginA</em>:</p>
+<pre><code>src/plugins/plugina/
+</code></pre>
+<p>The main javascript file should use the directory name as its root name:</p>
+<pre><code>src/plugins/plugina/plugina.js
+</code></pre>
+<p>For most plugins, a single <code>.js</code> file is enough.</p>
+<p>Note that the plugin name is also used as a namespace for various things. For
+example, the <em>autoplay</em> plugin can be configured by setting the <code>data-autoplay=&quot;5&quot;</code>
+attribute on a <code>div</code>.</p>
+<p>As a general rule ids, classes and attributes within the <code>div#impress</code> root
+element, may use the plugin name directly (e.g. <code>data-autoplay=&quot;5&quot;</code>). However,
+outside of the root element, you should use <code>impress-pluginname</code> (e.g.
+<code>&lt;div id=&quot;impress-toolbar&quot;&gt;</code>. The latter (longer) form also applies to all
+events, they should be prefixed with <code>impress:pluginname</code>.</p>
+<p>You should use crisp and descriptive names for your plugins. But
+sometimes you might optimize for a short namespace. Hence, the
+<a href="https://github.com/impress/impress.js/tree/master/src/plugins/rel/rel.js">Relative Positioning Plugin</a> is called <code>rel</code> to keep html attributes
+short. You should not overuse this idea!</p>
+<p>Note that for default plugins, which is all plugins in this directory,
+<strong>NO css, html or image files</strong> are allowed.</p>
+<p>Default plugins must not add any global variables.</p>
+<h3>Testing</h3>
+<p>The plugin directory should also include tests, which should use the <em>QUnit</em> and
+<em>Syn</em> libraries under <a href="https://github.com/impress/impress.js/tree/master/./test">test/</a>. You can have as many tests as you like,
+but it is suggested your first and main test file is called <code>plugina_tests.html</code>
+and <code>plugina_tests.js</code> respectively. You need to add your test <code>.js</code> file into
+<a href="https://github.com/impress/impress.js/tree/master/./qunit_test_runner.html">/qunit_test_runner.html</a>, and the <code>.js</code> file
+should start by loading the test <code>.html</code> file into the
+<code>iframe#presentation-iframe</code>. See <a href="https://github.com/impress/impress.js/tree/master/src/plugins/navigation-ui">navigation-ui</a> plugin for an
+example.</p>
+<p>You are allowed to test your plugin whatever way you like, but the general
+approach is for the test to load the <a href="https://github.com/impress/impress.js/tree/master/./js/impress.js">js/impress.js</a> file
+produced by build.js. This way you are testing what users will actually be
+using, rather than the uncompiled source code.</p>
+<h2>HowTo write a plugin</h2>
+<h3>Encapsulation</h3>
+<p>To avoid polluting the global namespace, plugins must encapsulate them in the
+standard javascript anonymous function:</p>
+<pre><code>/**
+ * Plugin A - An example plugin
+ *
+ * Description...
+ *
+ * Copyright 2016 Firstname Lastname, email or github handle
+ * Released under the MIT license.
+ */
+(function ( document, window ) {
+
+    // Plugin implementation...
+
+})(document, window);
+</code></pre>
+<h3>Init plugins</h3>
+<p>We categorize plugins into various categories, based on how and when they are
+called, and what they do.</p>
+<p>An init plugin is the simplest kind of plugin. It simply listens for the
+<code>impress().init()</code> method to send the <code>impress:init</code> event, at which point
+the plugin can initialize itself and start doing whatever it does, for example
+by calling methods in the public api returned by <code>impress()</code>.</p>
+<p>The <code>impress:init</code> event has the <code>div#impress</code> element as its <code>target</code> attribute,
+whereas <code>event.detail.api</code> contains the same object that is returned by calling
+<code>impress()</code>. It is customary to store the api object sent by the event rather than
+calling <code>impress()</code> from the global namespace.</p>
+<p>Example:</p>
+<pre><code>/**
+ * Plugin A - An example plugin
+ *
+ * Description...
+ *
+ * Copyright 2016 Firstname Lastname, email or github handle
+ * Released under the MIT license.
+ */
+(function ( document, window ) {
+    var root;
+    var api;
+    var lib;
+
+    document.addEventListener( &quot;impress:init&quot;, function( event ) {
+        root = event.target;
+        api = event.detail.api;
+        lib = api.lib;
+
+        // Element attributes starting with &quot;data-&quot;, become available under
+        // element.dataset. In addition hyphenized words become camelCased.
+        var data = root.dataset;
+        // Get value of `&lt;div id=&quot;impress&quot; data-plugina-foo=&quot;...&quot;&gt;`
+        var foo = data.pluginaFoo;
+        // ...
+    }
+})(document, window);
+</code></pre>
+<p>Both <a href="https://github.com/impress/impress.js/tree/master/src/plugins/navigation/navigation.js">Navigation</a> and <a href="https://github.com/impress/impress.js/tree/master/src/plugins/autoplay/autoplay.js">Autoplay</a>
+are init plugins.</p>
+<p>To provide end user configurability in your plugin, a good idea might be to
+read html attributes from the impress presentation. The
+<a href="https://github.com/impress/impress.js/tree/master/src/plugins/autoplay/autoplay.js">Autoplay</a> plugin does exactly this, you can provide
+a default value in the <code>div#impress</code> element, or in each <code>div.step</code>.</p>
+<p>A plugin must only use html attributes in its designated namespace, which is</p>
+<pre><code>data-pluginName-*=&quot;value&quot;
+</code></pre>
+<p>For example, if <em>pluginA</em> offers config options <code>foo</code> and <code>bar</code>, it would look
+like this:</p>
+<pre><code>&lt;div id=&quot;impress&quot; data-plugina-foo=&quot;5&quot; data-plugina-bar=&quot;auto&quot; &gt;
+</code></pre>
+<h3>Pre-init plugins</h3>
+<p>Some plugins need to run before even impress().init() does anything. These
+are typically <em>filters</em>: they want to modify the html via DOM calls, before
+impress.js core parses the presentation. We call these <em>pre-init plugins</em>.</p>
+<p>A pre-init plugin must be called synchronously, before <code>impress().init()</code> is
+executed. Plugins can register themselves to be called in the pre-init phase
+by calling:</p>
+<pre><code>impress.addPreInitPlugin( plugin [, weight] );
+</code></pre>
+<p>The argument <code>plugin</code> must be a function. <code>weight</code> is optional and defaults to
+<code>10</code>. Plugins are ordered by weight when they are executed, with lower weight
+first.</p>
+<p>The <a href="https://github.com/impress/impress.js/tree/master/src/plugins/rel/rel.js">Relative Positioning Plugin</a> is an example of a pre-init plugin.</p>
+<h3>Pre-StepLeave plugins</h3>
+<p>A <em>pre-stepleave plugin</em> is called synchronously from impress.js core at the
+beginning of <code>impress().goto()</code>.</p>
+<p>To register a plugin, call</p>
+<pre><code>impress.addPreStepLeavePlugin( plugin [, weight] );
+</code></pre>
+<p>When the plugin function is executed, it will be passed an argument
+that resembles the <code>event</code> object from DOM event handlers:</p>
+<p><code>event.target</code> contains the current step, which we are about to leave.</p>
+<p><code>event.detail.next</code> contains the element we are about to transition to.</p>
+<p><code>event.detail.reason</code> contains a string, one of &quot;next&quot;, &quot;prev&quot; or &quot;goto&quot;,
+which tells you which API function was called to initiate the transition.</p>
+<p><code>event.detail.transitionDuration</code> contains the transitionDuration for the
+upcoming transition.</p>
+<p>A pre-stepleave plugin may alter the values in <code>event.detail</code> (except for
+<code>reason</code>), and this can change the behavior of the upcoming transition.
+For example, the <code>goto</code> plugin will set the <code>event.detail.next</code> to point to
+some other element, causing the presentation to jump to that step instead.</p>
+<h3>GUI plugins</h3>
+<p>A <em>GUI plugin</em> is actually just an init plugin, but is a special category that
+exposes visible widgets or effects in the presentation. For example, it might
+provide clickable buttons to go to the next and previous slide.</p>
+<p>Note that all plugins shipped in the default set <strong>must not</strong> produce any visible
+html elements unless the user asks for it. A recommended best practice is to let
+the user add a div element, with an id equaling the plugin's namespace, in the
+place where he wants to see whatever visual UI elements the plugin is providing:</p>
+<pre><code>&lt;div id=&quot;impress-plugina&quot;&gt;&lt;/div&gt;
+</code></pre>
+<p>Another way to show the elements of a UI plugin might be by allowing the user
+to explicitly press a key, like &quot;H&quot; for a help dialog.</p>
+<p><a href="/docs/plugins/toolbar">Toolbar plugin</a> is an example of a GUI plugin. It presents
+a toolbar where other plugins can add their buttons in a centralized fashion.</p>
+<p>Remember that for default plugins, even GUI plugins, no html files, css files
+or images are allowed. Everything must be generated from javascript. The idea
+is that users can theme widgets with their own CSS. (A plugin is of course welcome
+to provide example CSS that can be copypasted :-)</p>
+<h2>Dependencies</h2>
+<p>If <em>pluginB</em> depends on the existence of <em>pluginA</em>, and also <em>pluginA</em> must run
+before <em>pluginB</em>, then <em>pluginB</em> should not listen to the <code>impress:init</code> event,
+rather <em>pluginA</em> should send its own init event, which <em>pluginB</em> listens to.</p>
+<p>Example:</p>
+<pre><code>// pluginA
+document.addEventListener(&quot;impress:init&quot;, function (event) {
+    // plugin A does it's own initialization first...
+
+    // Signal other plugins that plugin A is now initialized
+    var root = document.querySelector( &quot;div#impress&quot; );
+    var event = document.createEvent(&quot;CustomEvent&quot;);
+    event.initCustomEvent(&quot;impress:plugina:init', true, true, { &quot;plugina&quot; : &quot;data...&quot; });
+    root.dispatchEvent(event);
+}, false);
+
+// pluginB
+document.addEventListener(&quot;impress:plugina:init&quot;, function (event) {
+    // plugin B implementation
+}, false);
+</code></pre>
+<p>A plugin should use the namespace <code>impress:pluginname:*</code> for any events it sends.</p>
+<p>In theory all plugins could always send an <code>init</code> and other events, but in
+practice we're adding them on an as needed basis.</p>
+</div>
+                    </div>
+                <div id="footer"></div>
+            </div>
+        </body>
+    </html>

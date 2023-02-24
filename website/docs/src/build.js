@@ -27,17 +27,6 @@ const pluginsPath = path.join( __dirname + '/../../../src/plugins' );
 let plugins = fs.readdirSync( pluginsPath );
 delete plugins[0];
 
-for ( let item in plugins ) {
-    fs.readFile( path.join( pluginsPath + '/' + plugins[item] + '/README.md' ), ( error, data ) => {
-        if ( error ) {
-            console.log( 'NO README found for ' + path.join( pluginsPath + '/' + plugins[item] ) + ' PLEASE MAKE SURE YOU HAVE CREATED A README!' );
-        } else {
-            let html = md2html.render( '' + data );
-            storeHTML( findLinks( html, path.join( pluginsPath + '/' + plugins[item] ) ), plugins[item], 'plugins' );
-        };
-    } );
-}
-
 if ( prompt( 'Do you want to regenerate the API reference? (y/n) ' ).toLowerCase() == 'y' ) {
     console.log( 'Regenerating API reference' );
     parseDocumentationMD();
@@ -52,6 +41,66 @@ let docPages = fs.readdirSync( __dirname + '/../../../website/docs/reference' );
 
 if ( prompt( 'Do you want to regenerate the plugins documentation? (y/n) ' ).toLowerCase() == 'y' ) {
     console.log( 'regenerating plugins documentation' );
+    let pluginsHome = md2html.render( fs.readFileSync( path.join( pluginsPath + '/README.md' ) ).toString() );
+    
+    /* 
+        Generate the plugins index.html from README.md
+    */
+    for ( let letter in pluginsHome ) {
+        if ( pluginsHome[ letter ] === '<' ) {
+            if ( pluginsHome.slice( parseInt( letter ), parseInt( letter ) + 9 ) === '<a href="' ) {
+                let newLink = '';
+                let i = 9;
+                while ( pluginsHome.slice( parseInt( letter ) + i, parseInt( letter ) + i + 1 ) !== '"' ) {
+                    i += 1;
+                };
+                let link = pluginsHome.slice( parseInt( letter ) + 9, parseInt( letter ) + i  );
+                // console.log( link );
+                let pos = 0;
+                if ( link.slice( 0, 1 ) === '/' && link.slice( 1, 3 ) !== '..' ) {
+                    console.log( 'root' );
+                    newLink = '<a href="https://github.com/impress/impress.js">';
+                } else if ( link.slice( 0, 3 ) === '../' || link.slice( 0, 4 ) === '/../' ) {
+                    if ( link.slice( 4, 6 ) === '../' ) {
+                        newLink = '<a href="https://github.com/impress/impress.js/tree/master/' + link.slice( 7, parseInt( link.length ) ) + '">';
+                    } else if ( link.slice( 5, 7 ) === '../' ) {
+                        newLink = '<a href="https://github.com/impress/impress.js/tree/master/' + link.slice( 8, parseInt( link.length ) ) + '">';
+                    } else if ( link.slice( 0, 3 ) === '../' ) {
+                        newLink = '<a href="https://github.com/impress/impress.js/tree/master/' + link.slice( 4, parseInt( link.length ) ) + '">';
+                    } else {
+                        newLink = '<a href="https://github.com/impress/impress.js/tree/master/' + link.slice( 5, parseInt( link.length ) ) + '">';
+                    }
+                } else if ( link.slice( 0, 8 ) === 'https://' || link.slice( 0, 7 ) === 'http://' ) {
+                    newLink = '<a href="' + link + '">';
+                } else if ( link.slice( 0, 2 ) === './' || link.slice( 0, 1 ) !== '/' || link.slice( 0, 1 ) !== '.' ) {
+                    if ( link.slice( parseInt( link.length ) - 9, parseInt( link.length ) ) === 'README.md' ) {
+                        newLink = '<a href="/docs/plugins/' + link.slice( 0, parseInt( link.length ) - 10 ) + '">';
+                    } else {
+                        newLink = '<a href="https://github.com/impress/impress.js/tree/master/src/plugins/' + link + '">';
+                    };
+                } else {
+                    throw 'INVALID LINK FOUND IN PLUGINS README! Please fix and rerun the script';
+                }
+                pluginsHome = pluginsHome.slice( 0, parseInt( letter ) ) + newLink + pluginsHome.slice( parseInt( letter) + i + 2, parseInt( pluginsHome.length ) );
+            };
+        };
+    };
+
+    storeHTML( pluginsHome, 'index', 'plugins' );
+
+    /* 
+        Generate the rest of the plugins documentation from their READMEs and warn if no README was found
+    */
+    for ( let item in plugins ) {
+        fs.readFile( path.join( pluginsPath + '/' + plugins[item] + '/README.md' ), ( error, data ) => {
+            if ( error ) {
+                console.log( 'NO README found for ' + path.join( pluginsPath + '/' + plugins[item] ) + ' PLEASE MAKE SURE YOU HAVE CREATED A README!' );
+            } else {
+                let html = md2html.render( '' + data );
+                storeHTML( findLinks( html, path.join( pluginsPath + '/' + plugins[item] ) ), plugins[item], 'plugins' );
+            };
+        } );
+    };
     for ( let obj in docPages ) {
         if ( docPages[obj] == 'index.html' ) {
             delete docPages[obj];
@@ -194,6 +243,7 @@ function generateNav () {
     fileStruct += `</div>
                     <a class="navitem" id="pluginsNav" onclick="toggleList( 'plugins' );">Plugins</a>
                     <div class="dropdown" id="plugins">
+                        <a class="nav-subitem" id="plugins-home" href="/docs/plugins">Home</a>
                     `;
     for ( let item in plugins ) {
         fileStruct += `<a class="nav-subitem" id="${ plugins[ item ] }" href="/docs/plugins/${ plugins[ item ] }.html">${ plugins[ item ] }</a>`;
