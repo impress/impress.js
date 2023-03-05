@@ -68,7 +68,7 @@
             }
 
             if ( "Space PageUp PageDown ArrowLeft ArrowRight ArrowUp ArrowDown"
-		 .split(" ").includes(event.code) ) {
+		 .split( " " ).includes( event.code ) ) {
                 return true;
             }
         };
