@@ -8,7 +8,7 @@
  * Example:
  *
  *       <!-- data-bookmark-key-list allows an "inbound"-oriented style of non-linear navigation. -->
- *       <div class="step" data-bookmark-key-list="Digit1 KeyA 1 2 3 a b c">
+ *       <div id="..." class="step" data-bookmark-key-list="Digit1 KeyA 1 2 3 a b c">
  *
  * See https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values for a table
  * of what strings to use for each key. Both .key and .code styles are recognized.
@@ -31,7 +31,7 @@
     // In pre-init phase, build a map of bookmark hotkey to div id, by reviewing all steps
     impress.addPreInitPlugin( function( root, api ) {
 	root.querySelectorAll( ".step" ).forEach(function(div) {
-            if ( div.dataset.bookmarkKeyList !== undefined) {
+            if ( div.dataset.bookmarkKeyList !== undefined && div.id != undefined) {
 		div.dataset.bookmarkKeyList.split( " " ).forEach( (k) => {
 		    if (hotkeys.hasOwnProperty(k)) hotkeys[k].push( div.id ); // if hotkeys collide, we'll cycle through the targets
 		    else hotkeys[k] = [div.id]; } ); } });

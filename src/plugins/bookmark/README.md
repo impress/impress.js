@@ -10,8 +10,10 @@ Example:
 
 ```html
 <!-- data-bookmark-key-list allows an "inbound"-oriented style of non-linear navigation. -->
-<div class="step" data-bookmark-key-list="Digit1 KeyA 1 2 3 a b c">
+<div id="..." class="step" data-bookmark-key-list="Digit1 KeyA 1 2 3 a b c">
 ```
+
+An `id` is required on the `div`.
 
 If you assign the same key to multiple steps, that hotkey will cycle among them.
 
