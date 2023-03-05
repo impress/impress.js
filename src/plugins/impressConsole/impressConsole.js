@@ -322,7 +322,7 @@
             // Prevent default keydown action when one of supported key is pressed
             window.document.addEventListener( 'keydown', function( event ) {
                 if ( !event.ctrlKey && !event.altKey && !event.shiftKey && !event.metaKey &&
-                     keys.includes( event.key ) ) {
+                     keys.includes( event.code ) ) {
                     event.preventDefault();
                 }
             }, false );
@@ -330,7 +330,7 @@
             // Trigger impress action on keyup
             window.document.addEventListener( 'keyup', function( event ) {
                 if ( !event.ctrlKey && !event.altKey && !event.shiftKey && !event.metaKey &&
-                     keys.includes( event.key) ) {
+                     keys.includes( event.code) ) {
                         handler();
                         event.preventDefault();
                 }

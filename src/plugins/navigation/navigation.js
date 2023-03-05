@@ -58,7 +58,7 @@
 
             // In the case of TAB, we force step navigation always, overriding the browser
             // navigation between input elements, buttons and links.
-            if ( event.key === "Tab" ) {
+            if ( event.code === "Tab" ) {
                 return true;
             }
 
@@ -68,7 +68,7 @@
             }
 
             if ( "Space PageUp PageDown ArrowLeft ArrowRight ArrowUp ArrowDown"
-		 .split(" ").includes(event.key) ) {
+		 .split(" ").includes(event.code) ) {
                 return true;
             }
         };
@@ -86,13 +86,13 @@
         gc.addEventListener( document, "keyup", function( event ) {
             if ( isNavigationEvent( event ) ) {
                 if ( event.shiftKey ) {
-                    switch ( event.key ) {
+                    switch ( event.code ) {
                         case "Tab": // Shift+tab
                             api.prev();
                             break;
                     }
                 } else {
-                    switch ( event.key ) {
+                    switch ( event.code ) {
                     case "PageUp":
                     case "ArrowLeft":
                     case "ArrowUp": api.prev( event ); break;
