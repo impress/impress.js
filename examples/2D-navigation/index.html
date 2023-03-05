@@ -28,21 +28,42 @@
 
         <ul>
         <li>Impress.js allows you to layout your presentation in a 3D space</li>
-        <li>Now <a href="https://github.com/impress/impress.js/tree/master/src/plugins/goto">the
-           goto plugin</a> also allows you to specify
+        <li><a href="https://github.com/impress/impress.js/tree/master/src/plugins/goto">The
+           goto plugin</a> allows you to specify
            non-linear navigation!</li>
         <li>This demo can be navigated by
             <ul>
+            <li>continuously pressing Space</li>
             <li>continuously pressing Right Arrow</li>
             <li>continuously pressing Down Arrow</li>
             <li>(or freely, pressing Up, Down, Right, Left as you choose)</li>
+            </ul>
+        <li>It's up to you to decide which is the better structure</li>
+        </li>
+    </div>
+
+    <div id="bm0" class="step" data-scale="1" data-rel-x="1500" data-rel-y="0"
+	 data-bookmark-key-list="0">
+        <h1>Using bookmark hotkeys</h1>
+        <ul>
+        <li><a href="https://github.com/impress/impress.js/tree/master/src/plugins/bookmark">The
+           bookmark plugin</a> also allows you to specify
+           non-linear navigation, in a different way.</li>
+        <li>This demo can <em>also</em> be navigated by
+            <ul>
+            <li>pressing 1 2 3 4 5 6 7 8 9 to fast travel directly</li>
+            <li>pressing J J J, K K K, L L L to cycle vertically</li>
+            <li>pressing U U U, I I I, O O O to cycle horizontally</li>
+            <li>pressing Z or [ to zoom out to the full view</li>
+            <li>pressing 0 to come back to this text</li>
             </ul>
         </li>
         <li>It's up to you to decide which is the better structure</li>
         </ul>
     </div>
 
-    <div id="contents" class="step" data-rel-x="1500" data-rel-y="1500" data-scale="1">
+    <div id="contents" class="step" data-rel-x="0" data-rel-y="1500" data-scale="1"
+	 data-bookmark-key-list="w" >
         <h1>Choosing a treat</h1>
 
         <ul>
@@ -60,7 +81,8 @@
     <!-- Ice cream slides (3) -->
     <div id="icecream" class="step" data-x="2000" data-y="2000"
          data-goto-key-list="ArrowUp ArrowDown ArrowLeft ArrowRight"
-         data-goto-next-list="contents icecream-pro contents crisps">
+         data-goto-next-list="contents icecream-pro contents crisps"
+	 data-bookmark-key-list="7 u j" >
         <h1>Ice cream</h1>
 
         <ul>
@@ -73,7 +95,8 @@
 
     <div id="icecream-pro" class="step" data-rel-x="0" data-rel-y="1000"
          data-goto-key-list="ArrowUp ArrowDown ArrowLeft ArrowRight"
-         data-goto-next-list="icecream icecream-con applepie crisps-pro">
+         data-goto-next-list="icecream icecream-con applepie crisps-pro"
+	 data-bookmark-key-list="4 i j" >
         <h1>Ice cream: Pro's</h1>
 
         <ul>
@@ -85,7 +108,8 @@
 
     <div id="icecream-con" class="step" data-rel-x="0" data-rel-y="1000"
          data-goto-key-list="ArrowUp ArrowDown ArrowLeft ArrowRight"
-         data-goto-next-list="icecream-pro crisps applepie-pro crisps-con">
+         data-goto-next-list="icecream-pro crisps applepie-pro crisps-con"
+	 data-bookmark-key-list="1 o j" >
         <h1>Ice cream: Con's</h1>
 
         <ul>
@@ -99,7 +123,8 @@
     <!-- Crisps slides (3) -->
     <div id="crisps" class="step" data-x="3500" data-y="2000"
          data-goto-key-list="ArrowUp ArrowDown ArrowLeft ArrowRight"
-         data-goto-next-list="icecream-con crisps-pro icecream applepie">
+         data-goto-next-list="icecream-con crisps-pro icecream applepie"
+	 data-bookmark-key-list="8 u k" >
         <h1>Crisps</h1>
 
         <ul>
@@ -112,7 +137,8 @@
 
     <div id="crisps-pro" class="step" data-rel-x="0" data-rel-y="1000"
          data-goto-key-list="ArrowUp ArrowDown ArrowLeft ArrowRight"
-         data-goto-next-list="crisps crisps-con icecream-pro applepie-pro">
+         data-goto-next-list="crisps crisps-con icecream-pro applepie-pro"
+	 data-bookmark-key-list="5 i k" >
         <h1>Crisps: Pro's</h1>
 
         <ul>
@@ -127,7 +153,8 @@
 
     <div id="crisps-con" class="step" data-rel-x="0" data-rel-y="1000"
          data-goto-key-list="ArrowUp ArrowDown ArrowLeft ArrowRight"
-         data-goto-next-list="crisps-pro applepie icecream-con applepie-con">
+         data-goto-next-list="crisps-pro applepie icecream-con applepie-con"
+	 data-bookmark-key-list="2 o k" >
         <h1>Crisps: Con's</h1>
 
         <ul>
@@ -140,7 +167,8 @@
     <!-- Apple pie slides (3) -->
     <div id="applepie" class="step" data-x="5000" data-y="2000"
          data-goto-key-list="ArrowUp ArrowDown ArrowLeft ArrowRight"
-         data-goto-next-list="crisps-con applepie-pro crisps icecream-pro">
+         data-goto-next-list="crisps-con applepie-pro crisps icecream-pro"
+	 data-bookmark-key-list="9 u l" >
         <h1>Apple pie</h1>
 
         <ul>
@@ -152,7 +180,8 @@
 
     <div id="applepie-pro" class="step" data-rel-x="0" data-rel-y="1000"
          data-goto-key-list="ArrowUp ArrowDown ArrowLeft ArrowRight"
-         data-goto-next-list="applepie applepie-con crisps-pro icecream-con">
+         data-goto-next-list="applepie applepie-con crisps-pro icecream-con"
+	 data-bookmark-key-list="6 i l" >
         <h1>Apple pie: Pro's</h1>
 
         <ul>
@@ -165,7 +194,8 @@
 
     <div id="applepie-con" class="step" data-rel-x="0" data-rel-y="1000"
          data-goto-key-list="ArrowUp ArrowDown ArrowLeft ArrowRight"
-         data-goto-next-list="applepie-pro conclusion crisps-con conclusion">
+         data-goto-next-list="applepie-pro conclusion crisps-con conclusion"
+	 data-bookmark-key-list="3 o l" >
         <h1>Apple pie: Con's</h1>
 
         <ul>
@@ -175,7 +205,8 @@
     </div>
 
 
-    <div id="conclusion" class="step" data-rel-x="1000" data-rel-y="1000">
+    <div id="conclusion" class="step" data-rel-x="1000" data-rel-y="1000"
+	 data-bookmark-key-list="q" >
         <h1>Conclusion</h1>
 
         <p>Can I choose all three ;-)</p>
@@ -186,7 +217,8 @@
                         <a href="https://www.flickr.com/photos/stevepj2009/6296334551">stevepj2009@Flickr</a> </p>
     </div>
 
-    <div id="overview" class="step" data-x="3000" data-y="2000" data-scale="9" style="pointer-events: none;">
+    <div id="overview" class="step" data-x="3000" data-y="2000" data-scale="9" style="pointer-events: none;"
+	 data-bookmark-key-list="z [" >
     </div>
 </div>
 
