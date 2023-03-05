@@ -58,7 +58,8 @@
 
     document.addEventListener( "keyup", function( event ) {
 
-        if ( event.keyCode === 72 || event.keyCode === 191 ) { // "h" || "?"
+	// "h" || "?" -- but this seems brittle, what about keyboards that don't have / ? together?
+        if ( [ "KeyH", "Slash" ].includes(event.key) ) {
             event.preventDefault();
             toggleHelp();
         }

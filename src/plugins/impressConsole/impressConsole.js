@@ -314,7 +314,7 @@
             }
         };
 
-        var registerKeyEvent = function( keyCodes, handler, window ) {
+        var registerKeyEvent = function( keys, handler, window ) {
             if ( window === undefined ) {
                 window = consoleWindow;
             }
@@ -322,7 +322,7 @@
             // Prevent default keydown action when one of supported key is pressed
             window.document.addEventListener( 'keydown', function( event ) {
                 if ( !event.ctrlKey && !event.altKey && !event.shiftKey && !event.metaKey &&
-                     keyCodes.indexOf( event.keyCode ) !== -1 ) {
+                     keys.includes( event.key ) ) {
                     event.preventDefault();
                 }
             }, false );
@@ -330,7 +330,7 @@
             // Trigger impress action on keyup
             window.document.addEventListener( 'keyup', function( event ) {
                 if ( !event.ctrlKey && !event.altKey && !event.shiftKey && !event.metaKey &&
-                     keyCodes.indexOf( event.keyCode ) !== -1 ) {
+                     keys.includes( event.key) ) {
                         handler();
                         event.preventDefault();
                 }
@@ -451,16 +451,16 @@
 
                 // Keyboard navigation handlers
                 // 33: pg up, 37: left, 38: up
-                registerKeyEvent( [ 33, 37, 38 ], window.impress().prev );
+                registerKeyEvent( [ "PageUp", "ArrowLeft", "ArrowUp" ], window.impress().prev );
 
                 // 34: pg down, 39: right, 40: down
-                registerKeyEvent( [ 34, 39, 40 ], window.impress().next );
+                registerKeyEvent( [ "PageDown", "ArrowRight", "ArrowDown" ], window.impress().next );
 
                 // 32: space
-                registerKeyEvent( [ 32 ], spaceHandler );
+                registerKeyEvent( [ "Space" ], spaceHandler );
 
                 // 82: R
-                registerKeyEvent( [ 82 ], timerReset );
+                registerKeyEvent( [ "KeyR" ], timerReset );
 
                 // Cleanup
                 consoleWindow.onbeforeunload = function() {
@@ -565,7 +565,7 @@
             };
 
             //Open speaker console when they press 'p'
-            registerKeyEvent( [ 80 ], open, window );
+            registerKeyEvent( [ "KeyP" ], open, window );
 
             //Btw, you can also launch console automatically:
             //<div id="impress" data-console-autolaunch="true">
@@ -592,12 +592,12 @@
         /**
          * Register a key code to an event handler
          *
-         * :param: event.detail.keyCodes    List of key codes
+         * :param: event.detail.keys        List of keys
          * :param: event.detail.handler     A function registered as the event handler
          * :param: event.detail.window      The console window to register the keycode in
          */
         root.addEventListener( 'impress:console:registerKeyEvent', function( event ) {
-            registerKeyEvent( event.detail.keyCodes, event.detail.handler, event.detail.window );
+            registerKeyEvent( event.detail.keys, event.detail.handler, event.detail.window );
         } );
 
         // Return the object

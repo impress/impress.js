@@ -92,7 +92,7 @@
         gc.addEventListener( document, "keydown", function( event ) {
 
             // Accept b or . -> . is sent by presentation remote controllers
-            if ( event.keyCode === 66 || event.keyCode === 190 ) {
+            if ( [ "KeyB", "Period" ].includes(event.key) {
                 event.preventDefault();
                 if ( !blackedOut ) {
                     blackout();
@@ -105,7 +105,7 @@
         gc.addEventListener( document, "keyup", function( event ) {
 
             // Accept b or . -> . is sent by presentation remote controllers
-            if ( event.keyCode === 66 || event.keyCode === 190 ) {
+            if ( [ "KeyB", "Period" ].includes(event.key) {
                 event.preventDefault();
             }
         }, false );
