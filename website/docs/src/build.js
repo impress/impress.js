@@ -99,7 +99,7 @@ if ( prompt( 'Do you want to regenerate the plugins documentation? (y/n) ' ).toL
                 ( async () => {
                     let html = md2html.render( '' + data );
                     storeHTML( await findLinks( html, path.join( pluginsPath + '/' + plugins[item] ) ), plugins[item], 'plugins' );
-                } );
+                } ) ();
             };
         } );
     };
@@ -120,14 +120,14 @@ buildExamplesPage();
 */
 async function findLinks ( html, path ) {
     let returnHTML = html;
-    for ( let letter in html ) {
-        if ( html[letter] === '<' ) {
-            if ( html.slice( parseInt( letter ), parseInt( letter ) + 9 ) === '<a href="' ) {
+    for ( let letter in returnHTML ) {
+        if ( returnHTML[letter] === '<' ) {
+            if ( returnHTML.slice( parseInt( letter ), parseInt( letter ) + 9 ) === '<a href="' ) {
                 let i = 9;
-                while ( html.slice( parseInt( letter ) + i, parseInt( letter ) + i + 1 ) !== '"' ) {
+                while ( returnHTML.slice( parseInt( letter ) + i, parseInt( letter ) + i + 1 ) !== '"' ) {
                     i += 1;
                 };
-                returnHTML = html.slice( 0, parseInt( letter ) ) + await checkLinks( html.slice( parseInt( letter ) + 9, parseInt( letter ) + i  ), path ) + html.slice( parseInt( letter ) + i + 2, parseInt( html.length ) );
+                returnHTML = returnHTML.slice( 0, parseInt( letter ) ) + await checkLinks( returnHTML.slice( parseInt( letter ) + 9, parseInt( letter ) + i  ), path ) + returnHTML.slice( parseInt( letter ) + i + 2, parseInt( returnHTML.length ) );
             };
         };
     };
@@ -164,7 +164,7 @@ async function checkLinks ( link, fpath ) {
         };
         let fpSlice = filepath.slice( parseInt( filepath.length ) - fsPos + 1, parseInt( filepath.length ) );
         let linkSlice = link.slice( pos, link.length );
-        
+
         // now let's assemble a link and add it back into the html
         if ( link.slice( link.length - 3, link.length ).includes( '.' ) ) {
             return '<a href="https://github.com/impress/impress.js/blob/master/' + fpSlice + linkSlice + '">';
@@ -186,7 +186,13 @@ async function checkLinks ( link, fpath ) {
         return '<a href="' + link + '">';
     } else if ( link.slice( 0, 1 ) === '/' && link.slice( 1, 2 ) !== '.' ) {
         if ( link.slice( link.length - 3, link.length ).includes( '.' ) ) {
-            return '<a href="https://github.com/impress/impress.js/blob/master' + link + '">';
+            if ( link === '/GettingStarted.md' ) {
+                return '<a href="/docs/gettingStarted.html">';
+            } else if ( link === '/DOCUMENTATION.md' ) {
+                return '<a href="/docs/reference">';
+            } else {
+                return '<a href="https://github.com/impress/impress.js/blob/master' + link + '">';
+            }
         } else {
             return '<a href="https://github.com/impress/impress.js/tree/master' + link + '">';
         };
