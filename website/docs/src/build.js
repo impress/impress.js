@@ -96,8 +96,10 @@ if ( prompt( 'Do you want to regenerate the plugins documentation? (y/n) ' ).toL
             if ( error ) {
                 console.log( 'NO README found for ' + path.join( pluginsPath + '/' + plugins[item] ) + ' PLEASE MAKE SURE YOU HAVE CREATED A README!' );
             } else {
-                let html = md2html.render( '' + data );
-                storeHTML( findLinks( html, path.join( pluginsPath + '/' + plugins[item] ) ), plugins[item], 'plugins' );
+                ( async () => {
+                    let html = md2html.render( '' + data );
+                    storeHTML( await findLinks( html, path.join( pluginsPath + '/' + plugins[item] ) ), plugins[item], 'plugins' );
+                } );
             };
         } );
     };
@@ -116,7 +118,7 @@ buildExamplesPage();
 /*
     This function finds links. The reason for this is possible incompatibilities with links on the website
 */
-function findLinks ( html, path ) {
+async function findLinks ( html, path ) {
     let returnHTML = html;
     for ( let letter in html ) {
         if ( html[letter] === '<' ) {
@@ -125,7 +127,7 @@ function findLinks ( html, path ) {
                 while ( html.slice( parseInt( letter ) + i, parseInt( letter ) + i + 1 ) !== '"' ) {
                     i += 1;
                 };
-                returnHTML = html.slice( 0, parseInt( letter ) ) + checkLinks( html.slice( parseInt( letter ) + 9, parseInt( letter ) + i  ), path ) + html.slice( parseInt( letter ) + i + 2, parseInt( html.length ) );
+                returnHTML = html.slice( 0, parseInt( letter ) ) + await checkLinks( html.slice( parseInt( letter ) + 9, parseInt( letter ) + i  ), path ) + html.slice( parseInt( letter ) + i + 2, parseInt( html.length ) );
             };
         };
     };
@@ -136,7 +138,7 @@ function findLinks ( html, path ) {
     This function takes care of checking links. This is necessary, as documentation may contain links that will
     not work on the website, as it has relative paths.
 */
-function checkLinks ( link, fpath ) {
+async function checkLinks ( link, fpath ) {
     let filepath = fpath;
     let pos = 0;
     if ( link.slice( parseInt( link.length ) - 9, parseInt( link.length ) ) === 'README.md' ) {
@@ -160,22 +162,34 @@ function checkLinks ( link, fpath ) {
         while ( filepath.slice( parseInt( filepath.length ) - fsPos - 10, parseInt( filepath.length ) - fsPos ) !== 'impress.js' ) {
             fsPos += 1;
         };
-        let fpSlice = filepath.slice( parseInt( filepath.length ) - fsPos, parseInt( filepath.length ) );
+        let fpSlice = filepath.slice( parseInt( filepath.length ) - fsPos + 1, parseInt( filepath.length ) );
         let linkSlice = link.slice( pos, link.length );
         
         // now let's assemble a link and add it back into the html
-        return '<a href="https://github.com/impress/impress.js' + fpSlice + linkSlice + '">';
+        if ( link.slice( link.length - 3, link.length ).includes( '.' ) ) {
+            return '<a href="https://github.com/impress/impress.js/blob/master/' + fpSlice + linkSlice + '">';
+        } else {
+            return '<a href="https://github.com/impress/impress.js/tree/master/' + fpSlice + linkSlice + '">';
+        };
     } else if ( link.slice( 0, 1 ) !== '.' && link.slice( 0, 1 ) !== '/' ) {
         let fsPos = 0;
         while ( filepath.slice( parseInt( filepath.length ) - fsPos - 10, parseInt( filepath.length ) - fsPos ) !== 'impress.js' ) {
             fsPos += 1;
         };
-        let fpSlice = filepath.slice( parseInt( filepath.length ) - fsPos, parseInt( filepath.length ) );
-        return '<a href="https://github.com/impress/impress.js' + link + '">';
+        let fpSlice = filepath.slice( parseInt( filepath.length ) - fsPos + 1, parseInt( filepath.length ) ) + '/';
+        if ( link.slice( link.length - 3, link.length ).includes( '.' ) ) {
+            return '<a href="https://github.com/impress/impress.js/blob/master/' + fpSlice + link + '">';
+        } else {
+            return '<a href="https://github.com/impress/impress.js/tree/master/' + fpSlice + link + '">';
+        };
     } else if ( link.slice( 0, 7 ) === 'http://' || link.slice( 0, 8 ) === 'https://' ) {
         return '<a href="' + link + '">';
-    } else if ( link.slice( 0, 1 ) === '/' ) {
-        return '<a href="https://github.com/impress/impress.js' + link + '">';
+    } else if ( link.slice( 0, 1 ) === '/' && link.slice( 1, 2 ) !== '.' ) {
+        if ( link.slice( link.length - 3, link.length ).includes( '.' ) ) {
+            return '<a href="https://github.com/impress/impress.js/blob/master' + link + '">';
+        } else {
+            return '<a href="https://github.com/impress/impress.js/tree/master' + link + '">';
+        };
     } else {
         throw Error( 'Invalid link found! Link is: "' + link + '" in file: ' + filepath + '/README.md' );
     };

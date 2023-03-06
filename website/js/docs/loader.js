@@ -19,7 +19,7 @@ function setTheme () {
         $( '.nav-subitem' ).css( 'background-color', 'rgb(18, 18, 99)' );
         $( '.navitem' ).css( 'background-color', 'rgb(12, 12, 60)' );
         $( '.nav-container' ).css( 'background-color', 'rgb(0, 0, 100)' );
-        $( '.docs-link' ).css( 'color', 'white' );
+        $( '#doc-container a' ).css( 'color', 'white' );
         $( '#darkToggle' ).css( 'color', 'white' );
     }
 }
@@ -46,7 +46,7 @@ function toggleDarkMode () {
     if ( theme == 'light' ) {
         $( '.content' ).animate( { 'background-color': 'rgb(46, 46, 46)' } );
         $( '.content' ).animate( { 'color': 'white' } );
-        $( '.docs-link' ).animate( { 'color': 'white' } );
+        $( '#doc-container a' ).animate( { 'color': 'white' } );
         $( '.top-container' ).animate( { 'background-color': 'rgb(100, 100, 100)' } );
         $( '.nav-subitem' ).animate( { 'background-color': 'rgb(18, 18, 99)' } );
         $( '.navitem' ).animate( { 'background-color': 'rgb(12, 12, 60)' } );
@@ -57,7 +57,7 @@ function toggleDarkMode () {
     } else {
         $( '.content' ).animate( { 'background-color': 'white' } );
         $( '.content' ).animate( { 'color': 'black' } );
-        $( '.docs-link' ).animate( { 'color': 'blue' } );
+        $( '#doc-container a' ).animate( { 'color': 'blue' } );
         $( '.nav-subitem' ).animate( { 'background-color': 'rgb(27, 27, 165)' } );
         $( '.navitem' ).animate( { 'background-color': 'rgb(22, 22, 117)' } );
         $( '.nav-container' ).animate( { 'background-color': 'blue' } );

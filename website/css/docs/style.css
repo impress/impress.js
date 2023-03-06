@@ -32,7 +32,7 @@ html, body {
         'menu footer footer footer footer';
 }
 
-.docs-link {
+#doc-container a {
     color: blue;
 }
 
@@ -73,3 +73,6 @@ html, body {
     grid-area: header;
 }
 
+code {
+    font-size: 85%;
+}
