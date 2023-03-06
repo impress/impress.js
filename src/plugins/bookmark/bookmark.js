@@ -41,7 +41,7 @@
 		    } else { hotkeys[ k ] = [ div.id ]; } } ); } } );
 
 	api.lib.gc.addEventListener( document, "keyup", function( event ) {
-	    if ( hotkeyDest( event ) !== undefined ) {
+	    if ( hotkeyDest( event ) !== null ) {
 		event.stopImmediatePropagation();
 		api.next( event );
 
