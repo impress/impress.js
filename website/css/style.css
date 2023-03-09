@@ -118,6 +118,10 @@ body {
     text-align: center;
 }
 
+.unstyled-html, .create {
+    width: 100%;
+}
+
 /* This div will have crazy cool style, as this should represent that you can use (almost) all the CSS you want.*/
 .create .special-style {
     background-color: aqua;
@@ -191,8 +195,13 @@ body {
     .sidebyside-element {
         width: 40%;
     }
+
 }
 
 code {
     text-align: justify;
+}
+
+code, pre {
+    max-width: 80vw;
 }
