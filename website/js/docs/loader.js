@@ -26,7 +26,7 @@ function setTheme () {
 
 // retreive preferred theme from browser preferences if not in session storage
 function getPreferredTheme () {
-    if ( window.matchMedia( '(prefers-colorscheme: dark)' ).matches ) {
+    if ( window.matchMedia( '(prefers-color-scheme: dark)' ).matches ) {
         setPreferredTheme( 'dark' );
         return 'dark';
     } else {
