@@ -12,9 +12,9 @@ First of all, you need to know, if you are going to have WiFi connection when yo
 Loading the script from the cdn is quite straight forward. If you copy the below example code, you need to do nothing else, impress will be loaded automatically.
 
 **Direct links to different versions of the impress.js file**
-- V2.0.0: https://cdn.jsdelivr.net/gh/impress/impress.js@2.0.0/js/impress.js
-- V1.1.0: https://cdn.jsdelivr.net/gh/impress/impress.js@1.1.0/js/impress.js
-- Source: https://cdn.jsdelivr.net/gh/impress/impress.js/js/impress.js
+- [V2.0.0](https://cdn.jsdelivr.net/gh/impress/impress.js@2.0.0/js/impress.js)
+- [V1.1.0](https://cdn.jsdelivr.net/gh/impress/impress.js@1.1.0/js/impress.js)
+- [Source](https://cdn.jsdelivr.net/gh/impress/impress.js/js/impress.js)
 
 ### Download the file to your PC
 Head to the releases tab and download the source code as zip or as a tarball. Go ahead and unzip / untar it. You need to copy the folder */js/* into the folder you are working in. Optionally, if you want to make your life a bit easier, you can copy also copy the folder */css/* in there.
