@@ -50,7 +50,7 @@ Now, create a new file called *index.html* and create the basic HTML structure:
 </html>
 ```
 
-Now, head into a file-manager, navigate to the file you just created (*index.html*) and open it. You should end up in a browser where you should see "My first Slide" displayed. As this is not really exciting, we are not gonna change anything about that and are gonna look at what you just typed. What do these lines mean?
+Now, head into a file-manager, navigate to the file you just created (*index.html*) and open it. You should end up in a browser where you should see "My first Slide" plus (in case you omitted the *impress-common.css* file) the fallback message displayed. As this is not really exciting, we are not gonna change anything about that and are gonna look at what you just typed. What do these lines mean?
 
 Well, first things first, you should probably give your presentation a title. You may do this in normal HTML fashion by changing the *title* HTML tag.
 
@@ -62,7 +62,23 @@ Finally, we load the ```impress.js``` script from your local copy (if you have o
 ```
 impress().init()
 ```
-to initialize impress.js. Now, let's continue on to explore more and more features of this amazing tool!
+to initialize impress.js. 
+
+If you have omitted the *impress-common.css* file, you might want to hide the fallback message. This can be done by creating a CSS file called *style.css* in the same folder you've created the *index.html* file in. In the *index.html* add the following line inside of the *<head>* tag: 
+```
+<link rel="stylesheet" href="style.css">
+```
+This will load the *style.css* file in the HTML.
+
+Now open up the *style.css* file using any text editor. To hide the fallback message, you should add the following lines to the CSS file:
+
+```
+.impress-supported .fallback-message {
+    display: none;
+}
+```
+
+Now, let's continue on to explore more and more features of this amazing tool!
 
 ## Creating slides
 Creating slides is fairly easy. You create a *div* that belongs to the class ```step``` and you are off to the races! Let me give you an example:

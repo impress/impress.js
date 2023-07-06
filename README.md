@@ -22,9 +22,6 @@ You can include this link directly inside of your HTML file in its header. If yo
 - V1.1.0: https://cdn.jsdelivr.net/gh/impress/impress.js@1.1.0/js/impress.js
 - Source: https://cdn.jsdelivr.net/gh/impress/impress.js/js/impress.js
 
-### Getting Started Guide
-Check out our new [Getting Started](GettingStarted.md) guide if you want a quick introduction to the project!
-
 ### Checking out and initializing the git repository
 
     git clone --recursive https://github.com/impress/impress.js.git
