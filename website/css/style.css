@@ -85,7 +85,7 @@ body {
 /* Buttons */
 .button {
     display: inline-block;
-    background-color: rgba(0, 128, 0, 1);
+    background-color: rgb(0, 128, 0);
     text-decoration: none;
     color: white;
     font-size: 1.2rem;
@@ -95,6 +95,12 @@ body {
     padding-top: 15px;
     padding-bottom: 15px;
     border-radius: 50px;
+    transition: all 0.5s;
+}
+
+.button:hover {
+    background-color: rgb(2, 88, 2);
+    border-radius: 5px;
 }
 
 

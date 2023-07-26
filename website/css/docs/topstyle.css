@@ -1,10 +1,11 @@
 .top-container {
-    background-color: rgb(223, 223, 223);
+    background-color: var( --top-background );
     height: 100%;
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: flex-end;
+    transition: all 0.5s;
 }
 
 .top-wrapper {
@@ -19,4 +20,5 @@
     border-style: none;
     font-size: 1.5rem;
     cursor: pointer;
+    color: var( --primary-color );
 }

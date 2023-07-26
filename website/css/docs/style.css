@@ -15,9 +15,45 @@ html, body {
     font-family: sans-serif;
 }
 
+:root, :root.light {
+    --primary-color: black;
+    --accent-background: rgb(25, 25, 148);
+    --accent-color: white;
+    --background-color: white;
+    --accent-background-hover: rgb(124, 140, 236);
+    --top-background: rgb(211, 211, 211);
+    --nav-buttons: rgb(1, 1, 109);
+    --dropdown-color: rgb(0, 0, 156);
+}
+
+:root.dark {
+    --primary-color: white;
+    --accent-background: rgb(0, 0, 88);
+    --accent-color: white;
+    --background-color: rgb(32, 32, 32);
+    --accent-background-hover: #4380a8;
+    --top-background: rgb(77, 77, 77);
+    --nav-buttons: rgb(0, 0, 36);
+    --dropdown-color: rgb(0, 0, 116);
+}
+
+@media ( prefers-color-scheme: dark ) {
+    :root {
+        --primary-color: white;
+        --accent-background: rgb(56, 56, 112);
+        --accent-color: white;
+        --background-color: rgb(46, 46, 46);
+        --accent-background-hover: #4380a8;
+        --top-background: rgb(77, 77, 77);
+        --nav-buttons: rgb(0, 0, 41);
+        --dropdown-color: rgb(0, 0, 116);
+    }
+}
+
 .content {
-    background-color: rgb(255, 255, 255);
-    color: black;
+    transition: all 0.5s;
+    background-color: var( --background-color );
+    color: var( --primary-color );
     display: grid;
     grid-template-areas:
         'menu header header header header'
@@ -33,7 +69,7 @@ html, body {
 }
 
 #doc-container a {
-    color: blue;
+    color: var( --primary-color );
 }
 
 .logo {

@@ -27,19 +27,19 @@ const pluginsPath = path.join( __dirname + '/../../../src/plugins' );
 let plugins = fs.readdirSync( pluginsPath );
 delete plugins[0];
 
-if ( prompt( 'Do you want to regenerate the API reference? (y/n) ' ).toLowerCase() == 'y' ) {
+if ( prompt( 'Do you want to regenerate the API reference? (y/N) ' ).toLowerCase() == 'y' ) {
     console.log( 'Regenerating API reference' );
     parseDocumentationMD();
 }
 
-if ( prompt( 'Do you want to regenerate the getting started guide? (y/n) ' ).toLowerCase() == 'y' ) {
+if ( prompt( 'Do you want to regenerate the getting started guide? (y/N) ' ).toLowerCase() == 'y' ) {
     console.log( 'Regenerating Getting Started Guide' );
     storeHTML( generateGettingStarted( md2html.render( '' + fs.readFileSync( path.join( __dirname + '/../../../GettingStarted.md' ) ) ) ), 'gettingStarted', '' );
 }
 
 let docPages = fs.readdirSync( __dirname + '/../../../website/docs/reference' );
 
-if ( prompt( 'Do you want to regenerate the plugins documentation? (y/n) ' ).toLowerCase() == 'y' ) {
+if ( prompt( 'Do you want to regenerate the plugins documentation? (y/N) ' ).toLowerCase() == 'y' ) {
     console.log( 'regenerating plugins documentation' );
     let pluginsHome = md2html.render( fs.readFileSync( path.join( pluginsPath + '/README.md' ) ).toString() );
     
@@ -254,7 +254,7 @@ function generateNav () {
                     <a class="navitem" id="gettingStarted" href="/docs/gettingStarted.html">Getting Started</a>
                     <a class="navitem" id="referenceNav" onclick="toggleList( 'reference' );">API reference</a>
                     <div class="dropdown" id="reference">
-                        <a class="nav-subitem" id="root" href="/docs/reference">Home</a>`
+                        <a class="nav-subitem" id="reference-home" href="/docs/reference">Home</a>`
     for ( let item in docPages ) {
         if ( docPages[ item ] === 'index' ) {} else {
             fileStruct += `<a class="nav-subitem" id="${ docPages[ item ].slice( 0, docPages[ item ].length - 5 ) }" href="/docs/reference/${ docPages[ item ] }">${ docPages[ item ].slice( 0, docPages[ item ].length - 5 ) }</a>`;
@@ -478,7 +478,7 @@ function buildExamplesPage () {
         <div id="navbar"></div>
         <div class="title">
             <div class="title-content">
-                <h1 class="heading">Examples</h1>
+                <h1 class="heading">Exam&shy;ples</h1>
             </div>
                 ${ html_list }
                 </ul>

@@ -1,5 +1,5 @@
 .nav-container {
-    background-color: blue;
+    background-color: var( --accent-background );
     width: 100%;
     height: 100vh;
 }
@@ -14,7 +14,7 @@
     display: none;
     font-size: 0.8rem;
     height: 100%;
-    background-color: rgb(27, 27, 165);
+    background-color: var( --dropdown-color );
 }
 
 .navitem {
@@ -23,8 +23,9 @@
     color: white;
     padding: 5%;
     width: 90%;
-    background-color: rgb(22, 22, 117);
+    background-color: var( --nav-buttons );
     font-size: 1rem;
+    transition: all 0.5s;
 }
 
 .nav-subitem {
@@ -35,5 +36,14 @@
     width: 70%;
     padding: 5%;
     padding-left: 25%;
-    background-color: rgb(27, 27, 165);
+    background-color: var( --dropdown-color );
+    transition: all 0.5s;
+}
+
+.nav-subitem:hover {
+    background-color: black;
+}
+
+.navitem:hover, .active {
+    background-color: black;
 }
