@@ -1,13 +1,10 @@
-let theme = '';
-theme = sessionStorage.getItem( 'theme' ) || getPreferredTheme();
-
 $( document ).ready( function () {
     $( '#nav' ).load( '/docs/nav.html' );
     $( '#top' ).load( '/docs/top.html' );
 } );
 
 // set theme on page load
-theme = localStorage.getItem( 'theme' ) ?? '';
+let theme = localStorage.getItem( 'theme' ) ?? '';
 if ( window.matchMedia( '(prefers-color-scheme: dark)' ).matches || theme === 'dark' ) {
     document.documentElement.classList.add( 'dark' );
     setTimeout( () => {
