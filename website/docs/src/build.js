@@ -432,6 +432,8 @@ function generateGettingStarted ( inputHTML ) {
                     } else {
                         checkedLink = '/docs/plugins' + link.slice( 12, link.length ) + '.html';
                     };
+                } else if ( link.slice( 0, 7 ) === 'http://' || link.slice( 0, 8 ) === 'https://' ) {
+                    checkedLink = link;
                 }
                 html = html.slice( 0, parseInt( letter ) + 9 ) + checkedLink + html.slice( parseInt( letter ) + i, parseInt( html.length ) );
             };
