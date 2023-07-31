@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+    <html>
+        <head>
+        <title>impressConsole :: plugins | DOCS - impress.js</title>
+        <!--I am using jquery for button animations.-->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/dark.min.css">
+        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script>
+        <script src="/js/docs/loader.js"></script>
+        <link rel="stylesheet" href="/css/docs/style.css">
+        </head>
+        <body>
+            <div class="content">
+                <div id="nav"></div>
+                <div id="top"></div>
+                    <div id="docPage">
+                        <div id="doc-container">
+                        <h1>Impress Console Plugin</h1>
+<p>Press 'P' to show a speaker console window.</p>
+<ul>
+<li>View of current slide</li>
+<li>Preview of next slide</li>
+<li>Speaker notes (contents of a &lt;div class=&quot;notes&quot;&gt; element on current slide)</li>
+<li>Navigation</li>
+</ul>
+<p>For speaker notes, add the following anywhere inside a step</p>
+<pre><code>&lt;div class=&quot;notes&quot;&gt;Speaker notes text...&lt;/div&gt;
+</code></pre>
+<p>Example CSS:</p>
+<pre><code>/* Hide notes from the actual presentation. This will not affect the visibility of notes in the impress console window. */
+
+.notes {
+    display: none;
+}
+</code></pre>
+<h2>Credits</h2>
+<ul>
+<li>Henrik Ingo, henrik.ingo@avoinelama.fi, impress.js (plugin) integration</li>
+<li>Heiko Richler, Aico.Richler@gmx.net, major changes in rev. 1.3</li>
+<li>Lennart Regebro, regebro@gmail.com, main author of impressConsole</li>
+<li>David Souther, davidsouther@gmail.com, author of the original notes.js</li>
+</ul>
+<p>MIT License</p>
+</div>
+                    </div>
+                <div id="footer"></div>
+            </div>
+        </body>
+    </html>

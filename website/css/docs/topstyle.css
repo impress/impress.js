@@ -1,0 +1,24 @@
+.top-container {
+    background-color: var( --top-background );
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    transition: all 0.5s;
+}
+
+.top-wrapper {
+    display: flex;
+    width: 80%;
+    margin-right: 5%;
+    justify-content: flex-end;
+}
+
+#darkToggle {
+    background-color: rgba(0, 0, 0, 0);
+    border-style: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var( --primary-color );
+}

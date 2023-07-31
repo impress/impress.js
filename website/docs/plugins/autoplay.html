@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+    <html>
+        <head>
+        <title>autoplay :: plugins | DOCS - impress.js</title>
+        <!--I am using jquery for button animations.-->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/dark.min.css">
+        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script>
+        <script src="/js/docs/loader.js"></script>
+        <link rel="stylesheet" href="/css/docs/style.css">
+        </head>
+        <body>
+            <div class="content">
+                <div id="nav"></div>
+                <div id="top"></div>
+                    <div id="docPage">
+                        <div id="doc-container">
+                        <h1>Autoplay</h1>
+<p>The <a href="https://github.com/impress/impress.js/blob/master/src/plugins/autoplay/autoplay.js">autoplay</a> plugin automatically advances the presentation after a certain timeout expired.</p>
+<h2>USAGE</h2>
+<p>You first have to enable the plugin by setting a global <code>data-autoplay</code> value on the impress-div. Then you can change individual <code>data-autoplay</code> values on each <em>step</em> by adding <code>data-autoplay</code> to it. If this value is set to <code>0</code>, there will be no more auto-advancing on this <em>step</em>. The value you enter is time in seconds to switch to the next slide.</p>
+<h2>EXAMPLE</h2>
+<p>Note: This only shows part of the HTML. If you want to know how to set up a presentation, I highly recommend you read our <a href="/docs/gettingStarted.html">Getting Started Guide</a></p>
+<pre><code>&lt;div id=impress data-autoplay=&quot;5&quot;&gt;
+    &lt;div class=&quot;step&quot; data-autoplay=&quot;0&quot;&gt;
+        This slide will not auto-advance
+    &lt;/div&gt;
+     &lt;div class=&quot;step&quot;&gt;
+        This slide will auto-advance at the globally defined rate.
+    &lt;/div&gt;
+     &lt;div class=&quot;step&quot; data-autoplay=&quot;10&quot;&gt;
+        This slide will auto-advance after 10 seconds
+    &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+</div>
+                    </div>
+                <div id="footer"></div>
+            </div>
+        </body>
+    </html>

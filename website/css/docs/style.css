@@ -1,0 +1,114 @@
+/*
+*
+*   impress.js - documentation stylesheet
+*
+*       Created 2023 by Janis Hutz
+*
+*/
+
+html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-size: calc(16pt + 0.4vw);
+    font-family: sans-serif;
+}
+
+:root, :root.light {
+    --primary-color: black;
+    --accent-background: rgb(25, 25, 148);
+    --accent-color: white;
+    --background-color: white;
+    --accent-background-hover: rgb(124, 140, 236);
+    --top-background: rgb(211, 211, 211);
+    --nav-buttons: rgb(1, 1, 109);
+    --dropdown-color: rgb(0, 0, 156);
+}
+
+:root.dark {
+    --primary-color: white;
+    --accent-background: rgb(0, 0, 88);
+    --accent-color: white;
+    --background-color: rgb(32, 32, 32);
+    --accent-background-hover: #4380a8;
+    --top-background: rgb(77, 77, 77);
+    --nav-buttons: rgb(0, 0, 36);
+    --dropdown-color: rgb(0, 0, 116);
+}
+
+@media ( prefers-color-scheme: dark ) {
+    :root {
+        --primary-color: white;
+        --accent-background: rgb(56, 56, 112);
+        --accent-color: white;
+        --background-color: rgb(46, 46, 46);
+        --accent-background-hover: #4380a8;
+        --top-background: rgb(77, 77, 77);
+        --nav-buttons: rgb(0, 0, 41);
+        --dropdown-color: rgb(0, 0, 116);
+    }
+}
+
+.content {
+    transition: all 0.5s;
+    background-color: var( --background-color );
+    color: var( --primary-color );
+    display: grid;
+    grid-template-areas:
+        'menu header header header header'
+        'menu main main main main'
+        'menu main main main main'
+        'menu main main main main'
+        'menu main main main main'
+        'menu main main main main'
+        'menu main main main main'
+        'menu main main main main'
+        'menu main main main main'
+        'menu footer footer footer footer';
+}
+
+#doc-container a {
+    color: var( --primary-color );
+}
+
+.logo {
+    width: 60%;
+    height: auto;
+    margin-left: 20%;
+    margin-top: 5%;
+    margin-bottom: 5%;
+}
+
+#nav {
+    grid-area: menu;
+    min-width: 20vw;
+    width: 100%;
+    height: 100%;
+    overflow: scroll;
+}
+
+#docPage {
+    max-width: 75vw;
+    margin: 0;
+    grid-area: main;
+    overflow: scroll;
+}
+
+#doc-container {
+    width: 90%;
+    margin: 5%;
+    max-height: 70vh;
+}
+
+#footer {
+    grid-area: footer;
+}
+
+#top {
+    grid-area: header;
+}
+
+code {
+    font-size: 85%;
+}

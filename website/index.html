@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>impress.js - the stunning javascript presentation framework</title>
+        <meta name="description" content="impress.js, a javascript presentation framework that uses the power of CSS 3 to create stunning presentations in your browser! It is inspired by the idea behind prezi.com">
+        <link rel="stylesheet" href="/css/style.css">
+        <!--I am using jquery for button animations (plus loading of the navbar and footer)-->
+        <script defer src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+        <script defer src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script defer src="/js/index.js"></script>
+        <!--I will be using highlight.js to highlight the syntax, but I still need to figure out how to use it.-->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/dark.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script>
+    </head>
+    <body>
+        <!--Here, the navbar is inserted by jquery-->
+        <div id="navbar"></div>
+        <div class="title">
+            <div class="title-content">
+                <h1 class="heading">imp&shy;ress.js</h1>
+            </div>
+            <div class="title-buttons">
+                <a class="button" id="demobutton" href="/demo/">Watch the demo</a>
+                <br>
+                <a class="button go-impress" href="/docs/gettingStarted.html">Get started!</a>
+                <a class="button download-base" href="/download.html">Download</a>
+            </div>
+        </div>
+        <div class="content">
+
+            <!--FEATURE OVERVIEW-->
+
+            <div class="centered">
+
+                <div class="create">
+                    <div class="unstyled-html">
+                        <h3>Use HTML</h3>
+                        <!--TODO: Add html demo code-->
+                        <pre>
+                            <code>
+    &lt;div id=&quot;impress&quot;&gt;
+        &lt;div class=&quot;step&quot;&gt;
+            &lt;h1&gt;impress.js - The JavaScript presentation framework&lt;/h1&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+                            </code>
+                        </pre>
+                    </div>
+                    <div class="special-style">
+                        <h3 style="font-size: 200%;">And CSS</h3>
+                        <pre>
+                            <code>
+    .impress-supported .fallback-message {
+        display: none;
+    }
+    
+    .step {
+        width: 80vw;
+        height: 80vh;
+        background-color: white;
+    }
+                            </code>
+                        </pre>
+                    </div>
+                    <p>To create stunning presentations</p>
+                </div>
+                
+                <div class="sidebyside">
+                    <div class="sidebyside-element">
+                        <h3>FULL power of CSS.</h3>
+                        <p>Use the powerful styling tools CSS offers with only minimal restrictions. Because a tool should not restrict your options, such that the only limit is your imagination. (And your skills in CSS)</p>
+                    </div>
+                    <div class="sidebyside-element">
+                        <h3>Familiar.</h3>
+                        <p>impress.js presentations can be written in HTML with only a few simple to understand element attributes. Highly detailed Documentation helps you getting started!</p>
+                    </div>
+                </div>
+                <div class="sidebyside">
+                    <div class="sidebyside-element">
+                        <h3>Minimalist.</h3>
+                        <p>The framework only delivers what is essential, without compromising on functionality. You can expand on its functionality by writing some more javascript code or by using more CSS transitions and transforms.</p>
+                    </div>
+                    <div class="sidebyside-element">
+                        <h3>Plugins.</h3>
+                        <p>It features extensive plugin-support to expand on its core functionality. Want a speaker console? Blank the screen? There's a plugin for it. If not, you may add your own!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!--GETTING STARTED with link to docs (that have been translated to html)-->
+
+            <div class="getting-started">
+                <h2 class="big-text">Impressed?</h2>
+                <h3>Then you should try impress.js</h3>
+                <p>*no rhyme intended</p>
+                <a class="button go-impress" href="/docs/gettingStarted.html">Get started!</a>
+                <!--TODO: Add a direct download link for the file-->
+                <a class="button download-base" href="/download.html">Download</a>
+            </div>
+
+            <div class="more-info">
+                <h2>Want to get more documentation or examples?</h2>
+                <p>Then check out our <a href="/docs">documentation</a> and <a href="/demo/examples/">examples</a></p>
+            </div>
+
+            <div class="contributing">
+                <h2>Want to help develop this project?</h2>
+                <p>Then you should head over to our GitHub and take a look at our contributing Documentation and guidelines which you can find <a href=/docs/contributing>here</a></p>
+            </div>
+        </div>
+        <div id="footer"></div>
+    </body>
+</html>

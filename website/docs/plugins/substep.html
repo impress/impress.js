@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+    <html>
+        <head>
+        <title>substep :: plugins | DOCS - impress.js</title>
+        <!--I am using jquery for button animations.-->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/dark.min.css">
+        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script>
+        <script src="/js/docs/loader.js"></script>
+        <link rel="stylesheet" href="/css/docs/style.css">
+        </head>
+        <body>
+            <div class="content">
+                <div id="nav"></div>
+                <div id="top"></div>
+                    <div id="docPage">
+                        <div id="doc-container">
+                        <h1>Substep Plugin</h1>
+<p>Reveal each substep (such as a bullet point) of the step separately. Just like in PowerPoint!</p>
+<p>If the current step contains html elements with <code>class=&quot;substep&quot;</code> then this plugin will prevent a
+<code>prev()</code> / <code>next()</code> call to leave the slide, and instead reveal the next substep (for <code>next()</code>) or
+alternatively hide one (for <code>prev()</code>). Only once all substeps are shown, will a call to <code>next()</code>
+actually move to the next step, and only when all are hidden will a call to <code>prev()</code> move to the
+previous one.</p>
+<p>By default, this plugin reveals substeps in the order in which they appear in the HTML.  If you
+would like to reveal them in a different order, you can supply an integer to <code>data-substep-order</code>.
+If you do so, this plugin will reveal the substeps in ascending order; any substeps without a
+specified <code>data-substep-order</code> will be revealed after all substeps with a specified order have
+been revealed.</p>
+<p>Calls to <code>goto()</code> will be ignored by this plugin, i.e. <code>goto()</code> will transition to whichever step is
+the target.</p>
+<p>In practice what happens is that when each substep is stepped through via <code>next()</code> calls, a
+<code>class=&quot;substep-visible&quot;</code> class is added to the element. It is up to the presentation author to
+use the appropriate CSS to make the substeps hidden and visible.</p>
+<p>Example:</p>
+<pre><code>    &lt;style type=&quot;text/css&quot;&gt;
+        .substep { opacity: 0; }
+        .substep.substep-visible { opacity: 1; transition: opacity 1s; }
+    &lt;/style&gt;
+
+    &lt;div class=&quot;step&quot;&gt;
+        &lt;h1&gt;Fruits&lt;/h1&gt;
+        &lt;p class=&quot;substep&quot;&gt;Orange&lt;/p&gt;
+        &lt;p class=&quot;substep&quot;&gt;Apple&lt;/p&gt;
+    &lt;/div&gt;
+</code></pre>
+<p>Classes:</p>
+<p><code>substep-active</code> - The most recent substep in the current step</p>
+<p><code>substep-visible</code> - The most recent and all previous substeps in the current step</p>
+<h2>Author</h2>
+<p>Copyright 2017 Henrik Ingo (@henrikingo)
+Released under the MIT license.</p>
+</div>
+                    </div>
+                <div id="footer"></div>
+            </div>
+        </body>
+    </html>

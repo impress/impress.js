@@ -1,0 +1,49 @@
+.nav-container {
+    background-color: var( --accent-background );
+    width: 100%;
+    height: 100vh;
+}
+
+.nav-list {
+    display: flex;
+    flex-direction: column;
+    overflow: scroll;
+}
+
+.dropdown {
+    display: none;
+    font-size: 0.8rem;
+    height: 100%;
+    background-color: var( --dropdown-color );
+}
+
+.navitem {
+    cursor: pointer;
+    text-decoration: none;
+    color: white;
+    padding: 5%;
+    width: 90%;
+    background-color: var( --nav-buttons );
+    font-size: 1rem;
+    transition: all 0.5s;
+}
+
+.nav-subitem {
+    display: block;
+    text-decoration: none;
+    color: white;
+    font-size: 0.8rem;
+    width: 70%;
+    padding: 5%;
+    padding-left: 25%;
+    background-color: var( --dropdown-color );
+    transition: all 0.5s;
+}
+
+.nav-subitem:hover {
+    background-color: black;
+}
+
+.navitem:hover, .active {
+    background-color: black;
+}

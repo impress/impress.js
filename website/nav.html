@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <link rel="stylesheet" href="/css/menustyle.css">
+    </head>
+    <body>
+        <div class="nav-container">
+            <div class="mobile-wrapper">
+                <a class="logo-container" href="/"><img class="logo" src="/assets/apple-touch-icon.png" alt="impress-logo"></a>
+                <div class="toggle-wrapper">
+                    <a class="listtoggle" onclick="togglelist()">&#9776</a>
+                </div>
+            </div>
+            <div class="nav-wrapper">
+                <div class="nav-menu">
+                    <div class="nav-list">
+                        <a class="navitem" id="docs" href="/docs">Documentation</a>
+                        <a class="navitem" id="download" href="/download.html">Download</a>
+                        <a class="navitem" id="demo" href="/demo">Demo</a>
+                        <a class="navitem" id="examples" href="/demo/examples">Examples</a>
+                        <a class="navitem" id="gh" href="https://github.com/impress/impress.js">GitHub</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            $(document).ready(function () {
+                $('.navitem').mouseenter( function () {
+                    if ( window.location.pathname.slice( 1, window.location.pathname.length ) == this.id ) {} else {
+                        $(this).stop();
+                        $(this).animate( { "color":"rgba(184, 214, 240, 1)", "background-color":"rgba(0, 0, 175, 1)" }, 200);
+                    };
+                });
+                $('.navitem').mouseleave( function () {
+                    if ( window.location.pathname.slice( 1, window.location.pathname.length ) == this.id ) {} else {
+                        $(this).stop();
+                        $(this).animate( { "color":"black", "background-color":"rgba(0, 0, 0, 0)" }, 200 );
+                    };
+                });
+            });
+
+            let previous = 1;
+            function togglelist() {
+                $( '.nav-menu' ).slideToggle(300);
+                $( '.listtoggle' ).toggleClass( 'active' );
+            }
+
+            window.addEventListener( 'resize', function( event ) {
+                if ( $(window).width() > 999 ) { 
+                    $( '.nav-menu' ).slideDown();
+                    previous = 1;
+                } else if ( $(window).width() < 999 && previous == 1 ) {
+                    $( '.nav-menu' ).slideUp();
+                    $( '.listtoggle' ).removeClass( 'active' );
+                    previous = 0;
+                };
+            }, true);
+        </script>
+    </body>
+</html>

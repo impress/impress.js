@@ -1,0 +1,76 @@
+/*
+*
+*   footerstyle.css - impress.js Website
+*
+*       Created 2023 by Janis Hutz
+*
+*/
+
+/* Style the footer box */
+
+.footer-container {
+    width: 100%;
+    height: 100%;
+    background-color: blue;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.footer-logo-container {
+    margin: 0.5%;
+    height: 45%;
+    display: inline-block;
+    width: fit-content;
+}
+
+.footer-logo {
+    display: block;
+    width: auto;
+    height: 100%;
+}
+
+.footer-wrapper {
+    width: 70%;
+    height: 45%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+}
+
+.footer-big {
+    font-size: 1.6rem;
+    margin: 1%;
+    font-weight: bold;
+}
+
+.footer-small {
+    margin: 1%;
+    font-size: 1.2rem
+}
+
+.credits {
+    margin-top: 2%;
+    color: gray;
+    text-decoration: none;
+    font-style: italic;
+    font-size: 0.8rem;
+}
+
+@media only screen and (min-width: 999px) {
+    .footer-container {
+        flex-direction: row;
+    }
+
+    .footer-wrapper {
+        height: 80%;
+        justify-content: flex-start;
+    }
+
+    .footer-logo-container {
+        height: 60%;
+    }
+}

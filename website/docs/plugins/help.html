@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+    <html>
+        <head>
+        <title>help :: plugins | DOCS - impress.js</title>
+        <!--I am using jquery for button animations.-->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/dark.min.css">
+        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script>
+        <script src="/js/docs/loader.js"></script>
+        <link rel="stylesheet" href="/css/docs/style.css">
+        </head>
+        <body>
+            <div class="content">
+                <div id="nav"></div>
+                <div id="top"></div>
+                    <div id="docPage">
+                        <div id="doc-container">
+                        <h1>Help screen plugin</h1>
+<p>Shows a help popup when a presentation is loaded, as well as when 'H' is pressed.</p>
+<p>To enable the help popup, add following div to your presentation:</p>
+<pre><code>&lt;div id=&quot;impress-help&quot;&gt;&lt;/div&gt;
+</code></pre>
+<p>Example CSS:</p>
+<pre><code>    .impress-enabled #impress-help {
+        background: none repeat scroll 0 0 rgba(0, 0, 0, 0.5);
+        color: #EEEEEE;
+        font-size: 80%;
+        position: fixed;
+        left: 2em;
+        bottom: 2em;
+        width: 24em;
+        border-radius: 1em;
+        padding: 1em;
+        text-align: center;
+        z-index: 100;
+        font-family: Verdana, Arial, Sans;
+    }
+    .impress-enabled #impress-help td {
+        padding-left: 1em;
+        padding-right: 1em;
+    }
+</code></pre>
+<h2>Author</h2>
+<p>Copyright Henrik Ingo (@henrikingo), 2016
+MIT License</p>
+</div>
+                    </div>
+                <div id="footer"></div>
+            </div>
+        </body>
+    </html>

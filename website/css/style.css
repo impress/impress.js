@@ -1,0 +1,211 @@
+/*
+*
+*   impress.js Website style.css
+*   
+*   copyright 2022 Janis Hutz
+*
+*
+*/
+
+html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-size: calc(14pt + 0.4vw);
+}
+
+body {
+    background-color: #dcdcdc;
+    /*TODO: Choose better font*/
+    font-family: sans-serif;
+}
+
+::selection {
+    background-color: #0000ff;
+}
+
+
+/*
+    TITLE
+*/
+
+/* This is the tile element with the background image and the title */
+
+.title {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 120vh;
+    margin-top: -0.5vh;
+    text-align: center;
+    font-size: 2.5rem;
+    background-image: url("/assets/main_bg_cut.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+}
+
+.title-content {
+    color: white;
+}
+
+.title-buttons {
+    margin-top: 10%;
+    font-size: 1.3rem;
+}
+
+.heading {
+    color: white !important;
+}
+
+.subheading {
+    color: white !important;
+    font-size: 1.7rem !important;
+}
+
+#navbar {
+    height: 15vh;
+    position: relative;
+    z-index: 1;
+}
+
+#footer {
+    height: 70vh;
+}
+
+/* 
+*
+*   GENERAL ITEMS
+*
+*/
+
+/* Buttons */
+.button {
+    display: inline-block;
+    background-color: rgb(0, 128, 0);
+    text-decoration: none;
+    color: white;
+    font-size: 1.2rem;
+    margin: 5px;
+    font-weight: bold;
+    padding: 30px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    border-radius: 50px;
+    transition: all 0.5s;
+}
+
+.button:hover {
+    background-color: rgb(2, 88, 2);
+    border-radius: 5px;
+}
+
+
+
+/*
+*
+*   CONTENT BOX
+*
+*/
+
+.content {
+    width: 75vw;
+    margin-left: 12.5vw;
+}
+
+.create {
+    display: grid;
+    justify-content: center;
+    text-align: center;
+}
+
+.unstyled-html, .create {
+    width: 100%;
+}
+
+/* This div will have crazy cool style, as this should represent that you can use (almost) all the CSS you want.*/
+.create .special-style {
+    background-color: aqua;
+    border-radius: 50px;
+    font-family: cursive;
+    padding: 5%;
+    animation-name: background;
+    animation-duration: 5s;
+    animation-iteration-count: 500;
+}
+
+@keyframes background {
+    0% {
+        background-color: aqua;
+        border-radius: 50px;
+    }
+    50% {
+        background-color: rgba(0, 255, 255, 0.2);
+        border-radius: 200px;
+    }
+    100% {
+        background-color: aqua;
+        border-radius: 50px;
+    }
+}
+
+.centered {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.sidebyside {
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebyside-element {
+    width: 100%;
+}
+
+
+/* GETTING STARTED BOX AND CHILDREN */
+
+.getting-started {
+    margin-top: 5%;
+    width: 100%;
+    height: 50vh;
+    text-align: center;
+}
+
+.big-text {
+    font-size: 200%;
+}
+
+@media only screen and (min-width: 999px) {
+    #footer {
+        height: 40vh;
+    }
+
+    .sidebyside {
+        width: 100%;
+        align-items: flex-start;
+        justify-content: space-between;
+        flex-direction: row;
+    }
+
+    .sidebyside-element {
+        width: 40%;
+    }
+
+}
+
+code {
+    text-align: justify;
+}
+
+code, pre {
+    max-width: 80vw;
+}

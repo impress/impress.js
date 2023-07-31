@@ -1,0 +1,138 @@
+/*
+*
+*   menustyle.css - impress.js Website
+*
+*       Created 2023 by Janis Hutz
+*
+*/
+
+/*
+    Default rules that are set for mobile interfaces
+*/
+.nav-container {
+    width: 100%;
+    height: 100%;
+    background-color: blue;
+}
+
+.toggle-wrapper {
+    display: inline-flex;
+    height: 100%;
+    width: 80%;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+
+/* Logo image and logo link (aka logo-container)*/
+.logo-container {
+    margin: 0.5%;
+    height: 80%;
+    display: inline-block;
+    width: fit-content;
+}
+
+.mobile-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+}
+
+.logo {
+    display: block;
+    width: auto;
+    height: 100%;
+}
+
+.listtoggle {
+    text-decoration: none;
+    color: black;
+    font-size: 5vh;
+    margin-right: 7%;
+    cursor: pointer;
+}
+
+.active {
+    color: rgba(184, 214, 240, 1);
+}
+
+/* Nav menu holder (contains the flex nav menu and has to exist because of jQuery */
+.nav-menu {
+    background-color: rgba(245, 245, 245, 0.9);
+    display: none;
+    width: 100%;
+}
+
+/* This is the list actually containing the menu items */
+.nav-list {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+.navitem {
+    text-decoration: none;
+    text-align: center;
+    color: black;
+    font-size: 1.3rem;
+    padding-top: 2%;
+    padding-bottom: 2%;
+    width: 100%;
+}
+/*
+.navitem:hover {
+    background-color: rgba(184, 214, 240, 1);
+}*/
+
+
+/* 
+    Media queries to optimise for desktop
+*/
+@media only screen and (min-width: 999px) {
+    /* Top navigation bar container */
+    .nav-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    /* div containing the nav-menu unordered list */
+    .nav-wrapper {
+        height: 100%;
+        width: 80%;
+        margin: auto;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .listtoggle, .toggle-wrapper {
+        display: none;
+    }
+
+    .nav-menu {
+        display: flex;
+        background-color: rgba(0, 0, 0, 0);
+    }
+
+    .nav-list {
+        flex-direction: row;
+    }
+
+    .mobile-wrapper {
+        width: fit-content;
+        margin-left: 3%;
+    }
+
+    .navitem {
+        font-size: 0.9rem;
+        width: fit-content;
+        padding: 1%;
+        padding-left: 2%;
+        padding-right: 2%
+    }
+}
