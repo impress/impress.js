@@ -8,7 +8,7 @@
  * in modern browsers and inspired by the idea behind prezi.com.
  *
  *
- * Copyright 2011-2012 Bartek Szopka (@bartaz), 2016-2023 Henrik Ingo (@henrikingo) 
+ * Copyright 2011-2012 Bartek Szopka (@bartaz), 2016-2023 Henrik Ingo (@henrikingo)
  * and 70+ other contributors
  *
  * Released under the MIT License.
@@ -4709,6 +4709,11 @@
                 currentSubstepOrder = el.dataset.substepOrder;
                 el.classList.add( "substep-visible" );
                 el.classList.add( "substep-active" );
+                if ( currentSubstepOrder === undefined ) {
+
+                    // Stop after one substep as default order
+                    break;
+                }
             }
 
             return el;
@@ -4741,6 +4746,7 @@
 
             // Continue if there is another substep with the same substepOrder
             if ( current > 0 &&
+                visible[ current ].dataset.substepOrder !== undefined &&
                 visible[ current - 1 ].dataset.substepOrder ===
                 visible[ current ].dataset.substepOrder ) {
                 visible.pop();
