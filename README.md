@@ -109,7 +109,7 @@ ABOUT THE NAME
 
 impress.js name is [courtesy of @skuzniak](http://twitter.com/skuzniak/status/143627215165333504).
 
-It's an (un)fortunate coincidence that a Open/LibreOffice presentation tool is called Impress ;)
+It's an (un)fortunate coincidence that an Open/LibreOffice presentation tool is called Impress ;)
 
 Reference API
 --------------
