@@ -111,6 +111,42 @@ It is focused on plugin functionality, not the visual style of your presentation
 }
 
 /*
+  Highlight substeps that are not yet visible in the sliveView window of the
+  impressConsole.
+*/
+.impress-console.slideView #impress .step:not(.future) .substep:not(.substep-visible) {
+  position: relative;
+  opacity: 1.0;
+}
+.impress-console.slideView #impress .step:not(.future) .substep:not(.substep-visible):before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: calc(100% - 10px);
+  height: calc(100% - 10px);
+  content: "";
+  border: 5px solid red;
+}
+.impress-console.slideView #impress .step:not(.future):has(.substep[data-substep-order]) .substep:not(.substep-visible):after {
+  position: absolute;
+  height: 60px;
+  width: 60px;
+  left: -30px;
+  top: -30px;
+  font-size: 40px;
+  text-align: center;
+  background-color: red;
+  color: #fff;
+  font-weight: bold;
+  content: "1";
+  border-radius: 30px;
+  padding: 0;
+}
+.impress-console.slideView #impress .step:not(.future):has(.substep[data-substep-order]) .substep[data-substep-order]:not(.substep-visible):after {
+  content: attr(data-substep-order);
+}
+
+/*
     With help from the mouse-timeout plugin, we can hide the toolbar and
     have it show only when you move/click/touch the mouse.
 */
