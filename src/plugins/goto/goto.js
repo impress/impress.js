@@ -65,7 +65,7 @@
 
                 // Don't return, allow the other categories to work despite this error
             } else {
-                var index = keylist.indexOf( event.origEvent.key );
+                var index = keylist.indexOf( event.origEvent.code );
                 if ( index >= 0 ) {
                     var next = nextlist[ index ];
                     if ( isNumber( next ) ) {
