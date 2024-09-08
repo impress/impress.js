@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>The presentation steps used in an iframe in rel/rotation_tests.js</title>
+    <style type="text/css" media="screen">
+.step {
+    position: relative;
+    width: 1000px;
+    height: 1000px;
+    padding: 40px 60px;
+    margin: 20px auto;
+
+    box-sizing:         border-box;
+
+    line-height: 1.5;
+
+    background-color: none;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, .1);
+
+    text-shadow: 0 2px 2px rgba(0, 0, 0, .1);
+
+    font-family: 'Open Sans', Arial, sans-serif;
+    font-size: 40pt;
+    letter-spacing: -1px;
+    border: solid 1px red;
+}
+    </style>
+  </head>
+
+  <body class="impress-not-supported">
+    <div id="impress" data-width="1920" data-height="1200">
+      <div id="overview" class="step overview" data-x="0" data-y="-1000" data-z="100" data-scale="4" data-rotate-x="45">
+        <h1>Testing related to <code>data-rel-to</code></h1>
+      </div>
+
+      <div id="abs-1" class="step" data-x="0" data-y="0" data-z="0">
+        <p>Testing default rel-position</p>
+      </div>
+
+      <div id="abs-2" class="step" data-rel-rotate-y="45" data-rel-z="-354" data-rel-x="854" data-rel-y="-125">
+        <p>default rel-position, rel-rotate not work</p>
+      </div>
+
+      <div id="abs-3" class="step">
+        <p>Should inherit rel-x/y/z, not rel-rotate-y</p>
+      </div>
+
+      <div id="abs-4" class="step" data-rel-reset data-rel-x="100">
+        <p>position out of flow</p>
+      </div>
+
+      <div id="abs-5" class="step" data-rel-to="abs-3">
+        <p>Should re-position at abs-3, but doesn't inherit from it</p>
+      </div>
+
+      <div id="abs-6" class="step">
+        <p>Should be the same as abs-5</p>
+      </div>
+
+      <div id="relative-1" class="step" data-rel-reset="all" data-rel-position="relative" data-x="0" data-y="1000" data-z="0">
+        <p>Testing rel-position="relative"</p>
+      </div>
+
+      <div id="relative-2" class="step" data-rel-rotate-y="45" data-rel-z="-354" data-rel-x="854" data-rel-y="-125">
+        <p>All rel-* will be inherited from previous slide</p>
+      </div>
+
+      <div id="relative-3" class="step">
+        <p>inherit again</p>
+      </div>
+
+      <div id="relative-4" class="step" data-rel-reset="all" data-rel-x="100">
+        <p>position out of flow</p>
+      </div>
+
+      <div id="relative-5" class="step" data-rel-to="relative-3">
+        <p>Should re-position at relative-3, and inherit all relatives from it</p>
+      </div>
+
+      <div id="relative-6" class="step">
+        <p>keep inheriting</p>
+      </div>
+
+      <div id="relative-7" class="step" data-rel-to="relative-3" data-rel-reset>
+        <p>Should re-position at relative-3, but clear all relative attributes</p>
+      </div>
+
+      <div id="relative-8" class="step">
+        <p>keep inheriting</p>
+      </div>
+
+      <div id="relative-9" class="step" data-rel-to="relative-3" data-rel-reset="all">
+        <p>Should re-position at relative-3, but clear data-rotate-* in addition to all relative attributes</p>
+      </div>
+
+      <div id="relative-10" class="step">
+        <p>keep inheriting</p>
+      </div>
+    </div>
+
+    <script src="../../../js/impress.js"></script>
+    <!-- <script>impress().init();</script> -->
+  </body>
+<html>

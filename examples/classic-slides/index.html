@@ -34,7 +34,7 @@
     <link rel="stylesheet" href="../../extras/mermaid/mermaid.forest.css">
 
     <!-- This file contains common styles for example presentations. -->
-    <link href="..\..\css\impress-common.css" rel="stylesheet" />   
+    <link href="../../css/impress-common.css" rel="stylesheet" />
     <!--
         This file contains styles specific for this example presentation. 
     -->
@@ -188,7 +188,7 @@
         Notation shouldn't be a surprise. We use `data-rotate="30"` attribute, meaning that this
         element should be rotated by 30 degrees clockwise.        
     -->
-    <div class="step slide" data-rel-x="2200" data-rel-y="600" data-rotate="30">
+    <div class="step slide" data-rel-position="relative" data-rel-x="2200" data-rel-y="600" data-rel-rotate-z="30">
         <h1>A blockquote &amp; image</h1>
         <img src="images/3476636111_c551295ca4_b.jpg" 
              alt="Mother Teresa holding a newborn baby" 
@@ -200,10 +200,14 @@
         </blockquote>
 
         <div class="notes">
+            We use <code>data-rel-position="relative"</code> to make <code>data-rel-rotate-*</code> work,
+            and make <code>data-rel-x/data-rel-y/data-rel-y</code> be calculated at the coordination related to previous slide.
+            The relative position and rotation will be inherited by following slides,
+            so it's not necessary to repeat it again and again.
         </div>
     </div>
 
-    <div class="step slide" data-rel-x="1600" data-rel-y="1600" data-rotate="60">
+    <div class="step slide">
         <h1>More text styles</h1>
         <p>As usual, use <em>em</em> to emphasize, <br />
            <strong>strong</strong> for strong, <u>u</u> for underline,<br />
@@ -216,7 +220,7 @@
         </div>
     </div>
 
-    <div class="step slide" data-rel-x="600" data-rel-y="2200" data-rotate="90">
+    <div id="motions" class="step slide">
         <h1>Motion effects 101</h1>
         <p>Items on the slide can</p>
         <p class="fly-in fly-out">Fly in</p>
@@ -246,22 +250,32 @@
         </div>
     </div>
 
-    <div id="addons" class="step slide title" data-rel-x="-600" data-rel-y="2200" data-rotate="120">
+    <div id="zoom" class="step" data-rel-reset data-rel-x="-0.25w" data-rel-y="0.5h" data-scale="0.5">
+        <div class="notes">
+            <p>This step zoom in to left bottom of previous slide to see to small text.</p>
+            <p>It's a empty and transparent.</p>
+            <p><code>data-rel-reset</code> is used to prevent this step from inheriting the relative positioning from previous slide.</p>
+        </div>
+    </div>
+
+    <div id="addons" class="step slide title" data-rel-to="motions">
         <h2>Add-ons</h2>
         <div class="notes">
         <p>This version of impress.js includes several add-ons, striving to make this a
            full featured presentation app.</p>
+        <p>The previous step breaks the slide flow, changes the relative position and rotation.</p>
+        <p>This slide use <code>data-rel-to</code> to inherit relative position and rotation from the slide before previous slide.</p>
         </div>
     </div>
 
-    <div class="step slide" data-rel-x="-1600" data-rel-y="1600" data-rotate="150" data-autoplay="3">
+    <div class="step slide" data-autoplay="3">
         <h1>Impress.js plugins</h1>
         <ul>
         <li>A new <a href="https://github.com/impress/impress.js/blob/master/src/plugins/README.md">plugin framework</a> allows for rich extensibility,
             without bloating the core rendering library.
             <ul>
             <li class="substep">Press 'P' to open a presenter console.</li>
-            <li class="substep">When you move the mouse, navigation controls are visible on your bottom left</li>
+            <li class="substep">When you move the mouse, navigation controls are visible on your bottom right</li>
             <li class="substep">Autoplay makes the slides advance after a timeout</li>
             <li class="substep">Relative positioning plugin is often a more convenient way to position your slides when editing. (<a href="https://github.com/impress/impress.js/blob/master/examples/classic-slides/index.html">See html for this presentation.</a>)</li>
             </ul>
@@ -277,7 +291,7 @@
         </div>
     </div>
 
-    <div class="step slide" data-rel-x="-2200" data-rel-y="600" data-rotate="180">
+    <div class="step slide">
         <h1>Highlight.js</h1>
         <pre><code>
         // `init` API function that initializes (and runs) the presentation.
@@ -303,7 +317,7 @@
         </div>
     </div>
 
-    <div class="step slide" data-rel-x="-2200" data-rel-y="-600" data-rotate="210">
+    <div class="step slide">
         <h1>Mermaid.js</h1>
         <div class="mermaid">
         %% This is a comment in mermaid markup
@@ -311,7 +325,7 @@
           A(Support for<br />diagrams)
           B[Provided by<br />mermaid.js]
           C{Already<br />know<br />mermaid?}
-          D(<a href=&quot;http://knsv.github.io/mermaid/index.html#usage&quot;>Tutorial</a>)
+          D(Tutorial)
           E(Great, hope you enjoy!)
           A-->B
           B-->C
@@ -324,13 +338,13 @@
         <h1><a href="http://docs.mathjax.org/en/latest/start.html">MathJax.js</a></h1>
         <p>Use \(\LaTeX\), MathML or AsciiMath to properly show mathematical formula.</p>
         <div class="notes">
-          Mermaid.js, likewise in a href="https://github.com/impress/impress.js/tree/master/extras">extras/</a>
+          Mermaid.js, likewise in <a href="https://github.com/impress/impress.js/tree/master/extras">extras/</a>
            directory, draws SVG diagrams from a MarkDown-like syntax. To learn
           more about it <a href="http://knsv.github.io/mermaid/index.html#usage">read the fine manual</a>.
         </div>
     </div>
 
-    <div id="markdown" class="step slide markdown" data-rel-x="-1600" data-rel-y="-1600" data-rotate="240">
+    <div id="markdown" class="step slide markdown">
 # Markdown.js
         
 * [Markdown.js](https://github.com/evilstreak/markdown-js) integration: for authors in a hurry!
@@ -344,7 +358,7 @@
 * [A more advanced Markdown presentation is here.](../markdown/)
     </div>
 
-    <div id="acme" class="step slide" data-rel-x="-600" data-rel-y="-2200" data-rotate="270">
+    <div id="acme" class="step slide">
         <ul>
         <li>Remember, in <em>impress.js</em> the full power of HTML5, CSS3 &amp; JavaScript is always at your fingertips!</li>
         <li>For example, you can use tables, forms, or dynamic charts as you would on any web page:</li>

@@ -5,7 +5,7 @@ var Terser = require("terser");
 
 var files = ['src/impress.js'];
 // Libraries from src/lib
-files.push('src/lib/gc.js', 'src/lib/util.js')
+files.push('src/lib/gc.js', 'src/lib/util.js', 'src/lib/rotation.js')
 // Plugins from src/plugins
 files.push('src/plugins/autoplay/autoplay.js',
            'src/plugins/blackout/blackout.js',
@@ -13,6 +13,7 @@ files.push('src/plugins/autoplay/autoplay.js',
            'src/plugins/form/form.js',
            'src/plugins/fullscreen/fullscreen.js',
            'src/plugins/goto/goto.js',
+           'src/plugins/bookmark/bookmark.js',
            'src/plugins/help/help.js',
            'src/plugins/impressConsole/impressConsole.js',
            'src/plugins/media/media.js',

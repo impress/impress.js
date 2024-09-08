@@ -8,13 +8,14 @@
  * in modern browsers and inspired by the idea behind prezi.com.
  *
  *
- * Copyright 2011-2012 Bartek Szopka (@bartaz), 2016-2020 Henrik Ingo (@henrikingo)
+ * Copyright 2011-2012 Bartek Szopka (@bartaz), 2016-2023 Henrik Ingo (@henrikingo)
+ * and 70+ other contributors
  *
  * Released under the MIT License.
  *
  * ------------------------------------------------
  *  author:  Bartek Szopka, Henrik Ingo
- *  version: 1.1.0
+ *  version: 2.0.0
  *  url:     http://impress.js.org
  *  source:  http://github.com/impress/impress.js/
  */
@@ -169,15 +170,18 @@
 
     // Some default config values.
     var defaults = {
-        width: 1024,
-        height: 768,
-        maxScale: 1,
+        width: 1920,
+        height: 1080,
+        maxScale: 3,
         minScale: 0,
 
         perspective: 1000,
 
         transitionDuration: 1000
     };
+
+    // Configuration options
+    var config = null;
 
     // It's just an empty function ... and a useless comment.
     var empty = function() { return false; };
@@ -230,9 +234,6 @@
         // Array of step elements
         var steps = null;
 
-        // Configuration options
-        var config = null;
-
         // Scale factor of the browser window
         var windowScale = null;
 
@@ -283,9 +284,9 @@
             var data = el.dataset,
                 step = {
                     translate: {
-                        x: lib.util.toNumber( data.x ),
-                        y: lib.util.toNumber( data.y ),
-                        z: lib.util.toNumber( data.z )
+                        x: lib.util.toNumberAdvanced( data.x ),
+                        y: lib.util.toNumberAdvanced( data.y ),
+                        z: lib.util.toNumberAdvanced( data.z )
                     },
                     rotate: {
                         x: lib.util.toNumber( data.rotateX ),
@@ -323,9 +324,27 @@
             steps.forEach( initStep );
         };
 
+        // Build configuration from root and defaults
+        var buildConfig = function() {
+            var rootData = root.dataset;
+            return {
+                width: lib.util.toNumber( rootData.width, defaults.width ),
+                height: lib.util.toNumber( rootData.height, defaults.height ),
+                maxScale: lib.util.toNumber( rootData.maxScale, defaults.maxScale ),
+                minScale: lib.util.toNumber( rootData.minScale, defaults.minScale ),
+                perspective: lib.util.toNumber( rootData.perspective, defaults.perspective ),
+                transitionDuration: lib.util.toNumber(
+                    rootData.transitionDuration, defaults.transitionDuration
+                )
+            };
+        };
+
         // `init` API function that initializes (and runs) the presentation.
         var init = function() {
             if ( initialized ) { return; }
+
+            // Initialize the configuration object, so it can be used by pre-init plugins.
+            config = buildConfig();
             execPreInitPlugins( root );
 
             // First we set up the viewport for mobile devices.
@@ -336,19 +355,6 @@
                 meta.name = "viewport";
                 document.head.appendChild( meta );
             }
-
-            // Initialize configuration object
-            var rootData = root.dataset;
-            config = {
-                width: lib.util.toNumber( rootData.width, defaults.width ),
-                height: lib.util.toNumber( rootData.height, defaults.height ),
-                maxScale: lib.util.toNumber( rootData.maxScale, defaults.maxScale ),
-                minScale: lib.util.toNumber( rootData.minScale, defaults.minScale ),
-                perspective: lib.util.toNumber( rootData.perspective, defaults.perspective ),
-                transitionDuration: lib.util.toNumber(
-                    rootData.transitionDuration, defaults.transitionDuration
-                )
-            };
 
             windowScale = computeWindowScale( config );
 
@@ -778,7 +784,7 @@
             // scrolling to element in hash.
             //
             // And it has to be set after animation finishes, because in Chrome it
-            // makes transtion laggy.
+            // makes transition laggy.
             // BUG: http://code.google.com/p/chromium/issues/detail?id=62820
             lib.gc.addEventListener( root, "impress:stepenter", function( event ) {
                 window.location.hash = lastHash = "#/" + event.target.id;
@@ -870,7 +876,7 @@
             var thisLevel = preInitPlugins[ i ];
             if ( thisLevel !== undefined ) {
                 for ( var j = 0; j < thisLevel.length; j++ ) {
-                    thisLevel[ j ]( root );
+                    thisLevel[ j ]( root, roots[ "impress-root-" + root.id ] );
                 }
             }
         }
@@ -888,6 +894,10 @@
             preStepLeavePlugins[ weight ] = [];
         }
         preStepLeavePlugins[ weight ].push( plugin );
+    };
+
+    impress.getConfig = function() {
+        return config;
     };
 
     // Called at beginning of goto(), to execute all preStepLeave plugins.
@@ -1204,7 +1214,8 @@
 
             // Get id from url # by removing `#` or `#/` from the beginning,
             // so both "fallback" `#slide-id` and "enhanced" `#/slide-id` will work
-            return byId( window.location.hash.replace( /^#\/?/, "" ) );
+            var encoded = window.location.hash.replace( /^#\/?/, "" );
+            return byId( decodeURIComponent( encoded ) );
         };
 
         // `getUrlParamValue` return a given URL parameter value if it exists
@@ -1238,6 +1249,26 @@
             return isNaN( numeric ) ? ( fallback || 0 ) : Number( numeric );
         };
 
+        /**
+         * Extends toNumber() to correctly compute also relative-to-screen-size values 5w and 5h.
+         *
+         * Returns the computed value in pixels with w/h postfix removed.
+         */
+        var toNumberAdvanced = function( numeric, fallback ) {
+            if ( typeof numeric !== "string" ) {
+                return toNumber( numeric, fallback );
+            }
+            var ratio = numeric.match( /^([+-]*[\d\.]+)([wh])$/ );
+            if ( ratio == null ) {
+                return toNumber( numeric, fallback );
+            } else {
+                var value = parseFloat( ratio[ 1 ] );
+                var config = window.impress.getConfig();
+                var multiplier = ratio[ 2 ] === "w" ? config.width : config.height;
+                return value * multiplier;
+            }
+        };
+
         // `triggerEvent` builds a custom DOM event with given `eventName` and `detail` data
         // and triggers it on element given as `el`.
         var triggerEvent = function( el, eventName, detail ) {
@@ -1254,6 +1285,7 @@
             getElementFromHash: getElementFromHash,
             throttle: throttle,
             toNumber: toNumber,
+            toNumberAdvanced: toNumberAdvanced,
             triggerEvent: triggerEvent,
             getUrlParamValue: getUrlParamValue
         };
@@ -1263,6 +1295,436 @@
 
     // Let impress core know about the existence of this library
     window.impress.addLibraryFactory( { util: libraryFactory } );
+
+} )( document, window );
+
+/**
+ * Helper functions for rotation.
+ *
+ * Tommy Tam (c) 2021
+ * MIT License
+ */
+( function( document, window ) {
+    "use strict";
+
+    // Singleton library variables
+    var roots = [];
+
+    var libraryFactory = function( rootId ) {
+        if ( roots[ "impress-root-" + rootId ] ) {
+            return roots[ "impress-root-" + rootId ];
+        }
+
+        /**
+         * Round the number to 2 decimals, it's enough for use
+         */
+        var roundNumber = function( num ) {
+            return Math.round( ( num + Number.EPSILON ) * 100 ) / 100;
+        };
+
+        /**
+         * Get the length/norm of a vector.
+         *
+         * https://en.wikipedia.org/wiki/Norm_(mathematics)
+         */
+        var vectorLength = function( vec ) {
+            return Math.sqrt( vec.x * vec.x + vec.y * vec.y + vec.z * vec.z );
+        };
+
+        /**
+         * Dot product of two vectors.
+         *
+         * https://en.wikipedia.org/wiki/Dot_product
+         */
+        var vectorDotProd = function( vec1, vec2 ) {
+            return vec1.x * vec2.x + vec1.y * vec2.y + vec1.z * vec2.z;
+        };
+
+        /**
+         * Cross product of two vectors.
+         *
+         * https://en.wikipedia.org/wiki/Cross_product
+         */
+        var vectorCrossProd = function( vec1, vec2 ) {
+            return {
+                x: vec1.y * vec2.z - vec1.z * vec2.y,
+                y: vec1.z * vec2.x - vec1.x * vec2.z,
+                z: vec1.x * vec2.y - vec1.y * vec2.x
+            };
+        };
+
+        /**
+         * Determine wheter a vector is a zero vector
+         */
+        var isZeroVector = function( vec ) {
+            return !roundNumber( vec.x ) && !roundNumber( vec.y ) && !roundNumber( vec.z );
+        };
+
+        /**
+         * Scalar triple product of three vectors.
+         *
+         * It can be used to determine the handness of vectors.
+         *
+         * https://en.wikipedia.org/wiki/Triple_product#Scalar_triple_product
+         */
+        var tripleProduct = function( vec1, vec2, vec3 ) {
+            return vectorDotProd( vectorCrossProd( vec1, vec2 ), vec3 );
+        };
+
+        /**
+         * The world/absolute unit coordinates.
+         *
+         * This coordinate is used by browser to position objects.
+         * It will not be affected by object rotations.
+         * All relative positions will finally be converted to this
+         * coordinate to be used.
+         */
+        var worldUnitCoordinate = {
+            x: { x:1, y:0, z:0 },
+            y: { x:0, y:1, z:0 },
+            z: { x:0, y:0, z:1 }
+        };
+
+        /**
+         * Make quaternion from rotation axis and angle.
+         *
+         * q = [ cos(½θ), sin(½θ) axis ]
+         *
+         * If the angle is zero, returns the corresponded quaternion
+         * of axis.
+         *
+         * If the angle is not zero, returns the rotating quaternion
+         * which corresponds to rotation about the axis, by the angle θ.
+         *
+         * https://en.wikipedia.org/wiki/Quaternion
+         * https://en.wikipedia.org/wiki/Quaternions_and_spatial_rotation
+         */
+        var makeQuaternion = function( axis, theta = 0 ) {
+            var r = 0;
+            var t = 1;
+
+            if ( theta ) {
+                var radians = theta * Math.PI / 180;
+                r = Math.cos( radians / 2 );
+                t = Math.sin( radians / 2 ) / vectorLength( axis );
+            }
+
+            var q = [ r, axis.x * t, axis.y * t, axis.z * t ];
+
+            return q;
+        };
+
+        /**
+         * Extract vector from quaternion
+         */
+        var quaternionToVector = function( quaternion ) {
+            return {
+                x: roundNumber( quaternion[ 1 ] ),
+                y: roundNumber( quaternion[ 2 ] ),
+                z: roundNumber( quaternion[ 3 ] )
+            };
+        };
+
+        /**
+         * Returns the conjugate quaternion of a quaternion
+         *
+         * https://en.wikipedia.org/wiki/Quaternion#Conjugation,_the_norm,_and_reciprocal
+         */
+        var conjugateQuaternion = function( quaternion ) {
+            return [ quaternion[ 0 ], -quaternion[ 1 ], -quaternion[ 2 ], -quaternion[ 3 ] ];
+        };
+
+        /**
+         * Left multiple two quaternion.
+         *
+         * Is's used to combine two rotating quaternion into one.
+         */
+        var leftMulQuaternion = function( q1, q2 ) {
+            return [
+                ( q1[ 0 ] * q2[ 0 ] - q1[ 1 ] * q2[ 1 ] - q1[ 2 ] * q2[ 2 ] - q1[ 3 ] * q2[ 3 ] ),
+                ( q1[ 1 ] * q2[ 0 ] + q1[ 0 ] * q2[ 1 ] - q1[ 3 ] * q2[ 2 ] + q1[ 2 ] * q2[ 3 ] ),
+                ( q1[ 2 ] * q2[ 0 ] + q1[ 3 ] * q2[ 1 ] + q1[ 0 ] * q2[ 2 ] - q1[ 1 ] * q2[ 3 ] ),
+                ( q1[ 3 ] * q2[ 0 ] - q1[ 2 ] * q2[ 1 ] + q1[ 1 ] * q2[ 2 ] + q1[ 0 ] * q2[ 3 ] )
+            ];
+        };
+
+        /**
+         * Convert a rotation into a quaternion
+         */
+        var rotationToQuaternion = function( baseCoordinate, rotation ) {
+            var order = rotation.order ? rotation.order : "xyz";
+            var axes = order.split( "" );
+            var result = [ 1, 0, 0, 0 ];
+
+            for ( var i = 0; i < axes.length; i++ ) {
+                var deg = rotation[ axes[ i ] ];
+                if ( !deg || ( Math.abs( deg ) < 0.0001 ) ) {
+                    continue;
+                }
+
+                // All CSS rotation is based on the rotated coordinate
+                // So we need to calculate the rotated coordinate first
+                var coordinate = baseCoordinate;
+                if ( i > 0 ) {
+                    coordinate = {
+                        x: rotateByQuaternion( baseCoordinate.x, result ),
+                        y: rotateByQuaternion( baseCoordinate.y, result ),
+                        z: rotateByQuaternion( baseCoordinate.z, result )
+                    };
+                }
+
+                result = leftMulQuaternion(
+                    makeQuaternion( coordinate[ axes[ i ] ], deg ),
+                    result );
+
+            }
+
+            return result;
+        };
+
+        /**
+         * Rotate a vector by a quaternion.
+         */
+        var rotateByQuaternion = function( vec, quaternion ) {
+            var q = makeQuaternion( vec );
+
+            q = leftMulQuaternion(
+                leftMulQuaternion( quaternion, q ),
+                conjugateQuaternion( quaternion ) );
+
+            return quaternionToVector( q );
+        };
+
+        /**
+         * Rotate a vector by rotaion sequence.
+         */
+        var rotateVector = function( baseCoordinate, vec, rotation ) {
+            var quaternion = rotationToQuaternion( baseCoordinate, rotation );
+
+            return rotateByQuaternion( vec, quaternion );
+        };
+
+        /**
+         * Given a rotation, return the rotationed coordinate
+         */
+        var rotateCoordinate = function( coordinate, rotation ) {
+            var quaternion = rotationToQuaternion( coordinate, rotation );
+
+            return {
+                x: rotateByQuaternion( coordinate.x, quaternion ),
+                y: rotateByQuaternion( coordinate.y, quaternion ),
+                z: rotateByQuaternion( coordinate.z, quaternion )
+            };
+        };
+
+        /**
+         * Return the angle between two vector.
+         *
+         * The axis is used to determine the rotation direction.
+         */
+        var angleBetweenTwoVector = function( axis, vec1, vec2 ) {
+            var vecLen1 = vectorLength( vec1 );
+            var vecLen2 = vectorLength( vec2 );
+
+            if ( !vecLen1 || !vecLen2 ) {
+                return 0;
+            }
+
+            var cos = vectorDotProd( vec1, vec2 ) / vecLen1 / vecLen2 ;
+            var angle = Math.acos( cos ) * 180 / Math.PI;
+
+            if ( tripleProduct( vec1, vec2, axis ) > 0 ) {
+                return angle;
+            } else {
+                return -angle;
+            }
+        };
+
+        /**
+         * Return the angle between a vector and a plane.
+         *
+         * The plane is determined by an axis and a vector on the plane.
+         */
+        var angleBetweenPlaneAndVector = function( axis, planeVec, rotatedVec ) {
+            var norm = vectorCrossProd( axis, planeVec );
+
+            if ( isZeroVector( norm ) ) {
+                return 0;
+            }
+
+            return 90 - angleBetweenTwoVector( axis, rotatedVec, norm );
+        };
+
+        /**
+         * Calculated a order specified rotation sequence to
+         * transform from the world coordinate to required coordinate.
+         */
+        var coordinateToOrderedRotation = function( coordinate, order ) {
+            var axis0 = order[ 0 ];
+            var axis1 = order[ 1 ];
+            var axis2 = order[ 2 ];
+            var reversedOrder = order.split( "" ).reverse().join( "" );
+
+            var rotate2 = angleBetweenPlaneAndVector(
+                coordinate[ axis2 ],
+                worldUnitCoordinate[ axis0 ],
+                coordinate[ axis0 ] );
+
+            // The r2 is the reverse of rotate for axis2
+            // The coordinate1 is the coordinate before rotate of axis2
+            var r2 = { order: reversedOrder };
+            r2[ axis2 ] = -rotate2;
+
+            var coordinate1 = rotateCoordinate( coordinate, r2 );
+
+            // Calculate the rotation for axis1
+            var rotate1 = angleBetweenTwoVector(
+                coordinate1[ axis1 ],
+                worldUnitCoordinate[ axis0 ],
+                coordinate1[ axis0 ] );
+
+            // Calculate the rotation for axis0
+            var rotate0 = angleBetweenTwoVector(
+                worldUnitCoordinate[ axis0 ],
+                worldUnitCoordinate[ axis1 ],
+                coordinate1[ axis1 ] );
+
+            var rotation = { };
+            rotation.order = order;
+            rotation[ axis0 ] = roundNumber( rotate0 );
+            rotation[ axis1 ] = roundNumber( rotate1 );
+            rotation[ axis2 ] = roundNumber( rotate2 );
+
+            return rotation;
+        };
+
+        /**
+         * Returns the possible rotations from unit coordinate
+         * to specified coordinate.
+         */
+        var possibleRotations = function( coordinate ) {
+            var orders = [ "xyz", "xzy", "yxz", "yzx", "zxy", "zyx" ];
+            var rotations = [ ];
+
+            for ( var i = 0; i < orders.length; ++i ) {
+                rotations.push(
+                    coordinateToOrderedRotation( coordinate, orders[ i ] )
+                );
+            }
+
+            return rotations;
+        };
+
+        /**
+         * Calculate a degree which in range (-180, 180] of baseDeg
+         */
+        var nearestAngle = function( baseDeg, deg ) {
+            while ( deg > baseDeg + 180 ) {
+                deg -= 360;
+            }
+
+            while ( deg < baseDeg - 180 ) {
+                deg += 360;
+            }
+
+            return deg;
+        };
+
+        /**
+         * Given a base rotation and multiple rotations, return the best one.
+         *
+         * The best one is the one has least rotate from base.
+         */
+        var bestRotation = function( baseRotate, rotations ) {
+            var bestScore;
+            var bestRotation;
+
+            for ( var i = 0; i < rotations.length; ++i ) {
+                var rotation = {
+                    order: rotations[ i ].order,
+                    x: nearestAngle( baseRotate.x, rotations[ i ].x ),
+                    y: nearestAngle( baseRotate.y, rotations[ i ].y ),
+                    z: nearestAngle( baseRotate.z, rotations[ i ].z )
+                };
+
+                var score = Math.abs( rotation.x - baseRotate.x ) +
+                    Math.abs( rotation.y - baseRotate.y ) +
+                    Math.abs( rotation.z - baseRotate.z );
+
+                if ( !i || ( score < bestScore ) ) {
+                    bestScore = score;
+                    bestRotation = rotation;
+                }
+            }
+
+            return bestRotation;
+        };
+
+        /**
+         * Given a coordinate, return the best rotation to achieve it.
+         *
+         * The baseRotate is used to select the near rotation from it.
+         */
+        var coordinateToRotation = function( baseRotate, coordinate ) {
+            var rotations = possibleRotations( coordinate );
+
+            return bestRotation( baseRotate, rotations );
+        };
+
+        /**
+         * Apply a relative rotation to the base rotation.
+         *
+         * Calculate the coordinate after the rotation on each axis,
+         * and finally find out a one step rotation has the effect
+         * of two rotation.
+         *
+         * If there're multiple way to accomplish, select the one
+         * that is nearest to the base.
+         *
+         * Return one rotation has the same effect.
+         */
+        var combineRotations = function( rotations ) {
+
+            // No rotation
+            if ( rotations.length <= 0 ) {
+                return { x:0, y:0, z:0, order:"xyz" };
+            }
+
+            // Find out the base coordinate
+            var coordinate = worldUnitCoordinate;
+
+            // One by one apply rotations in order
+            for ( var i = 0; i < rotations.length; i++ ) {
+                coordinate = rotateCoordinate( coordinate, rotations[ i ] );
+            }
+
+            // Calculate one rotation from unit coordinate to rotated
+            // coordinate.  Because there're multiple possibles,
+            // select the one nearest to the base
+            var rotate = coordinateToRotation( rotations[ 0 ], coordinate );
+
+            return rotate;
+        };
+
+        var translateRelative = function( relative, prevRotation ) {
+            var result = rotateVector(
+                worldUnitCoordinate, relative, prevRotation );
+            result.rotate = combineRotations(
+                [ prevRotation, relative.rotate ] );
+
+            return result;
+        };
+
+        var lib = {
+            translateRelative: translateRelative
+        };
+
+        roots[ "impress-root-" + rootId ] = lib;
+        return lib;
+    };
+
+    // Let impress core know about the existence of this library
+    window.impress.addLibraryFactory( { rotation: libraryFactory } );
 
 } )( document, window );
 
@@ -1520,7 +1982,6 @@
         root = event.target;
         canvas = root.firstElementChild;
         var gc = api.lib.gc;
-        var util = api.lib.util;
 
         gc.addEventListener( document, "keydown", function( event ) {
 
@@ -1563,48 +2024,95 @@
  * Copyright 2016 Henrik Ingo (@henrikingo)
  * Released under the MIT license.
  */
-/* global markdown, hljs, mermaid, impress, document, window */
+/* global markdown, marked, hljs, mermaid, impress */
 
 ( function( document, window ) {
     "use strict";
 
-    var preInit = function() {
-        if ( window.markdown ) {
+    const SLIDE_SEPARATOR = /^-----$/m;
 
-            // Unlike the other extras, Markdown.js doesn't by default do anything in
-            // particular. We do it ourselves here.
-            // In addition, we use "-----" as a delimiter for new slide.
+    const getMarkdownParser = function( ) {
+        if ( window.hasOwnProperty( "marked" ) ) {
 
-            // Query all .markdown elements and translate to HTML
-            var markdownDivs = document.querySelectorAll( ".markdown" );
-            for ( var idx = 0; idx < markdownDivs.length; idx++ ) {
-              var element = markdownDivs[ idx ];
-              var dialect = element.dataset.markdownDialect;
+            // Using marked
+            return function( elem, src ) {
+                return marked.parse( src );
+            };
+        } else if ( window.hasOwnProperty( "markdown" ) ) {
 
-              var slides = element.textContent.split( /^-----$/m );
-              var i = slides.length - 1;
-              element.innerHTML = markdown.toHTML( slides[ i ], dialect );
+            // Using builtin markdown engine
+            return function( elem, src ) {
+                var dialect = elem.dataset.markdownDialect;
+                return markdown.toHTML( src, dialect );
+            };
+        }
 
-              // If there's an id, unset it for last, and all other, elements,
-              // and then set it for the first.
-              var id = null;
-              if ( element.id ) {
-                id = element.id;
-                element.id = "";
-              }
-              i--;
-              while ( i >= 0 ) {
-                var newElement = element.cloneNode( false );
-                newElement.innerHTML = markdown.toHTML( slides[ i ] );
-                element.parentNode.insertBefore( newElement, element );
-                element = newElement;
-                i--;
-              }
-              if ( id !== null ) {
-                element.id = id;
-              }
+        return null;
+    };
+
+    const getMarkdownSlides = function( elem ) {
+        var text = elem.textContent;
+
+        // Using first not blank line to detect leading whitespaces.
+        // can't properly handle the mixing of space and tabs
+        var m = text.match( /^([ \t]*)\S/m );
+        if ( m !== null ) {
+            text = text.replace( new RegExp( "^" + m[ 1 ], "mg" ), "" );
+        }
+
+        return text.split( SLIDE_SEPARATOR );
+    };
+
+    const convertMarkdowns = function( selector ) {
+
+        // Detect markdown engine
+        var parseMarkdown = getMarkdownParser();
+        if ( !parseMarkdown ) {
+            return;
+        }
+
+        for ( var elem of document.querySelectorAll( selector ) ) {
+            var id = null;
+            if ( elem.id ) {
+                id = elem.id;
+                elem.id = "";
             }
-        } // Markdown
+
+            var origTitle = null;
+            if ( elem.title ) {
+                origTitle = elem.title;
+                elem.title = "";
+            }
+
+            var slides = getMarkdownSlides( elem );
+            var slideElems = [ elem ];
+
+            for ( var j = 1; j < slides.length; ++j ) {
+                var newElem = elem.cloneNode( false );
+                newElem.id = "";
+                elem.parentNode.insertBefore( newElem, slideElems[ 0 ] );
+                slideElems.splice( 0, 0, newElem );
+            }
+
+            if ( id ) {
+                slideElems[ 0 ].id = id;
+            }
+
+            for ( var i = 0; i < slides.length; ++i ) {
+                slideElems[ i ].innerHTML =
+                    parseMarkdown( slideElems[ i ], slides[ i ] );
+
+                if ( origTitle && ( i === 0 ) ) {
+                    slideElems[ i ].title = origTitle;
+                }
+            }
+        }
+    };
+
+    var preInit = function() {
+
+        // Query all .markdown elements and translate to HTML
+        convertMarkdowns( ".markdown" );
 
         if ( window.hljs ) {
             hljs.initHighlightingOnLoad();
@@ -2081,6 +2589,20 @@
             'useAMPM': false
         };
         break;
+    case 'zh-CN':
+    case 'zh-cn':
+        lang = {
+            'noNotes': '<div class="noNotes">当前帧没有备注</div>',
+            'restart': '重新开始',
+            'clickToOpen': '点击以打开演讲者控制界面',
+            'prev': '上一帧',
+            'next': '下一帧',
+            'loading': '加载中',
+            'ready': '就绪',
+            'moving': '移动中',
+            'useAMPM': false
+        };
+        break;
     case 'en': // jshint ignore:line
     default : // jshint ignore:line
         lang = {
@@ -2370,8 +2892,8 @@
                 var preView = consoleWindow.document.getElementById( 'preView' );
 
                 // Firefox:
-                slideView.contentDocument.body.classList.add( 'impress-console' );
-                preView.contentDocument.body.classList.add( 'impress-console' );
+                slideView.contentDocument.body.classList.add( 'impress-console', 'slideView' );
+                preView.contentDocument.body.classList.add( 'impress-console', 'preView' );
                 if ( cssFileIframe !== undefined ) {
                     slideView.contentDocument.head.insertAdjacentHTML(
                         'beforeend',
@@ -2385,7 +2907,8 @@
 
                 // Chrome:
                 slideView.addEventListener( 'load', function() {
-                        slideView.contentDocument.body.classList.add( 'impress-console' );
+                        slideView.contentDocument.body.classList.add( 'impress-console',
+                            'slideView' );
                         if ( cssFileIframe !== undefined ) {
                             slideView.contentDocument.head.insertAdjacentHTML(
                                 'beforeend',
@@ -2395,7 +2918,7 @@
                         }
                 } );
                 preView.addEventListener( 'load', function() {
-                        preView.contentDocument.body.classList.add( 'impress-console' );
+                        preView.contentDocument.body.classList.add( 'impress-console', 'preView' );
                         if ( cssFileIframe !== undefined ) {
                             preView.contentDocument.head.insertAdjacentHTML(
                                 'beforeend',
@@ -3431,6 +3954,33 @@
         return tempDiv.firstChild;
     };
 
+    var getStepTitle = function( step ) {
+
+        // Max length for title.
+        // Line longer than this will be cutted.
+        const MAX_TITLE_LEN = 40;
+
+        if ( step.title ) {
+            return step.title;
+        }
+
+        // Neither title nor id is defined
+        if ( step.id.startsWith( 'step-' ) ) {
+            for ( var line of step.innerText.split( '\n' ) ) {
+                line = line.trim( );
+                if ( line.length > 0 ) {
+                    if ( line.length <= MAX_TITLE_LEN ) {
+                        return line;
+                    } else {
+                        return line.slice( 0, MAX_TITLE_LEN - 3 ) + '...';
+                    }
+                }
+            }
+        }
+
+        return step.id;
+    };
+
     var selectOptionsHtml = function() {
         var options = '';
         for ( var i = 0; i < steps.length; i++ ) {
@@ -3438,7 +3988,9 @@
             // Omit steps that are listed as hidden from select widget
             if ( hideSteps.indexOf( steps[ i ] ) < 0 ) {
                 options = options + '<option value="' + steps[ i ].id + '">' + // jshint ignore:line
-                                    steps[ i ].id + '</option>' + '\n'; // jshint ignore:line
+							(
+								getStepTitle( steps[ i ] )
+							) + '</option>' + '\n';
             }
         }
         return options;
@@ -3624,34 +4176,11 @@
 ( function( document, window ) {
     "use strict";
 
+    var api;
     var startingState = {};
 
-    /**
-     * Copied from core impress.js. We currently lack a library mechanism to
-     * to share utility functions like this.
-     */
-    var toNumber = function( numeric, fallback ) {
-        return isNaN( numeric ) ? ( fallback || 0 ) : Number( numeric );
-    };
-
-    /**
-     * Extends toNumber() to correctly compute also relative-to-screen-size values 5w and 5h.
-     *
-     * Returns the computed value in pixels with w/h postfix removed.
-     */
-    var toNumberAdvanced = function( numeric, fallback ) {
-        if ( typeof numeric !== "string" ) {
-            return toNumber( numeric, fallback );
-        }
-        var ratio = numeric.match( /^([+-]*[\d\.]+)([wh])$/ );
-        if ( ratio == null ) {
-            return toNumber( numeric, fallback );
-        } else {
-            var value = parseFloat( ratio[ 1 ] );
-            var multiplier = ratio[ 2 ] === "w" ? window.innerWidth : window.innerHeight;
-            return value * multiplier;
-        }
-    };
+    var toNumber;
+    var toNumberAdvanced;
 
     var computeRelativePositions = function( el, prev ) {
         var data = el.dataset;
@@ -3659,20 +4188,64 @@
         if ( !prev ) {
 
             // For the first step, inherit these defaults
-            prev = { x:0, y:0, z:0, relative: { x:0, y:0, z:0 } };
+            prev = {
+                x:0, y:0, z:0,
+                rotate: { x:0, y:0, z:0, order:"xyz" },
+                relative: {
+                    position: "absolute",
+                    x:0, y:0, z:0,
+                    rotate: { x:0, y:0, z:0, order:"xyz" }
+                }
+            };
         }
 
+        var ref = prev;
         if ( data.relTo ) {
 
-            var ref = document.getElementById( data.relTo );
+            ref = document.getElementById( data.relTo );
             if ( ref ) {
 
                 // Test, if it is a previous step that already has some assigned position data
                 if ( el.compareDocumentPosition( ref ) & Node.DOCUMENT_POSITION_PRECEDING ) {
-                    prev.x = toNumber( ref.getAttribute( "data-x" ) );
-                    prev.y = toNumber( ref.getAttribute( "data-y" ) );
-                    prev.z = toNumber( ref.getAttribute( "data-z" ) );
-                    prev.relative = {};
+                    prev.x = toNumberAdvanced( ref.getAttribute( "data-x" ) );
+                    prev.y = toNumberAdvanced( ref.getAttribute( "data-y" ) );
+                    prev.z = toNumberAdvanced( ref.getAttribute( "data-z" ) );
+
+                    var prevPosition = ref.getAttribute( "data-rel-position" ) || "absolute";
+
+                    if ( prevPosition !== "relative" ) {
+
+                        // For compatibility with the old behavior, doesn't inherit otherthings,
+                        // just like a reset.
+                        prev.rotate = { x:0, y:0, z:0, order: "xyz" };
+                        prev.relative = {
+                            position: "absolute",
+                            x:0, y:0, z:0,
+                            rotate: { x:0, y:0, z:0, order:"xyz" }
+                        };
+                    } else {
+
+                        // For data-rel-position="relative", inherit all
+                        prev.rotate.y = toNumber( ref.getAttribute( "data-rotate-y" ) );
+                        prev.rotate.x = toNumber( ref.getAttribute( "data-rotate-x" ) );
+                        prev.rotate.z = toNumber(
+                            ref.getAttribute( "data-rotate-z" ) ||
+                            ref.getAttribute( "data-rotate" ) );
+
+                        // We also inherit relatives from relTo slide
+                        prev.relative = {
+                            position: prevPosition,
+                            x: toNumberAdvanced( ref.getAttribute( "data-rel-x" ), 0 ),
+                            y: toNumberAdvanced( ref.getAttribute( "data-rel-y" ), 0 ),
+                            z: toNumberAdvanced( ref.getAttribute( "data-rel-z" ), 0 ),
+                            rotate: {
+                                x: toNumberAdvanced( ref.getAttribute( "data-rel-rotate-x" ), 0 ),
+                                y: toNumberAdvanced( ref.getAttribute( "data-rel-rotate-y" ), 0 ),
+                                z: toNumberAdvanced( ref.getAttribute( "data-rel-rotate-z" ), 0 ),
+                                order: ( ref.getAttribute( "data-rel-rotate-order" ) ||  "xyz" )
+                            }
+                        };
+                    }
                 } else {
                     window.console.error(
                         "impress.js rel plugin: Step \"" + data.relTo + "\" is not defined " +
@@ -3693,39 +4266,104 @@
             }
         }
 
+        // While ``data-rel-reset="relative"`` or just ``data-rel-reset``,
+        // ``data-rel-x/y/z`` and ``data-rel-rotate-x/y/z`` will have default value of 0,
+        // instead of inherit from previous slide.
+        //
+        // If ``data-rel-reset="all"``, ``data-rotate-*`` are not inherited from previous slide too.
+        // So ``data-rel-reset="all" data-rotate-x="90"`` means
+        // ``data-rotate-x="90" data-rotate-y="0" data-rotate-z="0"``, we doesn't need to
+        // bother clearing all unneeded attributes.
+
+        var inheritRotation = true;
+        if ( el.hasAttribute( "data-rel-reset" ) ) {
+
+            // Don't inherit from prev, just use the relative setting for current element
+            prev.relative = {
+                position: prev.relative.position,
+                x:0, y:0, z:0,
+                rotate: { x:0, y:0, z:0, order: "xyz" } };
+
+            if ( data.relReset === "all" ) {
+                inheritRotation = false;
+            }
+        }
+
         var step = {
-                x: toNumber( data.x, prev.x ),
-                y: toNumber( data.y, prev.y ),
-                z: toNumber( data.z, prev.z ),
+                x: toNumberAdvanced( data.x, prev.x ),
+                y: toNumberAdvanced( data.y, prev.y ),
+                z: toNumberAdvanced( data.z, prev.z ),
+                rotate: {
+                    x: toNumber( data.rotateX, 0 ),
+                    y: toNumber( data.rotateY, 0 ),
+                    z: toNumber( data.rotateZ || data.rotate, 0 ),
+                    order: data.rotateOrder || "xyz"
+                },
                 relative: {
+                    position: data.relPosition || prev.relative.position,
                     x: toNumberAdvanced( data.relX, prev.relative.x ),
                     y: toNumberAdvanced( data.relY, prev.relative.y ),
-                    z: toNumberAdvanced( data.relZ, prev.relative.z )
+                    z: toNumberAdvanced( data.relZ, prev.relative.z ),
+                    rotate: {
+                        x: toNumber( data.relRotateX, prev.relative.rotate.x ),
+                        y: toNumber( data.relRotateY, prev.relative.rotate.y ),
+                        z: toNumber( data.relRotateZ, prev.relative.rotate.z ),
+                        order: data.rotateOrder || "xyz"
+                    }
                 }
             };
+
+        // The final relatives maybe or maybe not the same with orignal data-rel-*
+        var relative = step.relative;
+
+        if ( step.relative.position === "relative" && inheritRotation ) {
+
+            // Calculate relatives based on previous slide
+            relative = api.lib.rotation.translateRelative(
+                step.relative, prev.rotate );
+
+            // Convert rotations to values that works with step.rotate
+            relative.rotate.x -= step.rotate.x;
+            relative.rotate.y -= step.rotate.y;
+            relative.rotate.z -= step.rotate.z;
+        }
 
         // Relative position is ignored/zero if absolute is given.
         // Note that this also has the effect of resetting any inherited relative values.
         if ( data.x !== undefined ) {
-            step.relative.x = 0;
+            relative.x = step.relative.x = 0;
         }
         if ( data.y !== undefined ) {
-            step.relative.y = 0;
+            relative.y = step.relative.y = 0;
         }
         if ( data.z !== undefined ) {
-            step.relative.z = 0;
+            relative.z = step.relative.z = 0;
+        }
+        if ( data.rotateX !== undefined || !inheritRotation ) {
+            relative.rotate.x = step.relative.rotate.x = 0;
+        }
+        if ( data.rotateY !== undefined || !inheritRotation ) {
+            relative.rotate.y = step.relative.rotate.y = 0;
+        }
+        if ( data.rotateZ !== undefined || data.rotate !== undefined || !inheritRotation ) {
+            relative.rotate.z = step.relative.rotate.z = 0;
         }
 
-        // Apply relative position to absolute position, if non-zero
-        // Note that at this point, the relative values contain a number value of pixels.
-        step.x = step.x + step.relative.x;
-        step.y = step.y + step.relative.y;
-        step.z = step.z + step.relative.z;
+        step.x = step.x + relative.x;
+        step.y = step.y + relative.y;
+        step.z = step.z + relative.z;
+        step.rotate.x = step.rotate.x + relative.rotate.x;
+        step.rotate.y = step.rotate.y + relative.rotate.y;
+        step.rotate.z = step.rotate.z + relative.rotate.z;
 
         return step;
     };
 
-    var rel = function( root ) {
+    var rel = function( root, impressApi ) {
+        api = impressApi;
+        toNumber = api.lib.util.toNumber;
+        toNumberAdvanced = api.lib.util.toNumberAdvanced;
+
         var steps = root.querySelectorAll( ".step" );
         var prev;
         startingState[ root.id ] = [];
@@ -3738,7 +4376,16 @@
                 z: el.getAttribute( "data-z" ),
                 relX: el.getAttribute( "data-rel-x" ),
                 relY: el.getAttribute( "data-rel-y" ),
-                relZ: el.getAttribute( "data-rel-z" )
+                relZ: el.getAttribute( "data-rel-z" ),
+                rotateX: el.getAttribute( "data-rotate-x" ),
+                rotateY: el.getAttribute( "data-rotate-y" ),
+                rotateZ: el.getAttribute( "data-rotate-z" ),
+                rotate: el.getAttribute( "data-rotate" ),
+                relRotateX: el.getAttribute( "data-rel-rotate-x" ),
+                relRotateY: el.getAttribute( "data-rel-rotate-y" ),
+                relRotateZ: el.getAttribute( "data-rel-rotate-z" ),
+                relPosition: el.getAttribute( "data-rel-position" ),
+                rotateOrder: el.getAttribute( "data-rotate-order" )
             } );
             var step = computeRelativePositions( el, prev );
 
@@ -3746,6 +4393,17 @@
             el.setAttribute( "data-x", step.x );
             el.setAttribute( "data-y", step.y );
             el.setAttribute( "data-z", step.z );
+            el.setAttribute( "data-rotate-x", step.rotate.x );
+            el.setAttribute( "data-rotate-y", step.rotate.y );
+            el.setAttribute( "data-rotate-z", step.rotate.z );
+            el.setAttribute( "data-rotate-order", step.rotate.order );
+            el.setAttribute( "data-rel-position", step.relative.position );
+            el.setAttribute( "data-rel-x", step.relative.x );
+            el.setAttribute( "data-rel-y", step.relative.y );
+            el.setAttribute( "data-rel-z", step.relative.z );
+            el.setAttribute( "data-rel-rotate-x", step.relative.rotate.x );
+            el.setAttribute( "data-rel-rotate-y", step.relative.rotate.y );
+            el.setAttribute( "data-rel-rotate-z", step.relative.rotate.z );
             prev = step;
         }
     };
@@ -3759,28 +4417,27 @@
         event.detail.api.lib.gc.pushCallback( function() {
             var steps = startingState[ root.id ];
             var step;
+            var attrs = [
+                [ "x", "relX" ],
+                [ "y", "relY" ],
+                [ "z", "relZ" ],
+                [ "rotate-x", "relRotateX" ],
+                [ "rotate-y", "relRotateY" ],
+                [ "rotate-z", "relRotateZ" ],
+                [ "rotate-order", "relRotateOrder" ]
+            ];
+
             while ( step = steps.pop() ) {
 
                 // Reset x/y/z in cases where this plugin has changed it.
-                if ( step.relX !== null ) {
-                    if ( step.x === null ) {
-                        step.el.removeAttribute( "data-x" );
-                    } else {
-                        step.el.setAttribute( "data-x", step.x );
-                    }
-                }
-                if ( step.relY !== null ) {
-                    if ( step.y === null ) {
-                        step.el.removeAttribute( "data-y" );
-                    } else {
-                        step.el.setAttribute( "data-y", step.y );
-                    }
-                }
-                if ( step.relZ !== null ) {
-                    if ( step.z === null ) {
-                        step.el.removeAttribute( "data-z" );
-                    } else {
-                        step.el.setAttribute( "data-z", step.z );
+                for ( var i = 0; i < attrs.length; i++ ) {
+                    if ( step[ attrs[ i ][ 1 ] ] !== null ) {
+                        if ( step[ attrs[ i ][ 0 ] ] === null ) {
+                            step.el.removeAttribute( "data-" + attrs[ i ][ 0 ] );
+                        } else {
+                            step.el.setAttribute(
+                                "data-" + attrs[ i ][ 0 ], step[ attrs[ i ][ 0 ] ] );
+                        }
                     }
                 }
             }
@@ -4009,10 +4666,26 @@
 
     var showSubstepIfAny = function( step ) {
         var substeps = step.querySelectorAll( ".substep" );
-        var visible = step.querySelectorAll( ".substep-visible" );
         if ( substeps.length > 0 ) {
-            return showSubstep( substeps, visible );
+            var sorted = sortSubsteps( substeps );
+            var visible = step.querySelectorAll( ".substep-visible" );
+            return showSubstep( sorted, visible );
         }
+    };
+
+    var sortSubsteps = function( substepNodeList ) {
+        var substeps = Array.from( substepNodeList );
+        var sorted = substeps
+            .filter( el => el.dataset.substepOrder )
+            .sort( ( a, b ) => {
+                var orderA = a.dataset.substepOrder;
+                var orderB = b.dataset.substepOrder;
+                return parseInt( orderA ) - parseInt( orderB );
+            } )
+            .concat( substeps.filter( el => {
+                return el.dataset.substepOrder === undefined;
+            } ) );
+        return sorted;
     };
 
     var showSubstep = function( substeps, visible ) {
@@ -4020,9 +4693,29 @@
             for ( var i = 0; i < substeps.length; i++ ) {
                 substeps[ i ].classList.remove( "substep-active" );
             }
-            var el = substeps[ visible.length ];
-            el.classList.add( "substep-visible" );
-            el.classList.add( "substep-active" );
+
+            // Loop over all substeps that are not yet visible and set
+            //   those of currentSubstepOrder to visible and active
+            var el;
+            var currentSubstepOrder;
+            for ( var j = visible.length; j < substeps.length; j++ ) {
+                if ( currentSubstepOrder &&
+                    currentSubstepOrder !== substeps[ j ].dataset.substepOrder ) {
+
+                    // Stop if the substepOrder is greater
+                    break;
+                }
+                el = substeps[ j ];
+                currentSubstepOrder = el.dataset.substepOrder;
+                el.classList.add( "substep-visible" );
+                el.classList.add( "substep-active" );
+                if ( currentSubstepOrder === undefined ) {
+
+                    // Stop after one substep as default order
+                    break;
+                }
+            }
+
             return el;
         }
     };
@@ -4030,8 +4723,9 @@
     var hideSubstepIfAny = function( step ) {
         var substeps = step.querySelectorAll( ".substep" );
         var visible = step.querySelectorAll( ".substep-visible" );
+        var sorted = sortSubsteps( visible );
         if ( substeps.length > 0 ) {
-            return hideSubstep( visible );
+            return hideSubstep( sorted );
         }
     };
 
@@ -4049,6 +4743,15 @@
             }
             var el = visible[ visible.length - 1 ];
             el.classList.remove( "substep-visible" );
+
+            // Continue if there is another substep with the same substepOrder
+            if ( current > 0 &&
+                visible[ current ].dataset.substepOrder !== undefined &&
+                visible[ current - 1 ].dataset.substepOrder ===
+                visible[ current ].dataset.substepOrder ) {
+                visible.pop();
+                return hideSubstep( visible );
+            }
             return el;
         }
     };

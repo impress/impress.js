@@ -6,13 +6,14 @@
  * in modern browsers and inspired by the idea behind prezi.com.
  *
  *
- * Copyright 2011-2012 Bartek Szopka (@bartaz), 2016-2020 Henrik Ingo (@henrikingo)
+ * Copyright 2011-2012 Bartek Szopka (@bartaz), 2016-2023 Henrik Ingo (@henrikingo)
+ * and 70+ other contributors
  *
  * Released under the MIT License.
  *
  * ------------------------------------------------
  *  author:  Bartek Szopka, Henrik Ingo
- *  version: 1.1.0
+ *  version: 2.0.0
  *  url:     http://impress.js.org
  *  source:  http://github.com/impress/impress.js/
  */
@@ -167,15 +168,18 @@
 
     // Some default config values.
     var defaults = {
-        width: 1024,
-        height: 768,
-        maxScale: 1,
+        width: 1920,
+        height: 1080,
+        maxScale: 3,
         minScale: 0,
 
         perspective: 1000,
 
         transitionDuration: 1000
     };
+
+    // Configuration options
+    var config = null;
 
     // It's just an empty function ... and a useless comment.
     var empty = function() { return false; };
@@ -228,9 +232,6 @@
         // Array of step elements
         var steps = null;
 
-        // Configuration options
-        var config = null;
-
         // Scale factor of the browser window
         var windowScale = null;
 
@@ -281,9 +282,9 @@
             var data = el.dataset,
                 step = {
                     translate: {
-                        x: lib.util.toNumber( data.x ),
-                        y: lib.util.toNumber( data.y ),
-                        z: lib.util.toNumber( data.z )
+                        x: lib.util.toNumberAdvanced( data.x ),
+                        y: lib.util.toNumberAdvanced( data.y ),
+                        z: lib.util.toNumberAdvanced( data.z )
                     },
                     rotate: {
                         x: lib.util.toNumber( data.rotateX ),
@@ -321,9 +322,27 @@
             steps.forEach( initStep );
         };
 
+        // Build configuration from root and defaults
+        var buildConfig = function() {
+            var rootData = root.dataset;
+            return {
+                width: lib.util.toNumber( rootData.width, defaults.width ),
+                height: lib.util.toNumber( rootData.height, defaults.height ),
+                maxScale: lib.util.toNumber( rootData.maxScale, defaults.maxScale ),
+                minScale: lib.util.toNumber( rootData.minScale, defaults.minScale ),
+                perspective: lib.util.toNumber( rootData.perspective, defaults.perspective ),
+                transitionDuration: lib.util.toNumber(
+                    rootData.transitionDuration, defaults.transitionDuration
+                )
+            };
+        };
+
         // `init` API function that initializes (and runs) the presentation.
         var init = function() {
             if ( initialized ) { return; }
+
+            // Initialize the configuration object, so it can be used by pre-init plugins.
+            config = buildConfig();
             execPreInitPlugins( root );
 
             // First we set up the viewport for mobile devices.
@@ -334,19 +353,6 @@
                 meta.name = "viewport";
                 document.head.appendChild( meta );
             }
-
-            // Initialize configuration object
-            var rootData = root.dataset;
-            config = {
-                width: lib.util.toNumber( rootData.width, defaults.width ),
-                height: lib.util.toNumber( rootData.height, defaults.height ),
-                maxScale: lib.util.toNumber( rootData.maxScale, defaults.maxScale ),
-                minScale: lib.util.toNumber( rootData.minScale, defaults.minScale ),
-                perspective: lib.util.toNumber( rootData.perspective, defaults.perspective ),
-                transitionDuration: lib.util.toNumber(
-                    rootData.transitionDuration, defaults.transitionDuration
-                )
-            };
 
             windowScale = computeWindowScale( config );
 
@@ -776,7 +782,7 @@
             // scrolling to element in hash.
             //
             // And it has to be set after animation finishes, because in Chrome it
-            // makes transtion laggy.
+            // makes transition laggy.
             // BUG: http://code.google.com/p/chromium/issues/detail?id=62820
             lib.gc.addEventListener( root, "impress:stepenter", function( event ) {
                 window.location.hash = lastHash = "#/" + event.target.id;
@@ -868,7 +874,7 @@
             var thisLevel = preInitPlugins[ i ];
             if ( thisLevel !== undefined ) {
                 for ( var j = 0; j < thisLevel.length; j++ ) {
-                    thisLevel[ j ]( root );
+                    thisLevel[ j ]( root, roots[ "impress-root-" + root.id ] );
                 }
             }
         }
@@ -886,6 +892,10 @@
             preStepLeavePlugins[ weight ] = [];
         }
         preStepLeavePlugins[ weight ].push( plugin );
+    };
+
+    impress.getConfig = function() {
+        return config;
     };
 
     // Called at beginning of goto(), to execute all preStepLeave plugins.

@@ -94,6 +94,23 @@ It is focused on plugin functionality, not the visual style of your presentation
 }
 
 /*
+  We might want to hide the help, toolbar, progress and progress bar in the
+  preView window of the impressConsole that is displayed when you press P.
+*/
+.impress-console.preView .impress-progress,
+.impress-console.preView .impress-progressbar,
+.impress-console.preView #impress-toolbar,
+.impress-console.preView #impress-help {
+  display: none;
+}
+/*
+  Hide the help in the slideView as well.
+*/
+.impress-console.slideView #impress-help {
+  display: none;
+}
+
+/*
     With help from the mouse-timeout plugin, we can hide the toolbar and
     have it show only when you move/click/touch the mouse.
 */

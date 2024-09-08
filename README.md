@@ -13,6 +13,17 @@ impress.js may not help you if you have nothing interesting to say ;)
 
 HOW TO USE IT
 ---------------
+### Getting Started Guide
+Check out our new [Getting Started](GettingStarted.md) guide if you want a quick introduction to the project!
+
+### Direct download link to only impress.js
+You can include this link directly inside of your HTML file in its header. If you want to learn how to do this, you can find a how-to in the [Getting Started](GettingStarted.md) guide.
+- V2.0.0: https://cdn.jsdelivr.net/gh/impress/impress.js@2.0.0/js/impress.js
+- V1.1.0: https://cdn.jsdelivr.net/gh/impress/impress.js@1.1.0/js/impress.js
+- Source: https://cdn.jsdelivr.net/gh/impress/impress.js/js/impress.js
+
+### Getting Started Guide
+Check out our new [Getting Started](GettingStarted.md) guide if you want a quick introduction to the project!
 
 ### Checking out and initializing the git repository
 
@@ -98,7 +109,7 @@ ABOUT THE NAME
 
 impress.js name is [courtesy of @skuzniak](http://twitter.com/skuzniak/status/143627215165333504).
 
-It's an (un)fortunate coincidence that a Open/LibreOffice presentation tool is called Impress ;)
+It's an (un)fortunate coincidence that an Open/LibreOffice presentation tool is called Impress ;)
 
 Reference API
 --------------
@@ -122,8 +133,6 @@ In particular, impress.js makes use of the following JS and CSS features:
 COPYRIGHT AND LICENSE
 ---------------------
 
-Copyright 2011-2016 Bartek Szopka
-
-Copyright 2015-2017 Henrik Ingo
+Copyright 2011-2012 Bartek Szopka (@bartaz), 2016-2023 Henrik Ingo (@henrikingo) and [70+ other contributors](https://github.com/impress/impress.js/graphs/contributors)
 
 Released under the MIT [License](LICENSE)

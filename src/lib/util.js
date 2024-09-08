@@ -46,7 +46,8 @@
 
             // Get id from url # by removing `#` or `#/` from the beginning,
             // so both "fallback" `#slide-id` and "enhanced" `#/slide-id` will work
-            return byId( window.location.hash.replace( /^#\/?/, "" ) );
+            var encoded = window.location.hash.replace( /^#\/?/, "" );
+            return byId( decodeURIComponent( encoded ) );
         };
 
         // `getUrlParamValue` return a given URL parameter value if it exists
@@ -80,6 +81,26 @@
             return isNaN( numeric ) ? ( fallback || 0 ) : Number( numeric );
         };
 
+        /**
+         * Extends toNumber() to correctly compute also relative-to-screen-size values 5w and 5h.
+         *
+         * Returns the computed value in pixels with w/h postfix removed.
+         */
+        var toNumberAdvanced = function( numeric, fallback ) {
+            if ( typeof numeric !== "string" ) {
+                return toNumber( numeric, fallback );
+            }
+            var ratio = numeric.match( /^([+-]*[\d\.]+)([wh])$/ );
+            if ( ratio == null ) {
+                return toNumber( numeric, fallback );
+            } else {
+                var value = parseFloat( ratio[ 1 ] );
+                var config = window.impress.getConfig();
+                var multiplier = ratio[ 2 ] === "w" ? config.width : config.height;
+                return value * multiplier;
+            }
+        };
+
         // `triggerEvent` builds a custom DOM event with given `eventName` and `detail` data
         // and triggers it on element given as `el`.
         var triggerEvent = function( el, eventName, detail ) {
@@ -96,6 +117,7 @@
             getElementFromHash: getElementFromHash,
             throttle: throttle,
             toNumber: toNumber,
+            toNumberAdvanced: toNumberAdvanced,
             triggerEvent: triggerEvent,
             getUrlParamValue: getUrlParamValue
         };

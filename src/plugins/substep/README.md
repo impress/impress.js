@@ -9,6 +9,12 @@ alternatively hide one (for `prev()`). Only once all substeps are shown, will a 
 actually move to the next step, and only when all are hidden will a call to `prev()` move to the
 previous one.
 
+By default, this plugin reveals substeps in the order in which they appear in the HTML.  If you
+would like to reveal them in a different order, you can supply an integer to `data-substep-order`.
+If you do so, this plugin will reveal the substeps in ascending order; any substeps without a
+specified `data-substep-order` will be revealed after all substeps with a specified order have
+been revealed.
+
 Calls to `goto()` will be ignored by this plugin, i.e. `goto()` will transition to whichever step is
 the target.
 

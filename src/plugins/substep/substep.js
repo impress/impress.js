@@ -61,10 +61,26 @@
 
     var showSubstepIfAny = function( step ) {
         var substeps = step.querySelectorAll( ".substep" );
-        var visible = step.querySelectorAll( ".substep-visible" );
         if ( substeps.length > 0 ) {
-            return showSubstep( substeps, visible );
+            var sorted = sortSubsteps( substeps );
+            var visible = step.querySelectorAll( ".substep-visible" );
+            return showSubstep( sorted, visible );
         }
+    };
+
+    var sortSubsteps = function( substepNodeList ) {
+        var substeps = Array.from( substepNodeList );
+        var sorted = substeps
+            .filter( el => el.dataset.substepOrder )
+            .sort( ( a, b ) => {
+                var orderA = a.dataset.substepOrder;
+                var orderB = b.dataset.substepOrder;
+                return parseInt( orderA ) - parseInt( orderB );
+            } )
+            .concat( substeps.filter( el => {
+                return el.dataset.substepOrder === undefined;
+            } ) );
+        return sorted;
     };
 
     var showSubstep = function( substeps, visible ) {
@@ -72,9 +88,29 @@
             for ( var i = 0; i < substeps.length; i++ ) {
                 substeps[ i ].classList.remove( "substep-active" );
             }
-            var el = substeps[ visible.length ];
-            el.classList.add( "substep-visible" );
-            el.classList.add( "substep-active" );
+
+            // Loop over all substeps that are not yet visible and set
+            //   those of currentSubstepOrder to visible and active
+            var el;
+            var currentSubstepOrder;
+            for ( var j = visible.length; j < substeps.length; j++ ) {
+                if ( currentSubstepOrder &&
+                    currentSubstepOrder !== substeps[ j ].dataset.substepOrder ) {
+
+                    // Stop if the substepOrder is greater
+                    break;
+                }
+                el = substeps[ j ];
+                currentSubstepOrder = el.dataset.substepOrder;
+                el.classList.add( "substep-visible" );
+                el.classList.add( "substep-active" );
+                if ( currentSubstepOrder === undefined ) {
+
+                    // Stop after one substep as default order
+                    break;
+                }
+            }
+
             return el;
         }
     };
@@ -82,8 +118,9 @@
     var hideSubstepIfAny = function( step ) {
         var substeps = step.querySelectorAll( ".substep" );
         var visible = step.querySelectorAll( ".substep-visible" );
+        var sorted = sortSubsteps( visible );
         if ( substeps.length > 0 ) {
-            return hideSubstep( visible );
+            return hideSubstep( sorted );
         }
     };
 
@@ -101,6 +138,15 @@
             }
             var el = visible[ visible.length - 1 ];
             el.classList.remove( "substep-visible" );
+
+            // Continue if there is another substep with the same substepOrder
+            if ( current > 0 &&
+                visible[ current ].dataset.substepOrder !== undefined &&
+                visible[ current - 1 ].dataset.substepOrder ===
+                visible[ current ].dataset.substepOrder ) {
+                visible.pop();
+                return hideSubstep( visible );
+            }
             return el;
         }
     };

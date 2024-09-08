@@ -1,5 +1,29 @@
 @import url(fonts.css);
 
+/* Specific to this presentation */
+
+div.step p {
+    border: solid 2px black;
+    border-radius: 120px;
+    width: 170px;
+    height: 110px;
+    text-align: center;
+    padding-top: 65px;
+    background-color: black;
+    color: white;
+}
+
+div.step img {
+    border: solid 2px black;
+    border-radius: 120px;
+    width: 170px;
+    height: 170px;
+    text-align: center;
+    background-color: black;
+    color: white;
+}
+
+
 
 
 /*  Fallback message */
@@ -62,16 +86,6 @@ body {
     border: none;
     box-shadow: none;
 }
-/*
-    Make inactive steps a little bit transparent.
-*/
-.impress-enabled .step {
-    margin: 0;
-    opacity: 0.7;
-    transition:         opacity 1s;
-}
-
-.impress-enabled .step.active { opacity: 1 }
 
 h1, 
 h2, 
@@ -102,21 +116,18 @@ code {
 
 
 a {
-    color: inherit;
-    text-decoration: none;
-    padding: 0 0.1em;
-    background: rgba(200,200,200,0.2);
-    text-shadow: -1px 1px 2px rgba(100,100,100,0.9);
-    border-radius: 0.2em;
-    border-bottom: 1px solid rgba(100,100,100,0.2);
-    border-left:   1px solid rgba(100,100,100,0.2);
-
-    transition:         0.5s;
+    color: #ddd;
+    text-decoration: underline;
 }
 a:hover,
 a:focus {
     background: rgba(200,200,200,1);
     text-shadow: -1px 1px 2px rgba(100,100,100,0.5);
+    padding: 0 0.1em;
+    background: rgba(200,200,200,0.2);
+    border-radius: 0.2em;
+    border-bottom: 1px solid rgba(100,100,100,0.2);
+    border-left:   1px solid rgba(100,100,100,0.2);
 }
 
 blockquote {
