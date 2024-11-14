@@ -1,0 +1,109 @@
+<!doctype html>
+
+<!--
+  This is a simple example / template impress.js slide show. The goal is to be
+  easier to read for a first timer than the official and very feature rich
+  demo by bartaz (http://bartaz.github.io/impress.js/). It's also a very
+  traditional presentation that looks like slides (square screens with bullet
+  points...), again to make a first timer feel more at home. From this simple
+  presentation you can then go on to more powerful impress.js presentations!
+  
+  This example is hopefully helpful for people that want to create both
+  simple and (eventually) awesome presentations in impress.js and comfortable
+  doing that directly in HTML.
+  
+  By: @henrikingo (Still based on the HTML from bartaz' demo.)  
+    
+-->
+
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>A Study in 3D Rotations| by Henrik Ingo @henrikingo</title>
+    <meta name="description" content="Explore impress.js in 3D" />
+    <meta name="author" content="Henrik Ingo" />
+    <link href="../../css/impress-common.css" rel="stylesheet" />
+    <link href="css/3D-rotations.css" rel="stylesheet" />
+</head>
+
+<body class="impress-not-supported">
+<div class="fallback-message">
+    <p>Your browser <b>doesn't support the features required</b> by impress.js, so you are presented with a simplified version of this presentation.</p>
+    <p>For the best experience please use the latest <b>Chrome</b>, <b>Safari</b> or <b>Firefox</b> browser.</p>
+</div>
+
+<div id="impress" data-transition-duration="2000">
+
+
+    <div id="overview" class="step people;" data-x="1350" data-y="100" data-z="100" data-scale="100" data-rotate-y="90" style="background-color: aqua;">
+        <img src="C:\bioinfo\kkkkk.png"style="max-width: 100%; height: auto;width: 300px;" class="step" data-x="290" data-y="320" data-z="100000">
+         <h1><p style="color: mediumblue; margin: -10px -500px;font-family: Georgia, 'Times New Roman', Times, serif;">Uso de Mafft para el alineamiento de secuencias</p></h1>
+    </div>
+    <div id="overview2" class="step overview" data-x="2018" data-y="106" data-z="3018" data-scale="2">
+        <h1><p font-size=" 25px;" style="color: rgb(228, 104, 104);"span class= "highlight-bold">Creado por:</p></h1>
+        <h2><p font-size= "10px">*Barrera Diaz Fernando.</p></h2> 
+        <h2><p font-size= "10px">*Bernal Trinidad Yehimi Angelica.</p></h2>
+    </div>
+
+    <div id="step-1" class="step" data-x="0" data-y="0" data-z="0"
+         data-goto-prev="step-8" style="background-color: rgb(21, 218, 218);">
+        <p font size= "1s;" style="margin:10px -50px; line-height: 1.1;color:black;font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">En bioinformatica, MAFFT (alineamiento multiple mediante transformada rapida de Fourier) es un programa utilizado para crear alinemientos multiples de secuencias de aminoacidos o nucleotidos</p>
+    </div>
+
+    <div id="step-2" class="step" style="background-color: rgb(35, 196, 196);line-height:0.2;font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif" data-x="2018" data-y="106" data-z="30018" data-rotate-z="45" data-rotate-y="-45" data-rotate-order="zyx">
+        <h5><q style="line-height:1; color:black">Este programa funciona siguiendo 5 pasos: </q></h5>
+        <h5><q>Alineacion por pares</q></h5>
+        <h5><q>Matriz de distancia</q></h5>
+        <h5><q>Arbol guia</q></h5>
+        <h5><q>Alineacion progresiva </q></h5>
+        <h5><q>Alineacion iterativa</q></h5>
+    </div>
+
+    <div id="step-3" class="step" data-x="700" data-y="350" data-z="-350" data-rotate-z="90" data-rotate-y="-90" data-rotate-order="zyx" style="background-color: rgb(49, 167, 167)">
+        <p style="margin: 10px -50px; line-height: 1.1; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;color:black">MAFFT es ampliamente considerado como una de las herramientas más precisas y versátiles para la alineación de secuencias múltiples en bioinformática.</p>
+    </div>
+
+    <div id="step-4" class="step" style= "background-color:rgb(54, 146, 146);"data-x="422" data-y="780" data-z="-250" data-rotate-z="135" data-rotate-y="-135" data-rotate-order="zyx">
+        <img src="C:\Users\Asus\Pictures\Screenshots\FFT-NS-1.png"style="margin:150px -260px; transform:scale(1.5)">
+        <p style="margin: -925px 150px;color: black; font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;">FFT-NS-1</p>
+    </div>
+
+    <div id="step-5" class="step" data-x="0" data-y="0" data-z="0" style= "background-color:rgb(60, 131, 131)">
+        <img src="C:\Users\Asus\Pictures\Screenshots\FFT-NS-2.png"style="margin:150px -260px; transform:scale(1.5)">
+        <p style="margin: -925px 150px;color: black; font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;">FFT-NS-2</p>
+    </div>
+
+    <div id="step-6" class="step" data-x="3000" data-y="780" data-z="270" style= "background-color:rgb(57, 104, 104)">
+        <img src="C:\Users\Asus\Pictures\Screenshots\G-INS-1.png"style="margin:150px -260px; transform:scale(1.5)">
+        <p style="margin: -925px 150px;color: blue; font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;">G-INS-1</p>
+    </div>
+
+    <div id="step-7" class="step" data-x="-700" data-y="350" data-z="350"style= "background-color:rgb(57, 104, 104)">
+        <img src="C:\Users\Asus\Pictures\Screenshots\FFT-NS-i.png"style="margin:150px -260px; transform:scale(1.5)">
+        <p style="margin: -925px 150px;color: blue; font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;">FFT-NS-i</p>
+    </div>
+
+    <div id="step-8" class="step" data-x="379" data-y="450" data-z="430" style= "background-color:rgb(50, 80, 80)">
+         <img src="C:\Users\Asus\Pictures\Screenshots\E-INS-i.png"style="margin:150px -260px; transform:scale(1.5)">
+         <p style="margin: -925px 150px;color: blue; font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;">E-INS-i</p>
+    </div>
+
+    <div id="step-9" class="step" data-x="700" data-y="550" data-z="430" style= "background-color:rgb(50, 80, 80)">
+         <img src="C:\Users\Asus\Pictures\Screenshots\L-INS-i.png"style="margin:150px -260px; transform:scale(1.5)">
+         <p style="margin: -925px 150px;color: blue; font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;">L-INS-i</p>
+    </div>
+
+    <div id="step-10" class="step" data-x="-3000" data-y="650" data-z="430" style= "background-color:rgb(50, 80, 80)">
+        <img src="C:\Users\Asus\Pictures\Screenshots\G-INS-i.png"style="margin:150px -260px; transform:scale(1.5)">
+        <p style="margin: -925px 150px;color: blue; font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;">G-INS-i</p>     
+    </div>
+   
+</div>
+<div id="impress-toolbar"></div>
+<div id="impress-help"></div>
+
+<script type="text/javascript" src="../../js/impress.js"></script>
+<script>impress().init();</script>
+
+</body>
+</html>
