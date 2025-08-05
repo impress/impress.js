@@ -1,0 +1,48 @@
+name: Automates the Verification, Testing, and Building Process
+
+env:
+  NPM_CONFIG_LOGLEVEL: "warn"
+  NPM_CONFIG_PREFER_OFFLINE: "true"
+
+jobs:
+  verification:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+      - name: Install dependencies
+        run: npm clean-install
+      - name: Lint code
+        run: npm run lint
+
+  # TODO: Run tests
+
+  assembly:
+    needs: verification
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+      - name: Install dependencies
+        run: npm clean-install
+      - name: Lint code
+        run: npm run build
+
+on:
+  pull_request:
+    branches:
+      - master
+  push:
+    branches:
+      - master
+
+permissions:
+  contents: read
