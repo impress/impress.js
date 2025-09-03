@@ -1,15 +1,15 @@
 # Introduction
 Welcome to impress.js! This presentation framework allows you to create stunning presentations with the power of CSS3 transformations.
-**NOTE:** This Guide is not made for you, if you have never written HTML and/or CSS before. Knowing your way around in JavaScript certainly helps, but is not a necessity. You may still continue this tutorial and try to understand what we do as you go. 
+**NOTE:** This Guide is not made for you if you have never written HTML and/or CSS before. Knowing your way around in JavaScript certainly helps, but it is not a necessity. You may still continue this tutorial and try to understand what we do as you go. 
 
 For more advanced and complete documentation, you might prefer the [DOCUMENTATION](DOCUMENTATION.md).
 
 # Getting started with impress.js
 ## Installation / acquiring the framework
-First of all, you need to know, if you are going to have WiFi connection when you hold your presentation. If you are not sure, please use the method where you download the file instead of the cdn.
+First of all, you need to know if you are going to have a WiFi connection when you hold your presentation. If you are not sure, please use the method where you download the file instead of the CDN.
 
-### Including from cdn
-Loading the script from the cdn is quite straight forward. If you copy the below example code, you need to do nothing else, impress will be loaded automatically.
+### Including from CDN
+Loading the script from the CDN is quite straightforward. If you copy the example code below, you need to do nothing else; impress.js will be loaded automatically.
 
 **Direct links to different versions of the impress.js file**
 - V2.0.0: https://cdn.jsdelivr.net/gh/impress/impress.js@2.0.0/js/impress.js
@@ -17,11 +17,11 @@ Loading the script from the cdn is quite straight forward. If you copy the below
 - Source: https://cdn.jsdelivr.net/gh/impress/impress.js/js/impress.js
 
 ### Download the file to your PC
-Head to the releases tab and download the source code as zip or as a tarball. Go ahead and unzip / untar it. You need to copy the folder */js/* into the folder you are working in. Optionally, if you want to make your life a bit easier, you can copy also copy the folder */css/* in there.
+Head to the releases tab and download the source code as a zip or a tarball. Go ahead and unzip/untar it. You need to copy the folder */js/* into the folder you are working in. Optionally, to make your life a bit easier, you can also copy the */css/* folder into the same location.
 
 
 ## Setting up the project
-Open up your favorite text-editor / IDE, for example Visual Studio Code, Atom, Notepad ++, ...
+Open up your favorite text editor / IDE, for example, Visual Studio Code, Atom, Notepad++, ...
 Now, create a new file called *index.html* and create the basic HTML structure:
 
 ```
@@ -50,19 +50,19 @@ Now, create a new file called *index.html* and create the basic HTML structure:
 </html>
 ```
 
-Now, head into a file-manager, navigate to the file you just created (*index.html*) and open it. You should end up in a browser where you should see "My first Slide" displayed. As this is not really exciting, we are not gonna change anything about that and are gonna look at what you just typed. What do these lines mean?
+Now, head into a file manager, navigate to the file you just created (*index.html*), and open it. You should end up in a browser where you should see "My first Slide" displayed. Since this isn't exciting, we won't change anything and will review what you just typed. What do these lines mean?
 
 Well, first things first, you should probably give your presentation a title. You may do this in normal HTML fashion by changing the *title* HTML tag.
 
-So now, we reached the HTML body. You can see that it already belongs to a class. This class just tells impress.js that this is the body where the "fallback-message" should be displayed when it detects, that your browser does not support CSS3 and therefore impress.js won't work. You can easily omit that class though, including the "fallback-message" div with its content, if you only intend to use the presentation for yourself and you know about the fact that some browsers might not work.
+So now, we have reached the HTML body. You can see that it already belongs to a class. This class just tells impress.js that this is the body where the "fallback-message" should be displayed when it detects, that your browser does not support CSS3 and therefore impress.js won't work. You can easily omit that class though, including the "fallback-message" div with its content, if you only intend to use the presentation for yourself and you know about the fact that some browsers might not work.
 
 Now, probably the most important part of all is the *div* that belongs to the ```impress``` class. This *div* should contain all the HTML code you write, as everything outside that class will not be animated by impress.js. 
 
-Finally, we load the ```impress.js``` script from your local copy (if you have one) or from the cdn, if you do not have a local copy and execute 
+Finally, we load the ```impress.js``` script from your local copy (if you have one) or from the CDN, if you do not have a local copy, and execute 
 ```
 impress().init()
 ```
-to initialize impress.js. Now, let's continue on to explore more and more features of this amazing tool!
+to initialize impress.js. Now, let's continue to explore more features of this amazing tool!
 
 ## Creating slides
 Creating slides is fairly easy. You create a *div* that belongs to the class ```step``` and you are off to the races! Let me give you an example:
@@ -74,7 +74,7 @@ Hello World
 
 Now, if you reload the presentation, you start to see a \*slight\* problem. All your text is stacked... How do we work around that?
 
-Obviously, impress.js has an answer to it. You can add the following additional attributes to your div, to make it work:
+Obviously, impress.js has an answer to it. You can add the following additional attributes to your div to make it work:
 
 Attribute       | Explanation
 ----------------|------------
@@ -87,11 +87,11 @@ data-rotate-y   | Rotate the element along the y-axis
 data-rotate-z   | Rotate the element along the z-axis
 data-scale      | Scale the element. 
 
-These are the basic positioning options in impress.js. All of the attributes take Strings as arguments, so be aware of the fact, that you need to put quotation marks around the numbers! The *data-rotate* attributes take an angle in form of a String as argument.
+These are the basic positioning options in impress.js. All of the attributes take Strings as arguments, so be aware that you need to put quotation marks around the numbers! The *data-rotate* attributes take an angle in the form of a String as an argument.
 
-Now, that you have created the slides, you might want to style them. This is where CSS comes into play. Add another file to your project called, e.g., ```style.css```. 
+Now that you have created the slides, you might want to style them. This is where CSS comes into play. Add another file to your project called, e.g., ```style.css```. 
 
-**NOTE:** Whatever you do, do not mess with positioning and rotation of the div that belongs to the class *step*, but add a div inside of it, if you really have to mess with these properties. See the example below. Always position *steps* with the *data-* attribute!
+**NOTE:** Whatever you do, do not mess with the positioning and rotation of the div that belongs to the class *step*, but add a div inside of it, if you really have to mess with these properties. See the example below. Always position *steps* with the *data-* attribute!
 
 ```
 <div class="step yourClassNameHere" data-x="1000" data-y="1000" data-z="-1000" data-scale="2" data-rotate-z="90">
@@ -115,19 +115,19 @@ data-min-scale           | 0         | Minimum scale factor.
 data-perspective         | 1000      | Perspective for 3D rendering. See https://developer.mozilla.org/en/CSS/perspective
 
 ### **Renaming Steps**
-You can give each step an ID. The name of the ID will be displayed in the browsers navigation bar instead of the default *step-x* whereas x is replaced by the current step number. This can be especially helpful, when trying to jump between steps and go back to a previous one. If you want to know how to move to a specific slide, you should take a look at the [README](./src/plugins/goto/README.md) of the "Goto" plugin. 
+You can give each step an ID. The name of the ID will be displayed in the browser's navigation bar instead of the default *step-x*, where x is replaced by the current step number. This can be especially helpful when trying to jump between steps and go back to a previous one. If you want to know how to move to a specific slide, you should take a look at the [README](./src/plugins/goto/README.md) of the "Goto" plugin. 
 
 # Using PLUGINS
-Impress.js is limited to everything that we have discussed so far and some other details, we won't go over here. Check the [DOCUMENTATION](DOCUMENTATION.md) for that.
+Impress.js is limited to everything we have discussed so far, along with some additional details; we won't cover them here. Check the [DOCUMENTATION](DOCUMENTATION.md) for that.
 
 impress.js has accumulated a lot of very useful plugins. You may find all of them [here](./src/plugins/)!
 
-Each Plugin has a README.md file which you may read to get an idea on how to use them. Some of the plugins run unnoticed in the background, like the *resize* plugin, which automatically resizes the presentation whenever the browser window changed in size. Here, I will give you an overview of some of the plugins that impress.js includes by default. 
+Each Plugin has a README.md file, which you may read to get an idea of how to use it. Some plugins run unnoticed in the background, such as the *resize* plugin, which automatically resizes the presentation whenever the browser window changes size. Here, I will give you an overview of some of the plugins that impress.js includes by default. 
 
 **NOTE:** As previously mentioned, if you'd like to get more info about how it works, take a look at the [DOCUMENTATION](DOCUMENTATION.md) or the README.md files of the plugins.
 
 ## [impressConsole](/src/plugins/impressConsole/README.md)
-This plugin opens up and additional browser tab which contains a speaker console. There you can see the current slide, the past slide and your notes. You add notes to your presentation by adding a *div* that belongs to the class "notes" to your *div* that belongs to the class "step". 
+This plugin opens up an additional browser tab that contains a speaker console. There you can see the current slide, the past slide, and your notes. You add notes to your presentation by adding a *div* that belongs to the class "notes" to your *div* that belongs to the class "step". 
 
 ### **adding notes to your presentation**
 You may add notes to your presentation by adding a div of class *notes* into the div of class *step*, like so:
@@ -151,17 +151,17 @@ Now that you have added the notes to your HTML, it is time to hide them. You nee
 To enter it, press P.
 
 ## [Goto](/src/plugins/goto/README.md)
-This plugin allows you to directly go to a certain step, by either passing in a number or the id of the step you'd like to go to.
+This plugin allows you to directly go to a certain step by either passing in a number or the ID of the step you'd like to go to.
 
 ## [Progress](/src/plugins/progress/README.md)
 This plugin, as its name implies, displays the progress in your presentation.
 
 ## [Blackout](/src/plugins/blackout/blackout.js)
-This plugin hides the screen, if you press B, which is handy in a lot of situations.
+This plugin hides the screen when you press B, which is handy in many situations.
 
 ## Other plugins
 You may find the other plugins [here](/src/plugins/). It certainly helps if you familiarise yourself with the plugins.
 
 
 # Thank you for reading this
-If you want to know more, you can always ready the [DOCUMENTATION](DOCUMENTATION.md) or, even better, read the Source Code and try to understand how it works!
+If you want to know more, you can always read the [DOCUMENTATION](DOCUMENTATION.md) or, even better, read the Source Code and try to understand how it works!
