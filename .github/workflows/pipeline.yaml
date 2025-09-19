@@ -19,9 +19,7 @@ jobs:
       - name: Lint code
         run: npm run lint
 
-  # TODO: Run tests
-
-  assembly:
+  testing:
     needs: verification
     runs-on: ubuntu-latest
     steps:
@@ -33,7 +31,22 @@ jobs:
           node-version: 22.x
       - name: Install dependencies
         run: npm clean-install
-      - name: Lint code
+      - name: Run test suite
+        run: npm run test
+
+  assembly:
+    needs: testing
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+      - name: Install dependencies
+        run: npm clean-install
+      - name: Build artifact(s)
         run: npm run build
 
 on:
