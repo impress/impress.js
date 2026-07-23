@@ -43,14 +43,11 @@
  *
  *    { group : 1,                       // integer. Widgets with the same group are grouped inside
  *                                       // the same <span> element.
- *      html : "<button>Click</button>", // The html to add.
- *      callback : "mycallback",         // Toolbar plugin will trigger event
- *                                       // `impress:toolbar:added:mycallback` when done.
+ *      element : buttonElement,         // The DOM element to add to the toolbar.
  *      before: element }                // The reference element for an insertBefore() call.
  *
- * You should also listen to the `impress:toolbar:added:mycallback` event. At
- * this point you can find the new widget in the DOM, and for example add an
- * event listener to it.
+ * After the event is handled, the widget is already in the DOM, so you can
+ * attach event listeners to it immediately (see navigation-ui for an example).
  *
  * You are free to use any integer for the group. It's ok to leave gaps. It's
  * ok to co-locate with widgets for another plugin, if you think they belong
