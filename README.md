@@ -22,9 +22,6 @@ You can include this link directly inside of your HTML file in its header. If yo
 - V1.1.0: https://cdn.jsdelivr.net/gh/impress/impress.js@1.1.0/js/impress.js
 - Source: https://cdn.jsdelivr.net/gh/impress/impress.js/js/impress.js
 
-### Getting Started Guide
-Check out our new [Getting Started](GettingStarted.md) guide if you want a quick introduction to the project!
-
 ### Checking out and initializing the git repository
 
     git clone --recursive https://github.com/impress/impress.js.git
@@ -82,7 +79,7 @@ REPOSITORY STRUCTURE
 * [test/](test/): Contains QUnit and Syn libraries that we use for writing tests, as well as some test coverage for core functionality. (Yes, more tests are much welcome.) Tests for plugins are in the directory of each plugin.
 * [js/](js/): Contains [js/impress.js](js/impress.js), which contains a concatenation of the core `src/impress.js` and all the plugins. Traditionally this is the file that you'll link to in a browser. In fact both the demo and test files do exactly that.
 * [css/](css/): Contains a CSS file used by the demo. This file is **not required for using impress.js** in your own presentations. Impress.js creates the CSS it needs dynamically.
-* [extras/](extras/) contains plugins that for various reasons aren't enabled by default. You have to explicitly add them with their own `script` element to use them.
+* [extras/](https://github.com/impress/impress-extras/) contains plugins that for various reasons aren't enabled by default. You have to explicitly add them with their own `script` element to use them. (This is provided as a Git submodule so if this directory is empty, you probably didn't clone with `--recursive`. Try running `git submodule update --init --recursive --remote` to get it.)
 * [build.js](build.js): Simple build file that creates `js/impress.js`. It also creates a minified version `impress.min.js`, but that one is not included in the github repository.
 * [package.json](build.js): An NPM package specification. This was mainly added so you can easily install [buildify](https://www.npmjs.com/package/buildify) and run `node build.js`. Other than the build process, which is really just doing roughly `cat src/impress.js src/plugins/*/*.js > js/impress.js`, and testing, `impress.js` itself doesn't depend on Node or any NPM modules.
 

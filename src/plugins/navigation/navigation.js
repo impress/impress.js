@@ -58,7 +58,7 @@
 
             // In the case of TAB, we force step navigation always, overriding the browser
             // navigation between input elements, buttons and links.
-            if ( event.keyCode === 9 ) {
+            if ( event.code === "Tab" ) {
                 return true;
             }
 
@@ -67,8 +67,8 @@
                 return false;
             }
 
-            if ( ( event.keyCode >= 32 && event.keyCode <= 34 ) ||
-                 ( event.keyCode >= 37 && event.keyCode <= 40 ) ) {
+            if ( "Space PageUp PageDown ArrowLeft ArrowRight ArrowUp ArrowDown"
+		 .split( " " ).includes( event.code ) ) {
                 return true;
             }
         };
@@ -86,25 +86,21 @@
         gc.addEventListener( document, "keyup", function( event ) {
             if ( isNavigationEvent( event ) ) {
                 if ( event.shiftKey ) {
-                    switch ( event.keyCode ) {
-                        case 9: // Shift+tab
+                    switch ( event.code ) {
+                        case "Tab": // Shift+tab
                             api.prev();
                             break;
                     }
                 } else {
-                    switch ( event.keyCode ) {
-                        case 33: // Pg up
-                        case 37: // Left
-                        case 38: // Up
-                                 api.prev( event );
-                                 break;
-                        case 9:  // Tab
-                        case 32: // Space
-                        case 34: // Pg down
-                        case 39: // Right
-                        case 40: // Down
-                                 api.next( event );
-                                 break;
+                    switch ( event.code ) {
+                    case "PageUp":
+                    case "ArrowLeft":
+                    case "ArrowUp": api.prev( event ); break;
+                    case "Tab":
+                    case "Space":
+                    case "PageDown":
+                    case "ArrowRight":
+                    case "ArrowDown": api.next( event ); break;
                     }
                 }
                 event.preventDefault();
