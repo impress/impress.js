@@ -615,7 +615,7 @@
 
         // Add 'P' to the help popup
         triggerEvent( document, 'impress:help:add',
-                        { command: 'P', text: 'Presenter console', row: 10 } );
+                        { command: 'P', text: 'Presenter console', row: 10, short: true } );
     } );
 
     // Returns a string to be used inline as a css <style> element in the console window.
