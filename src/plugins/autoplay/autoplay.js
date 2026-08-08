@@ -10,6 +10,8 @@
     "use strict";
 
     var autoplayDefault = 0;
+    var userSkipAutoplayDefault = 0;
+    var userSkipAutoplay = 0;
     var currentStepTimeout = 0;
     var api = null;
     var timeoutHandle = null;
@@ -26,6 +28,7 @@
         // or anything. `impress:init` event data gives you everything you
         // need to control the presentation that was just initialized.
         api = event.detail.api;
+        var gc = api.lib.gc;
         root = event.target;
 
         // Element attributes starting with "data-", become available under
@@ -37,14 +40,24 @@
             autoplayDefault = util.toNumber( autoplay, 0 );
         }
 
+        if ( data.userSkipAutoplay ) {
+            userSkipAutoplayDefault = util.toNumber( data.userSkipAutoplay, 0 );
+        }
+
         var toolbar = document.querySelector( "#impress-toolbar" );
         if ( toolbar ) {
             addToolbarButton( toolbar );
         }
 
-        api.lib.gc.pushCallback( function() {
+        gc.pushCallback( function() {
             clearTimeout( timeoutHandle );
         } );
+
+        gc.addEventListener( document, "keydown", user );
+        gc.addEventListener( document, "keyup", user );
+        gc.addEventListener( document, "mousemove", user );
+        gc.addEventListener( document, "click", user );
+        gc.addEventListener( document, "touch", user );
 
         // Note that right after impress:init event, also impress:stepenter is
         // triggered for the first slide, so that's where code flow continues.
@@ -59,6 +72,15 @@
         status = "playing";
         reloadTimeout( event );
     }, false );
+
+    var user = function( event ) {
+        if ( status !== "paused" ) {
+            userSkipAutoplay = userSkipAutoplayDefault;
+            if ( status !== "delayed" ) {
+                status = "delayed";
+            }
+        }
+    };
 
     // If default autoplay time was defined in the presentation root, or
     // in this step, set timeout.
@@ -89,7 +111,18 @@
         }
 
         if ( timeout > 0 ) {
-            timeoutHandle = setTimeout( function() { api.next(); }, timeout * 1000 );
+            timeoutHandle = setTimeout( function() {
+                if (status === "delayed") {
+                    if (userSkipAutoplay > 0) {
+                        userSkipAutoplay = userSkipAutoplay - 1;
+                        setAutoplayTimeout( timeout );
+                    } else {
+                        status = "playing";
+                        api.next();
+                    }
+                } else {
+                    api.next();
+                }}, timeout * 1000 );
         }
         setButtonText();
     };
