@@ -159,6 +159,16 @@ body.impress-mouse-timeout {
 
 
 /*
+    To make behavior just like GettingStarted.md's guide
+    `"fallback-message" should be displayed when it detects, that your browser does not support CSS3 and therefore impress.js won't work`
+    Without this css,It can't auto hide
+*/
+.impress-supported .fallback-message {
+    display: none;
+}
+
+
+/*
     There is one funny thing I just realized.
 
     Thanks to this workaround above everything except #impress element is invisible
